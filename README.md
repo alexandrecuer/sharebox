@@ -1,4 +1,4 @@
-# Ruby on Rails Sharebox File System
+# Ruby on Rails SharingFile System
 
 Uses the following gems :
 * [paperclip](https://github.com/thoughtbot/paperclip) for documents processing
