@@ -6,6 +6,7 @@ Uses the following gems :
 * [paperclip](https://github.com/thoughtbot/paperclip) for documents processing
 * [devise](https://github.com/plataformatec/devise) for user authentification
 * [passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html) as the application server (in standalone mode)
+* [aws-sdk](https://github.com/aws/aws-sdk-ruby) for storage on S3
 
 # Installation on a Microsoft Window development machine
 ## Requirements
