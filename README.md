@@ -44,7 +44,8 @@ Gem file is configured to use postgreSQL, so please install PGQSL window binary
 If you want to use another DBMS, you will have to change the gem file
 
 ## Installation
-Clone the repository into your C:/Sites directory
+Clone/Unzip the repository into your local rails'applications directory, for example C:/Sites/sharebox
+Open your local app directory in a git bash 
 ```
 $ cd /c/Sites/sharebox
 ```
@@ -67,7 +68,7 @@ $ rails server
 Type http://localhost:3000 in Mozilla
 
 ##### Second option 
-On Windows, this method may override specific problems related to environment variables beginning with /. Edit the .env file and fill it with your personal credentials. Install [node-foreman](https://github.com/strongloop/node-foreman) and start the server from a git bash with the following command :
+On Windows, this second option may permit to simply override specific problems related to environment variables beginning with /. Edit the .env file and fill it with your personal credentials. Install [node-foreman](https://github.com/strongloop/node-foreman) and start the server from a git bash with the following command :
 ```
 $ nf start -s -j Procfile_dev
 ```
@@ -144,7 +145,39 @@ Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
 Or https://cli-assets.heroku.com/branches/stable/heroku-windows-amd64.exe
 
+Open your local app directory in a git bash, and login to Heroku :
+```
+$ cd /c/Sites/sharebox
+$ heroku login
+Enter your Heroku credentials:
+Email: alexandre.cuer@cerema.fr
+Password: *************
+Logged in as alexandre.cuer@cerema.fr
+```
+Once succesfully logged, create a new heroku app and push the files with git :
+```
+$ heroku create
+$ git init
+$ git add .
+$ git commit -a -m "Switch to production"
+$ git push heroku master
+```
+Fix environmental variables
+```
+$ heroku config:set S3_BUCKET_NAME="your_bucket"
+$ heroku config:set AWS_REGION="your_region"
+$ heroku config:set AWS_HOST_NAME="your_host_name"
+$ heroku config:set AWS_URL="your_url"
+$ heroku config:set AWS_ACCESS_KEY_ID="your_access_key"
+$ heroku config:set AWS_SECRET_ACCESS_KEY="your_secret_access_key"
+```
+If for some reason, one variable is not correctly fixed, you can correct it from the heroku dashboard.
 
+Go to https://dashboard.heroku.com/apps > Settings > Reveal Config Vars
 
-
+Create the database and the tables
+```
+$ rake db:create
+$ rails db:schema:load
+```
 
