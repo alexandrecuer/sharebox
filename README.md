@@ -106,6 +106,15 @@ has_attached_file :uploaded_file,
      #path: '/forge/attachments/:id/:filename',
      #s3_permissions: :private
 ```
+### Use Amazon S3 storage
+You may encounter difficulty due to some SSL defaults on your development machine.
+
+To override, create a file /config/initializers/paperclip.rb with the folowwing command
+```
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+```
+Caution : only for a development purpose; not suitable for a production server !
+
 
 ### Database configuration
 Modify the \config\environments\database.yml with your database credentials. 
