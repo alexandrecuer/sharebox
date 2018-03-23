@@ -77,7 +77,7 @@ Type http://localhost:5000 in Mozilla
 
 
 ### Use local file system for storage
-Document storage is configured for Amazon S3 but using local file system is possible
+Document storage is configured for Amazon S3 but using local file system is possible. In that case, the aws-sdk gem is no more needed. 
 
 Remove the paperclip section in the \config\environments\developpment.rb
 ```
