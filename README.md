@@ -44,8 +44,8 @@ Gem file is configured to use postgreSQL, so please install PGQSL window binary
 If you want to use another DBMS, you will have to change the gem file
 
 ## Installation
-Clone/Unzip the repository into your local rails'applications directory, for example C:/Sites/sharebox
-Open your local app directory in a git bash 
+Clone/Unzip the repository into your local rails directory, for example C:/Sites/. 
+Open the resulting app directory in a git bash 
 ```
 $ cd /c/Sites/sharebox
 ```
