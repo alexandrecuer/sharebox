@@ -139,6 +139,15 @@ Assuming you are using gmail for mail delivering, you may need to configure your
 
 https://www.google.com/settings/security/lesssecureapps
 
+On a production server, it may be necessary to clear the captcha in order to define the production server as an authorized application with auto sign-in activated
+
+https://accounts.google.com/DisplayUnlockCaptcha
+
+The captcha are cleared for a few minutes. During that time, you can realize a password modification in order for your production server to be integrated in the list of authorized applications with auto sign-in activated.
+
+<img src=public/images/doc/gmail_less_secure_captcha.png>
+
+
 # Installation on Heroku (for production)
 You will need a S3 bucket as Heroku has an ephemeral file system
 
@@ -171,6 +180,8 @@ $ heroku config:set AWS_HOST_NAME="your_host_name"
 $ heroku config:set AWS_URL="your_url"
 $ heroku config:set AWS_ACCESS_KEY_ID="your_access_key"
 $ heroku config:set AWS_SECRET_ACCESS_KEY="your_secret_access_key"
+$ heroku config:set GMAIL_USERNAME="your_gmail_address"
+$ heroku config:set GMAIL_PASSWORD="your_gmail_password"
 ```
 If for some reason, one variable is not correctly fixed, you can correct it from the heroku dashboard.
 
@@ -182,3 +193,6 @@ $ heroku run rake db:create
 $ heroku run rake db:schema:load
 ```
 
+# customization
+
+Please modify \app\views\layouts\application.html.erb
