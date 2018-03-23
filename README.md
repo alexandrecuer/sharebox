@@ -107,7 +107,7 @@ has_attached_file :uploaded_file,
      #s3_permissions: :private
 ```
 ### Use Amazon S3 storage
-You may encounter difficulty due to some SSL defaults on your development machine.
+You may encounter difficulties due to some SSL defaults on your development machine.
 
 To override, create a file /config/initializers/paperclip.rb with the folowwing command
 ```
