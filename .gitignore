@@ -13,11 +13,8 @@
 !/log/.keep
 !/tmp/.keep
 /set_env.bat
-/set_env_var.bat
 /config/initializers/paperclip.rb
 /forge
-/.env
-/Procfile_dev
 
 /node_modules
 /yarn-error.log
