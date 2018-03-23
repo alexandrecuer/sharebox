@@ -1,0 +1,19 @@
+###
+To use with
+<div id=work data-background-color="#990000">Paint it red</div>
+<div id=2 data-background-color="#009900" data-text-color="#FFFFFF">Paint it green</div>
+<div id=2 data-background-color="#000099" data-text-color="#FFFFFF">Paint it blue</div>
+###
+
+@paintIt = (element, backgroundColor, textColor) ->
+  element.style.backgroundColor = backgroundColor
+  if textColor?
+    element.style.color = textColor
+    
+ready = ->
+  $("div[data-background-color]").click (e) ->
+    backgroundColor = $(this).data("background-color")
+    textColor = $(this).data("text-color")
+    paintIt(this, backgroundColor, textColor)
+    
+$(document).on('turbolinks:load', ready)

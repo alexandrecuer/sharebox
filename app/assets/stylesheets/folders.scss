@@ -1,0 +1,28 @@
+// Place all the styles related to the Folder controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+//an other theme, in ../images directly
+//folder.png
+//shared_folder.png
+//shared_folder_by_others.png
+// 20px 21 px
+
+.folder, .folder_shared, .folder_shared_by_others, .folder_sub_shared_by_others {
+    background:url("../images/window/window_owned.png") no-repeat scroll left center transparent; 
+    padding-left :40px;
+	height:40px;
+	line-height:40px;
+}
+
+.folder_shared {
+    background:url("../images/window/window_shared.png") no-repeat scroll left center transparent;
+}
+
+.folder_shared_by_others {
+    background:url("../images/window/window_shared_by_others.png") no-repeat scroll left center transparent;
+}
+
+.folder_sub_shared_by_others {
+    background:url("../images/window/window_sub_shared_by_others.png") no-repeat scroll left center transparent;
+}

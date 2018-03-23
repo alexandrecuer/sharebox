@@ -1,0 +1,17 @@
+<%= render 'shared/nav' %>
+
+<% if @asset.errors.any? %>	
+    <% @asset.errors.delete(:uploaded_file) %>
+    <% if @asset.errors.count>0 %>
+        <h3><%= pluralize(@asset.errors.count, "erreur") %></h3>
+    <% end %>
+	<ul>
+	<% @asset.errors.full_messages.each do |msg| %>
+		<li><%= msg.html_safe %></li>
+	<% end %>
+	</ul>
+<% end %>
+
+<%= render 'form' %>
+
+<%= render 'shared/list' %>

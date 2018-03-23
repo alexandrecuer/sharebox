@@ -1,0 +1,14 @@
+<h3>Les partages du répertoire<br> 
+<%= current_user.folders.find(@folder_id).name %><br>
+numéro : <%= @folder_id %></h3>
+
+<% @shared_folders.each do |f|%>
+    <%= f.id %><br>
+    <%= f.share_email %><br>
+    <% if f.share_user_id %>
+        registered in system at number <%= f.share_user_id %><br>
+    <% end %>
+    <% if f.message.to_s != "" %>
+        Message : <%= f.message %><br>
+    <% end %><br>
+<% end %>

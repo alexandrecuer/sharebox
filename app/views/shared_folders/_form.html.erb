@@ -1,0 +1,12 @@
+<% if @to_be_shared_folder %>
+    <%= form_for @shared_folder, url: shared_folders_path do |f| %>
+        <small>Si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,</small><br>
+        <%= f.text_field :share_email, size:50 %><%= f.submit "partager '"+@to_be_shared_folder.name+"'" %>
+        <%= f.button "Tout effacer", type: 'reset' %>
+        <!-- <br>Message (facultatif)<br>
+        <%= f.text_area :message, cols: 50, rows: 1 %>
+        --!>
+        <%= f.hidden_field :folder_id %>     
+        <br><br>
+    <% end %>
+<% end %>

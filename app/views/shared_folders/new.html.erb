@@ -1,0 +1,12 @@
+<%= render 'shared/nav' %>
+
+<!-- si on arrive içi, c'est que la folder @to_be_shared_folder existe
+le contrôleur a initialisé un nouveau partage @shared_folder 
+il faut renseigner son folder_id
+-->
+
+<% @shared_folder.folder_id=@to_be_shared_folder.id %>
+
+<%= render 'form' %>
+
+<%= render 'shared/list' %>

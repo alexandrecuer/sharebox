@@ -1,0 +1,5 @@
+<%= form_for @folder, url: folders_path do |f| %>
+    Nom du répertoire à créer : <%= f.text_field :name %><%= f.submit "Créer le répertoire" %>
+	<%= f.hidden_field :parent_id %>
+    <br><br>
+<% end %>

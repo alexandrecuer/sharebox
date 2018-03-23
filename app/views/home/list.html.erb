@@ -1,0 +1,37 @@
+<h1> Registered users</h1>
+<% @users=User.all %>
+<table ellpadding=1 cellspacing=2>
+<tr bgcolor=#CCCCCC>
+<td>email</td>
+<td>id</td>
+<td>has shared folders from others ?</td>
+</tr>
+<% @users.each do |u| %>
+    <tr bgcolor=#EEEEEE>
+    <td><%= u.email %></td>
+    <td><%= u.id %></td>
+    <td><%= u.has_shared_folders_from_others? %></td>
+    </tr>
+<% end %>
+</table>
+
+<h1>shared_folders without share_user_id filled</h1>
+(at sharing time, folder was shared to an unregistered user) 
+<table cellpadding=1 cellspacing=2>
+<tr bgcolor=#CCCCCC>
+<td>folder_id</td>
+<td>prop_id</td>
+<td>share_email</td>
+<td>calculated share_user_id</td>
+</tr>
+<% @shared_folders=SharedFolder.where("share_user_id IS NULL") %>
+<% @shared_folders.each do |u| %>
+    <tr bgcolor=#EEEEEE>
+    <td><%= u.folder_id %></td>
+    <td><%= u.user_id %></td>
+    <td><%= u.share_email %></td>
+    <td><%= u.fetch_user_id_associated_to_email %></td>
+    </tr>
+<% end %>
+</table>
+<br>

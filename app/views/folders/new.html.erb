@@ -1,0 +1,14 @@
+<%= render 'shared/nav' %>
+
+<% if @folder.errors.any? %>
+    <h3><%= pluralize(@folder.errors.count, "erreur") %></h3>
+	<ul>
+	<% @folder.errors.full_messages.each do |msg| %>
+		<li><%= msg.html_safe %></li>
+	<% end %>
+	</ul>
+<% end %>
+
+<%= render 'form' %>
+
+<%= render 'shared/list' %>

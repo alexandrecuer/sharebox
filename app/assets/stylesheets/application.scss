@@ -1,0 +1,108 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+ 
+html,body {
+	background-color: #FFFFFF;
+	font-family: "Lucida Grande","Verdana","Arial","Bitstream Vera Sans",sans-serif;
+	font-size: 12px;
+}
+
+a {
+  text-decoration: none; /* pas de soulignage */
+  color: #F56618; 
+  background-color: #EEEEEE ;
+}
+
+a:hover {
+  color: black;
+}
+
+.rootlink {
+  text-decoration: none; /* pas de soulignage */
+  color: #FFFFFF; 
+  background-color: #F56618;
+  font-size:20 px;
+}
+
+.rootlink:hover {
+  background-color: #FFFFFF;
+  color: #F56618;
+}
+
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h5 { 
+   position: absolute;
+   background-color: #F56618;
+   opacity: .50;
+   color : white;
+   font-size: 20px;
+   top: 40px; 
+   left: 0; 
+   width: 100%; 
+}
+
+
+/*
+ * Styles dedicated to dialog box (sharing process)
+ */
+.window-header{
+    opacity:1;
+    position: absolute;
+    top: -27px;
+    left: -2px;
+    background-color:#99bbe8;
+    height: 22px;
+    width: 100%;
+    color: white;
+    font-size: 14px;
+    font-weight: bolder;
+    border: 1px solid #012345;
+    padding : 1px;
+}
+.close {
+    background: url(../images/tool-sprites.gif) 0px 0px;
+	height: 16px;
+	width: 16px;
+	position: absolute;
+	right: 2px;
+	top: -23px;
+    opacity: 1;
+}
+.close:hover {
+    background: url(../images/tool-sprites.gif) 16px 0px;
+}
+
+.sharingbox {
+    opacity:1; 
+    display:none;
+    /*visibility: hidden;*/
+    position:fixed;
+    top:100;
+    right:50%; 
+    width:auto;
+    height:auto;
+    background-color:#EEEEEE;
+    padding: 1%;
+    border: 1px solid #012345;
+}
+
+.show {
+	visibility: visible;
+}
