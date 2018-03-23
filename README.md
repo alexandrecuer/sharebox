@@ -69,7 +69,7 @@ $ rails server
 Type http://localhost:3000 in Mozilla
 
 ##### Second option 
-On Windows, this second option may permit to simply override specific problems related to environment variables beginning with /. Edit the .env file and fill it with your personal credentials. Install [node-foreman](https://github.com/strongloop/node-foreman) and start the server from a git bash with the following command :
+On Windows, this second option may permit to override specific problems related to environment variables beginning with /. Edit the .env file and fill it with your personal credentials. Install [node-foreman](https://github.com/strongloop/node-foreman) and start the server from a git bash with the following command :
 ```
 $ nf start -s -j Procfile_dev
 ```
