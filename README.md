@@ -151,6 +151,8 @@ The captcha are cleared for a few minutes. During that time, you can realize a p
 # Installation on Heroku (for production)
 You will need a S3 bucket as Heroku has an ephemeral file system
 
+Modify /config/environments/
+
 Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
 Or https://cli-assets.heroku.com/branches/stable/heroku-windows-amd64.exe
@@ -164,9 +166,31 @@ Email: alexandre.cuer@cerema.fr
 Password: *************
 Logged in as alexandre.cuer@cerema.fr
 ```
-Once succesfully logged, create a new heroku app and push the files with git :
+Once succesfully logged, create a new heroku app :
 ```
 $ heroku create
+Creating app... done, desolate-earth-32333
+https://desolate-earth-32333.herokuapp.com/ | https://git.heroku.com/desolate-earth-32333.git
+```
+Heroku will define a random name for your production server, here : desolate-earth-32333. Modify the action_mailer settings in /config/environments/production.rb
+```
+config.action_mailer.default_url_options = { host: 'https://desolate-earth-32333.herokuapp.com' }
+  
+config.action_mailer.delivery_method = :smtp
+  
+config.action_mailer.smtp_settings = {
+    address:				"smtp.gmail.com",
+    port:					587,
+    domain: 				"desolate-earth-32333.herokuapp.com",
+    user_name:				ENV.fetch('GMAIL_USERNAME'),
+    password:				ENV.fetch('GMAIL_PASSWORD'),
+    authentication:			:plain,
+    enable_starttls_auto: 	true
+}
+```
+
+Push the files with git.
+```
 $ git init
 $ git add .
 $ git commit -a -m "Switch to production"
