@@ -1,11 +1,14 @@
 # Ruby on Rails SharingFile System
 
+Check online prototype : https://desolate-earth-32333.herokuapp.com/
+
 Uses the following gems :
 * [paperclip](https://github.com/thoughtbot/paperclip) for documents processing
 * [devise](https://github.com/plataformatec/devise) for user authentification
+* [passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html) as the application server (in standalone mode)
 
-## Installation on a Microsoft Window development machine
-### Requirements
+# Installation on a Microsoft Window development machine
+## Requirements
 Window All-In-One rails installer [Ruby on Rails](http://railsinstaller.org/en) >= 5.1.4
 
 [ImageMagick](http://www.imagemagick.org) for documents processing
@@ -28,7 +31,7 @@ $ where convert
 c:\Program Files\ImageMagick-7.0.6-Q16\convert.exe
 c:\Windows\System32\convert.exe
 ```
-If not, you will have to modify the system and users paths so that they begin with C:\Program Files\ImageMagick-7.0.6-Q16\
+If not, you will have to modify the system and user paths so that they begin with something like C:\Program Files\ImageMagick-7.0.6-Q16\
 
 On windows 10, from the control panel :
 ``
@@ -40,16 +43,41 @@ Gem file is configured to use postgreSQL, so please install PGQSL window binary
 
 If you want to use another DBMS, you will have to change the gem file
 
-### Installation
+## Installation
 Clone the repository into your C:/Sites directory
+```
+$ cd /c/Sites/sharebox
+```
+Install the required gems ``$ bundle install`` or ``$ bundle update``
 
-Edit the set_env_var.bat file with your personal credentials and run this bat file from the main DOS shell. 
-It will fix the environment details in all subsequent shells such as git bash or window power shell 
+Please note that the bcrypt gem needed for devise may malfunction.
+To correct, you have to reinstall manually
+```
+$ gem uninstall bcrypt
+$ gem uninstall bcrypt-ruby
+$ gem install bcrypt --platform=ruby
+```
 
-Please note that document storage is configured for Amazon S3
+### Settings environmental variables
+##### First option
+Edit the set_env_var.bat file, fill it with your personal credentials and run this bat file from the main DOS shell. It will fix the environment details in all subsequent shells such as git bash or window power shell. You can start the server from a git bash with the classic method :
+```
+$ rails server
+```
+Type http://localhost:3000 in Mozilla
 
-#### Use local file system for storage
-If you want to use local file system for storage, please remove the paperclip section in the \config\environments\developpment.rb
+##### Second option 
+On Windows, this method may override specific problems related to environment variables beginning with /. Edit the .env file and fill it with your personal credentials. Install [node-foreman](https://github.com/strongloop/node-foreman) and start the server from a git bash with the following command :
+```
+$ nf start -s -j Procfile_dev
+```
+Type http://localhost:5000 in Mozilla
+
+
+### Use local file system for storage
+Document storage is configured for Amazon S3 but using local file system is possible
+
+Remove the paperclip section in the \config\environments\developpment.rb
 ```
 config.paperclip_defaults = {
     storage: :s3,
@@ -77,8 +105,8 @@ has_attached_file :uploaded_file,
      #s3_permissions: :private
 ```
 
-#### Database configuration
-Modify the \config\environments\database.yml with yout database credentials. 
+### Database configuration
+Modify the \config\environments\database.yml with your database credentials. 
 Generally, the postgreSQL Window installer creates a user "postgres" for which you were asked a password during the installation process. 
 ```
 default: &default
@@ -97,19 +125,26 @@ Create the database and the tables
 $ rake db:create
 $ rails db:migrate
 ```
-To go faster, you don't have to run all the migrations from scratch :
+To create the database structure and the tables, you don't have to run all the migrations from scratch :
 ```
 $ rails db:schema:load
 ```
 
-Please note that the bcrypt gem needed for devise may malfunction.
-To correct, you have to reinstall manually
-```
-$ gem uninstall bcrypt
-$ gem uninstall bcrypt-ruby
-$ gem install bcrypt --platform=ruby
-```
+# Configuring mail services
+Assuming you are using gmail for mail delivering, you may need to configure your google account in order to allow external applications to use it 
+
+<img src=public/images/doc/gmail_less_secure_apps.png>
+
+https://www.google.com/settings/security/lesssecureapps
 
 # Installation on Heroku (for production)
 You will need a S3 bucket as Heroku has an ephemeral file system
+
+Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+
+Or https://cli-assets.heroku.com/branches/stable/heroku-windows-amd64.exe
+
+
+
+
 
