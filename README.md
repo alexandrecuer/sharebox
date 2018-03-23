@@ -177,7 +177,7 @@ Go to https://dashboard.heroku.com/apps > Settings > Reveal Config Vars
 
 Create the database and the tables
 ```
-$ rake db:create
-$ rails db:schema:load
+$ heroku run rake db:create
+$ heroku run rake db:schema:load
 ```
 
