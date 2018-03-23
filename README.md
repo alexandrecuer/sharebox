@@ -77,7 +77,7 @@ Type http://localhost:5000 in Mozilla
 
 
 ### Use local file system for storage
-Document storage is configured for Amazon S3 but using local file system is possible. In that case, the aws-sdk gem is no more needed. 
+Document storage is configured for Amazon S3 but using local file system is possible. In that case, the aws-sdk gem is not needed. 
 
 Remove the paperclip section in the \config\environments\developpment.rb
 ```
@@ -133,7 +133,7 @@ $ rails db:schema:load
 ```
 
 # Configuring mail services
-Assuming you are using gmail for mail delivering, you may need to configure your google account in order to allow external applications to use it 
+Assuming you are using gmail for mail delivery, you may need to configure your google account in order to allow external applications to use it 
 
 <img src=public/images/doc/gmail_less_secure_apps.png>
 
@@ -193,6 +193,14 @@ $ heroku run rake db:create
 $ heroku run rake db:schema:load
 ```
 
-# customization
+# Customization
 
 Please modify \app\views\layouts\application.html.erb
+
+# Working behind a proxy server
+
+If you work behind a proxy, please set http_proxy and https_proxy variables
+```
+$ export https_proxy="http://user_name:password@proxy_url:proxy_port"
+$ export http_proxy="http://user_name:password@proxy_url:proxy_port"
+```
