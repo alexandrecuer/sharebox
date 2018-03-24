@@ -61,6 +61,64 @@ $ gem install bcrypt --platform=ruby
 ```
 
 ### Settings environmental variables
+The application uses several variables, which you have to fix in the environment
+
+<table>
+    <tr>
+        <td><sub>Name</sub></td>
+        <td><sub>Purpose</sub></td>
+        <td><sub>See :</sub></td>
+        <td><sub>Example</sub></td>
+    </tr>
+    <tr>
+        <td><sub>S3_BUCKET_NAME</sub></td>
+        <td><sub>S3 storage</sub></td>
+        <td><sub><a href=https://devcenter.heroku.com/articles/s3#s3-setup target=blank>Heroku specific doc</a></sub></td>
+        <td><sub></sub></td>
+    </tr>
+    <tr>
+        <td><sub>AWS_REGION</sub></td>
+        <td><sub>S3 storage</sub></td>
+        <td rowspan=2><sub><a href=https://docs.aws.amazon.com/fr_fr/general/latest/gr/rande.html#s3_region target=blank>AWS regional parameters</a></sub></td>
+        <td><sub>eu-west-3</sub></td>
+    </tr>
+    <tr>
+        <td><sub>AWS_HOST_NAME</sub></td>
+        <td><sub>S3 storage</sub></td>
+        <td><sub>s3.eu-west-3.amazonaws.com</sub></td>
+    </tr>
+    <tr>
+        <td><sub>AWS_URL</sub></td>
+        <td><sub>S3 storage</sub></td>
+        <td><sub>S3_BUCKET_NAME.AWS_HOST_NAME</sub></td>
+        <td><sub></sub></td>
+    </tr>
+    <tr>
+        <td><sub>AWS_ACCESS_KEY_ID</sub></td>
+        <td><sub>S3 storage</sub></td>
+        <td><sub></sub></td>
+        <td><sub></sub></td>
+    </tr>
+    <tr>
+        <td><sub>AWS_SECRET_ACCESS_KEY</sub></td>
+        <td><sub>S3 storage</sub></td>
+        <td rowspan=2><sub><a href=https://console.aws.amazon.com/iam/home#/users target=blank>IAM - Identity and Access Management</a></sub></td>
+        <td><sub></sub></td>
+    </tr>
+    <tr>
+        <td><sub>GMAIL_USERNAME</sub></td>
+        <td><sub>mail delivery</sub></td>
+        <td><sub></sub></td>
+    </tr>
+    <tr>
+        <td><sub>GMAIL_PASSWORD</sub></td>
+        <td><sub>mail delivery</sub></td>
+        <td><sub></sub></td>
+        <td><sub></sub></td>
+    </tr>
+</table>
+
+        
 ##### First option
 Edit the set_env_var.bat file, fill it with your personal credentials and run this bat file from the main DOS shell. It will fix the environment details in all subsequent shells such as git bash or window power shell. You can start the server from a git bash with the classic method :
 ```
