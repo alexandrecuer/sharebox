@@ -62,9 +62,7 @@ $ gem install bcrypt --platform=ruby
 
 ### Settings environmental variables
 The application uses several variables, which you have to fix in the environment
-
-For S3 storage
-
+<table><tr><td>For S3 storage
 <table>
     <tr>
         <td><sub>S3_BUCKET_NAME</sub></td>
@@ -89,9 +87,7 @@ For S3 storage
         <td><sub>AWS_SECRET_ACCESS_KEY</sub></td>
     </tr>
 </table>
-
-For Mail delivery
-
+</td><td valign=top>For Mail delivery
 <table>
     <tr>
         <td><sub>GMAIL_USERNAME</sub></td>
@@ -101,7 +97,7 @@ For Mail delivery
         <td><sub>GMAIL_PASSWORD</sub></td>
     </tr>
 </table>
-
+</td></tr></table>
         
 ##### First option
 Edit the set_env_var.bat file, fill it with your personal credentials and run this bat file from the main DOS shell. It will fix the environment details in all subsequent shells such as git bash or window power shell. You can start the server from a git bash with the classic method :
