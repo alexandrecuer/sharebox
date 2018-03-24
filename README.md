@@ -63,58 +63,42 @@ $ gem install bcrypt --platform=ruby
 ### Settings environmental variables
 The application uses several variables, which you have to fix in the environment
 
+For S3 storage
+
 <table>
     <tr>
-        <td><sub>Name</sub></td>
-        <td><sub>Purpose</sub></td>
-        <td><sub>See :</sub></td>
-        <td><sub>Example</sub></td>
-    </tr>
-    <tr>
         <td><sub>S3_BUCKET_NAME</sub></td>
-        <td><sub>S3 storage</sub></td>
-        <td><sub><a href=https://devcenter.heroku.com/articles/s3#s3-setup target=blank>Heroku specific doc</a></sub></td>
-        <td><sub></sub></td>
+        <td><sub><a href=https://devcenter.heroku.com/articles/s3#s3-setup>Heroku specific doc</a></sub></td>
     </tr>
     <tr>
         <td><sub>AWS_REGION</sub></td>
-        <td><sub>S3 storage</sub></td>
-        <td rowspan=2><sub><a href=https://docs.aws.amazon.com/fr_fr/general/latest/gr/rande.html#s3_region target=blank>AWS regional parameters</a></sub></td>
-        <td><sub>eu-west-3</sub></td>
+        <td rowspan=2><sub><a href=https://docs.aws.amazon.com/fr_fr/general/latest/gr/rande.html#s3_region>AWS regional parameters</a><br><sub> ex : AWS_REGION=eu-west-3 and AWS_HOST_NAME=s3.eu-west-3.amazonaws.com</sub></sub></td> 
     </tr>
     <tr>
         <td><sub>AWS_HOST_NAME</sub></td>
-        <td><sub>S3 storage</sub></td>
-        <td><sub>s3.eu-west-3.amazonaws.com</sub></td>
     </tr>
     <tr>
         <td><sub>AWS_URL</sub></td>
-        <td><sub>S3 storage</sub></td>
         <td><sub>S3_BUCKET_NAME.AWS_HOST_NAME</sub></td>
-        <td><sub></sub></td>
     </tr>
     <tr>
         <td><sub>AWS_ACCESS_KEY_ID</sub></td>
-        <td><sub>S3 storage</sub></td>
-        <td><sub></sub></td>
-        <td><sub></sub></td>
+        <td rowspan=2><sub><a href=https://console.aws.amazon.com/iam/home#/users>IAM - Identity and Access Management</a></sub></td>
     </tr>
     <tr>
         <td><sub>AWS_SECRET_ACCESS_KEY</sub></td>
-        <td><sub>S3 storage</sub></td>
-        <td rowspan=2><sub><a href=https://console.aws.amazon.com/iam/home#/users target=blank>IAM - Identity and Access Management</a></sub></td>
-        <td><sub></sub></td>
     </tr>
+</table>
+
+For Mail delivery
+
+<table>
     <tr>
         <td><sub>GMAIL_USERNAME</sub></td>
-        <td><sub>mail delivery</sub></td>
-        <td><sub></sub></td>
+        <td rowspan=2><sub><a href=https://mail.google.com/>gmail</a></sub></td>
     </tr>
     <tr>
         <td><sub>GMAIL_PASSWORD</sub></td>
-        <td><sub>mail delivery</sub></td>
-        <td><sub></sub></td>
-        <td><sub></sub></td>
     </tr>
 </table>
 
@@ -167,7 +151,7 @@ has_attached_file :uploaded_file,
 ### Use Amazon S3 storage
 You may encounter difficulties due to some SSL defaults on your development machine.
 
-To override, create a file /config/initializers/paperclip.rb with the folowwing command
+To override, create a file /config/initializers/paperclip.rb with the following command
 ```
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 ```
@@ -210,7 +194,7 @@ On a production server, it may be necessary to clear the captcha in order to def
 
 https://accounts.google.com/DisplayUnlockCaptcha
 
-The captcha are cleared for a few minutes. During that time, you can realize a password modification in order for your production server to be integrated in the list of authorized applications with auto sign-in activated.
+The captcha is cleared for a few minutes. During that time, you can realize a password modification in order for your production server to be integrated in the list of authorized applications with auto sign-in activated.
 
 <img src=public/images/doc/gmail_less_secure_captcha.png>
 
