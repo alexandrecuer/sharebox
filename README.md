@@ -1,5 +1,7 @@
 # Ruby on Rails SharingFile System
 
+[![Build Status](https://travis-ci.org/alexandrecuer/sharebox.svg?branch=master)](https://travis-ci.org/alexandrecuer/sharebox)
+
 Check online prototype : https://desolate-earth-32333.herokuapp.com/
 
 Uses the following gems :
