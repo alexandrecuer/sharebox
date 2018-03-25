@@ -53,9 +53,30 @@ Launch the server with the command ``rails server``. The server should be up on 
 
 ### ImageMagick
 
-Check https://github.com/thoughtbot/paperclip#requirements
+For a more detailed procedure, check https://github.com/thoughtbot/paperclip#requirements
 
 ImageMagick uses two utilities file.exe and convert.exe
+
+You will have to install file.exe from [gnuwin32](http://gnuwin32.sourceforge.net/packages/file.htm)
+
+When you install ImageMagick, don't forget to include the required legacy utilities among which you will find convert.exe
+
+<img src=public/images/doc/imagemagick.png height=300>
+
+Modify the system and user paths so that they begin with something like C:\Program Files\ImageMagick-7.0.6-Q16\ and C:\Program Files (x86)\GnuWin32.
+
+On windows 10, from the control panel :
+``
+Security and System > System > Advanced System Parameters > Environment Variables
+``
+
+Please note Window has got its own convert utility. Paperclip will not work with the Window convert.exe. So check that ImageMagick's convert.exe comes first
+```
+$ where convert
+c:\Program Files\ImageMagick-7.0.6-Q16\convert.exe
+c:\Windows\System32\convert.exe
+```
+Check if everything is OK in the rails git bash :
 ```
 $ which file
 /c/Program Files (x86)/GnuWin32/bin/file
@@ -63,20 +84,6 @@ $ which convert
 /c/Program Files/ImageMagick-7.0.6-Q16/convert
 ```
 
-Please note Window has got its own convert utility. Paperclip will not work with the Window convert.exe
-
-So check that ImageMagick's convert.exe comes first
-```
-$ where convert
-c:\Program Files\ImageMagick-7.0.6-Q16\convert.exe
-c:\Windows\System32\convert.exe
-```
-If not, you will have to modify the system and user paths so that they begin with something like C:\Program Files\ImageMagick-7.0.6-Q16\
-
-On windows 10, from the control panel :
-``
-Security and System > System > Advanced System Parameters > Environment Variables
-``
 
 ## Installation
 Clone/Unzip the repository into your local rails directory, for example C:/Sites/. 
