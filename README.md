@@ -10,9 +10,22 @@ Uses the following gems :
 * [passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html) as the application server (in standalone mode)
 * [aws-sdk](https://github.com/aws/aws-sdk-ruby) for storage on S3
 
+- [Installation on a Microsoft Window development machine](#installation-on-a-microsoft-window-development-machine)
+  - [Requirements](#requirements)
+    - [Rails](#rails)
+
 # Installation on a Microsoft Window development machine
 ## Requirements
 Window All-In-One rails installer [Ruby on Rails](http://railsinstaller.org/en) >= 5.1.4
+
+[ImageMagick](http://www.imagemagick.org) for documents processing
+
+Gem file is configured to use postgreSQL, so please install PGQSL window binary
+[EDB POSTGRES](https://www.enterprisedb.com/)
+
+If you want to use another DBMS, you will have to change the gem file
+
+### Rails
 
 Once RailsInstaller is up, launch a git bash, verify ruby version and install Rails
 ```
@@ -30,7 +43,7 @@ $ rails new blog
 ```
 The system will create the app files and launch the command ``bundle install`` to fetch some gems
 
-[ImageMagick](http://www.imagemagick.org) for documents processing
+### ImageMagick
 
 Check https://github.com/thoughtbot/paperclip#requirements
 
@@ -56,11 +69,6 @@ On windows 10, from the control panel :
 ``
 Security and System > System > Advanced System Parameters > Environment Variables
 ``
-
-Gem file is configured to use postgreSQL, so please install PGQSL window binary
-[EDB POSTGRES](https://www.enterprisedb.com/)
-
-If you want to use another DBMS, you will have to change the gem file
 
 ## Installation
 Clone/Unzip the repository into your local rails directory, for example C:/Sites/. 
