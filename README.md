@@ -70,7 +70,7 @@ On windows 10, from the control panel :
 Security and System > System > Advanced System Parameters > Environment Variables
 ``
 
-Please note Window has got its own convert utility. Paperclip will not work with the Window convert.exe. So check that ImageMagick's convert.exe comes first
+Please note Window has got its own convert utility. Paperclip will not work with the Window convert.exe. ImageMagick's convert.exe should come first
 ```
 $ where convert
 c:\Program Files\ImageMagick-7.0.6-Q16\convert.exe
