@@ -14,6 +14,22 @@ Uses the following gems :
 ## Requirements
 Window All-In-One rails installer [Ruby on Rails](http://railsinstaller.org/en) >= 5.1.4
 
+Once RailsInstaller is up, launch a git bash, verify ruby version and install Rails
+```
+$ ruby -v
+$ gem install rails
+```
+Verify rails version
+```
+$ rails -v
+Rails 5.1.5
+```
+Check you can create a new application named blog
+```
+$ rails new blog
+```
+The system will create the app files and launch the command ``bundle install`` to fetch some gems
+
 [ImageMagick](http://www.imagemagick.org) for documents processing
 
 Check https://github.com/thoughtbot/paperclip#requirements
