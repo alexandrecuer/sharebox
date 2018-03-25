@@ -10,10 +10,21 @@ Uses the following gems :
 * [passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html) as the application server (in standalone mode)
 * [aws-sdk](https://github.com/aws/aws-sdk-ruby) for storage on S3
 
+---
 - [Installation on a Microsoft Window development machine](#installation-on-a-microsoft-window-development-machine)
   - [Requirements](#requirements)
     - [Rails](#rails)
-
+    - [ImageMagick](#imagemagick)
+  - [Installation](#installation)
+    - [Setting environmental variables](#setting-environmental-variables)
+    - [Use local file system for storage](#use-local-file-system-for-storage)
+    - [Use Amazon S3 storage](#use-amazon-s3-storage)
+    - [Database configuration](#database-configuration)
+- [Configuring mail services](#configuring-mail-services)
+- [Installation on Heroku (for production)](#installation-on-heroku-for-production)
+- [Customization](#customization)
+- [Working behind a proxy server](#working-behind-a-proxy-server)
+    
 # Installation on a Microsoft Window development machine
 ## Requirements
 Window All-In-One rails installer [Ruby on Rails](http://railsinstaller.org/en) >= 5.1.4
@@ -27,12 +38,7 @@ If you want to use another DBMS, you will have to change the gem file
 
 ### Rails
 
-Once RailsInstaller is up, launch a git bash, verify ruby version and install Rails
-```
-$ ruby -v
-$ gem install rails
-```
-Verify rails version
+Once RailsInstaller is up, launch a git bash, verify ruby version ``ruby -v``, install Rails ``gem install rails`` and verify the version :
 ```
 $ rails -v
 Rails 5.1.5
@@ -42,6 +48,8 @@ Check you can create a new application named blog
 $ rails new blog
 ```
 The system will create the app files and launch the command ``bundle install`` to fetch some gems
+
+Launch the server with the command ``rails server``. The server should be up on port 3000. Browse the adress http://localhost:3000 in Mozilla.
 
 ### ImageMagick
 
@@ -86,7 +94,7 @@ $ gem uninstall bcrypt-ruby
 $ gem install bcrypt --platform=ruby
 ```
 
-### Settings environmental variables
+### Setting environmental variables
 The application uses several variables, which you have to fix in the environment
 <table><tr><td>For S3 storage
 <table>
@@ -130,14 +138,13 @@ Edit the set_env_var.bat file, fill it with your personal credentials and run th
 ```
 $ rails server
 ```
-Type http://localhost:3000 in Mozilla
 
 ##### Second option 
 On Windows, this second option may permit to override specific problems related to environment variables beginning with /. Edit the .env file and fill it with your personal credentials. Install [node-foreman](https://github.com/strongloop/node-foreman) and start the server from a git bash with the following command :
 ```
 $ nf start -s -j Procfile_dev
 ```
-Type http://localhost:5000 in Mozilla
+Note the server will start on port 5000
 
 
 ### Use local file system for storage
