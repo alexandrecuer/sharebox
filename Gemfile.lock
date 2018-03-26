@@ -204,8 +204,7 @@ GEM
       nokogiri (~> 1.8)
 
 PLATFORMS
-  x86-mingw32
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   acts_as_tree
@@ -232,4 +231,4 @@ RUBY VERSION
    ruby 2.3.3p222
 
 BUNDLED WITH
-   1.13.7
+   1.16.1
