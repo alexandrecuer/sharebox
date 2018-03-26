@@ -4,4 +4,4 @@ before_install:
 rvm:
   - "2.3.3"
 script:
-  - more Gemfile.lock
+  - cat Gemfile.lock
