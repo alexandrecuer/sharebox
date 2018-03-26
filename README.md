@@ -15,19 +15,22 @@ Uses the following gems :
   - [Requirements](#requirements)
     - [Rails](#rails)
     - [ImageMagick](#imagemagick)
+    - [NodeJS](#nodejs)
   - [Installation](#installation)
     - [Setting environmental variables](#setting-environmental-variables)
-    - [Use local file system for storage](#use-local-file-system-for-storage)
-    - [Use Amazon S3 storage](#use-amazon-s3-storage)
     - [Database configuration](#database-configuration)
+  - [File storage](#file-storage)    
+    - [Use local file system for storage](#use-local-file-system)
+    - [Use Amazon S3](#use-amazon-s3)
 - [Configuring mail services](#configuring-mail-services)
 - [Installation on Heroku (for production)](#installation-on-heroku-for-production)
 - [Customization](#customization)
 - [Working behind a proxy server](#working-behind-a-proxy-server)
-    
+---
+
 # Installation on a Microsoft Window development machine
 ## Requirements
-Window All-In-One rails installer [Ruby on Rails](http://railsinstaller.org/en) >= 5.1.4
+Window All-In-One rails installer [Ruby on Rails](http://railsinstaller.org/en) >= 5.1.4 + NodeJS
 
 [ImageMagick](http://www.imagemagick.org) for documents processing
 
@@ -84,6 +87,9 @@ $ which convert
 /c/Program Files/ImageMagick-7.0.6-Q16/convert
 ```
 
+### NodeJS
+
+Install [NodeJS](https://nodejs.org/en/download/)
 
 ## Installation
 Clone/Unzip the repository into your local rails directory, for example C:/Sites/. 
@@ -153,8 +159,34 @@ $ nf start -s -j Procfile_dev
 ```
 Note the server will start on port 5000
 
+### Database configuration
+Modify the \config\environments\database.yml with your database credentials. 
+Generally, the postgreSQL Window installer creates a user "postgres" for which you were asked a password during the installation process. 
+```
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: postgres
+  password: your_pass
+  host: localhost
+```
 
-### Use local file system for storage
+Create the database and the tables
+```
+$ rake db:create
+$ rails db:migrate
+```
+To create the database structure and the tables, you don't have to run all the migrations from scratch :
+```
+$ rails db:schema:load
+```
+
+## File storage
+
+### Use local file system
 Document storage is configured for Amazon S3 but using local file system is possible. In that case, the aws-sdk gem is not needed. 
 
 Remove the paperclip section in the \config\environments\developpment.rb
@@ -184,7 +216,7 @@ has_attached_file :uploaded_file,
      #path: '/forge/attachments/:id/:filename',
      #s3_permissions: :private
 ```
-### Use Amazon S3 storage
+### Use Amazon S3
 You may encounter difficulties due to some SSL defaults on your development machine.
 
 To override, create a file /config/initializers/paperclip.rb with the following command
@@ -193,31 +225,6 @@ OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 ```
 Caution : only for a development purpose; not suitable for a production server !
 
-
-### Database configuration
-Modify the \config\environments\database.yml with your database credentials. 
-Generally, the postgreSQL Window installer creates a user "postgres" for which you were asked a password during the installation process. 
-```
-default: &default
-  adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: postgres
-  password: your_pass
-  host: localhost
-```
-
-Create the database and the tables
-```
-$ rake db:create
-$ rails db:migrate
-```
-To create the database structure and the tables, you don't have to run all the migrations from scratch :
-```
-$ rails db:schema:load
-```
 
 # Configuring mail services
 Assuming you are using gmail for mail delivery, you may need to configure your google account in order to allow external applications to use it 
