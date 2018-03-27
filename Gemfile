@@ -64,4 +64,4 @@ gem 'acts_as_tree'
 
 gem 'jquery-rails'
 
-gem 'aws-sdk', '~> 2.3'
+gem 'aws-sdk', '~> 3'
