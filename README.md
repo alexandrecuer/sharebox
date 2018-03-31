@@ -41,15 +41,13 @@ If you want to use another DBMS, you will have to change the gem file
 
 ### Rails
 
-Once RailsInstaller is up, launch a git bash, verify ruby version ``ruby -v``, install Rails ``gem install rails`` and verify the version :
+After having run RailsInstaller, launch a git bash, verify ruby version ``ruby -v``, install Rails ``gem install rails`` and verify the version :
 ```
 $ rails -v
 Rails 5.1.5
 ```
-Check you can create a new application named blog
-```
-$ rails new blog
-```
+Check you can create a new application named blog ``rails new blog``
+
 The system will create the app files and launch the command ``bundle install`` to fetch some gems
 
 Launch the server with the command ``rails server``. The server should be up on port 3000. Browse the adress http://localhost:3000 in Mozilla.
@@ -244,8 +242,6 @@ The captcha is cleared for a few minutes. During that time, you can realize a pa
 
 # Installation on Heroku (for production)
 You will need a S3 bucket as Heroku has an ephemeral file system
-
-Modify /config/environments/
 
 Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
