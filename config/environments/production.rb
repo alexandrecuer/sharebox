@@ -97,14 +97,14 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
   
-  config.action_mailer.default_url_options = { host: ENV.fetch('SMTP_DOMAIN') }
+  config.action_mailer.default_url_options = { host: ENV.fetch('DOMAIN') }
   
   config.action_mailer.delivery_method = :smtp
   
   config.action_mailer.smtp_settings = {
     address:                 ENV.fetch('SMTP_ADDRESS'),
     port:                    ENV.fetch('SMTP_PORT'),
-    domain:                  ENV.fetch('SMTP_DOMAIN'),
+    domain:                  ENV.fetch('DOMAIN'),
     user_name:               ENV.fetch('GMAIL_USERNAME'),
     password:                ENV.fetch('GMAIL_PASSWORD'),
     authentication:          :plain,
