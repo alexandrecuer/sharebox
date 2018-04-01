@@ -24,6 +24,8 @@ Uses the following gems :
     - [Use Amazon S3](#use-amazon-s3)
 - [Configuring mail services](#configuring-mail-services)
 - [Installation on Heroku (for production)](#installation-on-heroku-for-production)
+  - [From a development server](#from-a-development-server)
+  - [From a github repository](#from-a-github-repository)
 - [Customization](#customization)
 - [Working behind a proxy server](#working-behind-a-proxy-server)
 ---
@@ -107,7 +109,7 @@ $ gem install bcrypt --platform=ruby
 
 ### Setting environmental variables
 The application uses several variables, which you have to fix in the environment
-<table><tr><td>For S3 storage
+<table><tr><td valign=top>For S3 storage
 <table>
     <tr>
         <td><sub>S3_BUCKET_NAME</sub></td>
@@ -140,6 +142,17 @@ The application uses several variables, which you have to fix in the environment
     </tr>
     <tr>
         <td><sub>GMAIL_PASSWORD</sub></td>
+    </tr>
+    <tr>
+        <td><sub>SMTP_ADDRESS</sub></td>
+        <td rowspan=2><sub>example if using gmail :<br><sub>SMTP_ADDRESS="smtp.gmail.com" and SMTP_PORT=587</sub></sub></td>
+    </tr>
+    <tr>
+      <td><sub>SMTP_PORT</sub></td>
+    </tr>
+    <tr>
+      <td><sub>DOMAIN</sub></td>
+      <td><sub>In development mode :<br><sub>localhost</sub><br>For a production server :<br><sub>ip address or domain name of the server</sub></sub></td>
     </tr>
 </table>
 </td></tr></table>
@@ -240,7 +253,9 @@ The captcha is cleared for a few minutes. During that time, you can realize a pa
 
 
 # Installation on Heroku (for production)
-You will need a S3 bucket as Heroku has an ephemeral file system
+You will need an heroku account and a S3 bucket as Heroku has an ephemeral file system
+
+## From a development server
 
 Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
@@ -261,22 +276,7 @@ $ heroku create
 Creating app... done, desolate-earth-32333
 https://desolate-earth-32333.herokuapp.com/ | https://git.heroku.com/desolate-earth-32333.git
 ```
-Heroku will define a random name for your production server, here : desolate-earth-32333. Modify the action_mailer settings in /config/environments/production.rb
-```
-config.action_mailer.default_url_options = { host: 'https://desolate-earth-32333.herokuapp.com' }
-  
-config.action_mailer.delivery_method = :smtp
-  
-config.action_mailer.smtp_settings = {
-    address:                "smtp.gmail.com",
-    port:                   587,
-    domain:                 "desolate-earth-32333.herokuapp.com",
-    user_name:              ENV.fetch('GMAIL_USERNAME'),
-    password:               ENV.fetch('GMAIL_PASSWORD'),
-    authentication:         :plain,
-    enable_starttls_auto:   true
-}
-```
+Heroku will define a random name for your production server, here : desolate-earth-32333.
 
 Push the files with git.
 ```
@@ -285,7 +285,7 @@ $ git add .
 $ git commit -a -m "Switch to production"
 $ git push heroku master
 ```
-Fix environmental variables
+Fix environmental variables (we assume you are using gmail)
 ```
 $ heroku config:set S3_BUCKET_NAME="your_bucket"
 $ heroku config:set AWS_REGION="your_region"
@@ -295,6 +295,9 @@ $ heroku config:set AWS_ACCESS_KEY_ID="your_access_key"
 $ heroku config:set AWS_SECRET_ACCESS_KEY="your_secret_access_key"
 $ heroku config:set GMAIL_USERNAME="your_gmail_address"
 $ heroku config:set GMAIL_PASSWORD="your_gmail_password"
+$ heroku config:set SMTP_ADDRESS="smtp.gmail.com"
+$ heroku config:set SMTP_PORT=587
+$ heroku config:set DOMAIN="desolate-earth-32333.herokuapp.com"
 ```
 If for some reason, one variable is not correctly fixed, you can correct it from the heroku dashboard.
 
@@ -302,9 +305,16 @@ Go to https://dashboard.heroku.com/apps > Settings > Reveal Config Vars
 
 Create the database and the tables
 ```
-$ heroku run rake db:create
 $ heroku run rake db:schema:load
 ```
+## From a github repository
+
+This is called github integration by the heroku team.
+
+If you don't have a github account, create one and fork the sharebox repository to your account.
+
+
+
 
 # Customization
 
