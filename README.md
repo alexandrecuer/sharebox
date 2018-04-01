@@ -153,9 +153,8 @@ $ rails server
 ##### Second option 
 On Windows, this second option may permit to override specific problems related to environment variables beginning with /. Edit the .env file and fill it with your personal credentials. Install [node-foreman](https://github.com/strongloop/node-foreman) and start the server from a git bash with the following command :
 ```
-$ nf start -s -j Procfile_dev
+$ nf -p 3000 start -s -j Procfile_dev
 ```
-Note the server will start on port 5000
 
 ### Database configuration
 Modify the \config\environments\database.yml with your database credentials. 
