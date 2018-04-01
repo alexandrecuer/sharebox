@@ -17,3 +17,6 @@ setx AWS_SECRET_ACCESS_KEY "your_secret_acces_key"
 rem assuming you are using gmail
 setx GMAIL_USERNAME "your_gmail_address"
 setx GMAIL_PASSWORD "your_gmail_pass"
+setx SMTP_ADDRESS "your_smtp_server_address"
+setx SMTP_PORT your_smtp_server_port
+setx DOMAIN localhost
