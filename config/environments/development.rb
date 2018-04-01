@@ -57,11 +57,11 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   
   config.action_mailer.smtp_settings = {
-    address:				        ENV.fetch('SMTP_ADDRESS'),
+    address:                ENV.fetch('SMTP_ADDRESS'),
     port:                   ENV.fetch('SMTP_PORT'),
-    domain: 				        ENV.fetch('DOMAIN'),
+    domain:                 ENV.fetch('DOMAIN'),
     user_name:              ENV.fetch('GMAIL_USERNAME'),
-    password:				        ENV.fetch('GMAIL_PASSWORD'),
+    password:               ENV.fetch('GMAIL_PASSWORD'),
     authentication:         :plain,
     enable_starttls_auto:   true
   } 
