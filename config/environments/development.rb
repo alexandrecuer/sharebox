@@ -52,18 +52,18 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: ENV.fetch('DOMAIN'), port: 3000 }
   
   config.action_mailer.delivery_method = :smtp
   
   config.action_mailer.smtp_settings = {
-    address:				"smtp.gmail.com",
-    port:					587,
-    domain: 				"gmail.com",
-    user_name:				ENV.fetch('GMAIL_USERNAME'),
-    password:				ENV.fetch('GMAIL_PASSWORD'),
-    authentication:			:plain,
-    enable_starttls_auto: 	true
+    address:				        ENV.fetch('SMTP_ADDRESS'),
+    port:                   ENV.fetch('SMTP_PORT'),
+    domain: 				        ENV.fetch('DOMAIN'),
+    user_name:              ENV.fetch('GMAIL_USERNAME'),
+    password:				        ENV.fetch('GMAIL_PASSWORD'),
+    authentication:         :plain,
+    enable_starttls_auto:   true
   } 
   # error with ENV variables starting by / addition of an 21 char prefix : C:/RailsInstaller/Git'
   # we remove this prefix
@@ -76,7 +76,6 @@ Rails.application.configure do
         bucket: ENV.fetch('S3_BUCKET_NAME'),
         access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
         secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
-        #secret_access_key: AWS_SAK,
         s3_region: ENV.fetch('AWS_REGION'),
         s3_host_name: ENV.fetch('AWS_HOST_NAME'),
     }
