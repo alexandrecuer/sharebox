@@ -81,7 +81,7 @@ class SharedFoldersController < ApplicationController
             #il faudra mettre en place un adapter de type sidekiq avec base de données clé valeur REDIS
             #on utilise les méthodes perform_now ou perform_later
             mel_text="Partage du répertoire "+params[:shared_folder][:folder_id]+"<br>"+mel_text
-            #ApplicationJob.perform_later(current_user,mel_text)
+            ApplicationJob.perform_later(current_user,mel_text)
         end
     
     end
