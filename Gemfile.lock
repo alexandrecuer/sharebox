@@ -637,8 +637,6 @@ GEM
       railties (>= 3.2, < 6.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    groupdate (4.0.0)
-      activesupport (>= 4.2)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -777,7 +775,6 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   devise
   font-awesome-rails
-  groupdate
   jbuilder (~> 2.5)
   jquery-rails
   paperclip
