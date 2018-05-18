@@ -75,8 +75,8 @@ before_action :authenticate_user!
             if current_user.has_asset_ownership?(asset)
                 #en passant à S3, on utilise redirect_to asset.uploaded_file.expiring_url(10)
                 #celà crée une url valable 10s qui permet d'accéder à des fichiers S3 privés
-                send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-                #redirect_to asset.uploaded_file.expiring_url(10)
+                #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+                redirect_to asset.uploaded_file.expiring_url(10)
             else
                 flash[:notice] = "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
                 redirect_to root_url
@@ -86,8 +86,8 @@ before_action :authenticate_user!
             current_folder = Folder.find_by_id(asset.folder_id)
             if current_user.has_shared_access?(current_folder)
                 #passage à S3
-                send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-                #redirect_to asset.uploaded_file.expiring_url(10)
+                #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+                redirect_to asset.uploaded_file.expiring_url(10)
             else
                 flash[:notice] = "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
                 redirect_to root_url
