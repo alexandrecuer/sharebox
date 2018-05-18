@@ -1,0 +1,49 @@
+<%= form_for @satisfaction do |f| %>
+
+	<h2 class="title"><%= @poll.name %></h2>
+	
+	<p><%= @poll.description %></p><br>
+
+	<% @arrayclosed = @poll.get_closed_names %>
+
+	<% @arrayclosed.each do |c| %>
+		<p><%= c %></p>
+
+		<% i = @arrayclosed.index(c) + 1 %>
+
+		<div class="stars">
+
+			<% a = "closed" + i.to_s %>
+
+			<%= f.radio_button a.to_sym, '4' %><label class="star-4" for="satisfaction_closed<%= i %>_4"></label>
+			<%= f.radio_button a.to_sym, '3' %><label class="star-3" for="satisfaction_closed<%= i %>_3"></label>
+			<%= f.radio_button a.to_sym, '2' %><label class="star-2" for="satisfaction_closed<%= i %>_2"></label>
+			<%= f.radio_button a.to_sym, '1' %><label class="star-1" for="satisfaction_closed<%= i %>_1"></label>
+
+		</div>
+
+	<% end %>
+
+	<% @arrayopen = @poll.get_open_names %>
+
+	<% @arrayopen.each do |o| %>
+		<p><%= o %></p>
+
+		<% i = @arrayopen.index(o) + 1 %>
+		<% a = "open" + i.to_s %>
+		<%= f.text_area(a.to_sym, size: "100x3") %><br>
+
+	<% end %>
+
+	<% @satisfaction.folder_id = @current_folder.id %> 
+	<% @satisfaction.poll_id = @current_folder.poll_id %>
+	<% @satisfaction.case_number = @current_folder.case_number %>
+	<%= f.hidden_field :folder_id %> 
+	<%= f.hidden_field :poll_id %> 
+	<%= f.hidden_field :case_number %>
+
+	<% if @satisfaction.new_record? %>
+    	<%= f.submit "Valider"%>
+    <% end %>
+
+<% end %>

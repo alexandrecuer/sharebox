@@ -1,0 +1,25 @@
+
+<% @arr = Array.new %>
+<% if @poll %>
+
+	<% for i in 1..@poll.closed_names_number %>
+
+	<%= line_chart [
+	    	{name: "Pas Satisfait", data: @poll.serie(1,i,@poll)},
+	    	{name: "Peu Satisfait", data: @poll.serie(2,i,@poll)},
+	    	{name: "Satisfait", data: @poll.serie(3,i,@poll)},
+	    	{name: "Très Satisfait", data: @poll.serie(4,i,@poll)},
+	   		{name: "Non Renseigné", data: @poll.serie(nil,i,@poll)},
+	  		],
+	  adapter: 'highcharts',
+	  height: '300px',
+	  title: @poll.findClosedName(@poll,i),
+	  min: 0,
+	  max: 100,
+	  xtitle: "Année", ytitle: "Satisfaction", 
+	  suffix: "%", 
+	  download: true
+ 	%>
+
+	<% end %>
+<% end %>

@@ -1,70 +1,98 @@
+<% if @current_folder %>
+    <% @assets = @current_folder.assets.order("uploaded_file_file_name desc") %>
+    <% @folders = @current_folder.children %>
+<% else %>
+    <% @folders=current_user.folders.roots %>
+    <% @assets=current_user.assets.where("folder_id is NULL").order("uploaded_file_file_name desc") %>
+    <% @shared_folders_by_others=current_user.shared_folders_by_others %>
+<% end %>
+
 
 <% if @assets.length > 0 or @folders.length > 0 or current_user.has_shared_folders_from_others? %>
 
-    <table cellspacing=0>
+    <table class="list_folders">
 	
-      <tr bgcolor=#EEEEE>
-	    <td colspan=2></td>
-        <td>Nom</td>
-        <td>Mise en ligne le</td>
-        <td>Taille</td>
-        <td></td>
-      </tr>
-      <% if !@current_folder %>
-        <% @shared_folders_by_others.each do |f|%>
-            <tr bgcolor=#EEEEEE>
-            <td colspan=2>Propriétaire:<br><%= User.find_by_id(f.user_id).email %></td>
-            <td><div class="folder_shared_by_others"><%= link_to f.name, folder_path(f) %></div></td>
-            <td><%= f.updated_at %></td>
-            <td></td>
-            <td></td>
-        <% end %>
-      <% end %>
-	  <% @folders.each do |f|%>
-        <% if current_user.has_ownership?(f) %>
-            <tr>
-            <td><%= link_to 'Supprimer', folder_path(f), method: :delete, data: {confirm: 'Etes vous sûr ?' } %></td>
-            <td>
-            <%= link_to 'Partager', new_share_on_folder_path(f) %>
-            </td>
-            <td><div class="folder<%= f.shared? ? '_shared' : '' %>"><%= link_to f.name, folder_path(f) %>
-            <% if f.shared? %>
-                <%= link_to '[Cesser de partager]', shared_folder_path(f), method: :delete, data: {confirm: 'confirmez-vous cette cessation de partage?'} %>
-                <%= link_to '[Voir les partages]', shared_folder_path(f) %>
-            <% end %>
-            </div></td>
+        <tr>
+	       <td colspan=3></td>
+            <td>Nom</td>
+            <td>Mise en ligne ou dernière modification</td>
+            <td>Taille</td>
+            <td>Etat de l'enquête satisfaction</td>
+        </tr>
+        <% if !@current_folder %>
+            <% @shared_folders_by_others.each do |f|%>
+                <tr>
+                    <td colspan=3>Propriétaire:<br><%= User.find_by_id(f.user_id).email %></td>
+                    <td><div class="folder_shared_by_others"><%= link_to f.name, folder_path(f) %></div></td>
+                    <td><%= f.updated_at %></td>
+                    <td></td>
+                    <% if f.poll_id %>
+                        <td>Disponible</td>
+                    <% end %>
             
-        <% else %>
-            <% if current_user.has_shared_access?(f) %>
-                <tr bgcolor=#EEEEEE>
-                <td colspan=2>Propriétaire:<br><%= User.find_by_id(f.user_id).email %></td>
-                <td><div class="folder_sub_shared_by_others"><%= link_to f.name, folder_path(f) %></div></td>
             <% end %>
         <% end %>
-        <td><%= f.updated_at %></td>
-        <td></td>
-        <td></td>
-        </tr>    
-      <% end %>
+	    <% @folders.each do |f|%>
+            <% if current_user.has_ownership?(f) %>
+                <tr>
+                    <% if current_user.is_admin? || current_user.is_private? %>
+                        <td><%= link_to 'Supprimer', folder_path(f), method: :delete, data: {confirm: 'Etes vous sûr ?' } %></td>
+                        <td><%= link_to 'Partager', new_share_on_folder_path(f) %></td>
+                        <td><%= link_to 'Gérer', edit_folder_path(f) %></td>
+                    <% end %>
+                    <td><div class="folder<%= f.shared? ? '_shared' : '' %>"><%= link_to f.name, folder_path(f) %>
+                    <% if current_user.is_admin? || current_user.is_private? %>
+                        <% if f.shared? %>
+                            <%= link_to '[Cesser de partager]', shared_folder_path(f), method: :delete, data: {confirm: 'confirmez-vous cette cessation de partage?'} %>
+                        <% end %>
+                        <% if f.shared? && !f.has_satisfaction_answer? %>
+                            <%= link_to '[Voir les partages]', shared_folder_path(f) %>
+                        <% elsif f.has_satisfaction_answer? %>
+                            <%= link_to '[Voir les réponses]', shared_folder_path(f) %>
+                        <% end %>
+                    <% end %>	
+                    </div></td>
+
+            
+            <% else %>
+                <% if current_user.has_shared_access?(f) %>
+                    <tr>
+                    <td colspan=3>Propriétaire:<br><%= User.find_by_id(f.user_id).email %></td>
+                    <td><div class="folder_sub_shared_by_others"><%= link_to f.name, folder_path(f) %></div></td>
+                <% end %>
+            <% end %>
+
+                <td><%= f.updated_at %></td>
+                <td></td>
+                <% if f.poll_id %>
+                    <td>Disponible</td>
+                <% end %>
+        
+            </tr>    
+        <% end %>
 	
       <% @assets.each do |f|%>
         <% if current_user.has_asset_ownership?(f) %>
             <tr>
-            <td><%= link_to 'Supprimer', asset_path(f), method: :delete, data: {confirm: 'Etes vous sûr ?' } %></td>
-            <td></td>
+            <td colspan="3"><%= link_to 'Supprimer', asset_path(f), method: :delete, data: {confirm: 'Etes vous sûr ?' } %></td>
             <td><div class="file"><%= link_to f.uploaded_file_file_name, download_url(f) %></div></td>
         <% else %>
-            <tr bgcolor=#EEEEEE>
-            <td colspan=2>Propriétaire:<br><%= User.find_by_id(f.user_id).email %></td>
+            <tr>
+            <td colspan=3>Propriétaire:<br><%= User.find_by_id(f.user_id).email %></td>
             <td><div class="file_shared"><%= link_to f.uploaded_file_file_name, download_url(f) %></div></td>
         <% end %>
         <!-- we could do f.uploaded_file_updated_at.strftime("%d/%m/%Y %l:%M%p") 
             but we have done it directly in /config/environnement so we don't have to repeat it in the views -->
         <td><%= f.uploaded_file_updated_at %></td>
         <td><%= number_to_human_size(f.uploaded_file_file_size, :precision => 2) %></td>
-        <td><%#= link_to f.uploaded_file_file_name, f.uploaded_file.url %></td>
+
+
+        
+        
         </tr>
       <% end %>
 	  
     </table>
 <% end %>
+
+

@@ -1,6 +1,6 @@
 class User < ApplicationRecord
 
-  after_create :complete_suid
+  after_create :complete_suid, :set_admin
   
   has_many :assets, :dependent=> :destroy
   
@@ -11,11 +11,22 @@ class User < ApplicationRecord
   has_many :being_shared_folders, :class_name=> "SharedFolder", :foreign_key=> "share_user_id", :dependent=> :destroy
   
   has_many :shared_folders_by_others, :through => :being_shared_folders, :source => :folder
+
+  has_many :polls, :dependent=> :destroy
+
+  has_many :satisfactions, :dependent=> :destroy
   
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
+  def set_admin
+    if User.count == 1
+      self.statut = "admin"
+      self.save
+    end
+  end
   
   def complete_suid
     @shared_folders=SharedFolder.where("share_user_id IS NULL")
@@ -50,6 +61,15 @@ class User < ApplicationRecord
     end
     return false
   end
+
+  # Permet de récupérer un couple clé / valeur => id / email de chaque utilisateur en une seule requête SQL
+  def get_all_emails
+    h = Hash.new
+    User.all.each do |u|
+      h[u.id] = u.email
+    end
+    return h
+  end
   
   def has_ownership?(folder)
     return true if self.folders.include?(folder)
@@ -61,6 +81,22 @@ class User < ApplicationRecord
   
   def has_shared_folders_from_others?
     return self.shared_folders_by_others.length>0
+  end
+
+  def is_admin?
+    return true if self.statut == "admin"
+  end
+
+  def is_private?
+    return true if self.statut == "private"
+  end
+
+  def is_public?
+    return true if self.statut == "public"
+  end
+
+  def has_completed_satisfaction?(folder)
+    return true if Satisfaction.where(folder_id: folder.id, user_id: self.id).length != 0 
   end
   
 end

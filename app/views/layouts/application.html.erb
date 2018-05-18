@@ -2,27 +2,34 @@
 <html>
   <head>
     <title>Cerema ShareBox</title>
-    <link rel="shortcut icon" href="../../../public/images/logo/logo.jpg">
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link rel="shortcut icon" href="/images/divers/logo.jpg"/>
+
   </head>
 
   <body>
     <div class="image">
-    <table>
-    <tr><td>
-    <img src="http://www.cerema.fr/themes/custom/uas_base/images/logo-seul.svg" height=150 border=0>
-    </td><td>
-    <%= link_to image_tag("http://www.cerema.fr/sites/default/files/styles/uas_wide_large/public/images/region/2017/cerema-centre-est.jpg", height:150, border:0 ), root_url %>
-    </td><td>
-    <img src="https://www.cerema.fr/sites/default/files/styles/uas_wide_medium/public/images/technology/2017/cerema-plateforme-9-10.jpg" height=150 border=0>
-    </td></tr>
+      <table>
+        <tr>
+          <td>
+            <img src="https://www.cerema.fr/themes/custom/uas_base/images/logo-seul.svg" height=150 border=0>
+          </td>
+          <td>
+             <img src="https://www.cerema.fr/sites/default/files/styles/uas_wide_large/public/images/region/2017/cerema-centre-est.jpg" height=150 border=0>
+          </td>
+          <td>
+            <img src="https://www.cerema.fr/sites/default/files/styles/uas_wide_medium/public/images/technology/2017/cerema-plateforme-9-10.jpg" height=150 border=0>
+          </td>
+        </tr>
     </table>
-    <h5><%= link_to "Le cloud des rapports / Cerema Centre-Est".html_safe, root_url, class: "rootlink" %></h5>
-    </div>
+    <h5>
+      <%= link_to "Le cloud des rapports / Cerema Centre-Est".html_safe, root_url, class: "rootlink" %>
+    </h5>
+  </div>
+
   <p class="notice"><% if notice %><%= notice.html_safe %><% end %></p>
   <p class="alert"><%= alert %></p>
   <%# if we want to use other flash message%> 

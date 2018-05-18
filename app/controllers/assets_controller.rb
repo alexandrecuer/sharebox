@@ -10,6 +10,10 @@ before_action :authenticate_user!
   end
   
   def new
+    if !(current_user.is_admin? || current_user.is_private?)
+      flash[:notice] = "Vous ne pouvez pas mettre en ligne de fichier"
+      redirect_to root_url
+    end
     @asset = current_user.assets.new
     # soit on a un folder_id - cf routage new_sub_asset - l'URI va être de type /folders/folder_id/new_file
     # soit on n'en a pas et on met en ligne le fichier à la racine
@@ -17,8 +21,6 @@ before_action :authenticate_user!
       @current_folder = Folder.find_by_id(params[:folder_id])
       if @current_folder
         @asset.folder_id = @current_folder.id
-        @assets = @current_folder.assets.order("uploaded_file_file_name desc")
-        @folders = @current_folder.children
         if !current_user.has_ownership?(@current_folder)  
             flash[:notice] = "Vous ne pouvez mettre en ligne de fichier que dans les répertoires vous appartenant"
             redirect_to root_url
@@ -27,12 +29,6 @@ before_action :authenticate_user!
         flash[:notice] = "Vous ne pouvez pas mettre en ligne de fichier dans un répertoire qui n'existe pas"
         redirect_to root_url
       end
-    # on est à la racine
-    # l'URI est de type /assets/new
-    else
-      @folders=current_user.folders.roots
-      @assets=current_user.assets.where("folder_id is NULL").order("uploaded_file_file_name desc")
-      @shared_folders_by_others=current_user.shared_folders_by_others
     end
     
   end
@@ -49,17 +45,9 @@ before_action :authenticate_user!
           redirect_to root_url
         end
       # soit la mise en ligne est un échec...
-      # on doit recaluler les instances assets et folders 
-      # pour que la commande [render 'shared/list'] de la vue new.html.erb fonctionne
       else
         if @asset.folder_id
           @current_folder = Folder.find_by_id(@asset.folder_id)
-          @assets = @current_folder.assets.order("uploaded_file_file_name desc")
-          @folders = @current_folder.children
-        else
-          @folders=current_user.folders.roots
-          @assets=current_user.assets.where("folder_id is NULL").order("uploaded_file_file_name desc")
-          @shared_folders_by_others=current_user.shared_folders_by_others
         end
         render 'new'
       end
@@ -87,8 +75,8 @@ before_action :authenticate_user!
             if current_user.has_asset_ownership?(asset)
                 #en passant à S3, on utilise redirect_to asset.uploaded_file.expiring_url(10)
                 #celà crée une url valable 10s qui permet d'accéder à des fichiers S3 privés
-                #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-                redirect_to asset.uploaded_file.expiring_url(10)
+                send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+                #redirect_to asset.uploaded_file.expiring_url(10)
             else
                 flash[:notice] = "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
                 redirect_to root_url
@@ -98,8 +86,8 @@ before_action :authenticate_user!
             current_folder = Folder.find_by_id(asset.folder_id)
             if current_user.has_shared_access?(current_folder)
                 #passage à S3
-                #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-                redirect_to asset.uploaded_file.expiring_url(10)
+                send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+                #redirect_to asset.uploaded_file.expiring_url(10)
             else
                 flash[:notice] = "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
                 redirect_to root_url

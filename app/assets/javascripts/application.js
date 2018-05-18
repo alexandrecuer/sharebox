@@ -11,11 +11,12 @@
 // about supported directives.
 //
 //= require jquery
-
+//= require highcharts
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
-
+//= require Chart.bundle
+//= require chartkick
 
 //tried to use a sort of unobstrusive javascript (UJS) with no success
 //<div data-sharing=<%= f.id %> data-folder_name='<%= f.name %>' >partager</div>

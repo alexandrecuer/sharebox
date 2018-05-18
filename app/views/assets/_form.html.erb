@@ -1,7 +1,7 @@
 <%= form_for @asset, url: assets_path, html: { multipart: true } do |f| %>
     <p>
       <%= f.file_field :uploaded_file, class:"custom-file-input" %>
-      <%= f.submit "Lancer le téléchargement" %>
+      <%= f.submit "Lancer le téléchargement", class:"custom-file-validate" %>
     </p>
 
 	<%= f.hidden_field :folder_id %>

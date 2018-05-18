@@ -1,3 +1,4 @@
+
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
@@ -12,8 +13,9 @@
  *
  *= require_tree .
  *= require_self
+ *= require font-awesome
  */
- 
+
 html,body {
 	background-color: #FFFFFF;
 	font-family: "Lucida Grande","Verdana","Arial","Bitstream Vera Sans",sans-serif;
@@ -23,7 +25,6 @@ html,body {
 a {
   text-decoration: none; /* pas de soulignage */
   color: #F56618; 
-  background-color: #EEEEEE ;
 }
 
 a:hover {
@@ -57,6 +58,8 @@ h5 {
    left: 0; 
    width: 100%; 
 }
+
+
 
 
 /*
@@ -105,4 +108,17 @@ h5 {
 
 .show {
 	visibility: visible;
+}
+
+/* 
+ * Styles dedicated to the table ( folder's list )
+ */
+
+.list_folders tr:first-child td {
+  font-weight: 600;
+  background-color: rgb(238, 238, 224);
+}
+.list_folders tr td{
+  padding: 10px;
+  
 }
