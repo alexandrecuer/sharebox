@@ -7,7 +7,7 @@ class SharedFoldersController < ApplicationController
     @shared_folders = current_user.shared_folders.where("folder_id = "+params[:id]) 
     @current_folder = current_user.folders.find(params[:id])
 
-    @satisfaction = Satisfaction.find_by_folder_id(@current_folder.id)
+    @satisfactions = Satisfaction.where(folder_id: @current_folder.id)
     @poll = Poll.find_by_id(@current_folder.poll_id)
 
   end
@@ -81,7 +81,7 @@ class SharedFoldersController < ApplicationController
             #il faudra mettre en place un adapter de type sidekiq avec base de données clé valeur REDIS
             #on utilise les méthodes perform_now ou perform_later
             mel_text="Partage du répertoire "+params[:shared_folder][:folder_id]+"<br>"+mel_text
-            ApplicationJob.perform_later(current_user,mel_text)
+            #ApplicationJob.perform_later(current_user,mel_text)
         end
     
     end
@@ -113,7 +113,15 @@ class SharedFoldersController < ApplicationController
     end
   end
 
-  
+  def edit
+    @to_be_unshared_folder = Folder.find_by_id(params[:id])
+  end
+
+  def delete
+    params[:emails].each do |email|
+      SharedFolder.destroy(shared_email: email)
+    end
+  end
   
   private
     def shared_folder_params

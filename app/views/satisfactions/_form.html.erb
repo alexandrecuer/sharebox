@@ -1,8 +1,13 @@
 <%= form_for @satisfaction do |f| %>
-
-	<h2 class="title"><%= @poll.name %></h2>
 	
-	<p><%= @poll.description %></p><br>
+	<% if @satisfaction.new_record? %>
+		<p><%= @poll.description.html_safe %></p><br>
+	<% else %>
+		<p>
+			Merci d'avoir répondu à notre enquête<br>
+			Voici ce que vous avez saisi<br><br>
+		</p>
+	<% end %>
 
 	<% @arrayclosed = @poll.get_closed_names %>
 

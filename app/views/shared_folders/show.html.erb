@@ -1,7 +1,4 @@
-<h3>Les partages du répertoire<br> 
-<%= @current_folder.name %><br>
-numéro : <%= @current_folder.id %></h3>
-
+<%= render 'shared/nav' %>
 
 <table class="recap">
     <tr>
@@ -10,22 +7,41 @@ numéro : <%= @current_folder.id %></h3>
     	<th>Statut</th>
     </tr>
     <% @shared_folders.each do |f|%>
+    <% user = User.find_by_email(f.share_email) %>
     <tr>
         <td>
-        <% if f.share_user_id %>
-            <%= f.share_user_id %>
-        <% end %>
+            <% if user %>
+                <%= user.id %>
+            <% end %>
         </td>
-    <td><%= f.share_email %></td>
-    <% if User.all.find_by_id(f.share_user_id) %>
-        <td><%= (User.all.find_by_id(f.share_user_id)).statut %></td>
-    <% end %>
+
+        <% if user %>
+            <% if user.has_completed_satisfaction?(@current_folder) %>
+                    <% satisfaction = @satisfactions.find_by_user_id(user.id) %>
+                <td><a class="display_anchor" onclick="display(<%= satisfaction.id %>)"><%= f.share_email %></a></td>
+            <% else %>
+                <td><%= f.share_email %></td>
+            <% end %>
+        <% else %>
+            <td><%= f.share_email %></td>
+        <% end %>
+
+        <td>
+            <% if user %>
+                <%= user.statut %>
+            <% end %>
+        </td>
+
+    </tr>
     <% end %>
 
 </table>
 
-<% if @satisfaction %>
-    <%= render 'satisfactions/form' %> 
+<% @satisfactions.each do |s| %> 
+    <div id="form_<%=s.id%>" style="display: none">
+        <% @satisfaction = s %>
+        <%= render 'satisfactions/form' %>
+    </div>
 <% end %>
 
 

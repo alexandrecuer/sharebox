@@ -1,7 +1,3 @@
-<% if current_user.has_shared_access?(@current_folder) && !(current_user.has_ownership?(@current_folder)) %>
-    Vous êtes sur un répertoire partagé <br>Vous n'avez que des droits de lecture<br><br>
-<% end %>
-
 <%= render 'shared/nav' %>
 
 <%= render 'shared/list' %>

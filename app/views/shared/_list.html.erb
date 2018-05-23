@@ -17,7 +17,6 @@
             <td>Nom</td>
             <td>Mise en ligne ou dernière modification</td>
             <td>Taille</td>
-            <td>Etat de l'enquête satisfaction</td>
         </tr>
         <% if !@current_folder %>
             <% @shared_folders_by_others.each do |f|%>
@@ -26,9 +25,6 @@
                     <td><div class="folder_shared_by_others"><%= link_to f.name, folder_path(f) %></div></td>
                     <td><%= f.updated_at %></td>
                     <td></td>
-                    <% if f.poll_id %>
-                        <td>Disponible</td>
-                    <% end %>
             
             <% end %>
         <% end %>
@@ -64,9 +60,6 @@
 
                 <td><%= f.updated_at %></td>
                 <td></td>
-                <% if f.poll_id %>
-                    <td>Disponible</td>
-                <% end %>
         
             </tr>    
         <% end %>

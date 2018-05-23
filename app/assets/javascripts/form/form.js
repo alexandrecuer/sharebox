@@ -25,3 +25,12 @@ function calc_names_number(){
 	form.appendChild(areaclosednumber);
 	form.appendChild(areaopennumber);
 }
+
+function display(form_number){
+	var element_id = "form_" + form_number;
+	var element = document.getElementById(element_id);
+	if (element.style.display == "block")
+		element.style.display = "none";
+	else
+		element.style.display = "block";
+}

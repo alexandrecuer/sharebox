@@ -9,8 +9,13 @@ class FoldersController < ApplicationController
   redirect_to folder_path(params[:folder_id])
   end
 
+  # Index permet d'afficher l'arborescence des dossiers pour les utilisateurs admin
   def index 
-    @folders = Folder.all
+    if !current_user.is_admin?
+      flash[:notice] = "Vous n'avez pas accès à cette page"
+      redirect_to root_url
+    end
+    @parent_folders = Folder.all.where(parent_id: nil)
   end
   
   def show
@@ -61,21 +66,31 @@ class FoldersController < ApplicationController
   
   def create
   	@folder = current_user.folders.new(folder_params)
-      # soit la création du répertoire est un succès et on renvoie vers le répertoire parent ou vers la racine
-  	if @folder.save
-        if @folder.parent_id
-          redirect_to folder_path(@folder.parent_id)
+  	# Un numéro d'affaire est unique, mais on peut créer plusieurs dossiers sans préciser de numéro d'affaire
+  	if ( Folder.where(case_number: @folder.case_number).length > 0 && @folder.case_number != "" ) 
+  		flash[:notice] = "Ce numéro d'affaire existe déjà"
+  		if @folder.parent_id
+          	redirect_to folder_path(@folder.parent_id)
         else
-          redirect_to root_url
+          	redirect_to root_url
         end
-    # Cette seconde partie du if permet, sans que l'utilisateur ait le sentiment de changer de page de porter à sa connaissance 
-    # les messages d'erreur et de réafficher le formulaire au cas ou le processus de création serait un échec. 
-    else
-      if @folder.parent_id
-        @current_folder = Folder.find_by_id(@folder.parent_id)
-      end
-      render 'new'
-    end
+  	else
+  		 # soit la création du répertoire est un succès et on renvoie vers le répertoire parent ou vers la racine
+  		if @folder.save
+        	if @folder.parent_id
+          		redirect_to folder_path(@folder.parent_id)
+        	else
+          		redirect_to root_url
+        	end
+    	# Cette seconde partie du if permet, sans que l'utilisateur ait le sentiment de changer de page de porter à sa connaissance 
+    	# les messages d'erreur et de réafficher le formulaire au cas ou le processus de création serait un échec. 
+    	else
+      		if @folder.parent_id
+        		@current_folder = Folder.find_by_id(@folder.parent_id)
+      		end
+      		render 'new'
+    	end
+  	end
   end
   
   def destroy
@@ -114,24 +129,38 @@ class FoldersController < ApplicationController
 
   def update
     @folder = Folder.find(params[:id])
-    case_number = @folder.case_number
-
-    if @folder.update(folder_params)
-      Satisfaction.where(case_number: case_number).each do |f|
-        f.case_number = @folder.case_number
-        f.save
-      end
-      if @folder.parent_id
-        redirect_to folder_path(@folder.parent_id)
-      else
-        redirect_to root_url
-      end
+    # On accède au nouveau numéro d'affaire via 'folder_params[:case_number]'
+    # On s'assure de 3 choses : 
+    # Si on ne modifie pas le numéro d'affaire c'est ok 
+    # Si on modifie le numéro d'affaire et que le nouveau numéro n'existe pas déjà c'est ok 
+    # Si le nouveau numéro d'affaire est vide alors c'est ok 
+    if ( Folder.where(case_number: folder_params[:case_number]).length > 0 && folder_params[:case_number] != "" && folder_params[:case_number] != @folder.case_number) 
+  		flash[:notice] = "Ce numéro d'affaire existe déjà"
+  		if @folder.parent_id
+          	redirect_to folder_path(@folder.parent_id)
+        else
+          	redirect_to root_url
+        end
     else
-      if @folder.parent_id
-        @current_folder = Folder.find(@folder.parent_id)
-      end
-      render 'edit'
-    end
+	    old_case_number = @folder.case_number
+	    if @folder.update(folder_params)
+	   		# En mettant à jour un numéro d'affaire sur un dossier, on met à jour toutes les satisfactions du dossier
+	        Satisfaction.where(case_number: old_case_number).each do |f|
+	        	f.case_number = @folder.case_number
+	        	f.save
+	      	end
+	      	if @folder.parent_id
+	        	redirect_to folder_path(@folder.parent_id)
+	      	else
+	        	redirect_to root_url
+	      	end
+	    else
+	      	if @folder.parent_id
+	        	@current_folder = Folder.find(@folder.parent_id)
+	      	end
+	      	render 'edit'
+	    end
+	end
   end
 
   private
