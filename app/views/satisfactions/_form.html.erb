@@ -3,16 +3,20 @@
 	<% if @satisfaction.new_record? %>
 		<p><%= @poll.description.html_safe %></p><br>
 	<% else %>
-		<p>
-			Merci d'avoir répondu à notre enquête<br>
-			Voici ce que vous avez saisi<br><br>
-		</p>
+		<% if current_user.is_private? || current_user.is_admin? %>
+			<p>Voici ce que l'utilisateur <%= User.find_by_id(@satisfaction.user_id).email %> a répondu le <%= @satisfaction.created_at %></p>
+		<% else %>
+			<p>
+				Merci d'avoir répondu à notre enquête<br>
+			 	Voici ce que vous avez saisi le : <%= @satisfaction.created_at %><br><br>
+			</p>
+		<% end %>
 	<% end %>
 
 	<% @arrayclosed = @poll.get_closed_names %>
 
 	<% @arrayclosed.each do |c| %>
-		<p><%= c %></p>
+		<%= c %> :
 
 		<% i = @arrayclosed.index(c) + 1 %>
 
@@ -25,18 +29,18 @@
 			<%= f.radio_button a.to_sym, '2' %><label class="star-2" for="satisfaction_closed<%= i %>_2"></label>
 			<%= f.radio_button a.to_sym, '1' %><label class="star-1" for="satisfaction_closed<%= i %>_1"></label>
 
-		</div>
+		</div><br>
 
 	<% end %>
 
 	<% @arrayopen = @poll.get_open_names %>
 
 	<% @arrayopen.each do |o| %>
-		<p><%= o %></p>
+		<%= o %> :
 
 		<% i = @arrayopen.index(o) + 1 %>
 		<% a = "open" + i.to_s %>
-		<%= f.text_area(a.to_sym, size: "100x3") %><br>
+		<%= f.text_area(a.to_sym, size: "50x5") %><br>
 
 	<% end %>
 

@@ -23,8 +23,13 @@ class PollsController < ApplicationController
 
     def update
         @poll = Poll.find_by_id(params[:id])
-        if @poll.update(poll_params)
-            flash[:notice] = "Modifications du sondage sauvegardées"
+        array = poll_params[:closed_names].split(";") + poll_params[:open_names].split(";")
+        if array.uniq.count != array.size
+            flash[:notice] = "Un sondage ne peut contenir des questions identiques"
+        else
+            if @poll.update(poll_params)
+                flash[:notice] = "Modifications du sondage sauvegardées"
+            end
         end
         redirect_to root_url
     end
@@ -51,11 +56,16 @@ class PollsController < ApplicationController
  	def create 
  		@poll = current_user.polls.new(poll_params)
         # le formulaire est crée seulement si on a un titre, une description et au moins une question ( ouverte ou fermée )
-        if ( @poll.closed_names == "" && @poll.open_names == "" )
-            flash[:notice] = "Il faut au moins une question dans le formulaire"
+        if (( @poll.open_names == "" && @poll.closed_names == "" ) || @poll.description == "" || @poll.name == "" )
+            flash[:notice] = "Il manque des champs obligatoires dans le formulaire"
         else
- 		    @poll.save
- 		    flash[:notice] = "Nouveau formulaire crée avec succès"
+            array = @poll.get_names
+            if array.uniq.count != array.size
+                flash[:notice] = "Il n'est pas possible de créer un formulaire avec des questions identiques"
+            else
+ 		        @poll.save
+ 		        flash[:notice] = "Nouveau formulaire crée avec succès"
+            end
         end
         redirect_to root_url
  	end
