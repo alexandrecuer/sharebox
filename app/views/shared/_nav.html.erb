@@ -35,8 +35,12 @@
       <% Poll.all.each do |poll| %>
         <li>
           <%= link_to poll.name, edit_poll_path(poll) %>
-          <%= link_to 'X', poll_path(poll), method: :delete, data: {confirm: 'Etes vous sûr ?' } %>
-          <%= link_to  'O)', poll_path(poll) %>
+          <%= link_to poll_path(poll), method: :delete, data: {confirm: 'Etes vous sûr ?' } do %>
+            <i class="fas fa-times fa-2x"></i>
+          <% end %>
+          <%= link_to poll_path(poll) do %>
+            <i class="far fa-eye fa-2x"></i>
+          <% end %>
         </li>
       <% end %>
     </ul>

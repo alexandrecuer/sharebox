@@ -13,6 +13,8 @@ class Folder < ApplicationRecord
   acts_as_tree
 
   validates :name, presence: true
+
+  extend ActsAsTree::TreeWalker
   
   def shared?
     !self.shared_folders.empty?

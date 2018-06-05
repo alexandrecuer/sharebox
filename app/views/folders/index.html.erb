@@ -1,4 +1,4 @@
-<% @parent_folders.each do |pa| %>
-	<%= pa.name+"("+pa.id.to_s+")" %><br>
-
+<% Folder.walk_tree do |folder, level| %>
+	<% user = User.find_by_id(folder.user_id) %>
+  	<%= link_to "#{' -- '* level}#{folder.name} (#{user.email})", folder_path(folder) %><br/>
 <% end %>
