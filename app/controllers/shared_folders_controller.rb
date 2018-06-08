@@ -122,7 +122,14 @@ class SharedFoldersController < ApplicationController
       SharedFolder.destroy(shared_email: email)
     end
   end
-  
+
+  def send_email
+    flash[:notice] = "test"
+    shared_folder = SharedFolder.find_by_id(params[:id])
+    shared_folder.send_email
+    redirect_to shared_folder_path(shared_folder.folder_id)
+  end
+
   private
     def shared_folder_params
     params.require(:shared_folder).permit(:share_email, :share_user_id, :folder_id, :message)

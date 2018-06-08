@@ -24,10 +24,10 @@
 
 			<% a = "closed" + i.to_s %>
 
-			<%= f.radio_button a.to_sym, '4' %><label class="star-4" for="satisfaction_closed<%= i %>_4"></label>
-			<%= f.radio_button a.to_sym, '3' %><label class="star-3" for="satisfaction_closed<%= i %>_3"></label>
-			<%= f.radio_button a.to_sym, '2' %><label class="star-2" for="satisfaction_closed<%= i %>_2"></label>
-			<%= f.radio_button a.to_sym, '1' %><label class="star-1" for="satisfaction_closed<%= i %>_1"></label>
+			<%= f.radio_button a.to_sym, '4', disabled: !@satisfaction.new_record? %><label class="star-4" for="satisfaction_closed<%= i %>_4"></label>
+			<%= f.radio_button a.to_sym, '3', disabled: !@satisfaction.new_record? %><label class="star-3" for="satisfaction_closed<%= i %>_3"></label>
+			<%= f.radio_button a.to_sym, '2', disabled: !@satisfaction.new_record? %><label class="star-2" for="satisfaction_closed<%= i %>_2"></label>
+			<%= f.radio_button a.to_sym, '1', disabled: !@satisfaction.new_record? %><label class="star-1" for="satisfaction_closed<%= i %>_1"></label>
 
 		</div><br>
 
@@ -40,7 +40,7 @@
 
 		<% i = @arrayopen.index(o) + 1 %>
 		<% a = "open" + i.to_s %>
-		<%= f.text_area(a.to_sym, size: "50x5") %><br>
+		<%= f.text_area a.to_sym, size: "50x5", disabled: !@satisfaction.new_record? %><br>
 
 	<% end %>
 
@@ -52,7 +52,7 @@
 	<%= f.hidden_field :case_number %>
 
 	<% if @satisfaction.new_record? %>
-    	<%= f.submit "Valider"%>
+    	<%= f.submit "Valider" %>
     <% end %>
 
 <% end %>

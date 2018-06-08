@@ -8,6 +8,7 @@
     </tr>
     <% @shared_folders.each do |f|%>
     <% user = User.find_by_email(f.share_email) %>
+    <% @current_shared_folder = f %>
     <tr>
         <td>
             <% if user %>
@@ -29,6 +30,12 @@
         <td>
             <% if user %>
                 <%= user.statut %>
+            <% end %>
+        </td>
+
+        <td>
+            <% if user %>
+                <%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
             <% end %>
         </td>
 

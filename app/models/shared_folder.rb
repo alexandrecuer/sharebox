@@ -15,4 +15,10 @@ class SharedFolder < ApplicationRecord
   def fetch_user_id_associated_to_email
     return User.where(email: self.share_email).ids[0]
   end
+
+  def send_email
+    text = nil 
+    ApplicationJob.perform_now(User.find_by_email(self.share_email),text)
+  end
+
 end

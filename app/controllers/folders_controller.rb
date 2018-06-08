@@ -160,8 +160,26 @@ class FoldersController < ApplicationController
 	      	end
 	      	render 'edit'
 	    end
-	end
+	  end
   end
+
+  def moove_folder
+    folder_to_moove = Folder.find_by_id(params[:id])
+    puts folder_to_moove
+
+    if folder_to_moove
+      if Folder.find_by_id(params[:parent_id])
+        folder_to_moove.parent_id = params[:parent_id]
+        folder_to_moove.save
+      else
+        flash[:notice] = "Le second id ne correspond à aucun répertoire"
+      end
+    else
+      flash[:notice] = "Le premier id ne correspond à aucun répertoire"
+    end
+    redirect_to folders_path
+  end
+
 
   private
     def folder_params

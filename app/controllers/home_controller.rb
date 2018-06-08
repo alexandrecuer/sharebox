@@ -2,7 +2,6 @@ class HomeController < ApplicationController
 
 before_action :authenticate_user!
 
-
 	def update
 		if !current_user.is_admin?
 			flash[:notice] = "Seul les admins peuvent changer le statut des utilisateurs"

@@ -44,7 +44,7 @@
 <h2>Modification de statut utilisateur :</h2>
 
 
-<%= form_tag({action: "update"}, method: "post") do %>
+<%= form_tag(method: "post") do %>
 <%= label_tag(:id, "ID de l'utilisateur :") %>
 <%= text_field_tag(:id) %>
 
