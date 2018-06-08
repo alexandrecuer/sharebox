@@ -37,6 +37,10 @@ Rails.application.routes.draw do
 
    get "folders/:id/satisfaction" => "satisfactions#new", :as => "new_satisfaction_on_folder"
    
-   match '/home', to: 'home#update', via: 'post'
+   match '/listusers', to: 'home#update', via: 'post'
+
+   match '/folders/index', to: 'folders#moove_folder', via: 'post'
+
+   get "shared_folders/:id/email" => "shared_folders#send_email", :as => "send_email"
 
 end
