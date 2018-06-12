@@ -5,8 +5,8 @@ class FoldersController < ApplicationController
   #uniquement pour la gestion du routage de type /folders/folder_id/new
   # si un utilisateur envoie une URI de ce type, il faut lui renvoyer un message d'erreur
   def error
-  flash[:notice]="new what ? new_folder ? new_file ?"
-  redirect_to folder_path(params[:folder_id])
+    flash[:notice]="new what ? new_folder ? new_file ?"
+    redirect_to folder_path(params[:folder_id])
   end
 
   # Index permet d'afficher l'arborescence des dossiers pour les utilisateurs admin
@@ -30,8 +30,8 @@ class FoldersController < ApplicationController
             redirect_to satisfaction_path(@satisfaction.id)
           end
         else
-            flash[:notice] = "Ce répertoire ne vous appartient pas, ne vous est pas destiné !"
-            redirect_to root_url
+          flash[:notice] = "Ce répertoire ne vous appartient pas, ne vous est pas destiné !"
+          redirect_to root_url
         end
     else
         flash[:notice] = "Ce répertoire n'existe pas !"
@@ -54,8 +54,8 @@ class FoldersController < ApplicationController
       if @current_folder
         @folder.parent_id = @current_folder.id
         if !current_user.has_ownership?(@current_folder)
-            flash[:notice] = "Vous ne pouvez créer de sous répertoire que dans les répertoires vous appartenant"  
-            redirect_to root_url
+          flash[:notice] = "Vous ne pouvez créer de sous répertoire que dans les répertoires vous appartenant"  
+          redirect_to root_url
         end
       else
         flash[:notice] = "Vous ne pouvez pas créer de sous répertoire dans un répertoire qui n'existe pas"
@@ -65,39 +65,39 @@ class FoldersController < ApplicationController
   end
   
   def create
-  	@folder = current_user.folders.new(folder_params)
-  	# Un numéro d'affaire est unique, mais on peut créer plusieurs dossiers sans préciser de numéro d'affaire
-  	if ( Folder.where(case_number: @folder.case_number).length > 0 && @folder.case_number != "" ) 
-  		flash[:notice] = "Ce numéro d'affaire existe déjà"
-  		if @folder.parent_id
-          	redirect_to folder_path(@folder.parent_id)
+    @folder = current_user.folders.new(folder_params)
+    # Un numéro d'affaire est unique, mais on peut créer plusieurs dossiers sans préciser de numéro d'affaire
+    if ( Folder.where(case_number: @folder.case_number).length > 0 && @folder.case_number != "" ) 
+      flash[:notice] = "Ce numéro d'affaire existe déjà"
+      if @folder.parent_id
+        redirect_to folder_path(@folder.parent_id)
+      else
+        redirect_to root_url
+      end
+    else
+      # soit la création du répertoire est un succès et on renvoie vers le répertoire parent ou vers la racine
+      if @folder.save
+        if @folder.parent_id
+          redirect_to folder_path(@folder.parent_id)
         else
-          	redirect_to root_url
+          redirect_to root_url
         end
-  	else
-  		 # soit la création du répertoire est un succès et on renvoie vers le répertoire parent ou vers la racine
-  		if @folder.save
-        	if @folder.parent_id
-          		redirect_to folder_path(@folder.parent_id)
-        	else
-          		redirect_to root_url
-        	end
-    	# Cette seconde partie du if permet, sans que l'utilisateur ait le sentiment de changer de page de porter à sa connaissance 
-    	# les messages d'erreur et de réafficher le formulaire au cas ou le processus de création serait un échec. 
-    	else
-      		if @folder.parent_id
-        		@current_folder = Folder.find_by_id(@folder.parent_id)
-      		end
-      		render 'new'
-    	end
-  	end
+      # Cette seconde partie du if permet, sans que l'utilisateur ait le sentiment de changer de page de porter à sa connaissance 
+      # les messages d'erreur et de réafficher le formulaire au cas ou le processus de création serait un échec. 
+      else
+        if @folder.parent_id
+          @current_folder = Folder.find_by_id(@folder.parent_id)
+        end
+        render 'new'
+      end
+    end
   end
   
   def destroy
     @folder = current_user.folders.find(params[:id])
     activefolder=@folder.parent_id
     @folder.destroy
-	  flash[:notice] = "Suppression réussie!"
+    flash[:notice] = "Suppression réussie!"
     if activefolder
       redirect_to folder_path(@folder.parent_id)
     else
@@ -135,44 +135,59 @@ class FoldersController < ApplicationController
     # Si on modifie le numéro d'affaire et que le nouveau numéro n'existe pas déjà c'est ok 
     # Si le nouveau numéro d'affaire est vide alors c'est ok 
     if ( Folder.where(case_number: folder_params[:case_number]).length > 0 && folder_params[:case_number] != "" && folder_params[:case_number] != @folder.case_number) 
-  		flash[:notice] = "Ce numéro d'affaire existe déjà"
-  		if @folder.parent_id
-          	redirect_to folder_path(@folder.parent_id)
-        else
-          	redirect_to root_url
-        end
+      flash[:notice] = "Ce numéro d'affaire existe déjà"
+      if @folder.parent_id
+        redirect_to folder_path(@folder.parent_id)
+      else
+        redirect_to root_url
+      end
     else
-	    old_case_number = @folder.case_number
-	    if @folder.update(folder_params)
-	   		# En mettant à jour un numéro d'affaire sur un dossier, on met à jour toutes les satisfactions du dossier
-	        Satisfaction.where(case_number: old_case_number).each do |f|
-	        	f.case_number = @folder.case_number
-	        	f.save
-	      	end
-	      	if @folder.parent_id
-	        	redirect_to folder_path(@folder.parent_id)
-	      	else
-	        	redirect_to root_url
-	      	end
-	    else
-	      	if @folder.parent_id
-	        	@current_folder = Folder.find(@folder.parent_id)
-	      	end
-	      	render 'edit'
-	    end
-	  end
+      old_case_number = @folder.case_number
+      if @folder.update(folder_params)
+      # En mettant à jour un numéro d'affaire sur un dossier, on met à jour toutes les satisfactions du dossier
+        Satisfaction.where(case_number: old_case_number).each do |f|
+          f.case_number = @folder.case_number
+          f.save
+        end
+        if @folder.parent_id
+          redirect_to folder_path(@folder.parent_id)
+        else
+          redirect_to root_url
+        end
+      else
+        if @folder.parent_id
+          @current_folder = Folder.find(@folder.parent_id)
+        end
+        render 'edit'
+      end
+    end
   end
 
   def moove_folder
     folder_to_moove = Folder.find_by_id(params[:id])
-    puts folder_to_moove
 
     if folder_to_moove
-      if Folder.find_by_id(params[:parent_id])
-        folder_to_moove.parent_id = params[:parent_id]
+      if params[:parent_id] == "0" 
+        # On déplace le répertoire à la racine 
+        folder_to_moove.parent_id = nil
         folder_to_moove.save
       else
-        flash[:notice] = "Le second id ne correspond à aucun répertoire"
+        if Folder.find_by_id(params[:parent_id])
+          # On déplace le répertoire parent dans un autre
+          folder_to_moove.parent_id = params[:parent_id]
+          folder_to_moove.user_id = Folder.find_by_id(params[:parent_id]).user_id
+          folder_to_moove.save
+          # on vérifie l'arborescence
+          if folder_to_moove.has_childrens?
+            childrens = folder_to_moove.get_childrens
+            childrens.each do |children|
+              children.user_id = folder_to_moove.user_id
+              children.save
+            end
+          end
+        else
+          flash[:notice] = "Le second id ne correspond à aucun répertoire"
+        end
       end
     else
       flash[:notice] = "Le premier id ne correspond à aucun répertoire"
@@ -183,6 +198,6 @@ class FoldersController < ApplicationController
 
   private
     def folder_params
-	  params.require(:folder).permit(:name, :parent_id, :poll_id, :case_number)
+      params.require(:folder).permit(:name, :parent_id, :poll_id, :case_number)
     end
 end

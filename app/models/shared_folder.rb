@@ -1,11 +1,11 @@
 class SharedFolder < ApplicationRecord
 
-	belongs_to :user
-	
-	belongs_to :folder
-    
+  belongs_to :user
+
+  belongs_to :folder
+
   validates :share_email, presence: true
-  
+
   validates :folder_id, presence: true
   
   def missing_share_user_id?
@@ -20,5 +20,4 @@ class SharedFolder < ApplicationRecord
     text = nil 
     ApplicationJob.perform_now(User.find_by_email(self.share_email),text)
   end
-
 end

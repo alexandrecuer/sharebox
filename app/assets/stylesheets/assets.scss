@@ -18,12 +18,17 @@
 }
 
 .file, .file_shared {
-    background:url("../images/window/file_owned.png") no-repeat scroll left center transparent; 
-    padding-left :40px;
+  background:url("../images/window/file_owned.png") no-repeat scroll left center transparent; 
+  padding-left :40px;
 	height:40px;
 	line-height:40px;
 }
 
 .file_shared {
     background:url("../images/window/file_shared.png") no-repeat scroll left center transparent;
+}
+
+.asset_span {
+  color: blue;
+  font-size: 10px;
 }

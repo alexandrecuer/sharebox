@@ -10,7 +10,7 @@ class Asset < ApplicationRecord
                     url: ENV.fetch('AWS_URL'),
                     path: '/forge/attachments/:id/:filename',
                     s3_permissions: :private
-					
+                    
   validates :uploaded_file, presence: true
   
   validates_attachment_size :uploaded_file, :less_than => 50.megabytes

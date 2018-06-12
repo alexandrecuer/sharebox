@@ -10,35 +10,40 @@
     <% user = User.find_by_email(f.share_email) %>
     <% @current_shared_folder = f %>
     <tr>
-        <td>
-            <% if user %>
-                <%= user.id %>
-            <% end %>
-        </td>
-
-        <% if user %>
-            <% if user.has_completed_satisfaction?(@current_folder) %>
-                    <% satisfaction = @satisfactions.find_by_user_id(user.id) %>
-                <td><a class="display_anchor" onclick="display(<%= satisfaction.id %>)"><%= f.share_email %></a></td>
-            <% else %>
-                <td><%= f.share_email %></td>
-            <% end %>
+    	<% if user %>
+	        <td>
+	            <%= user.id %>
+	        </td>
+        	<% if user.has_completed_satisfaction?(@current_folder) %>
+            	<% satisfaction = @satisfactions.find_by_user_id(user.id) %>
+            	<td>
+            		<a class="display_anchor" onclick="display(<%= satisfaction.id %>)"><%= f.share_email %></a>
+            	</td>
+        	<% else %>
+            	<td>
+            		<%= f.share_email %>
+            	</td>
+        	<% end %>
+        	<td>
+            	<%= user.statut %>
+        	</td>
+			<td>
+            	<% if !user.has_completed_satisfaction?(@current_folder) %>
+                	<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
+            	<% end %>
+        	</td>
         <% else %>
-            <td><%= f.share_email %></td>
+        	<td>
+        	</td>
+        	<td>
+        		<%= f.share_email %>
+        	</td>
+        	<td>
+        	</td>
+        	<td>
+        		<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
+        	</td>
         <% end %>
-
-        <td>
-            <% if user %>
-                <%= user.statut %>
-            <% end %>
-        </td>
-
-        <td>
-            <% if user %>
-                <%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
-            <% end %>
-        </td>
-
     </tr>
     <% end %>
 

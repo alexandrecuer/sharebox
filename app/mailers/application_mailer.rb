@@ -3,5 +3,4 @@ class ApplicationMailer < ActionMailer::Base
   #mailer_sender: 'alexandre.cuer@cerema.fr'
   default from: 'cerematest@gmail.com'
   #default from: %("#{'L\'ADMIN DU CLOUD DES RAPPORTS - Cerema'}" <#{'cuer.ac@gmail.com'}>)
-  
 end

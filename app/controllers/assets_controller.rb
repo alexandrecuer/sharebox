@@ -35,7 +35,7 @@ before_action :authenticate_user!
   
   def create
     # pour la définition de asset_params, voir les private methods en fin de ce fichier controller 
-	@asset = current_user.assets.new(asset_params)
+	  @asset = current_user.assets.new(asset_params)
       # soit la mise en ligne est un succès et on renvoie soit vers le répertoire de l'asset, soit vers la racine 
       if @asset.save
         flash[:notice] = "Mise en ligne réussie!"
@@ -44,7 +44,7 @@ before_action :authenticate_user!
         else
           redirect_to root_url
         end
-      # soit la mise en ligne est un échec...
+        # soit la mise en ligne est un échec...
       else
         if @asset.folder_id
           @current_folder = Folder.find_by_id(@asset.folder_id)
@@ -57,7 +57,7 @@ before_action :authenticate_user!
   def destroy
     @asset = current_user.assets.find(params[:id])
     @asset.destroy
-	flash[:notice] = "Suppression réussie!"
+    flash[:notice] = "Suppression réussie!"
     if @asset.folder_id
       redirect_to folder_path(@asset.folder_id)
     else
@@ -70,32 +70,32 @@ before_action :authenticate_user!
     asset = Asset.find_by_id(params[:id])
     
     if asset
-        #case 1 : asset is a root file
-        if !asset.folder_id
-            if current_user.has_asset_ownership?(asset)
-                #en passant à S3, on utilise redirect_to asset.uploaded_file.expiring_url(10)
-                #celà crée une url valable 10s qui permet d'accéder à des fichiers S3 privés
-                #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-                redirect_to asset.uploaded_file.expiring_url(10)
-            else
-                flash[:notice] = "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
-                redirect_to root_url
-            end
+      #case 1 : asset is a root file
+      if !asset.folder_id
+        if current_user.has_asset_ownership?(asset)
+          #en passant à S3, on utilise redirect_to asset.uploaded_file.expiring_url(10)
+          #celà crée une url valable 10s qui permet d'accéder à des fichiers S3 privés
+          #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+          redirect_to asset.uploaded_file.expiring_url(10)
         else
-        #case 2 : asset belongs to a directory
-            current_folder = Folder.find_by_id(asset.folder_id)
-            if current_user.has_shared_access?(current_folder)
-                #passage à S3
-                #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-                redirect_to asset.uploaded_file.expiring_url(10)
-            else
-                flash[:notice] = "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
-                redirect_to root_url
-            end
+          flash[:notice] = "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
+          redirect_to root_url
         end
+      else
+        #case 2 : asset belongs to a directory
+        current_folder = Folder.find_by_id(asset.folder_id)
+        if current_user.has_shared_access?(current_folder)
+          #passage à S3
+          #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+          redirect_to asset.uploaded_file.expiring_url(10)
+        else
+          flash[:notice] = "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
+          redirect_to root_url
+        end
+      end
     else
-        flash[:notice] = "Ce fichier n'existe pas !"
-        redirect_to root_url
+      flash[:notice] = "Ce fichier n'existe pas !"
+      redirect_to root_url
     end
   end
   
@@ -103,6 +103,6 @@ before_action :authenticate_user!
     def asset_params
       params.require(:asset).permit(:uploaded_file, :folder_id)
       # previous config when form was only composed of a file input
-	  #params.require(:asset).permit(:uploaded_file, :folder_id) if params[:asset]
+      #params.require(:asset).permit(:uploaded_file, :folder_id) if params[:asset]
     end
 end

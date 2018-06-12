@@ -1,7 +1,7 @@
 class SatisfactionsController < ApplicationController
 
   before_action :authenticate_user!
-	
+
   def new
     # Lorsque l'on traite de satisfactions, on est forcément sur un dossier
     # La variable @shared_folders_by_others qui sert lorsque l'on est à la racine pour afficher les dossiers partagés par les autres n'est donc pas à renseigner

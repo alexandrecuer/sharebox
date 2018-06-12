@@ -31,24 +31,25 @@ class User < ApplicationRecord
   def complete_suid
     @shared_folders=SharedFolder.where("share_user_id IS NULL")
     mel_text=""
-        @shared_folders.each do |u|
-            if u.missing_share_user_id?
-                if u.fetch_user_id_associated_to_email
-                    u.share_user_id=u.fetch_user_id_associated_to_email
-                    if u.save
-                        mel_text+="share_user_id("+u.share_user_id.to_s+") -> partage("+u.id.to_s+")<br>"
-                    end
-                    else mel_text+=u.share_email+" pas encore inscrit<br>"
-                end
-            end
+    @shared_folders.each do |u|
+      if u.missing_share_user_id?
+        if u.fetch_user_id_associated_to_email
+          u.share_user_id=u.fetch_user_id_associated_to_email
+          if u.save
+            mel_text+="share_user_id("+u.share_user_id.to_s+") -> partage("+u.id.to_s+")<br>"
+          end
+        else
+          mel_text+=u.share_email+" pas encore inscrit<br>"
         end
-        #peux t'on faire un perform_later dans un modele ?
-        if mel_text != ""
-            mel_text="ACTION complete_suid<br>"+mel_text
-            ApplicationJob.perform_now(self,mel_text)
-        end
+      end
     end
-    
+    #peux t'on faire un perform_later dans un modele ?
+    if mel_text != ""
+      mel_text="ACTION complete_suid<br>"+mel_text
+      ApplicationJob.perform_now(self,mel_text)
+    end
+  end
+
   def has_shared_access?(folder)
     return true if self.folders.include?(folder)
     return true if self.shared_folders_by_others.include?(folder)
