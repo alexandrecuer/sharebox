@@ -1,6 +1,7 @@
 class PollsController < ApplicationController
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   before_action :authenticate_user!, :check_admin
 
   def check_admin
@@ -10,6 +11,10 @@ class PollsController < ApplicationController
 =======
     before_action :authenticate_user!, :check_admin
 
+=======
+    before_action :authenticate_user!, :check_admin
+
+>>>>>>> 919a09ff0356b499e2a673999ef00c1f9515df9b
     def check_admin
         if !current_user.is_admin?
             flash[:notice] = "Vous n'avez pas les droits administrateurs"
@@ -45,6 +50,7 @@ class PollsController < ApplicationController
     end
   end
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   def update
     @poll = Poll.find_by_id(params[:id])
@@ -83,6 +89,12 @@ class PollsController < ApplicationController
         @poll = current_user.polls.new
     end
 
+=======
+    def new
+        @poll = current_user.polls.new
+    end
+
+>>>>>>> 919a09ff0356b499e2a673999ef00c1f9515df9b
     def show
         @poll = Poll.find_by_id(params[:id])
         @hash = current_user.get_all_emails
@@ -113,6 +125,9 @@ class PollsController < ApplicationController
         end
         redirect_to root_url
     end
+<<<<<<< HEAD
+>>>>>>> 919a09ff0356b499e2a673999ef00c1f9515df9b
+=======
 >>>>>>> 919a09ff0356b499e2a673999ef00c1f9515df9b
 
   def create
@@ -151,11 +166,15 @@ class PollsController < ApplicationController
   end
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   private
   def poll_params
     params.require(:poll).permit(:name, :description, :closed_names, :open_names, :closed_names_number, :open_names_number)
   end
 end
+=======
+end
+>>>>>>> 919a09ff0356b499e2a673999ef00c1f9515df9b
 =======
 end
 >>>>>>> 919a09ff0356b499e2a673999ef00c1f9515df9b
