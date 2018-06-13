@@ -78,7 +78,7 @@ class SharedFoldersController < ApplicationController
         #il faudra mettre en place un adapter de type sidekiq avec base de données clé valeur REDIS
         #on utilise les méthodes perform_now ou perform_later
         mel_text="Partage du répertoire "+params[:shared_folder][:folder_id]+"<br>"+mel_text
-        #ApplicationJob.perform_later(current_user,mel_text)
+        InformAdminJob.perform_now(current_user,mel_text)
       end
     end
     # on sort du formulaire de partage (app/views/shared_folders/_form.html.erb)
@@ -121,7 +121,7 @@ class SharedFoldersController < ApplicationController
 
   def send_email
     shared_folder = SharedFolder.find_by_id(params[:id])
-    shared_folder.send_email
+    InformUserJob.perform_now(shared_folder.share_email)
     redirect_to shared_folder_path(shared_folder.folder_id)
   end
 
