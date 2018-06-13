@@ -1,1 +1,5 @@
-<p> Il vous suffit de vous inscrire à l'adresse suivante : https://ceremacf.herokuapp.com/ avec votre adresse email : <%= @user.email %> pour accéder à votre livrable</p>
+<% if @user %> 
+	<p> Vous pouvez désormais accéder à votre livrable à l'adresse suivante : http://<%= ENV.fetch('DOMAIN') %> avec votre adresse email : <%= @email %></p>
+<% else %>
+	<p> Il vous suffit de vous inscrire à l'adresse suivante : http://<%= ENV.fetch('DOMAIN') %> avec votre adresse email : <%= @email %> pour accéder à votre livrable</p>
+<% end %>

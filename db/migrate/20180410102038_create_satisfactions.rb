@@ -51,25 +51,5 @@ class CreateSatisfactions < ActiveRecord::Migration[5.1]
     add_index :satisfactions, :folder_id, :name => "index_satisfactions_on_folder_id"
     add_index :satisfactions, :poll_id, :name => "index_satisfactions_on_poll_id"
     add_index :satisfactions, :user_id, :name => "index_satisfactions_on_user_id"
-
-    create_table :polls do |t|
-      t.string :open_names
-      t.string :closed_names
-      t.string :name
-      t.string :description
-      t.integer :user_id
-      t.integer :closed_names_number
-      t.integer :open_names_number
-    end
-
-    add_index :polls, :user_id, :name => "index_polls_on_user_id"
-
-    add_column :folders, :case_number, :string
-    add_column :folders, :poll_id, :integer
-  	add_index :folders, :poll_id, :name => "index_folders_on_poll_id"
-
-    add_column :users, :statut, :string, default: "public"
-
-
   end
 end

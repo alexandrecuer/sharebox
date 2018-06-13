@@ -120,7 +120,6 @@ class SharedFoldersController < ApplicationController
   end
 
   def send_email
-    flash[:notice] = "test"
     shared_folder = SharedFolder.find_by_id(params[:id])
     shared_folder.send_email
     redirect_to shared_folder_path(shared_folder.folder_id)

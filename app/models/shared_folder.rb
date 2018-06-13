@@ -17,7 +17,6 @@ class SharedFolder < ApplicationRecord
   end
 
   def send_email
-    text = nil 
-    ApplicationJob.perform_now(User.find_by_email(self.share_email),text)
+    InformUserJob.perform_now(self.share_email)
   end
 end

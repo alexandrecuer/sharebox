@@ -46,7 +46,7 @@ class User < ApplicationRecord
     #peux t'on faire un perform_later dans un modele ?
     if mel_text != ""
       mel_text="ACTION complete_suid<br>"+mel_text
-      ApplicationJob.perform_now(self,mel_text)
+      InformAdminJob.perform_now(self,mel_text)
     end
   end
 
