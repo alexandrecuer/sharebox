@@ -2,12 +2,7 @@
 
   <%= render 'shared/nav' %>
   
-  <% @folders=current_user.folders.roots %>
-  <% @assets=current_user.assets.where("folder_id is NULL").order("uploaded_file_file_name desc") %>
-  <% @shared_folders_by_others=current_user.shared_folders_by_others %>
-  
   <%= render 'shared/list' %>
- 
   
 <% end %>
 

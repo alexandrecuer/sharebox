@@ -1,0 +1,21 @@
+<%= form_for @poll do |poll| %>
+
+	<p>Titre du formulaire :</p>
+	<%= poll.text_area(:name, size: "100x1") %><br>
+
+	<p>Description du formulaire :</p>
+	<%= poll.text_area(:description, size: "100x10") %><br>
+
+	<p>Questions fermées séparées par un point virgule</p>
+	<%= poll.text_area(:closed_names, size: "100x3") %><br>
+
+	<p>Questions ouvertes séparées par un point virgule</p>
+	<%= poll.text_area(:open_names, size: "100x3") %><br>
+
+	<% if @poll.new_record? %>
+	    <%= poll.submit "Créer le formulaire", onclick: "calc_names_number();" %>
+	<% else %>
+	    <%= poll.submit "Modifier le formulaire", onclick: "calc_names_number();" %>
+	<% end %>
+
+	<% end %>

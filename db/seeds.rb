@@ -5,3 +5,6 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+alexandre = User.find_by_email("alexandre.cuer@cerema.fr")
+alexandre.update_attributes!( :statut => "admin")

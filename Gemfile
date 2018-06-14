@@ -65,3 +65,5 @@ gem 'acts_as_tree'
 gem 'jquery-rails'
 
 gem 'aws-sdk', '~> 3'
+
+gem "font-awesome-rails"

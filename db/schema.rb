@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170907083114) do
+ActiveRecord::Schema.define(version: 20180510102038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,8 +34,74 @@ ActiveRecord::Schema.define(version: 20170907083114) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "case_number"
+    t.integer "poll_id"
     t.index ["parent_id"], name: "index_folders_on_parent_id"
+    t.index ["poll_id"], name: "index_folders_on_poll_id"
     t.index ["user_id"], name: "index_folders_on_user_id"
+  end
+
+  create_table "polls", force: :cascade do |t|
+    t.string "open_names"
+    t.string "closed_names"
+    t.string "name"
+    t.string "description"
+    t.integer "user_id"
+    t.integer "closed_names_number"
+    t.integer "open_names_number"
+    t.index ["user_id"], name: "index_polls_on_user_id"
+  end
+
+  create_table "satisfactions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.string "case_number"
+    t.integer "folder_id"
+    t.integer "poll_id"
+    t.integer "closed1"
+    t.integer "closed2"
+    t.integer "closed3"
+    t.integer "closed4"
+    t.integer "closed5"
+    t.integer "closed6"
+    t.integer "closed7"
+    t.integer "closed8"
+    t.integer "closed9"
+    t.integer "closed10"
+    t.integer "closed11"
+    t.integer "closed12"
+    t.integer "closed13"
+    t.integer "closed14"
+    t.integer "closed15"
+    t.integer "closed16"
+    t.integer "closed17"
+    t.integer "closed18"
+    t.integer "closed19"
+    t.integer "closed20"
+    t.string "open1"
+    t.string "open2"
+    t.string "open3"
+    t.string "open4"
+    t.string "open5"
+    t.string "open6"
+    t.string "open7"
+    t.string "open8"
+    t.string "open9"
+    t.string "open10"
+    t.string "open11"
+    t.string "open12"
+    t.string "open13"
+    t.string "open14"
+    t.string "open15"
+    t.string "open16"
+    t.string "open17"
+    t.string "open18"
+    t.string "open19"
+    t.string "open20"
+    t.index ["folder_id"], name: "index_satisfactions_on_folder_id"
+    t.index ["poll_id"], name: "index_satisfactions_on_poll_id"
+    t.index ["user_id"], name: "index_satisfactions_on_user_id"
   end
 
   create_table "shared_folders", force: :cascade do |t|
@@ -64,6 +130,7 @@ ActiveRecord::Schema.define(version: 20170907083114) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "statut", default: "public"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

@@ -1,5 +1,35 @@
-<%= form_for @folder, url: folders_path do |f| %>
-    Nom du répertoire à créer : <%= f.text_field :name %><%= f.submit "Créer le répertoire" %>
-	<%= f.hidden_field :parent_id %>
-    <br><br>
+<% if @folder.errors.any? %>
+    <h3><%= pluralize(@folder.errors.count, "erreur") %></h3>
+	<ul>
+	<% @folder.errors.full_messages.each do |msg| %>
+		<li><%= msg.html_safe %></li>
+	<% end %>
+	</ul>
+<% end %>
+
+
+<%= form_for @folder do |f| %>
+    Nom du répertoire : <%= f.text_field :name %>
+	N° d'affaire : <%= f.text_field :case_number %>
+    <%= f.hidden_field :parent_id %>
+    <% if @folder.shared? %>
+
+    	<% polls_array = Poll.all.map { |poll| [poll.name, poll.id] } %>
+    	<% polls_array = [["Pas de sondage",""]] + polls_array %>
+
+    	<%#= f.collection_select(:poll_id, Poll.all, :id, :name) %>
+
+    	<%= f.select(:poll_id) do %>
+    	<%= options_for_select(polls_array, { selected: @folder.poll_id }) %>
+    	<% end %>
+
+    <% end %>
+
+    <% if @folder.new_record? %>
+        <%= f.submit "Créer le répertoire" %>
+    <% else %>
+        <%= f.submit "Modifier le répertoire" %>
+    <% end %>
+
+
 <% end %>

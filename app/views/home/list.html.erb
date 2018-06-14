@@ -1,18 +1,24 @@
-<h1> Registered users</h1>
-<% @users=User.all %>
-<table ellpadding=1 cellspacing=2>
-<tr bgcolor=#CCCCCC>
-<td>email</td>
-<td>id</td>
-<td>has shared folders from others ?</td>
+<%= render 'shared/nav' %>
+
+<table class="recap">
+<tr><th colspan="4">Utilisateurs(<%= @users.count%>)</th>
+</tr>
+<tr>
+<th>id</th>
+<th>email</th>
+<th>has shared folders from others ?</th>
+<th>statut</th>
 </tr>
 <% @users.each do |u| %>
-    <tr bgcolor=#EEEEEE>
-    <td><%= u.email %></td>
-    <td><%= u.id %></td>
-    <td><%= u.has_shared_folders_from_others? %></td>
-    </tr>
+        <tr>
+        <td><%= u.id %></td>
+        <td><%= u.email %></td>
+        <td><%= u.has_shared_folders_from_others? %></td>
+        <td><%= u.statut %><td>
 <% end %>
+</table>
+<br>
+
 </table>
 
 <h1>shared_folders without share_user_id filled</h1>
@@ -34,4 +40,16 @@
     </tr>
 <% end %>
 </table>
-<br>
+
+<h2>Modification de statut utilisateur :</h2>
+
+
+<%= form_tag(update_user_path, method: "patch") do %>
+<%= label_tag(:id, "ID de l'utilisateur :") %>
+<%= text_field_tag(:id) %>
+
+<%= label_tag(:statut, "Nouveau statut [public|private] :") %>
+<%= text_field_tag(:statut) %>
+
+<%= submit_tag("Valider") %>
+<% end %>

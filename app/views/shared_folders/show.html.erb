@@ -1,14 +1,59 @@
-<h3>Les partages du répertoire<br> 
-<%= current_user.folders.find(@folder_id).name %><br>
-numéro : <%= @folder_id %></h3>
+<%= render 'shared/nav' %>
 
-<% @shared_folders.each do |f|%>
-    <%= f.id %><br>
-    <%= f.share_email %><br>
-    <% if f.share_user_id %>
-        registered in system at number <%= f.share_user_id %><br>
+<table class="recap">
+    <tr>
+    	<th>Id Utilisateur</th>
+    	<th>Email</th>
+    	<th>Statut</th>
+    </tr>
+    <% @shared_folders.each do |f|%>
+    <% user = User.find_by_email(f.share_email) %>
+    <% @current_shared_folder = f %>
+    <tr>
+    	<% if user %>
+	        <td>
+	            <%= user.id %>
+	        </td>
+        	<% if user.has_completed_satisfaction?(@current_folder) %>
+            	<% satisfaction = @satisfactions.find_by_user_id(user.id) %>
+            	<td>
+            		<a class="display_anchor" onclick="display(<%= satisfaction.id %>)"><%= f.share_email %></a>
+            	</td>
+        	<% else %>
+            	<td>
+            		<%= f.share_email %>
+            	</td>
+        	<% end %>
+        	<td>
+            	<%= user.statut %>
+        	</td>
+			<td>
+            	<% if !user.has_completed_satisfaction?(@current_folder) %>
+                	<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
+            	<% end %>
+        	</td>
+        <% else %>
+        	<td>
+        	</td>
+        	<td>
+        		<%= f.share_email %>
+        	</td>
+        	<td>
+        	</td>
+        	<td>
+        		<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
+        	</td>
+        <% end %>
+    </tr>
     <% end %>
-    <% if f.message.to_s != "" %>
-        Message : <%= f.message %><br>
-    <% end %><br>
+
+</table>
+
+<% @satisfactions.each do |s| %> 
+    <div id="form_<%=s.id%>" style="display: none">
+        <% @satisfaction = s %>
+        <%= render 'satisfactions/form' %>
+    </div>
 <% end %>
+
+

@@ -1,8 +1,7 @@
 class ApplicationJob < ActiveJob::Base
-    queue_as :default
+  # Automatically retry jobs that encountered a deadlock
+  # retry_on ActiveRecord::Deadlocked
 
-    def perform(current_user,text)
-        UserMailer.inform_admin(current_user,text).deliver_now
-    end
-    
+  # Most jobs are safe to ignore if the underlying records are no longer available
+  # discard_on ActiveJob::DeserializationError
 end

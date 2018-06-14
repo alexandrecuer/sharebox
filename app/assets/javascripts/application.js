@@ -11,11 +11,9 @@
 // about supported directives.
 //
 //= require jquery
-
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
-
 
 //tried to use a sort of unobstrusive javascript (UJS) with no success
 //<div data-sharing=<%= f.id %> data-folder_name='<%= f.name %>' >partager</div>
