@@ -1,3 +1,5 @@
+<%= render 'shared/nav' %>
+
 <% Folder.walk_tree do |folder, level| %>
 	<% user = User.find_by_id(folder.user_id) %>
 	<% if level > 0 %>

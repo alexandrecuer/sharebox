@@ -30,7 +30,7 @@
 			<td>
             	<% if !user.has_completed_satisfaction?(@current_folder) %>
                 	<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
-                <% end %>
+            	<% end %>
         	</td>
         <% else %>
         	<td>

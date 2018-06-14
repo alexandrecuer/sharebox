@@ -1,5 +1,16 @@
 <% if @user %> 
-	<p> Vous pouvez désormais accéder à votre livrable à l'adresse suivante : http://<%= ENV.fetch('DOMAIN') %> avec votre adresse email : <%= @email %></p>
+	<p> 
+		Vous pouvez désormais accéder à votre livrable à l'adresse suivante : <%= link_to 'Le cloud des rapports', new_user_session_url %><br>
+		Votre adresse email est la suivante : <%= @email %><br>
+
+	</p>
 <% else %>
-	<p> Il vous suffit de vous inscrire à l'adresse suivante : http://<%= ENV.fetch('DOMAIN') %> avec votre adresse email : <%= @email %> pour accéder à votre livrable</p>
+	<p>
+		Il vous suffit de vous inscrire à l'adresse suivante : <%= link_to 'inscription', new_user_session_url %><br>
+		Vous devez vous inscrire avec l'adresse : <%= @email %> pour accéder à votre livrable<br>
+
+		<%#= image_tag attachments['logo.jpg'].url, alt: 'My Photo' %>
+		<%#= image_tag image_path('logo.jpg') %>
+
+	</p>
 <% end %>
