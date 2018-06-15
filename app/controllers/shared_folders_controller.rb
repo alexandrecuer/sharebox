@@ -3,6 +3,14 @@ class SharedFoldersController < ApplicationController
   before_action :authenticate_user!
   
   def show
+
+    # Survient seulement dans le cas d'envois de mail
+    if params[:share_email]
+      flash[:notice] = "Vous venez d'envoyer un email à l'adresse : " + params[:share_email]
+      InformUserJob.perform_now(params[:share_email])
+      redirect_to shared_folder_path(params[:id])
+    end
+
     @shared_folders = current_user.shared_folders.where("folder_id = "+params[:id]) 
     @current_folder = current_user.folders.find(params[:id])
 
@@ -117,12 +125,6 @@ class SharedFoldersController < ApplicationController
     params[:emails].each do |email|
       SharedFolder.destroy(shared_email: email)
     end
-  end
-
-  def send_email
-    shared_folder = SharedFolder.find_by_id(params[:id])
-    InformUserJob.perform_now(shared_folder.share_email)
-    redirect_to shared_folder_path(shared_folder.folder_id)
   end
 
   private

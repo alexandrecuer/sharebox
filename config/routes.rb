@@ -41,6 +41,4 @@ Rails.application.routes.draw do
 
    patch '/folders' => 'folders#moove_folder', :as => 'moove_folder'
 
-   get "shared_folders/:id/email" => "shared_folders#send_email", :as => "send_email"
-
 end

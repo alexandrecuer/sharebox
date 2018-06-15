@@ -29,7 +29,7 @@
         	</td>
 			<td>
             	<% if !user.has_completed_satisfaction?(@current_folder) %>
-                	<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
+                	<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, shared_folder_path(f.folder_id, :share_email => f.share_email) %>
             	<% end %>
         	</td>
         <% else %>
@@ -41,7 +41,7 @@
         	<td>
         	</td>
         	<td>
-        		<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
+        		<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, shared_folder_path(f.folder_id, :share_email => f.share_email) %>
         	</td>
         <% end %>
     </tr>
