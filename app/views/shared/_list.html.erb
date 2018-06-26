@@ -7,7 +7,6 @@
     <% @shared_folders_by_others=current_user.shared_folders_by_others %>
 <% end %>
 
-
 <% if @assets.length > 0 or @folders.length > 0 or current_user.has_shared_folders_from_others? %>
 
     <table class="list_folders">
@@ -19,7 +18,7 @@
             <td>Taille</td>
         </tr>
         <% if !@current_folder %>
-            <% @shared_folders_by_others.each do |f|%>
+            <% @shared_folders_by_others.order(name: :ASC).each do |f|%>
                 <tr>
                     <td colspan=3>Propriétaire:<br><%= User.find_by_id(f.user_id).email %></td>
                     <td><div class="folder_shared_by_others"><%= link_to f.name, folder_path(f) %></div></td>
@@ -28,7 +27,7 @@
             
             <% end %>
         <% end %>
-	    <% @folders.each do |f|%>
+	    <% @folders.order(name: :ASC).each do |f|%>
             <% if current_user.has_ownership?(f) %>
                 <tr>
                     <% if current_user.is_admin? || current_user.is_private? %>
@@ -38,9 +37,6 @@
                     <% end %>
                     <td><div class="folder<%= f.shared? ? '_shared' : '' %>"><%= link_to f.name, folder_path(f) %>
                     <% if current_user.is_admin? || current_user.is_private? %>
-                        <% if f.shared? %>
-                            <%= link_to '[Cesser de partager]', shared_folder_path(f), method: :delete, data: {confirm: 'confirmez-vous cette cessation de partage?'} %>
-                        <% end %>
                         <% if f.shared? && !f.has_satisfaction_answer? %>
                             <%= link_to '[Voir les partages]', shared_folder_path(f) %>
                         <% elsif f.has_satisfaction_answer? %>

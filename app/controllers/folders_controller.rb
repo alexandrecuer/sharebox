@@ -21,21 +21,28 @@ class FoldersController < ApplicationController
   def show
     folder = Folder.find_by_id(params[:id])
     if folder
-        if current_user.has_shared_access?(folder)
-            @current_folder = folder
+      if current_user.has_shared_access?(folder)
+        @current_folder = folder
+      end
+      if @current_folder
+        # Si l'utilisateur en cours a déjà répondu à l'enquête satisfaction, on affiche sa réponse
+        # S'il n'a pas répondu et qu'il se trouve :
+        # 1) que le répertoire est audité en satisfaction,
+        # 2) et que l'user en cours n'est pas le propriétaire, 
+        # alors c'est que l'user en cours est interrogé satisfaction (vu qu'il a shared_access - current_folder existe)
+        # donc on fait un redirect_to new_satisfaction_on_folder_path(@current_folder)
+        if @satisfaction = current_user.satisfactions.find_by_folder_id(@current_folder.id)
+          redirect_to satisfaction_path(@satisfaction.id)
+        elsif @current_folder.is_polled? && !current_user.has_ownership?(@current_folder)
+          redirect_to new_satisfaction_on_folder_path(@current_folder)
         end
-        if @current_folder
-          # Si l'utilisateur en cours a déjà répondu à l'enquête satisfaction, on affiche sa réponse
-          if @satisfaction = current_user.satisfactions.find_by_folder_id(@current_folder.id)
-            redirect_to satisfaction_path(@satisfaction.id)
-          end
-        else
-          flash[:notice] = "Ce répertoire ne vous appartient pas, ne vous est pas destiné !"
-          redirect_to root_url
-        end
-    else
-        flash[:notice] = "Ce répertoire n'existe pas !"
+      else
+        flash[:notice] = "Ce répertoire ne vous appartient pas, ne vous est pas destiné !"
         redirect_to root_url
+      end
+    else
+      flash[:notice] = "Ce répertoire n'existe pas !"
+      redirect_to root_url
     end
   end
   

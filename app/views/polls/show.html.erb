@@ -4,7 +4,7 @@
 	<tr>
 		<th>Date</th>
 		<th>Email</th>
-		<th>N° d'affaire</th>
+		<th>Dossier - (N° d'affaire)</th>
 		<% @arrayclosed = @poll.get_names %>
 		<% @arrayclosed.each do |c| %>
 			<th><%= c %></th>
@@ -16,7 +16,7 @@
 	<tr>
 		<td><%= s.created_at %></td>
 		<td><%= @hash[s.user_id] %></td>
-		<td><%= s.case_number %></td>
+		<td><%= Folder.find_by_id(s.folder_id).name + " - (" + s.case_number + ")" %></td>
 		<% for i in 1..@poll.closed_names_number %>
 			<td><%= s.public_send("closed#{i}") %></td>
 		<% end %>

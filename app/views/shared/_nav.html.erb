@@ -15,16 +15,6 @@
   <% end %>
 <% end %>
 
-<% if @current_folder %>
-  <% if @current_folder.poll_id %>
-    <% if current_user.has_shared_access?(@current_folder) %>
-      <% if !current_user.has_completed_satisfaction?(@current_folder) %>
-        | <%= link_to "Répondre à l'enquête satisfaction", new_satisfaction_on_folder_path(@current_folder) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
-
 <% if current_user.is_admin? %>
   <%= link_to '[Liste des utilisateurs]', list_path %>
   <div class="dropdown">
@@ -35,11 +25,11 @@
       <% Poll.all.each do |poll| %>
         <li>
           <%= link_to poll.name, edit_poll_path(poll) %>
-          <%= link_to poll_path(poll), method: :delete, data: {confirm: 'Etes vous sûr ?' } do %>
-            <i class="fas fa-times fa-2x"></i>
-          <% end %>
           <%= link_to poll_path(poll) do %>
             <i class="far fa-eye fa-2x"></i>
+          <% end %>
+          <%= link_to poll_path(poll), method: :delete, data: {confirm: 'Etes vous sûr ?' } do %>
+            <i class="fas fa-times fa-2x"></i>
           <% end %>
         </li>
       <% end %>

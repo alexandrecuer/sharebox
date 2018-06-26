@@ -2,6 +2,8 @@ class HomeController < ApplicationController
 
   before_action :authenticate_user!
 
+  helper_method :sort_column, :sort_direction
+
   def update
     if !current_user.is_admin?
       flash[:notice] = "Seul les admins peuvent changer le statut des utilisateurs"
@@ -40,7 +42,7 @@ class HomeController < ApplicationController
   end
     
   def list 
-    @users=User.all
+    @users=User.all.order(sort_column + " " + sort_direction)
     if current_user.is_public?
       flash[:notice] = "Les utilisateurs publics ne peuvent ni visualiser ni gérer les autres utilisateurs"
       redirect_to root_url
@@ -50,4 +52,13 @@ class HomeController < ApplicationController
   def destroy
     redirect_to root_url
   end
+
+  private
+    def sort_column
+      User.column_names.include?(params[:sort]) ? params[:sort] : "id"
+    end
+  
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
 end

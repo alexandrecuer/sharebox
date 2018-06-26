@@ -32,6 +32,9 @@
                 	<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, shared_folder_path(f.folder_id, :share_email => f.share_email) %>
             	<% end %>
         	</td>
+            <td>
+                <%= link_to '<i class="fas fa-times fa-2x"></i>'.html_safe, shared_folder_path(f.id), method: :delete, data: {confirm: 'Etes vous sûr ?' } %>
+            </td>
         <% else %>
         	<td>
         	</td>
@@ -43,6 +46,9 @@
         	<td>
         		<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, shared_folder_path(f.folder_id, :share_email => f.share_email) %>
         	</td>
+            <td>
+                <%= link_to '<i class="fas fa-times fa-2x"></i>'.html_safe, shared_folder_path(f.id), method: :delete, data: {confirm: 'Etes vous sûr ?' } %>
+            </td>
         <% end %>
     </tr>
     <% end %>

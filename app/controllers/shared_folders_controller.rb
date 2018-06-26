@@ -100,18 +100,14 @@ class SharedFoldersController < ApplicationController
   end
   
   def destroy
-    # on arrive içi via une URI de type shared_folders/id avec la méthode DELETE
-    # donc params[:id] donne l'id de la folder pour laquelle on veut supprimer tous les partages
-    @shared_folders = current_user.shared_folders.where("folder_id = "+params[:id])
-    @folder = current_user.folders.find(params[:id])
-    
-    @shared_folders.each do |f|
-      f.destroy
-    end
-    flash[:notice] = "Vous venez de supprimer tous les partages sur ce répertoire !"
-    
-    if @folder.parent_id
-      redirect_to folder_path(@folder.parent_id)
+    @shared_folder = SharedFolder.find_by_id(params[:id])
+   
+    @shared_folder.destroy
+    flash[:notice] = "Vous venez de retirer le partage à : " + @shared_folder.share_email + " pour ce dossier"
+
+    if SharedFolder.find_by_folder_id(@shared_folder.folder_id)
+      # S'il existe d'autres partages sur ce répertoire, on reste sur la même vue 
+      redirect_to shared_folder_path(@shared_folder.folder_id)
     else
       redirect_to root_url
     end
@@ -119,12 +115,6 @@ class SharedFoldersController < ApplicationController
 
   def edit
     @to_be_unshared_folder = Folder.find_by_id(params[:id])
-  end
-
-  def delete
-    params[:emails].each do |email|
-      SharedFolder.destroy(shared_email: email)
-    end
   end
 
   private
