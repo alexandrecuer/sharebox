@@ -41,4 +41,6 @@ Rails.application.routes.draw do
 
    patch '/folders' => 'folders#moove_folder', :as => 'moove_folder'
 
+   patch '/shared_folders/:id' => 'shared_folders#destroy', :as => 'delete_shared_folder'
+
 end

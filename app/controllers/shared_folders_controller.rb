@@ -100,18 +100,24 @@ class SharedFoldersController < ApplicationController
   end
   
   def destroy
-    @shared_folder = SharedFolder.find_by_id(params[:id])
-   
-    @shared_folder.destroy
-    flash[:notice] = "Vous venez de retirer le partage à : " + @shared_folder.share_email + " pour ce dossier"
-
-    if SharedFolder.find_by_folder_id(@shared_folder.folder_id)
-      # S'il existe d'autres partages sur ce répertoire, on reste sur la même vue 
-      redirect_to shared_folder_path(@shared_folder.folder_id)
+    if !params[:ids]
+      flash[:notice] = "Aucun partage sélectionné"
     else
+      params[:ids].each do |id|
+        SharedFolder.find_by_id(id).destroy
+      end
+      flash[:notice] = "Partage(s) supprimé(s)"
+    end
+
+    if !SharedFolder.find_by_folder_id(params[:id])
+      # S'il n'existe plus de partages pour ce dossier, on retourne à la racine
       redirect_to root_url
+    else
+      redirect_to shared_folder_path(params[:id])
     end
   end
+
+
 
   def edit
     @to_be_unshared_folder = Folder.find_by_id(params[:id])
