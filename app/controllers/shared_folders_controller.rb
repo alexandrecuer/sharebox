@@ -98,7 +98,7 @@ class SharedFoldersController < ApplicationController
       redirect_to root_url
     end
   end
-  
+
   def destroy
     if !params[:ids]
       flash[:notice] = "Aucun partage sélectionné"

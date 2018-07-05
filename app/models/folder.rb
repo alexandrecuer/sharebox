@@ -16,15 +16,18 @@ class Folder < ApplicationRecord
 
   extend ActsAsTree::TreeWalker
   
+  # Retourne Vrai si le dossier a été partagé au moins une fois
   def shared?
     !self.shared_folders.empty?
   end
 
+  # Retourne vrai si un sondage est attribué au dossier 
   def is_polled?
     # return true if self.poll_id != nil
     return true if Poll.where(id: self.poll_id).length != 0
   end
 
+  # Retourne vrai s'il existe au moins une réponse satisfaction pour le dossier
   def has_satisfaction_answer?
     if Satisfaction.find_by_folder_id(self.id)
       return true 

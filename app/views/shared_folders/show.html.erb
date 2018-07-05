@@ -33,7 +33,9 @@
               <% end %>
             </td>
             <td>
-              <%= check_box_tag 'ids[]', f.id, false %>
+              <% if !user.has_completed_satisfaction?(@current_folder) %>
+                <%= check_box_tag 'ids[]', f.id, false %>
+              <% end %>
             </td>
           <% else %>
             <td>

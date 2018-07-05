@@ -48,8 +48,7 @@
 <%= label_tag(:id, "ID de l'utilisateur :") %>
 <%= text_field_tag(:id) %>
 
-<%= label_tag(:statut, "Nouveau statut [public|private] :") %>
-<%= text_field_tag(:statut) %>
+<%= select_tag :statut, options_for_select(["public", "private", "admin" ])%>
 
 <%= submit_tag("Valider") %>
 <% end %>
