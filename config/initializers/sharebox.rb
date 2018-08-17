@@ -1,0 +1,7 @@
+MAIN = YAML.load_file("#{Rails.root}/config/config.yml")["main"]
+FOLDERS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["folders_msg"]
+HOME_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["home_msg"]
+ASSETS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["assets_msg"]
+POLLS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["polls_msg"]
+SATISFACTIONS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["satisfactions_msg"]
+SHARED_FOLDERS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["shared_folders_msg"]

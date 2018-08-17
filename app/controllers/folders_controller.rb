@@ -1,119 +1,95 @@
+##
+# manage folders creation within the sharebox site
+
 class FoldersController < ApplicationController
-
+	
   before_action :authenticate_user!
-  
-  #uniquement pour la gestion du routage de type /folders/folder_id/new
-  # si un utilisateur envoie une URI de ce type, il faut lui renvoyer un message d'erreur
-  def error
-    flash[:notice]="new what ? new_folder ? new_file ?"
-    redirect_to folder_path(params[:folder_id])
-  end
-
-  # Index permet d'afficher l'arborescence des dossiers pour les utilisateurs admin
+  ##
+  # Show a complete view of all directories and files present in the application<br>
+  # Only for admin users
   def index 
     if !current_user.is_admin?
-      flash[:notice] = "Vous n'avez pas accès à cette page"
+      flash[:notice] = FOLDERS_MSG["index_forbidden"]
       redirect_to root_url
     end
     @parent_folders = Folder.all.where(parent_id: nil)
   end
   
+  ##
+  # Following the route /folders/:id, browse to folder identified by id<br>
+  # We check if the current user has shared access on the folder and if yes we can initialize current_folder<br>
+  # if current_folder exists, we can go further :<br>
+  # - In case the current user has answered to a poll on the folder, we have to show the details of his answer<br>
+  # - We can consider we are waiting for the current user to express his satisfaction :<br>
+  # - if current user is not the owner of the folder, 
+  # - if a poll has been triggered on the folder, 
+  # - and if the current user has not answered to the poll 
   def show
     folder = Folder.find_by_id(params[:id])
     if folder
-        if current_user.has_shared_access?(folder)
-            @current_folder = folder
+      if current_user.has_shared_access?(folder)
+        @current_folder = folder
+      end
+      if @current_folder
+        # if the user has answered to the poll, we show the details of the answer
+        # if we are waiting for the current user to express his satisfaction, we redirect to new satisfaction_on_folder_path(@current_folder)
+        if @satisfaction = current_user.satisfactions.find_by_folder_id(@current_folder.id)
+          redirect_to satisfaction_path(@satisfaction.id)
+        elsif @current_folder.is_polled? && !current_user.has_ownership?(@current_folder)
+          redirect_to new_satisfaction_on_folder_path(@current_folder)
         end
-        if @current_folder
-          # Si l'utilisateur en cours a déjà répondu à l'enquête satisfaction, on affiche sa réponse
-          if @satisfaction = current_user.satisfactions.find_by_folder_id(@current_folder.id)
-            redirect_to satisfaction_path(@satisfaction.id)
-          end
-        else
-          flash[:notice] = "Ce répertoire ne vous appartient pas, ne vous est pas destiné !"
-          redirect_to root_url
-        end
-    else
-        flash[:notice] = "Ce répertoire n'existe pas !"
+      else
+        flash[:notice] = FOLDERS_MSG["folder_not_for_yu"]
         redirect_to root_url
+      end
+    else
+      flash[:notice] = FOLDERS_MSG["inexisting_folder"]
+      redirect_to root_url
     end
   end
-  
+
+  ##
+  # show the 'new' form in order for the user to create a new directory<br>
+  # Control if current user has got the ability to create a new folder : all public users will be rejected<br>
+  # In case of a subfolder creation :<br>
+  # 1) if current user browse a directory shared by another user, he will not be able to create any subfolder in it<br>
+  # 2) if current user has ownership, then we fetch parent_id, in order to fill the parent_id field hidden in the form
   def new
     if !(current_user.is_admin? || current_user.is_private?)
-      flash[:notice] = "Vous ne pouvez pas créer de dossier"
+      flash[:notice] = FOLDERS_MSG["no_folder_creation"]
       redirect_to root_url
     end
     @folder = current_user.folders.new
-    # soit on crée un sous-répertoire dans un répertoire : sub_folder
-    # 1) the folder form integrates a parent_id field we have to fill at this stage
-    # 2) if we are in a shared_by_others directory, we cannot create any sub directory
     if params[:folder_id]
       #@current_folder = current_user.folders.find(params[:folder_id])
       @current_folder = Folder.find_by_id(params[:folder_id])
       if @current_folder
         @folder.parent_id = @current_folder.id
         if !current_user.has_ownership?(@current_folder)
-          flash[:notice] = "Vous ne pouvez créer de sous répertoire que dans les répertoires vous appartenant"  
+          flash[:notice] = FOLDERS_MSG["no_subfolder_out_of_yur_folder"]
           redirect_to root_url
         end
       else
-        flash[:notice] = "Vous ne pouvez pas créer de sous répertoire dans un répertoire qui n'existe pas"
+        flash[:notice] = FOLDERS_MSG["no_subfolder_in_inexisting_folder"]
         redirect_to root_url
       end
-    end
-  end
-  
-  def create
-    @folder = current_user.folders.new(folder_params)
-    # Un numéro d'affaire est unique, mais on peut créer plusieurs dossiers sans préciser de numéro d'affaire
-    if ( Folder.where(case_number: @folder.case_number).length > 0 && @folder.case_number != "" ) 
-      flash[:notice] = "Ce numéro d'affaire existe déjà"
-      if @folder.parent_id
-        redirect_to folder_path(@folder.parent_id)
-      else
-        redirect_to root_url
-      end
-    else
-      # soit la création du répertoire est un succès et on renvoie vers le répertoire parent ou vers la racine
-      if @folder.save
-        if @folder.parent_id
-          redirect_to folder_path(@folder.parent_id)
-        else
-          redirect_to root_url
-        end
-      # Cette seconde partie du if permet, sans que l'utilisateur ait le sentiment de changer de page de porter à sa connaissance 
-      # les messages d'erreur et de réafficher le formulaire au cas ou le processus de création serait un échec. 
-      else
-        if @folder.parent_id
-          @current_folder = Folder.find_by_id(@folder.parent_id)
-        end
-        render 'new'
-      end
-    end
-  end
-  
-  def destroy
-    @folder = current_user.folders.find(params[:id])
-    activefolder=@folder.parent_id
-    @folder.destroy
-    flash[:notice] = "Suppression réussie!"
-    if activefolder
-      redirect_to folder_path(@folder.parent_id)
-    else
-      redirect_to root_url
     end
   end
 
-  # L'admin peut modifier tous les dossiers, même ceux qui ne lui sont pas partagés
+  ##
+  # Show the 'edit' form in order for the user to modify an axisting folder<br>
+  # - private users can only modify the folders they own<br>
+  # - admins have full control on all folders created in the application<br>
+  # Modifications includes : change the name, affect a case number, trigger a poll<br>
+  # please note a poll on a folder can be triggered only if the folder has been previously shared
   def edit 
     @folder = Folder.find_by_id(params[:id])
     if !@folder
-      flash[:notice] = "Vous ne pouvez pas apporter de modifications à un répertoire qui n'existe pas"
+      flash[:notice] = FOLDERS_MSG["inexisting_folder_cannot_be_modified"]
       redirect_to root_url
     else
       if !(current_user.has_ownership?(@folder) || current_user.is_admin?)
-        flash[:notice] = "Vous n'êtes pas propriétaire ou administrateur"
+        flash[:notice] = FOLDERS_MSG["not_admin_nor_owner"]
         if current_user.has_shared_access?(@folder)
           redirect_to folder_path(@folder)
         else
@@ -127,15 +103,49 @@ class FoldersController < ApplicationController
     end
   end
 
+  ##
+  # Create a new folder<br>
+  # Please note the 'new' form offers the possibility to define a case number<br>
+  # This case number field can be left blank<br>
+  # If not, the application will check if the given case number is already present in the database<br>
+  # All non blank case numbers already used once will be rejected (usefull??)
+  def create
+    @folder = current_user.folders.new(folder_params)
+    if ( Folder.where(case_number: @folder.case_number).length > 0 && @folder.case_number != "" ) 
+      flash[:notice] = FOLDERS_MSG["case_number_used"]
+      if @folder.parent_id
+        redirect_to folder_path(@folder.parent_id)
+      else
+        redirect_to root_url
+      end
+    else
+      # if creation is a success, we redirect to the parent directory or to the root directory
+      if @folder.save
+        if @folder.parent_id
+          redirect_to folder_path(@folder.parent_id)
+        else
+          redirect_to root_url
+        end
+      # this permit to show all errors messages without leaving the 'new' form
+      else
+        if @folder.parent_id
+          @current_folder = Folder.find_by_id(@folder.parent_id)
+        end
+        render 'new'
+      end
+    end
+  end
+
+  ##
+  # update an existing folder<br>
+  # if the user decide to modify the case number, and if this new case number is not blank, we have to check it is not already registered in the database
   def update
     @folder = Folder.find(params[:id])
-    # On accède au nouveau numéro d'affaire via 'folder_params[:case_number]'
-    # On s'assure de 3 choses : 
-    # Si on ne modifie pas le numéro d'affaire c'est ok 
-    # Si on modifie le numéro d'affaire et que le nouveau numéro n'existe pas déjà c'est ok 
-    # Si le nouveau numéro d'affaire est vide alors c'est ok 
+    # case number update !!
+    # we can get the existing case number via @folder.case_number
+    # we can get the new case number via 'folder_params[:case_number]'
     if ( Folder.where(case_number: folder_params[:case_number]).length > 0 && folder_params[:case_number] != "" && folder_params[:case_number] != @folder.case_number) 
-      flash[:notice] = "Ce numéro d'affaire existe déjà"
+      flash[:notice] = FOLDERS_MSG["case_number_used"]
       if @folder.parent_id
         redirect_to folder_path(@folder.parent_id)
       else
@@ -144,7 +154,7 @@ class FoldersController < ApplicationController
     else
       old_case_number = @folder.case_number
       if @folder.update(folder_params)
-      # En mettant à jour un numéro d'affaire sur un dossier, on met à jour toutes les satisfactions du dossier
+      # Updating a case number on a folder also update every case number on satisfactions of the same folder
         Satisfaction.where(case_number: old_case_number).each do |f|
           f.case_number = @folder.case_number
           f.save
@@ -162,7 +172,24 @@ class FoldersController < ApplicationController
       end
     end
   end
+  
+  ##
+  # destroy an existing folder
+  def destroy
+    @folder = current_user.folders.find(params[:id])
+    activefolder=@folder.parent_id
+    @folder.destroy
+    flash[:notice] = FOLDERS_MSG["folder_destroyed"]
+    if activefolder
+      redirect_to folder_path(@folder.parent_id)
+    else
+      redirect_to root_url
+    end
+  end
 
+  ##
+  # Move a folder<br>
+  # This feature is only for admins and is intended for annual archiving purposes
   def moove_folder
     folder_to_moove = Folder.find_by_id(params[:id])
 
@@ -186,18 +213,26 @@ class FoldersController < ApplicationController
             end
           end
         else
-          flash[:notice] = "Le second id ne correspond à aucun répertoire"
+          flash[:notice] = (params[:parent_id]).to_s + FOLDERS_MSG["no_folder_on_that_id"]
         end
       end
     else
-      flash[:notice] = "Le premier id ne correspond à aucun répertoire"
+      flash[:notice] = (params[:id]).to_s + FOLDERS_MSG["no_folder_on_that_id"]
     end
     redirect_to folders_path
+  end
+
+  ##
+  # Manage the route /folders/:folder_id/new<br>
+  # If a user try to use such a route, an error message will be returned 
+  def error
+    flash[:notice]= FOLDERS_MSG["not_a_proper_new_folder_route"]
+    redirect_to folder_path(params[:folder_id])
   end
 
 
   private
     def folder_params
-      params.require(:folder).permit(:name, :parent_id, :poll_id, :case_number)
+      params.require(:folder).permit(:name, :parent_id, :poll_id, :case_number, :id)
     end
 end

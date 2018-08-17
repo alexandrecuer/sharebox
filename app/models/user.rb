@@ -21,6 +21,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  # Permet au premier utilisateur qui s'inscrit sur l'application d'avoir automatiquement le statut d'administrateur
   def set_admin
     if User.count == 1
       self.statut = "admin"
@@ -28,6 +29,7 @@ class User < ApplicationRecord
     end
   end
   
+  # Méthode appelée lors de l'inscription d'un utilisateur, elle envoit un mail à l'administrateur
   def complete_suid
     @shared_folders=SharedFolder.where("share_user_id IS NULL")
     mel_text=""
@@ -50,6 +52,7 @@ class User < ApplicationRecord
     end
   end
 
+  # Retourne vrai si l'utilisateur a accès au dossier passé en paramètre
   def has_shared_access?(folder)
     return true if self.folders.include?(folder)
     return true if self.shared_folders_by_others.include?(folder)
@@ -72,30 +75,37 @@ class User < ApplicationRecord
     return h
   end
   
+  # Retourne vrai si l'utilisateur détient le dossier passé en paramètre
   def has_ownership?(folder)
     return true if self.folders.include?(folder)
   end
   
+  # Retourne vrai si l'utilisateur détient le fichier passé en paramètre
   def has_asset_ownership?(asset)
     return true if self.assets.include?(asset)
   end
   
+  # Retourne vrai si l'utilisateur a reçu des partages de dossiers
   def has_shared_folders_from_others?
     return self.shared_folders_by_others.length>0
   end
 
+  # Retourne vrai si l'utilisateur est administrateur
   def is_admin?
     return true if self.statut == "admin"
   end
 
+  # Retourne vrai si l'utilisateur a un statut privé
   def is_private?
     return true if self.statut == "private"
   end
 
+  # Retourne vrai si l'utilisateur a un statut public
   def is_public?
     return true if self.statut == "public"
   end
 
+  # Retourne vrai si l'utilisateur a répondu à une enquête satisfaction sur le dossier passé en paramètre
   def has_completed_satisfaction?(folder)
     return true if Satisfaction.where(folder_id: folder.id, user_id: self.id).length != 0 
   end

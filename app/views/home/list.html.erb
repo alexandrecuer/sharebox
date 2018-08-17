@@ -4,10 +4,10 @@
 <tr><th colspan="4">Utilisateurs(<%= @users.count%>)</th>
 </tr>
 <tr>
-<th>id</th>
-<th>email</th>
+<th><%= sortable "id" %></th>
+<th><%= sortable "email","mail" %></th>
 <th>has shared folders from others ?</th>
-<th>statut</th>
+<th><%= sortable "statut" %></th>
 </tr>
 <% @users.each do |u| %>
         <tr>
@@ -48,8 +48,7 @@
 <%= label_tag(:id, "ID de l'utilisateur :") %>
 <%= text_field_tag(:id) %>
 
-<%= label_tag(:statut, "Nouveau statut [public|private] :") %>
-<%= text_field_tag(:statut) %>
+<%= select_tag :statut, options_for_select(["public", "private", "admin" ])%>
 
 <%= submit_tag("Valider") %>
 <% end %>

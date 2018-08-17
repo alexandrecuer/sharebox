@@ -1,53 +1,62 @@
 <%= render 'shared/nav' %>
 
-<table class="recap">
+<%= form_tag(delete_shared_folder_path, method: "delete") do %> 
+  <table class="recap">
     <tr>
-    	<th>Id Utilisateur</th>
-    	<th>Email</th>
-    	<th>Statut</th>
+      <th>Id Utilisateur</th>
+      <th>Email</th>
+      <th>Statut</th>
     </tr>
-    <% @shared_folders.each do |f|%>
-    <% user = User.find_by_email(f.share_email) %>
-    <% @current_shared_folder = f %>
-    <tr>
-    	<% if user %>
-	        <td>
-	            <%= user.id %>
-	        </td>
-        	<% if user.has_completed_satisfaction?(@current_folder) %>
-            	<% satisfaction = @satisfactions.find_by_user_id(user.id) %>
-            	<td>
-            		<a class="display_anchor" onclick="display(<%= satisfaction.id %>)"><%= f.share_email %></a>
-            	</td>
-        	<% else %>
-            	<td>
-            		<%= f.share_email %>
-            	</td>
-        	<% end %>
-        	<td>
-            	<%= user.statut %>
-        	</td>
-			<td>
-            	<% if !user.has_completed_satisfaction?(@current_folder) %>
-                	<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
-            	<% end %>
-        	</td>
-        <% else %>
-        	<td>
-        	</td>
-        	<td>
-        		<%= f.share_email %>
-        	</td>
-        	<td>
-        	</td>
-        	<td>
-        		<%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, send_email_path(f), remote: true  %>
-        	</td>
-        <% end %>
-    </tr>
-    <% end %>
-
-</table>
+      <% @shared_folders.each do |f| %>
+        <% user = User.find_by_email(f.share_email) %>
+        <tr>
+          <% if user %>
+            <td>
+              <%= user.id %>
+            </td>
+            <% if user.has_completed_satisfaction?(@current_folder) %>
+              <% satisfaction = @satisfactions.find_by_user_id(user.id) %>
+              <td>
+                <a class="display_anchor" onclick="display(<%= satisfaction.id %>)"><%= f.share_email %></a>
+              </td>
+            <% else %>
+              <td>
+                <%= f.share_email %>
+              </td>
+            <% end %>
+            <td>
+              <%= user.statut %>
+            </td>
+            <td>
+              <% if !user.has_completed_satisfaction?(@current_folder) %>
+                <%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, shared_folder_path(f.folder_id, :share_email => f.share_email) %>
+              <% end %>
+            </td>
+            <td>
+              <% if !user.has_completed_satisfaction?(@current_folder) %>
+                <%= check_box_tag 'ids[]', f.id, false %>
+              <% end %>
+            </td>
+          <% else %>
+            <td>
+            </td>
+            <td>
+              <%= f.share_email %>
+            </td>
+            <td>
+            </td>
+            <td>
+              <%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, shared_folder_path(f.folder_id, :share_email => f.share_email) %>
+            </td>
+            <td>
+              <%= check_box_tag 'ids[]', f.id, false %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+  <%= submit_tag("Supprimer le(s) partage(s) sélectionné(s)") %>
+<% end %>
 
 <% @satisfactions.each do |s| %> 
     <div id="form_<%=s.id%>" style="display: none">

@@ -1,63 +1,71 @@
+## 
+# manage assets creation inside folders within the sharebox site
+
 class AssetsController < ApplicationController
 
 before_action :authenticate_user!
-
-  def index
-  end
   
+  ## A view accessible via "/assets/assets_id"
+  # Show the name of the file and its directory (forge/attachments//asset_id/asset_name)
   def show
     @asset = current_user.assets.find(params[:id])
   end
   
+  ##
+  # Show the new form in order to upload a new asset
+  # Only admin or private users are able to download files on the application
+  # They cannot upload files inside folder they don't own
   def new
     if !(current_user.is_admin? || current_user.is_private?)
-      flash[:notice] = "Vous ne pouvez pas mettre en ligne de fichier"
+      flash[:notice] = ASSETS_MSG["rights_missing"]
       redirect_to root_url
     end
     @asset = current_user.assets.new
-    # soit on a un folder_id - cf routage new_sub_asset - l'URI va être de type /folders/folder_id/new_file
-    # soit on n'en a pas et on met en ligne le fichier à la racine
+    # If there is a folder_id, then the path will be like : /folders/folder_id/new_file
+    # Else the file will be located at the root 
     if params[:folder_id]
       @current_folder = Folder.find_by_id(params[:folder_id])
       if @current_folder
         @asset.folder_id = @current_folder.id
         if !current_user.has_ownership?(@current_folder)  
-            flash[:notice] = "Vous ne pouvez mettre en ligne de fichier que dans les répertoires vous appartenant"
+            flash[:notice] = ASSETS_MSG["not_yur_folder"]
             redirect_to root_url
         end
       else
-        flash[:notice] = "Vous ne pouvez pas mettre en ligne de fichier dans un répertoire qui n'existe pas"
+        flash[:notice] = ASSETS_MSG["inexisting_folder"]
         redirect_to root_url
       end
     end
-    
   end
   
+  ##
+  # Upload an asset and register it in the database
+  # if the asset is located at the root, we redirect to root 
+  # else we redirect to the parent folder of the file
   def create
-    # pour la définition de asset_params, voir les private methods en fin de ce fichier controller 
 	  @asset = current_user.assets.new(asset_params)
-      # soit la mise en ligne est un succès et on renvoie soit vers le répertoire de l'asset, soit vers la racine 
       if @asset.save
-        flash[:notice] = "Mise en ligne réussie!"
+        flash[:notice] = ASSETS_MSG["asset_uploaded"]
         if @asset.folder_id
           redirect_to folder_path(@asset.folder_id)
         else
           redirect_to root_url
         end
-        # soit la mise en ligne est un échec...
       else
         if @asset.folder_id
           @current_folder = Folder.find_by_id(@asset.folder_id)
         end
         render 'new'
       end
-	
   end
   
+  ##
+  # Destroy the asset 
+  # files can be deleted by their owners
   def destroy
     @asset = current_user.assets.find(params[:id])
     @asset.destroy
-    flash[:notice] = "Suppression réussie!"
+    flash[:notice] = ASSETS_MSG["asset_destroyed"]
     if @asset.folder_id
       redirect_to folder_path(@asset.folder_id)
     else
@@ -65,6 +73,12 @@ before_action :authenticate_user!
     end
   end
   
+
+  ##
+  # Permits the user to download a file
+  # there is 2 different options :
+  # - 1) The file is stored locally in a directory egg : (forge/attachments//asset_id/asset_name)
+  # - 2) Amazon S3 mode : The file is stored in a cloud storage
   def get
     #asset = current_user.assets.find_by_id(params[:id])
     asset = Asset.find_by_id(params[:id])
@@ -73,28 +87,28 @@ before_action :authenticate_user!
       #case 1 : asset is a root file
       if !asset.folder_id
         if current_user.has_asset_ownership?(asset)
-          #en passant à S3, on utilise redirect_to asset.uploaded_file.expiring_url(10)
-          #celà crée une url valable 10s qui permet d'accéder à des fichiers S3 privés
-          #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-          redirect_to asset.uploaded_file.expiring_url(10)
+          # switching to S3, we use "redirect_to asset.uploaded_file.expiring_url(10)""
+          # this creates a valid 10s url that allows access to private S3 files
+          send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+          #redirect_to asset.uploaded_file.expiring_url(10)
         else
-          flash[:notice] = "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
+          flash[:notice] = ASSETS_MSG["asset_not_for_yu"]
           redirect_to root_url
         end
       else
         #case 2 : asset belongs to a directory
         current_folder = Folder.find_by_id(asset.folder_id)
         if current_user.has_shared_access?(current_folder)
-          #passage à S3
-          #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-          redirect_to asset.uploaded_file.expiring_url(10)
+          # switch to S3
+          send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+          #redirect_to asset.uploaded_file.expiring_url(10)
         else
-          flash[:notice] = "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
+          flash[:notice] = ASSETS_MSG["asset_not_for_yu"]
           redirect_to root_url
         end
       end
     else
-      flash[:notice] = "Ce fichier n'existe pas !"
+      flash[:notice] = ASSETS_MSG["inexisting_asset"]
       redirect_to root_url
     end
   end
