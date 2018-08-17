@@ -8,10 +8,10 @@ class HomeController < ApplicationController
   helper_method :sort_column, :sort_direction
 
   ## 
-  # Admin users can modify the statut of other users
-  # There is 3 differents statut on the application which are public, private and admin. 
-  # The first user registered on the application is considered like a super admin, his statut cannot be changed
-  # An admin cannot change his own statut 
+  # Admin users can modify other users'status
+  # 3 differents status are public, private and admin. 
+  # The first user registered on the application is considered like a super admin, his status cannot be changed
+  # An admin cannot change his own status 
   def update
     if !current_user.is_admin?
       flash[:notice] = HOME_MSG["only_for_admin"]
@@ -34,7 +34,7 @@ class HomeController < ApplicationController
             if @user.save
               flash[:notice] = @user.email + '('+@user.id.to_s+') a désormais le statut :'+@user.statut
             else
-              flash[:notice] = HOME_MSG["error_changing_statut"]
+              flash[:notice] = HOME_MSG["error_changing_status"]
             end
           else
             flash[:notice] = HOME_MSG["own_statut_nor_superadmin_cannot_be_changed"]
@@ -43,7 +43,7 @@ class HomeController < ApplicationController
           flash[:notice] = HOME_MSG["inexisting_user"]
         end
       else
-        flash[:notice] = HOME_MSG["invalid_statut"]
+        flash[:notice] = HOME_MSG["invalid_status"]
       end
       redirect_to list_path
     end
@@ -66,14 +66,16 @@ class HomeController < ApplicationController
     redirect_to root_url
   end
 
-  ##
-  # Using the sortable method in application_helper, it allow to sort users by Id, Email or Statut 
-  # A click on the column name sort ascending, if you click again the sort is descending
+  # Functions intended for the sortable method in application_helper
   private
+    ##
+    # Return the sorting direction
     def sort_column
       User.column_names.include?(params[:sort]) ? params[:sort] : "id"
     end
   
+    ##
+    # Return the name of the column to sort
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end

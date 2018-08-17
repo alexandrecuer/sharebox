@@ -18,10 +18,10 @@ folders_msg:
 
 home_msg:
   only_for_admin: "Seul les admins peuvent changer le statut des utilisateurs"
-  error_changing_statut: "Erreur lors du changement de statut"
+  error_changing_status: "Erreur lors du changement de statut"
   own_statut_nor_superadmin_cannot_be_changed: "Vous ne pouvez pas changer votre propre statut ou celui du super administrateur"
   inexisting_user: "Vous ne pouvez pas changer le statut d'un utilisateur inexistant"
-  invalid_statut: "Statut invalide"
+  invalid_status: "Statut invalide"
   user_managing_forbidden: "Les utilisateurs publics ne peuvent ni visualiser ni gérer les autres utilisateurs"
   
 assets_msg: 
@@ -36,7 +36,7 @@ assets_msg:
 polls_msg:
   admin_rights_missing: "Vous n'avez pas les droits administrateurs"
   inexisting_poll: "Vous ne pouvez pas apporter de modifications à un sondage qui n'existe pas"
-  similar_questions: "Un sondage ne peut contenir des questions identiques"
+  same_questions: "Un sondage ne peut contenir des questions identiques"
   poll_updated: "Modifications du sondage sauvegardées"
   inexisting_poll_number: "Ce numéro de sondage n'existe pas"
   missing_required_fields: "Il manque des champs obligatoires dans le formulaire"
@@ -58,8 +58,8 @@ shared_folders_msg:
   mail_sent_to: "Vous venez d'envoyer un email à l'adresse : "
   inexisting_folder: "Vous ne pouvez pas partager un répertoire qui n'existe pas ou ne vous appartient pas"
   email_needed: "Il faut indiquer une adresse mel"
-  already_access: "Vous avez déjà accès à ce répertoire"
-  already_access_for: "Partage déjà opérationnel pour l'adresse : "
+  you_are_folder_owner: "Vous avez déjà accès à ce répertoire"
+  already_shared_to: "Partage déjà opérationnel pour l'adresse : "
   unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse : " 
   no_share_selected: "Aucun partage sélectionné"
   shares_destroyed: "Partage(s) supprimé(s)"

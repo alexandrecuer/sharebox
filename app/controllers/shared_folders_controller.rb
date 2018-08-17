@@ -6,14 +6,14 @@ class SharedFoldersController < ApplicationController
   before_action :authenticate_user!
   
   ##
-  # On this view, there is a table with every emails of the users having access to the folder 
+  # Show the list of the shared emails
   # if a user already answered to the satisfaction form, his answers can be displayed by clicking on his email
   # If a user did not answered to the form yet :
-  # - It is possible to remove shared access from him
-  # - It is also possible to send him an email to tell him that he is able to express his satisfaction
+  # - It is possible to remove shared access
+  # - It is also possible to send him an email invitation to express his satisfaction
   def show
-    # Happend only when a mail is sent 
-    if params[:share_email]# Happend only when a mail is sent
+    # Happens only when a mail is sent 
+    if params[:share_email]
       flash[:notice] = SHARED_FOLDERS_MSG["mail_sent_to"] + params[:share_email]
       InformUserJob.perform_now(params[:share_email])
       redirect_to shared_folder_path(params[:id])
@@ -29,7 +29,7 @@ class SharedFoldersController < ApplicationController
   # TODO
   # Used to update the database manually when users sign up
   # if a user has been assigned shares before signing up , the corresponding share_user_id in the table shared_folders are empty
-  # when creating the user, an after_create is responsible for filing in the share_user_id 
+  # when creating the user, an after_create is responsible for filling in the share_user_id 
   def complete_suid
     current_user.complete_suid
     if current_user.set_admin
@@ -39,7 +39,8 @@ class SharedFoldersController < ApplicationController
   end
 
   ##
-  # Used to share a folder to a user
+  # Show the shared form
+  # When a folder is shared to a user, you must give one email address or more but separated by a ","
   def new
     @to_be_shared_folder = Folder.find_by_id(params[:id])
     if !current_user.has_ownership?(@to_be_shared_folder)
@@ -52,9 +53,9 @@ class SharedFoldersController < ApplicationController
   end
 
   ##
-  # When a folder is shared to a user, you must give one email address or more but separated by a ","
-  # If you share a folder to a user that already have access on it, it doesn't work 
-  # If you share it to yourself, it doesn't work too because sharing a folder means you already have access on it 
+  # Saves the shared emails in the database
+  # If you share a folder to a user that already has access on it, it doesn't work 
+  # you cannot share to yourself a folder you own
   # It is possible to send an email to the admin to report him that a folder is shared (UserMailer.inform_admin)
   def create
     flash[:notice]=""
@@ -66,7 +67,7 @@ class SharedFoldersController < ApplicationController
       mel_text=""
       email_addresses.each do |email_address|
         if email_address == current_user.email
-          flash[:notice] = SHARED_FOLDERS_MSG["already_access"]
+          flash[:notice] = SHARED_FOLDERS_MSG["you_are_folder_owner"]
         else
           email_address=email_address.delete(' ')
           @shared_folder = current_user.shared_folders.new(shared_folder_params)
@@ -77,7 +78,7 @@ class SharedFoldersController < ApplicationController
           @shared_folder.share_user_id = share_user.id if share_user
           exist = current_user.shared_folders.where("share_email = '"+email_address+"' and folder_id = "+params[:shared_folder][:folder_id])
           if exist.length >0
-            flash[:notice] = SHARED_FOLDERS_MSG["already_access_for"].to_s + email_address
+            flash[:notice] = SHARED_FOLDERS_MSG["already_shared_to"].to_s + email_address
           else
             if @shared_folder.save
               a="Partage effectué pour l'adresse : " + email_address + "<br>"
@@ -107,10 +108,8 @@ class SharedFoldersController < ApplicationController
   end
 
   ##
-  # We are on the show view 
-  # It is possible to delete multiple shares on a folder in the same time
-  # After deletion, if there is still shares for the folder, we stay in the same view 
-  # If not, we go back to the root view
+  # Delete specific share(s) within the show view
+  # After deletion, if there is no more shares, we redirect to the root view
   def destroy
     if !params[:ids]
       flash[:notice] = SHARED_FOLDERS_MSG["no_share_selected"]

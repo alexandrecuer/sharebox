@@ -7,10 +7,14 @@ class SatisfactionsController < ApplicationController
   before_action :authenticate_user!
 
   ##
-  # Public users are able to express their satisfaction by answering to a form if : 
+  # Show the new form in order for public users to express their satisfaction :
   # - they have a shared access on the folder 
   # - the folder is polled
   # - they have not already answered to the form
+  # The form is composed of open and closed questions
+  # We answer a closed question with a score of 1 to 4 represented by stars
+  # There is a field for each open questions that allow the user to write his answer 
+  # Both types of questions can be left blank
   def new
     @current_folder = Folder.find_by_id(params[:id])
     if !@current_folder
@@ -39,7 +43,8 @@ class SatisfactionsController < ApplicationController
   end
   
   ##
-  # Any users can check answers from a folder if they have shared access and if the folder is polled
+  # Show all existing answers on a specific folder
+  # Any user can only check answers on a folder if they have shared access and if the folder is polled
   def show 
     @satisfaction = Satisfaction.find_by_id(params[:id])
     if !@satisfaction
@@ -57,10 +62,7 @@ class SatisfactionsController < ApplicationController
   end
 
   ##
-  # The form is composed of open and closed questions
-  # We answer a closed question with a score of 1 to 4 represented by stars
-  # There is a field for each open questions that allow the user to write his answer 
-  # Both types of questions can be left blank
+  # Save a satisfaction answer
   def create
     @satisfaction = Satisfaction.new(satisfaction_params)
     @current_folder = Folder.find_by_id(params[:satisfaction][:folder_id])
@@ -75,7 +77,8 @@ class SatisfactionsController < ApplicationController
   end
 
   ##
-  # When you watch every satisfactions answer related to a poll, there is a cross on the right that allow admin user to delete satisfaction 
+  # Destroy a specific satisfaction
+  # The show form of the poll_controller include a delete button
   def destroy
     @satisfaction = Satisfaction.find_by_id(params[:id])
     @poll = Poll.find_by_id(@satisfaction.poll_id)

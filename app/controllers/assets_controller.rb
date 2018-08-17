@@ -6,14 +6,15 @@ class AssetsController < ApplicationController
 before_action :authenticate_user!
   
   ## A view accessible via "/assets/assets_id"
-  # You can find the name of the file and where he is saved (forge/attachments//asset_id/asset_name)
+  # Show the name of the file and its directory (forge/attachments//asset_id/asset_name)
   def show
     @asset = current_user.assets.find(params[:id])
   end
   
   ##
+  # Show the new form in order to upload a new asset
   # Only admin or private users are able to download files on the application
-  # They cannot download files inside folder they don't own
+  # They cannot upload files inside folder they don't own
   def new
     if !(current_user.is_admin? || current_user.is_private?)
       flash[:notice] = ASSETS_MSG["rights_missing"]
@@ -38,9 +39,9 @@ before_action :authenticate_user!
   end
   
   ##
-  # When an asset is created on the application, 
-  # if the asset is located at the root, we send back to root 
-  # else we send back to the folder that contain the file
+  # Upload an asset and register it in the database
+  # if the asset is located at the root, we redirect to root 
+  # else we redirect to the parent folder of the file
   def create
 	  @asset = current_user.assets.new(asset_params)
       if @asset.save
@@ -59,7 +60,8 @@ before_action :authenticate_user!
   end
   
   ##
-  # Every file can be deleted by the user who own it 
+  # Destroy the asset 
+  # files can be deleted by their owners
   def destroy
     @asset = current_user.assets.find(params[:id])
     @asset.destroy
@@ -73,9 +75,10 @@ before_action :authenticate_user!
   
 
   ##
-  # This method explain how the files are saved on the application, there is 2 differents possibilities :
-  # - 1) The file is saved in a directory following a path like : (forge/attachments//asset_id/asset_name)
-  # - 2) Amazon S3 mode : The file is saved in a cloud storage
+  # Permits the user to download a file
+  # there is 2 different options :
+  # - 1) The file is stored locally in a directory egg : (forge/attachments//asset_id/asset_name)
+  # - 2) Amazon S3 mode : The file is stored in a cloud storage
   def get
     #asset = current_user.assets.find_by_id(params[:id])
     asset = Asset.find_by_id(params[:id])
@@ -86,8 +89,8 @@ before_action :authenticate_user!
         if current_user.has_asset_ownership?(asset)
           # switching to S3, we use "redirect_to asset.uploaded_file.expiring_url(10)""
           # this creates a valid 10s url that allows access to private S3 files
-          #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-          redirect_to asset.uploaded_file.expiring_url(10)
+          send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+          #redirect_to asset.uploaded_file.expiring_url(10)
         else
           flash[:notice] = ASSETS_MSG["asset_not_for_yu"]
           redirect_to root_url
@@ -97,8 +100,8 @@ before_action :authenticate_user!
         current_folder = Folder.find_by_id(asset.folder_id)
         if current_user.has_shared_access?(current_folder)
           # switch to S3
-          #send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-          redirect_to asset.uploaded_file.expiring_url(10)
+          send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+          #redirect_to asset.uploaded_file.expiring_url(10)
         else
           flash[:notice] = ASSETS_MSG["asset_not_for_yu"]
           redirect_to root_url
