@@ -1,60 +1,54 @@
+## 
+# Manage satisfactions creation within the sharebox site
+# A satisfaction is a form intended for the client to express his satisfaction
+
 class SatisfactionsController < ApplicationController
 
   before_action :authenticate_user!
 
+  ##
+  # Public users are able to express their satisfaction by answering to a form if : 
+  # - they have a shared access on the folder 
+  # - the folder is polled
+  # - they have not already answered to the form
   def new
-    # Lorsque l'on traite de satisfactions, on est forcément sur un dossier
-    # La variable @shared_folders_by_others qui sert lorsque l'on est à la racine pour afficher les dossiers partagés par les autres n'est donc pas à renseigner
-    # _list.html.erb n'a besoin que de @assets et de @folders
-
     @current_folder = Folder.find_by_id(params[:id])
     if !@current_folder
-      flash[:notice] = "Vous ne pouvez pas participer à un sondage sur un répertoire qui n'existe pas "
+      flash[:notice] = SATISFACTIONS_MSG["inexisting_folder"]
       redirect_to root_url
     else
       if current_user.has_ownership?(@current_folder)
-        flash[:notice] = " Vous ne pouvez pas participer à un sondage sur un répertoire dont vous êtes le propriétaire "
+        flash[:notice] = SATISFACTIONS_MSG["folder_owner"]
         redirect_to folder_path(@current_folder)
       end
       if !current_user.has_shared_access?(@current_folder)
-        flash[:notice] = "Vous ne pouvez pas participer à un sondage sur un répertoire ne vous est pas partagé"
+        flash[:notice] = SATISFACTIONS_MSG["unshared_folder"]
         redirect_to root_url
       end
       if !@current_folder.is_polled?
-        flash[:notice] = "Aucune enquête en cours sur ce dossier"
+        flash[:notice] = SATISFACTIONS_MSG["unpolled_folder"]
         redirect_to folder_path(@current_folder)
       end
       if current_user.has_completed_satisfaction?(@current_folder)
-        flash[:notice] = "Vous avez déjà répondu à une enquête sur ce répertoire"
+        flash[:notice] = SATISFACTIONS_MSG["already_answered"]
         redirect_to folder_path(@current_folder)
       end
       @satisfaction = Satisfaction.new
       @poll = Poll.all.find_by_id(@current_folder.poll_id)
     end
   end
-
-  # Seulement les utilisateurs privés et l'admin peuvent voir les statistiques de satisfaction
-  def index 
-    if current_user.is_private? || current_user.is_admin?
-      @satisfactions = Satisfaction.all
-      @polls = Poll.all
-    else 
-      flash[:notice] = "N'étant ni admin ni utilisateur privé, vous n'avez pas les droits pour accéder aux données globales de satisfaction"
-      redirect_to root_url
-    end
-  end
   
-  # Un utilisateur public peut voir les réponses d'un dossier qui lui a été partagé et qui est audité en satisfaction.
-  # Il en va de même pour l'utilisateur privé et l'administrateur
+  ##
+  # Any users can check answers from a folder if they have shared access and if the folder is polled
   def show 
     @satisfaction = Satisfaction.find_by_id(params[:id])
     if !@satisfaction
-      flash[:notice] = " Aucune enquête sous ce numéro "
+      flash[:notice] = SATISFACTIONS_MSG["inexisting_satisfaction"]
       redirect_to root_url
     else
       @current_folder = Folder.find_by_id(@satisfaction.folder_id)
       if !( current_user.has_shared_access?(@current_folder) || current_user.is_admin? )
-        flash[:notice] = " Vous ne pouvez accéder aux statistiques n'étant ni admin ni propriétaire ni autorisé sur ce dossier"
+        flash[:notice] = SATISFACTIONS_MSG["access_forbidden"]
         redirect_to root_url
       end
       @poll = Poll.all.find_by_id(@current_folder.poll_id)
@@ -62,19 +56,26 @@ class SatisfactionsController < ApplicationController
     end
   end
 
+  ##
+  # The form is composed of open and closed questions
+  # We answer a closed question with a score of 1 to 4 represented by stars
+  # There is a field for each open questions that allow the user to write his answer 
+  # Both types of questions can be left blank
   def create
     @satisfaction = Satisfaction.new(satisfaction_params)
     @current_folder = Folder.find_by_id(params[:satisfaction][:folder_id])
     @satisfaction.user_id = current_user.id
     if @satisfaction.save
-      flash[:notice]= "Vos réponses ont été enregistrées, merci !"
+      flash[:notice] = SATISFACTIONS_MSG["satisfaction_created"]
       @poll = Poll.all.find_by_id(@satisfaction.poll_id)
     else
-      flash[:notice]= "Error creating satisfaction."
+      flash[:notice] = SATISFACTIONS_MSG["satisfaction_error"]
     end
     render 'new'
   end
 
+  ##
+  # When you watch every satisfactions answer related to a poll, there is a cross on the right that allow admin user to delete satisfaction 
   def destroy
     @satisfaction = Satisfaction.find_by_id(params[:id])
     @poll = Poll.find_by_id(@satisfaction.poll_id)

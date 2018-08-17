@@ -1,0 +1,65 @@
+main:
+  site_name: "Le cloud des rapports / Cerema Centre Est"
+  admin_mel: "alexandre.cuer@cerema.fr"
+
+folders_msg:
+  index_forbidden: "Vous n'avez pas accès à cette page"
+  folder_not_for_yu: "Ce répertoire ne vous appartient pas, ne vous est pas destiné !"
+  inexisting_folder: "Ce répertoire n'existe pas !"
+  no_folder_creation: "Vous ne pouvez pas créer de dossier"
+  no_subfolder_out_of_yur_folder: "Vous ne pouvez créer de sous répertoire que dans les répertoires vous appartenant"
+  no_subfolder_in_inexisting_folder: "Vous ne pouvez pas créer de sous répertoire dans un répertoire qui n'existe pas"
+  inexisting_folder_cannot_be_modified: "Vous ne pouvez pas apporter de modifications à un répertoire qui n'existe pas"
+  not_admin_nor_owner: "Vous n'êtes pas propriétaire ou administrateur"
+  case_number_used: "Ce numéro d'affaire existe déjà"
+  folder_destroyed: "Suppression réussie !"
+  no_folder_on_that_id: " ne correspond à aucun répertoire existant"
+  not_a_proper_new_folder_route: "new what? new_folder? new_file?"
+
+home_msg:
+  only_for_admin: "Seul les admins peuvent changer le statut des utilisateurs"
+  error_changing_statut: "Erreur lors du changement de statut"
+  own_statut_nor_superadmin_cannot_be_changed: "Vous ne pouvez pas changer votre propre statut ou celui du super administrateur"
+  inexisting_user: "Vous ne pouvez pas changer le statut d'un utilisateur inexistant"
+  invalid_statut: "Statut invalide"
+  user_managing_forbidden: "Les utilisateurs publics ne peuvent ni visualiser ni gérer les autres utilisateurs"
+  
+assets_msg: 
+  rights_missing: "Vous ne pouvez pas mettre en ligne de fichier"
+  not_yur_folder: "Vous ne pouvez mettre en ligne de fichier que dans les répertoires vous appartenant"
+  inexisting_folder: "Vous ne pouvez pas mettre en ligne de fichier dans un répertoire qui n'existe pas"
+  asset_uploaded: "Mise en ligne réussie!"
+  asset_destroyed: "Suppression réussie!"
+  asset_not_for_yu: "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
+  inexisting_asset: "Ce fichier n'existe pas !"
+
+polls_msg:
+  admin_rights_missing: "Vous n'avez pas les droits administrateurs"
+  inexisting_poll: "Vous ne pouvez pas apporter de modifications à un sondage qui n'existe pas"
+  similar_questions: "Un sondage ne peut contenir des questions identiques"
+  poll_updated: "Modifications du sondage sauvegardées"
+  inexisting_poll_number: "Ce numéro de sondage n'existe pas"
+  missing_required_fields: "Il manque des champs obligatoires dans le formulaire"
+  poll_created: "Nouveau formulaire crée avec succès"
+  poll_destroyed: "Suppression du formulaire réussie"
+
+satisfactions_msg:
+  inexisting_folder: "Vous ne pouvez pas participer à un sondage sur un répertoire qui n'existe pas"
+  folder_owner: "Vous ne pouvez pas participer à un sondage sur un répertoire dont vous êtes le propriétaire"
+  unshared_folder: "Vous ne pouvez pas participer à un sondage sur un répertoire qui ne vous est pas partagé"
+  unpolled_folder: "Aucune enquête en cours sur ce dossier"
+  already_answered: "Vous avez déjà répondu à une enquête sur ce répertoire"
+  inexisting_satisfaction: "Aucune enquête sous ce numéro"
+  access_forbidden: "Vous ne pouvez accéder aux statistiques n'étant ni admin ni propriétaire ni autorisé sur ce dossier"
+  satisfaction_created: "Vos réponses ont été enregistrées, merci !"
+  satisfaction_error: "Error creating satisfaction."
+
+shared_folders_msg:
+  mail_sent_to: "Vous venez d'envoyer un email à l'adresse : "
+  inexisting_folder: "Vous ne pouvez pas partager un répertoire qui n'existe pas ou ne vous appartient pas"
+  email_needed: "Il faut indiquer une adresse mel"
+  already_access: "Vous avez déjà accès à ce répertoire"
+  already_access_for: "Partage déjà opérationnel pour l'adresse : "
+  unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse : " 
+  no_share_selected: "Aucun partage sélectionné"
+  shares_destroyed: "Partage(s) supprimé(s)"
