@@ -1,7 +1,38 @@
 main:
   site_name: "Le cloud des rapports / Cerema Centre Est"
   admin_mel: "alexandre.cuer@cerema.fr"
-
+  are_yu_sure: "Etes vous sûr ?"
+  # for views\assets\_form.html.erb
+  upload: "Lancer le téléchargement"
+  # for views\folders\_form.html.erb
+  # for views\folders\index.html.erb
+  # for views\home\list.html.erb
+  # for views\polls\_form.html.erb
+  # for views\polls\show.html.erb
+  # for views\satisfaction\_form.html.erb
+  # for views\shared\_list.html.erb
+  asset_or_folder_name: "Nom"
+  asset_or_folder_last_update: "Dernière modif."
+  asset_or_folder_length: "Taille"
+  owner: "Propriétaire: "
+  delete_folder: "Supprimer"
+  share_folder: "Partager"
+  manage_folder: "Gérer"
+  see_shares: "[Voir les partages]"
+  see_answers: "[Voir les réponses]"
+  delete_asset: "Supprimer"
+  # for views\shared\_nav.html.erb
+  disconnect: "se déconnecter"
+  upload_file: "charger un document"
+  create_dir: "créer un répertoire"
+  users_list: "[Liste des utilisateurs]"
+  manage_polls: "[Gestion des sondages]"
+  new_poll: "NOUVEAU SONDAGE"
+  manage_folders: "[Gestion des dossiers]"
+  root: "racine"
+  # for views\shared_folders\_form.html.erb
+  # for views\shared_folders\show.html.erb
+  
 folders_msg:
   index_forbidden: "Vous n'avez pas accès à cette page"
   folder_not_for_yu: "Ce répertoire ne vous appartient pas, ne vous est pas destiné !"
@@ -17,10 +48,11 @@ folders_msg:
   not_a_proper_new_folder_route: "new what? new_folder? new_file?"
 
 home_msg:
-  only_for_admin: "Seul les admins peuvent changer le statut des utilisateurs"
-  error_changing_status: "Erreur lors du changement de statut"
-  own_statut_nor_superadmin_cannot_be_changed: "Vous ne pouvez pas changer votre propre statut ou celui du super administrateur"
-  inexisting_user: "Vous ne pouvez pas changer le statut d'un utilisateur inexistant"
+  only_for_admin: "Seul les admins peuvent changer le status des utilisateurs"
+  error_changing_status: "Erreur lors du changement de status"
+  new_status: " a désormais le status "
+  own_status_nor_superadmin_cannot_be_changed: "Vous ne pouvez pas changer votre propre status ou celui du super administrateur"
+  inexisting_user: "Vous ne pouvez pas changer le status d'un utilisateur inexistant"
   invalid_status: "Statut invalide"
   user_managing_forbidden: "Les utilisateurs publics ne peuvent ni visualiser ni gérer les autres utilisateurs"
   

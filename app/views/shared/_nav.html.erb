@@ -1,56 +1,74 @@
 <div style="height:40px">
 <!-- navigation menu -->
-<%= current_user.email %>(<%= current_user.statut %>)
-| <%= link_to "se déconnecter", destroy_user_session_path, :method => :delete %>
+        <%= current_user.email %>(<%= current_user.statut %>)
+        | <%= link_to MAIN["disconnect"], destroy_user_session_path, :method => :delete %>
+<% 
+if current_user.is_admin? || current_user.is_private?
+  if @current_folder
+    if current_user.has_ownership?(@current_folder)
+%>
+        | <%= link_to MAIN["upload_file"], new_sub_asset_path(@current_folder) %>
+        | <%= link_to MAIN["create_dir"], new_sub_folder_path(@current_folder) %>
+<%
+    end
+  else %>
+        | <%= link_to MAIN["upload_file"], new_asset_path %>
+        | <%= link_to MAIN["create_dir"], new_folder_path %>
+<% 
+  end
+end
+%>
 
-<% if current_user.is_admin? || current_user.is_private? %>
-  <% if @current_folder %>
-    <% if current_user.has_ownership?(@current_folder) %>
-        | <%= link_to "charger un document", new_sub_asset_path(@current_folder) %>
-        | <%= link_to "créer un répertoire", new_sub_folder_path(@current_folder) %>
-    <% end %>
-  <% else %>
-    | <%= link_to "charger un document", new_asset_path %>
-    | <%= link_to "créer un répertoire", new_folder_path %>
-  <% end %>
+<%
+  if current_user.is_admin? %>
+        <%= link_to MAIN["users_list"], list_path %>
+        <div class="dropdown">
+          <a class="dropbtn"><%= MAIN["manage_polls"] %></a>
+          <div class="dropdown-content">
+            <ul>
+              <%= link_to MAIN["new_poll"], new_poll_path %>
+<%
+    Poll.all.each do |poll|
+%>
+              <li>
+                <%= link_to poll.name, edit_poll_path(poll) %>
+                <%= link_to poll_path(poll) do %><i class="far fa-eye fa-2x"></i><% end %>
+                <%= link_to poll_path(poll), method: :delete, data: {confirm: MAIN["are_yu_sure"] } do %><i class="fas fa-times fa-2x"></i><% end %>
+              </li>
+<%
+    end
+%>
+            </ul>
+          </div>
+        </div>
+        <%= link_to MAIN["manage_folders"], folders_path %>
 <% end %>
 
-<% if current_user.is_admin? %>
-  <%= link_to '[Liste des utilisateurs]', list_path %>
-  <div class="dropdown">
-    <a class="dropbtn">[Gestion des sondages]</a>
-    <div class="dropdown-content">
-      <ul>
-        <%= link_to "NOUVEAU SONDAGE", new_poll_path %>
-      <% Poll.all.each do |poll| %>
-        <li>
-          <%= link_to poll.name, edit_poll_path(poll) %>
-          <%= link_to poll_path(poll) do %>
-            <i class="far fa-eye fa-2x"></i>
-          <% end %>
-          <%= link_to poll_path(poll), method: :delete, data: {confirm: 'Etes vous sûr ?' } do %>
-            <i class="fas fa-times fa-2x"></i>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
-    </div>
-  </div>
-  <%= link_to '[Gestion des dossiers]', folders_path %>
-<% end %>
-
-<br>
 
 <!-- bread crumbs navigation if any / fil d'ariane si présent-->
-<% if @current_folder %>
-  <%= link_to "racine", root_url %>
-  <%# if current_user.has_ownership?(@current_folder) %>
-    <% @current_folder.ancestors.reverse.each do |folder| %>
+<% 
+if @current_folder 
+%>
+        <br><%= link_to MAIN["root"], root_url %>
+<% 
+  @current_folder.ancestors.reverse.each do |folder|
+    if current_user.has_shared_access?(folder)
+%>
         / <%= link_to folder.name, folder_path(folder) %>
-    <% end %>
-  <%# end %>
-  / <%= @current_folder.name %> 
+<%
+    else 
+%>
+        <div class="dropdown">
+        / <a class="dropbtn"><%= folder.name %></a>
+          <div class="dropdown-content">yu cannot browse this folder</div>
+        </div>
+<%
+    end
+  end 
+%>
+        / <%= @current_folder.name %> 
+<%
+end
+%>
+
 </div>
-
-<% end %>
-
