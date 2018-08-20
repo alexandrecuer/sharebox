@@ -10,6 +10,8 @@ Uses the following gems :
 * [passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html) as the application server (in standalone mode)
 * [aws-sdk](https://github.com/aws/aws-sdk-ruby) for storage on S3
 
+## Will have to switch from paperclip to [ActiveStorage](http://guides.rubyonrails.org/active_storage_overview.html) as paperclip is now deprecated
+
 ---
 - [Installation on a Microsoft Window development machine](#installation-on-a-microsoft-window-development-machine)
   - [Requirements](#requirements)
@@ -19,8 +21,7 @@ Uses the following gems :
   - [Installation](#installation)
     - [Setting environmental variables](#setting-environmental-variables)
     - [Database configuration](#database-configuration)
-  - [File storage](#file-storage)    
-    - [Use local file system for storage](#use-local-file-system)
+  - [File storage](#file-storage)
     - [Use Amazon S3](#use-amazon-s3)
 - [Configuring mail services](#configuring-mail-services)
 - [Installation on Heroku (for production)](#installation-on-heroku-for-production)
@@ -196,36 +197,68 @@ $ rails db:schema:load
 
 ## File storage
 
-### Use local file system
-Document storage is configured for Amazon S3 but using local file system is possible. In that case, the aws-sdk gem is not needed. 
+Document storage is configured for : 
+- Amazon S3 in production mode 
+- local file system in development mode. In that case, the aws-sdk gem is not needed.
 
-Remove the paperclip section in the \config\environments\developpment.rb
-```
-config.paperclip_defaults = {
-    storage: :s3,
-    s3_credentials: {
-        bucket: ENV.fetch('S3_BUCKET_NAME'),
-        access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-        secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
-        s3_region: ENV.fetch('AWS_REGION'),
-        s3_host_name: ENV.fetch('AWS_HOST_NAME'),
-    }
-}
-```
-Modify the get method in the \app\controllers\assets_controller.rb so that it uses send_file and not redirect_to
-```
-send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-#redirect_to asset.uploaded_file.expiring_url(10)
-```
-Modify the asset model \app\models\model.rb
-```
-has_attached_file :uploaded_file,
-     url: '/forge/get/:id/:filename',             
-     path: ':rails_root/forge/attachments/:id/:filename'
-     #url: ENV.fetch('AWS_URL'),
-     #path: '/forge/attachments/:id/:filename',
-     #s3_permissions: :private
-```
+Switching between S3 mode and local storage mode can be done by modifying the value of config.local_storage 
+- in /config/environments/development.rb 
+- and in /config/environments/production.rb
+
+with config.local_storage = 1, local storage will be activated<br>
+with config.local_storage = 0, all files will go in the defined S3 bucket
+
+<table>
+  <tr>
+    <td></td>
+    <td valign=top>S3 storage</td>
+    <td valogn=top>local storage</td>
+  </tr>
+  <tr>
+    <td>\config\environments\developpment.rb</td>
+    <td width=50%><sub>
+      config.paperclip_defaults = {<br>
+        storage: :s3,<br>
+        s3_credentials: {<br>
+          bucket: ENV.fetch('S3_BUCKET_NAME'),<br>
+          access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),<br>
+          secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),<br>
+          s3_region: ENV.fetch('AWS_REGION'),<br>
+          s3_host_name: ENV.fetch('AWS_HOST_NAME'),<br>
+        }<br>
+      }
+      </sub>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>\app\models\asset.rb</td>
+    <td width=50%><sub>
+      has_attached_file :uploaded_file,<br>
+      url: ENV.fetch('AWS_URL'),<br>
+      path: '/forge/attachments/:id/:filename',<br>
+      s3_permissions: :private
+      </sub>
+    </td>
+    <td width=50%><sub>
+      has_attached_file :uploaded_file,<br>
+      url: '/forge/get/:id/:filename',<br>      
+      path: ':rails_root/forge/attachments/:id/:filename'<br>
+      </td>
+  </tr>
+  <tr>
+    <td>\app\controllers\assets_controller.rb</td>
+    <td><sub>
+      redirect_to asset.uploaded_file.expiring_url(10)
+      </sub>
+    </td>
+    <td><sub>
+      send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+      </sub>
+    </td>
+  </tr>
+</table>
+
 ### Use Amazon S3
 You may encounter difficulties due to some SSL defaults on your development machine.
 
