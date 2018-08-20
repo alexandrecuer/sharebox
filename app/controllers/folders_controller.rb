@@ -205,11 +205,10 @@ class FoldersController < ApplicationController
           folder_to_moove.user_id = Folder.find_by_id(params[:parent_id]).user_id
           folder_to_moove.save
           # on vérifie l'arborescence
-          if folder_to_moove.has_childrens?
-            childrens = folder_to_moove.get_childrens
-            childrens.each do |children|
-              children.user_id = folder_to_moove.user_id
-              children.save
+          if folder_to_moove.has_sub_asset_or_share?
+            folder_to_moove.get_subs_assets_shares.each do |c|
+              c.user_id = folder_to_moove.user_id
+              c.save
             end
           end
         else

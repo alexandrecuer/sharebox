@@ -1,32 +1,56 @@
 <%= render 'shared/nav' %>
+<% 
+Folder.walk_tree do |folder, level|
+  name=folder.name.to_s+" (D" + folder.id.to_s + ")"
+  # if the folder is shared, we have to display the share numbers after the file name
+  if folder.shared?
+    name+=" { "
+    SharedFolder.where(folder_id: folder.id).each do |p|
+      name += "->P"+p.id.to_s+" "
+    end
+    name+="}"
+  end
+  
+  # case 1 : we are in a subfolder
+  if level > 0 
+%> 
+        <%= link_to '|_'+"#{name}", folder_path(folder), :style =>'margin-left:'+(level * 10).to_s+'px;' %><br>
+<%
+    # we display all belonging files
+    if folder.has_assets?
+	  folder.get_assets.each do |asset|
+%>
+            <span class="asset_span" style="margin-left:<%= level * 10%>px"%><%= asset.uploaded_file_file_name %></span><br>
+<%
+      end
+    end
+  # case 2 : root folder, without any parent
+  # we display the owner's mel
+  else
+    # who's the folder's owner ?
+    user = User.find_by_id(folder.user_id)
+%>
+  		<br><%= link_to "#{name}", folder_path(folder) %><%= " (" + user.email + ")" %><br>
+<%
+    if folder.has_assets?	
+      folder.get_assets.each do |asset|
+%> 
+            <span class="asset_span"><%= asset.uploaded_file_file_name %></span><br>
+<%
+      end
+    end
+  end
+end
+%>
 
-<% Folder.walk_tree do |folder, level| %>
-	<% user = User.find_by_id(folder.user_id) %>
-	<% if level > 0 %>
-		<%= link_to '|_'+"#{folder.name}", folder_path(folder), :style =>'margin-left:'+(level * 10).to_s+'px;' %><%= " (" + folder.id.to_s + ")"%><br>
-		<% if folder.has_assets? %>	
-			<% folder.get_assets.each do |asset| %> 
-				<span class="asset_span" style="margin-left:<%= level * 10%>px"%><%= asset.uploaded_file_file_name %></span><br>
-			<% end %>
-		<% end %>
-  	<% else %>
-  		<br><%= link_to "#{folder.name}", folder_path(folder) %><%= " (" + folder.id.to_s + ") (" + user.email + ")" %><br>
-  		<% if folder.has_assets? %>	
-  			<% folder.get_assets.each do |asset| %> 
-  				<span class="asset_span"><%= asset.uploaded_file_file_name %></span><br>
-  			<% end %>
-  		<% end %>
-  	<% end %>
-<% end %>
-
-<h2>Déplacement de répertoire</h2>
+<h2><%= MAIN["folder_move"]%></h2>
 
 <%= form_tag(moove_folder_path, method: "patch") do %>
-<%= label_tag(:id, "ID du répertoire à déplacer") %>
+<%= label_tag(:id, MAIN["folder_id_to_move"]) %>
 <%= text_field_tag(:id) %>
 
-<%= label_tag(:parent_id, "ID du répertoire dans lequel le placer (0 pour placer à la racine)") %>
+<%= label_tag(:parent_id, MAIN["destination_folder_id"]) %>
 <%= text_field_tag(:parent_id) %>
 
-<%= submit_tag("Valider") %>
+<%= submit_tag(MAIN["validate_move"]) %>
 <% end %>
