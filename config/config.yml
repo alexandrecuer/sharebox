@@ -6,6 +6,10 @@ main:
   upload: "Lancer le téléchargement"
   # for views\folders\_form.html.erb
   # for views\folders\index.html.erb
+  folder_move: "Déplacement de répertoire"
+  folder_id_to_move: "ID du répertoire à déplacer"
+  destination_folder_id: "ID du répertoire de destination (0 pour envoyer à la racine)"
+  validate_move: "procéder au déplacement"
   # for views\home\list.html.erb
   # for views\polls\_form.html.erb
   # for views\polls\show.html.erb
