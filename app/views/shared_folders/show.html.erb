@@ -3,9 +3,9 @@
 <%= form_tag(delete_shared_folder_path, method: "delete") do %> 
   <table class="recap">
     <tr>
-      <th>Id Utilisateur</th>
-      <th>Email</th>
-      <th>Statut</th>
+      <th><%= MAIN["user_id"] %></th>
+      <th><%= MAIN["mail"] %></th>
+      <th><%= MAIN["status"] %></th>
     </tr>
       <% @shared_folders.each do |f| %>
         <% user = User.find_by_email(f.share_email) %>
@@ -55,7 +55,7 @@
         </tr>
       <% end %>
     </table>
-  <%= submit_tag("Supprimer le(s) partage(s) sélectionné(s)") %>
+  <%= submit_tag(MAIN["delete_share"]) %>
 <% end %>
 
 <% @satisfactions.each do |s| %> 

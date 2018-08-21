@@ -2,18 +2,55 @@ main:
   site_name: "Le cloud des rapports / Cerema Centre Est"
   admin_mel: "alexandre.cuer@cerema.fr"
   are_yu_sure: "Etes vous sûr ?"
+  mail: "addresse email"
+  user_id: "ID de l'utilisateur "
+  status: "status"
+  
   # for views\assets\_form.html.erb
   upload: "Lancer le téléchargement"
+  
   # for views\folders\_form.html.erb
+  dir_name: "Nom du répertoire "
+  case_number: "N° d'affaire "
+  no_poll: "Pas de sondage"
+  create_folder: "Créer le répertoire"
+  update_folder: "Modifier le répertoire"
+  
   # for views\folders\index.html.erb
   folder_move: "Déplacement de répertoire"
   folder_id_to_move: "ID du répertoire à déplacer"
   destination_folder_id: "ID du répertoire de destination (0 pour envoyer à la racine)"
   validate_move: "procéder au déplacement"
+  
   # for views\home\list.html.erb
+  users_list: "Liste des utilisateurs"
+  has_shared_folders_from_others?: "bénéficie de dossiers partagés?"
+  process_to_status_mod: "Modifier le status" 
+  
   # for views\polls\_form.html.erb
+  poll_title: "Titre du formulaire"
+  poll_description: "Description du formulaire"
+  enter_closed_questions: "Questions fermées séparées par un point virgule"
+  enter_open_questions: "Questions ouvertes séparées par un point virgule"
+  create_poll: "Créer le sondage"
+  update_poll: "Modifier le sondage"
+  
   # for views\polls\show.html.erb
+  # uses mail - cf list.html.erb
+  date: "Date"
+  case_or_product: "Dossier - (N° d'affaire)"
+  satisfaction_level_4: "Très satisfait" 
+  satisfaction_level_3: "Satisfait"
+  satisfaction_level_2: "Peu satisfait"
+  satisfaction_level_1: "Pas satisfait"
+  blank: "Non renseigné"
+  download_csv: "Télécharger le fichier csv"
+  
   # for views\satisfaction\_form.html.erb
+  message_for_private_and_admin_after_record: "Données de satisfaction enregistrées par l'utilisateur "
+  message_user_after_record: "Merci d'avoir répondu à notre enquête<br>Vous avez validé votre saisie le : " 
+  record_satisfaction: "Enregistrer votre satisfaction"
+  
   # for views\shared\_list.html.erb
   asset_or_folder_name: "Nom"
   asset_or_folder_last_update: "Dernière modif."
@@ -25,6 +62,7 @@ main:
   see_shares: "[Voir les partages]"
   see_answers: "[Voir les réponses]"
   delete_asset: "Supprimer"
+  
   # for views\shared\_nav.html.erb
   disconnect: "se déconnecter"
   upload_file: "charger un document"
@@ -34,8 +72,14 @@ main:
   new_poll: "NOUVEAU SONDAGE"
   manage_folders: "[Gestion des dossiers]"
   root: "racine"
+  
   # for views\shared_folders\_form.html.erb
+  delete_share: "Supprimer le(s) partage(s) sélectionné(s)"
+  
   # for views\shared_folders\show.html.erb
+  share_label: "Si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,"
+  share: "partager"
+  reset: "Tout effacer"
   
 folders_msg:
   index_forbidden: "Vous n'avez pas accès à cette page"

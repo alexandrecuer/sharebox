@@ -9,13 +9,13 @@
 
 
 <%= form_for @folder do |f| %>
-    Nom du répertoire : <%= f.text_field :name %>
-	N° d'affaire : <%= f.text_field :case_number %>
+    <%= MAIN["dir_name"] %><%= f.text_field :name %>
+	<%= MAIN["case_number"] %><%= f.text_field :case_number %>
     <%= f.hidden_field :parent_id %>
     <% if @folder.shared? %>
 
     	<% polls_array = Poll.all.map { |poll| [poll.name, poll.id] } %>
-    	<% polls_array = [["Pas de sondage",""]] + polls_array %>
+    	<% polls_array = [[MAIN["no_poll"],""]] + polls_array %>
 
     	<%#= f.collection_select(:poll_id, Poll.all, :id, :name) %>
 
@@ -26,9 +26,9 @@
     <% end %>
 
     <% if @folder.new_record? %>
-        <%= f.submit "Créer le répertoire" %>
+        <%= f.submit MAIN["create_folder"] %>
     <% else %>
-        <%= f.submit "Modifier le répertoire" %>
+        <%= f.submit MAIN["update_folder"] %>
     <% end %>
 
 

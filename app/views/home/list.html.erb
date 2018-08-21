@@ -1,13 +1,13 @@
 <%= render 'shared/nav' %>
 
 <table class="recap">
-<tr><th colspan="4">Utilisateurs(<%= @users.count%>)</th>
+<tr><th colspan="4"><%= MAIN["users_list"]%>(<%= @users.count%>)</th>
 </tr>
 <tr>
 <th><%= sortable "id" %></th>
-<th><%= sortable "email","mail" %></th>
-<th>has shared folders from others ?</th>
-<th><%= sortable "statut" %></th>
+<th><%= sortable "email", MAIN["mail"] %></th>
+<th><%= MAIN["has_shared_folders_from_others?"] %></th>
+<th><%= sortable "statut", MAIN["status"] %></th>
 </tr>
 <% @users.each do |u| %>
         <tr>
@@ -15,23 +15,31 @@
         <td><%= u.email %></td>
         <td><%= u.has_shared_folders_from_others? %></td>
         <td><%= u.statut %><td>
+        <td><%= link_to "delete", user_path(u), method: :delete, data: {confirm: MAIN["are_yu_sure"] } %></td>
 <% end %>
 </table>
+
 <br>
 
-</table>
+<%= form_tag(update_user_path, method: "patch") do %>
+<%= label_tag(:id, MAIN["user_id"]) %>
+<%= text_field_tag(:id) %>
+<%= select_tag :statut, options_for_select(["public", "private", "admin" ])%>
+<%= submit_tag(MAIN["process_to_status_mod"]) %>
+<% end %>
 
-<h1>shared_folders without share_user_id filled</h1>
-(at sharing time, folder was shared to an unregistered user) 
-<table cellpadding=1 cellspacing=2>
-<tr bgcolor=#CCCCCC>
-<td>folder_id</td>
-<td>prop_id</td>
-<td>share_email</td>
-<td>calculated share_user_id</td>
+<br><br>
+
+<table class="recap">
+<tr><th colspan="4">Folders shared to an unregistered user (at sharing time)</th>
 </tr>
-<% @shared_folders=SharedFolder.where("share_user_id IS NULL") %>
-<% @shared_folders.each do |u| %>
+<tr>
+<th>folder_id</th>
+<th>prop_id</th>
+<th>share_email</th>
+<th>calculated share_user_id</th>
+</tr>
+<% SharedFolder.where("share_user_id IS NULL").each do |u| %>
     <tr bgcolor=#EEEEEE>
     <td><%= u.folder_id %></td>
     <td><%= u.user_id %></td>
@@ -40,15 +48,3 @@
     </tr>
 <% end %>
 </table>
-
-<h2>Modification de statut utilisateur :</h2>
-
-
-<%= form_tag(update_user_path, method: "patch") do %>
-<%= label_tag(:id, "ID de l'utilisateur :") %>
-<%= text_field_tag(:id) %>
-
-<%= select_tag :statut, options_for_select(["public", "private", "admin" ])%>
-
-<%= submit_tag("Valider") %>
-<% end %>

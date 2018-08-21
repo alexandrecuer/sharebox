@@ -3,8 +3,8 @@ class UserMailer < ApplicationMailer
   def inform_admin(current_user,text)
     @user = current_user
     @text = text
-    #attachments.inline["logo.jpg"] = File.read("#{Rails.root}/app/assets/images/logo.jpg")
-    mail(to: User.find_by_id(1).email, subject: 'Activity report')
+    mail(to: MAIN["admin_mel"], subject: 'Activity report')
+    
   end
 
   def inform_user(email)

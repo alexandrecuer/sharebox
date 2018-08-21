@@ -59,12 +59,6 @@ class HomeController < ApplicationController
       redirect_to root_url
     end
   end
-
-  ##
-  # Allow to delete users, to develop ? 
-  def destroy
-    redirect_to root_url
-  end
   
   ##
   # Functions used by the sortable method in application_helper and by the list method

@@ -2,9 +2,9 @@
 
 <table class="recap">
 	<tr>
-		<th>Date</th>
-		<th>Email</th>
-		<th>Dossier - (N° d'affaire)</th>
+		<th><%= MAIN["date"] %></th>
+		<th><%= MAIN["mail"] %></th>
+		<th><%= MAIN["case_or_product"] %></th>
 		<% @arrayclosed = @poll.get_names %>
 		<% @arrayclosed.each do |c| %>
 			<th><%= c %></th>
@@ -24,38 +24,38 @@
 			<td><%= s.public_send("open#{i}") %></td>
 		<% end %>
 		<td>
-			<%= link_to 'X' ,satisfaction_path(s), method: :delete, data: {confirm: 'Etes vous sûr ?' } %>
+			<%= link_to 'X' ,satisfaction_path(s), method: :delete, data: {confirm: MAIN["are_yu_sure"] } %>
 		</td>
 	</tr>
 
 	<% end %>
 	<% tab = @poll.calc %>
 	<tr>
-		<th colspan="3">Très Satisfait</th>
+		<th colspan="3"><%= MAIN["satisfaction_level_4"] %></th>
 		<% for i in 1..@poll.closed_names_number %>
 			<td><%= tab[i-1][4] %>%</td>
 		<% end %>
 	</tr>
 	<tr>
-		<th colspan="3">Satisfait</th>
+		<th colspan="3"><%= MAIN["satisfaction_level_3"] %></th>
 		<% for i in 1..@poll.closed_names_number %>
 			<td><%= tab[i-1][3] %>%</td>
 		<% end %>
 	</tr>
 	<tr>
-		<th colspan="3">Peu Satisfait</th>
+		<th colspan="3"><%= MAIN["satisfaction_level_2"] %></th>
 		<% for i in 1..@poll.closed_names_number %>
 			<td><%= tab[i-1][2] %>%</td>
 		<% end %>
 	</tr>
 	<tr>
-		<th colspan="3">Pas Satisfait</th>
+		<th colspan="3"><%= MAIN["satisfaction_level_1"] %></th>
 		<% for i in 1..@poll.closed_names_number %>
 			<td><%= tab[i-1][1] %>%</td>
 		<% end %>
 	</tr>
 	<tr>
-		<th colspan="3">Non Renseigné</th>
+		<th colspan="3"><%= MAIN["blank"] %></th>
 		<% for i in 1..@poll.closed_names_number %>
 			<td><%= tab[i-1][0] %>%</td>
 		<% end %>
@@ -63,4 +63,4 @@
 
 </table>
 
-<%= link_to 'Télécharger le CSV', poll_path(@poll, format: "csv") %>
+<%= link_to MAIN["download_csv"], poll_path(@poll, format: "csv") %>
