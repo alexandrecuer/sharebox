@@ -12,7 +12,7 @@ main:
   # for views\folders\_form.html.erb
   dir_name: "Nom du répertoire "
   case_number: "N° d'affaire "
-  no_poll: "Pas de sondage"
+  no_poll: "Associer un sondage"
   create_folder: "Créer le répertoire"
   update_folder: "Modifier le répertoire"
   

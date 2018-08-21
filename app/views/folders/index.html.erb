@@ -6,7 +6,7 @@ Folder.walk_tree do |folder, level|
   if folder.shared?
     name+=" { "
     SharedFolder.where(folder_id: folder.id).each do |p|
-      name += "->P"+p.id.to_s+" "
+      name += "->P"+p.id.to_s+">"+p.share_email.to_s+"("+p.share_user_id.to_s+") "
     end
     name+="}"
   end
