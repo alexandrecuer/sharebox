@@ -18,6 +18,6 @@ module Sharebox
     # -- all .rb files in that directory are automatically loaded.
     config.i18n.default_locale = :fr
     
-    config.action_mailer.asset_host = ENV.fetch('DOMAIN')
+    config.action_mailer.asset_host = "http://"+ENV.fetch('DOMAIN')
   end
 end
