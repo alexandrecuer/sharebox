@@ -1,4 +1,4 @@
-<%= image_tag 'logo.jpg' size: '5x5' %>
+<%= image_tag 'logo.jpg', size: '5x5' %>
 <%= link_to MAIN["site_name"], "http://"+ENV.fetch('DOMAIN') %>
 <h1>Activity monitoring on ENV.fetch('DOMAIN')</h1>
 <p>Activité de <%= @user.email %>, utilisateur <%= @user.id %></p>
