@@ -48,7 +48,7 @@ main:
   
   # for views\satisfaction\_form.html.erb
   message_for_private_and_admin_after_record: "Données de satisfaction enregistrées par l'utilisateur "
-  message_user_after_record: "Merci d'avoir répondu à notre enquête<br>Vous avez validé votre saisie le : " 
+  message_user_after_record: "Merci d'avoir répondu à notre enquête<br>Vous avez validé votre saisie le " 
   record_satisfaction: "Enregistrer votre satisfaction"
   
   # for views\shared\_list.html.erb
@@ -117,7 +117,7 @@ polls_msg:
   admin_rights_missing: "Vous n'avez pas les droits administrateurs"
   inexisting_poll: "Vous ne pouvez pas apporter de modifications à un sondage qui n'existe pas"
   same_questions: "Un sondage ne peut contenir des questions identiques"
-  poll_updated: "Modifications du sondage sauvegardées"
+  poll_updated: "Modification(s) du sondage sauvegardée(s)"
   inexisting_poll_number: "Ce numéro de sondage n'existe pas"
   missing_required_fields: "Il manque des champs obligatoires dans le formulaire"
   poll_created: "Nouveau formulaire crée avec succès"
@@ -139,7 +139,9 @@ shared_folders_msg:
   inexisting_folder: "Vous ne pouvez pas partager un répertoire qui n'existe pas ou ne vous appartient pas"
   email_needed: "Il faut indiquer une adresse mel"
   you_are_folder_owner: "Vous avez déjà accès à ce répertoire"
-  already_shared_to: "Partage déjà opérationnel pour l'adresse : "
-  unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse : " 
+  already_shared_to: "Partage déjà opérationnel pour l'adresse "
+  unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse "
+  shared_to: "Partage effectué pour l'adresse "
+  folder: "Répertoire "
   no_share_selected: "Aucun partage sélectionné"
   shares_destroyed: "Partage(s) supprimé(s)"

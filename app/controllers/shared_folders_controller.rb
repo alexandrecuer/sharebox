@@ -1,16 +1,16 @@
 ## 
-# manage folder sharing on the sharebox site
+# manage folder sharing within the sharebox site
 
 class SharedFoldersController < ApplicationController
 
   before_action :authenticate_user!
   
   ##
-  # Show the list of the shared emails
-  # if a user already answered to the satisfaction form, his answers can be displayed by clicking on his email
-  # If a user did not answered to the form yet :
-  # - It is possible to remove shared access
-  # - It is also possible to send him an email invitation to express his satisfaction
+  # Show the list of the shared emails<br>
+  # if a user already answered to the satisfaction form, clicking on his email can display his answer<br>
+  # If a user did not answered to the form yet :<br>
+  # - It's possible to remove the shared, useful if an error has been done when typing his email address<br>
+  # - you can send him an email inviting him to express his satisfaction or to access to a shared folder with file(s)<br>
   def show
     # Happens only when a mail is sent 
     if params[:share_email]
@@ -26,10 +26,10 @@ class SharedFoldersController < ApplicationController
     @poll = Poll.find_by_id(@current_folder.poll_id)
   end
   
-  # TODO
-  # Used to update the database manually when users sign up
-  # if a user has been assigned shares before signing up , the corresponding share_user_id in the table shared_folders are empty
-  # when creating the user, an after_create is responsible for filling in the share_user_id 
+  # This method is only used when following the route /complete_suid<br>
+  # it does the following tasks :<br>
+  # - send to the admin a list with all the unregistered emails which benefited from shared access to a folder<br>
+  # - manually lauch the set_admin method (cf user model)<br>
   def complete_suid
     current_user.complete_suid
     if current_user.set_admin
@@ -39,8 +39,8 @@ class SharedFoldersController < ApplicationController
   end
 
   ##
-  # Show the shared form
-  # When a folder is shared to a user, you must give one email address or more but separated by a ","
+  # Show the shared form<br>
+  # When a folder is shared to a user, you must give at least one email address or more but separated by a ","
   def new
     @to_be_shared_folder = Folder.find_by_id(params[:id])
     if !current_user.has_ownership?(@to_be_shared_folder)
@@ -53,10 +53,10 @@ class SharedFoldersController < ApplicationController
   end
 
   ##
-  # Saves the shared emails in the database
-  # If you share a folder to a user that already has access on it, it doesn't work 
-  # you cannot share to yourself a folder you own
-  # It is possible to send an email to the admin to report him that a folder is shared (UserMailer.inform_admin)
+  # Saves the shared emails in the database<br>
+  # you cannot share to yourself a folder you own<br>
+  # the method verify if shared emails are already registered in the database for the specified folder (folder_id)<br>
+  # the sharing activity details are emailed to the admin (cf variable admin_mel as declared in the main section of config.yml)<br>
   def create
     flash[:notice]=""
     emails=params[:shared_folder][:share_email]
@@ -73,15 +73,15 @@ class SharedFoldersController < ApplicationController
           @shared_folder = current_user.shared_folders.new(shared_folder_params)
           @shared_folder.share_email = email_address
           # We search if the email exist in the user table
-          # if he is not, we'll have to update the share_user_id field after registration
+          # if not, we'll have to update the share_user_id field after registration
           share_user = User.find_by_email(email_address)
           @shared_folder.share_user_id = share_user.id if share_user
           exist = current_user.shared_folders.where("share_email = '"+email_address+"' and folder_id = "+params[:shared_folder][:folder_id])
           if exist.length >0
-            flash[:notice] = SHARED_FOLDERS_MSG["already_shared_to"].to_s + email_address
+            flash[:notice] = SHARED_FOLDERS_MSG["already_shared_to"].to_s + email_address + "<br>"
           else
             if @shared_folder.save
-              a="Partage effectué pour l'adresse : " + email_address + "<br>"
+              a=SHARED_FOLDERS_MSG["shared_to"] + email_address + "<br>"
               flash[:notice]+=a
               mel_text+=a
             else
@@ -90,16 +90,19 @@ class SharedFoldersController < ApplicationController
           end
         end
       end
-      # if mel_text exist, then we send the mail
-      if mel_text != ""
-        #UserMailer.inform_admin(current_user,mel_text).deliver_now
-        mel_text="Partage du répertoire "+params[:shared_folder][:folder_id]+"<br>"+mel_text
-        InformAdminJob.perform_now(current_user,mel_text)
-      end
     end
     # we leave the sharing form (app/views/shared_folders/_form.html.erb)
     # the id of the folder that we just shared is given by : params[:shared_folders][:folder_id]
     @folder = current_user.folders.find(params[:shared_folder][:folder_id])
+    # if mel_text exist, then we send the mail
+    if mel_text != ""
+      entete=SHARED_FOLDERS_MSG["folder"]+params[:shared_folder][:folder_id]
+      entete+="<br><b>["+@folder.name.html_safe+"]</b><br>"
+      mel_text=entete+mel_text
+      InformAdminJob.perform_now(current_user,mel_text)
+      # alternative not using jobs
+      #UserMailer.inform_admin(current_user,mel_text).deliver_now
+    end
     if @folder.parent_id
       redirect_to folder_path(@folder.parent_id)
     else
@@ -108,8 +111,8 @@ class SharedFoldersController < ApplicationController
   end
 
   ##
-  # Delete specific share(s) within the show view
-  # After deletion, if there is no more shares, we redirect to the root view
+  # Delete specific share(s) within the show view<br>
+  # After deletion, we redirect to root view if all shares were deleted
   def destroy
     if !params[:ids]
       flash[:notice] = SHARED_FOLDERS_MSG["no_share_selected"]

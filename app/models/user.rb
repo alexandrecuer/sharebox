@@ -1,3 +1,6 @@
+##
+# The user model
+
 class User < ApplicationRecord
 
   after_create :complete_suid, :set_admin
@@ -21,7 +24,11 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  # Permet au premier utilisateur qui s'inscrit sur l'application d'avoir automatiquement le statut d'administrateur
+  ##
+  # This method is used after a user creation<br>
+  # It realize a concrete action only once in theory<br>
+  # It grants, after initial login, admin rights to the first user opening an account<br>
+  # you can use db/seeds.rb as an alternative : rake db:seed<br>
   def set_admin
     if User.count == 1
       self.statut = "admin"
@@ -29,7 +36,10 @@ class User < ApplicationRecord
     end
   end
   
-  # Méthode appelée lors de l'inscription d'un utilisateur, elle envoit un mail à l'administrateur
+  ##
+  # This method is used after a user creation<br>
+  # It checks if the shared_folders table has to be completed (column share_user_id)<br>
+  # Sends an email to the admin
   def complete_suid
     @shared_folders=SharedFolder.where("share_user_id IS NULL")
     mel_text=""
@@ -45,14 +55,16 @@ class User < ApplicationRecord
         end
       end
     end
-    #peux t'on faire un perform_later dans un modele ?
     if mel_text != ""
       mel_text="ACTION complete_suid<br>"+mel_text
       InformAdminJob.perform_now(self,mel_text)
     end
   end
 
-  # Retourne vrai si l'utilisateur a accès au dossier passé en paramètre
+  ##
+  # Return true if user has "shared access" on the folder<br>
+  # "shared access" means being owner or being granted of a share<br>
+  # if folder is a subfolder of a folder shared to the user, we consider the user has shared access on the subfolder
   def has_shared_access?(folder)
     return true if self.folders.include?(folder)
     return true if self.shared_folders_by_others.include?(folder)
@@ -66,7 +78,8 @@ class User < ApplicationRecord
     return false
   end
 
-  # Permet de récupérer un couple clé / valeur => id / email de chaque utilisateur en une seule requête SQL
+  ##
+  # Return an hash table (key/value) => (id/email) of all users in a single SQL request
   def get_all_emails
     h = Hash.new
     User.all.each do |u|
@@ -75,37 +88,44 @@ class User < ApplicationRecord
     return h
   end
   
-  # Retourne vrai si l'utilisateur détient le dossier passé en paramètre
+  ##
+  # Return true if the user owns the folder
   def has_ownership?(folder)
     return true if self.folders.include?(folder)
   end
   
-  # Retourne vrai si l'utilisateur détient le fichier passé en paramètre
+  ##
+  # Return true if the user owns the asset
   def has_asset_ownership?(asset)
     return true if self.assets.include?(asset)
   end
   
-  # Retourne vrai si l'utilisateur a reçu des partages de dossiers
+  ##
+  # Return true if user has been awarded some shared folders by private or admin users 
   def has_shared_folders_from_others?
     return self.shared_folders_by_others.length>0
   end
 
-  # Retourne vrai si l'utilisateur est administrateur
+  ##
+  # Return true is user is admin
   def is_admin?
     return true if self.statut == "admin"
   end
 
-  # Retourne vrai si l'utilisateur a un statut privé
+  ##
+  # Return true if user is private
   def is_private?
     return true if self.statut == "private"
   end
 
-  # Retourne vrai si l'utilisateur a un statut public
+  ##
+  # Return true if user is public
   def is_public?
     return true if self.statut == "public"
   end
 
-  # Retourne vrai si l'utilisateur a répondu à une enquête satisfaction sur le dossier passé en paramètre
+  ##
+  # Return true if user has answered to a satisfaction survey on the folder
   def has_completed_satisfaction?(folder)
     return true if Satisfaction.where(folder_id: folder.id, user_id: self.id).length != 0 
   end
