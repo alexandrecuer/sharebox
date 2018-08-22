@@ -67,7 +67,7 @@ class SharedFoldersController < ApplicationController
       mel_text=""
       email_addresses.each do |email_address|
         if email_address == current_user.email
-          flash[:notice] = SHARED_FOLDERS_MSG["you_are_folder_owner"]
+          flash[:notice] += SHARED_FOLDERS_MSG["you_are_folder_owner"] + "<br>"
         else
           email_address=email_address.delete(' ')
           @shared_folder = current_user.shared_folders.new(shared_folder_params)
@@ -78,7 +78,7 @@ class SharedFoldersController < ApplicationController
           @shared_folder.share_user_id = share_user.id if share_user
           exist = current_user.shared_folders.where("share_email = '"+email_address+"' and folder_id = "+params[:shared_folder][:folder_id])
           if exist.length >0
-            flash[:notice] = SHARED_FOLDERS_MSG["already_shared_to"].to_s + email_address + "<br>"
+            flash[:notice] += SHARED_FOLDERS_MSG["already_shared_to"].to_s + email_address + "<br>"
           else
             if @shared_folder.save
               a=SHARED_FOLDERS_MSG["shared_to"] + email_address + "<br>"
