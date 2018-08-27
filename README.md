@@ -1,4 +1,10 @@
-# Ruby on Rails SharingFile System
+# A social network tool with your clients for your business
+This application can also be qualified as a Ruby on Rails SharingFile System
+
+If you deliver files and documents to your clients and if you want to record your clients'satisfaction, this tool is for you
+
+If you are a developper, check online class documentation :
+https://alexandrecuer.github.io/sharebox/
 
 [![Build Status](https://travis-ci.org/alexandrecuer/sharebox.svg?branch=master)](https://travis-ci.org/alexandrecuer/sharebox)
 
