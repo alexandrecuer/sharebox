@@ -1,3 +1,6 @@
+##
+# The asset model 
+
 class Asset < ApplicationRecord
 
   belongs_to :user

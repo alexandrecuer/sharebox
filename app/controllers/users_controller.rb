@@ -6,7 +6,8 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
   
   ##
-  # Delete user 
+  # Delete a specific user<br>
+  # only for admins  
   def destroy
     if !(current_user.is_admin?)
         flash[:notice] = "Vous devez être administrateur pour supprimer un utilisateur"

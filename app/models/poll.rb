@@ -8,7 +8,8 @@ class Poll < ApplicationRecord
   
   has_many :satisfactions, :dependent=> :destroy
 
-  # Méthode qui permet de générer l'export CSV, lorsque les titres des colonnes ne sont pas forcément identiques aux identifiants de la base de données, il faut les écrire en dure dans le code 
+  ##
+  # generate the csv file containing all the results to the poll
   def to_csv(emails)
     headers = self.get_names.insert(0,'Date').insert(1,'Email').insert(2,'N° d''affaire')
 
@@ -31,24 +32,28 @@ class Poll < ApplicationRecord
     end
   end
 
-  # Permet de retourner un tableau où chaque élément sera le titre d'une question fermée
+  ##
+  # Return a table with all closed questions
   def get_closed_names
     c = self.closed_names.split(';')
   end
 
-  # Permet de retourner un tableau où chaque élément sera le titre d'une question ouverte
+  ##
+  # Return a table with all open questions
   def get_open_names
     o = self.open_names.split(';')
   end
 
-  # Tableau avec les titres des questions fermées + ouvertes
+  ##
+  # Return a table with all closed and open questions 
   def get_names
     o = get_closed_names + get_open_names
   end
 
-  # Crée un tableau qui correspond au pourcentages.
-  # 5 lignes ( Très satisfait, Satisfait, etc )
-  # Le nombre de colonnes correspond au nombre de questions fermées du sondage
+  ##
+  # Calculates average value for each closed question and for each satisfaction level<br>
+  # we have to consider 4 different satisfaction levels plus "left blank" field<br>
+  # return a 5 lines table gathering all the results, with one column for each closed question
   def calc()
     tab = Array.new(self.closed_names_number){Array.new(5,0)}
     number_of_satisfactions = 0 

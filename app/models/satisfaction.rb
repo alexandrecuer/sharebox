@@ -10,7 +10,8 @@ class Satisfaction < ApplicationRecord
 
   validates :poll_id, presence: true
 
-  # Méthode qui calcule la note moyenne de toutes les satisfactions pour une année donnée.
+  ##
+  # Not used
   def moy(annee)
     @Satisfactions = Satisfaction.all
     total = 0
@@ -28,7 +29,8 @@ class Satisfaction < ApplicationRecord
     end
   end
 
-  # Méthode qui calcule la moyenne des réponses pour une enquête satisfaction donnée, ignore les réponses non renseignées. 
+  ##
+  # Not used 
   def moyparams(sat)
     total = 0
     totalnil = 0

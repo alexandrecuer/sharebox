@@ -19,11 +19,11 @@ class FoldersController < ApplicationController
   # Following the route /folders/:id, browse to folder identified by id<br>
   # We check if the current user has shared access on the folder and if yes we can initialize current_folder<br>
   # if current_folder exists, we can go further :<br>
-  # - In case the current user has answered to a poll on the folder, we have to show the details of his answer<br>
-  # - We can consider we are waiting for the current user to express his satisfaction :<br>
-  # - if current user is not the owner of the folder, 
-  # - if a poll has been triggered on the folder, 
-  # - and if the current user has not answered to the poll 
+  # In case the current user has answered to a poll on the folder, we have to show the details of his answer<br>
+  # We can consider we are waiting for the current user to express his satisfaction :<br>
+  # - if current user is not the owner of the folder, <br>
+  # - if a poll has been triggered on the folder, <br>
+  # - and if the current user has not answered to the poll<br> 
   def show
     folder = Folder.find_by_id(params[:id])
     if folder
@@ -78,10 +78,11 @@ class FoldersController < ApplicationController
 
   ##
   # Show the 'edit' form in order for the user to modify an axisting folder<br>
-  # - private users can only modify the folders they own<br>
-  # - admins have full control on all folders created in the application<br>
+  # Private users can only modify the folders they own<br> 
   # Modifications includes : change the name, affect a case number, trigger a poll<br>
-  # please note a poll on a folder can be triggered only if the folder has been previously shared
+  # please note a poll on a folder can be triggered only if the folder has been previously shared<br>
+  # admins have full control on all folders created in the application but not via the edit method<br>
+  # they can take full control via the moove_folder method they can use within the folders index
   def edit 
     @folder = Folder.find_by_id(params[:id])
     if !@folder

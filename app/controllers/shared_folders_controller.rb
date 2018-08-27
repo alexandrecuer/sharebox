@@ -8,7 +8,7 @@ class SharedFoldersController < ApplicationController
   ##
   # Show the list of the shared emails<br>
   # if a user already answered to the satisfaction form, clicking on his email can display his answer<br>
-  # If a user did not answered to the form yet :<br>
+  # If a user did not answer to the form yet :<br>
   # - It's possible to remove the shared, useful if an error has been done when typing his email address<br>
   # - you can send him an email inviting him to express his satisfaction or to access to a shared folder with file(s)<br>
   def show
@@ -29,7 +29,7 @@ class SharedFoldersController < ApplicationController
   # This method is only used when following the route /complete_suid<br>
   # it does the following tasks :<br>
   # - send to the admin a list with all the unregistered emails which benefited from shared access to a folder<br>
-  # - manually lauch the set_admin method (cf user model)<br>
+  # - manually launch the set_admin method (cf user model)<br>
   def complete_suid
     current_user.complete_suid
     if current_user.set_admin
@@ -39,7 +39,7 @@ class SharedFoldersController < ApplicationController
   end
 
   ##
-  # Show the shared form<br>
+  # Show the sharing form<br>
   # When a folder is shared to a user, you must give at least one email address or more but separated by a ","
   def new
     @to_be_shared_folder = Folder.find_by_id(params[:id])
@@ -66,10 +66,10 @@ class SharedFoldersController < ApplicationController
       email_addresses = emails.split(",")
       mel_text=""
       email_addresses.each do |email_address|
+        email_address=email_address.delete(' ')
         if email_address == current_user.email
           flash[:notice] += SHARED_FOLDERS_MSG["you_are_folder_owner"] + "<br>"
         else
-          email_address=email_address.delete(' ')
           @shared_folder = current_user.shared_folders.new(shared_folder_params)
           @shared_folder.share_email = email_address
           # We search if the email exist in the user table

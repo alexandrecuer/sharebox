@@ -7,7 +7,8 @@ before_action :authenticate_user!
   
   ## 
   # Method used when following the route /assets/assets_id<br>
-  # Show the name of the file and its directory (forge/attachments/asset_id/asset_name)
+  # Show the name of the file and its directory (forge/attachments/asset_id/asset_name)<br>
+  # actually not used.... 
   def show
     @asset = current_user.assets.find(params[:id])
   end

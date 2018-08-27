@@ -1,5 +1,5 @@
 ## 
-# Manage satisfactions creation within the sharebox site
+# Manage satisfactions creation within the sharebox site<br>
 # A satisfaction is a form intended for the client to express his satisfaction
 
 class SatisfactionsController < ApplicationController
@@ -7,14 +7,12 @@ class SatisfactionsController < ApplicationController
   before_action :authenticate_user!
 
   ##
-  # Show the new form in order for public users to express their satisfaction :
-  # - they have a shared access on the folder 
-  # - the folder is polled
-  # - they have not already answered to the form
-  # The form is composed of open and closed questions
-  # We answer a closed question with a score of 1 to 4 represented by stars
-  # There is a field for each open questions that allow the user to write his answer 
-  # Both types of questions can be left blank
+  # Show the new form in order for public users to express their satisfaction<br>
+  # A public user will access to the form if :<br>
+  # - he has a shared access on the folder <br>
+  # - the folder is polled<br>
+  # - he has not already answered to the form<br>
+  # Both types of questions, open and closed, are not required fields
   def new
     @current_folder = Folder.find_by_id(params[:id])
     if !@current_folder
@@ -43,8 +41,8 @@ class SatisfactionsController < ApplicationController
   end
   
   ##
-  # Show all existing answers on a specific folder
-  # Any user can only check answers on a folder if they have shared access and if the folder is polled
+  # Show satisfaction answer given a specific id<br>
+  # for admins and users with shared access on the folder related to the satisfaction
   def show 
     @satisfaction = Satisfaction.find_by_id(params[:id])
     if !@satisfaction
@@ -77,8 +75,8 @@ class SatisfactionsController < ApplicationController
   end
 
   ##
-  # Destroy a specific satisfaction
-  # The show form of the poll_controller include a delete button
+  # Destroy a specific satisfaction<br>
+  # The show form of the poll_controller includes a delete button
   def destroy
     @satisfaction = Satisfaction.find_by_id(params[:id])
     @poll = Poll.find_by_id(@satisfaction.poll_id)

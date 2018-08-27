@@ -138,7 +138,7 @@ shared_folders_msg:
   mail_sent_to: "Vous venez d'envoyer un email à l'adresse : "
   inexisting_folder: "Vous ne pouvez pas partager un répertoire qui n'existe pas ou ne vous appartient pas"
   email_needed: "Il faut indiquer une adresse mel"
-  you_are_folder_owner: "Vous avez déjà accès à ce répertoire"
+  you_are_folder_owner: "Vous êtes propriétaire - pas besoin de vous partager ce répertoire"
   already_shared_to: "Partage déjà opérationnel pour l'adresse "
   unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse "
   shared_to: "Partage effectué pour l'adresse "

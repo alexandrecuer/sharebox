@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.16
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "README";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-Ruby+on+Rails+SharingFile+System">Ruby on Rails SharingFile System</h1>
+
+<p><a href="https://travis-ci.org/alexandrecuer/sharebox"><img
+src="https://travis-ci.org/alexandrecuer/sharebox.svg?branch=master"></a></p>
+
+<p>Check online prototype : <a
+href="https://desolate-earth-32333.herokuapp.com">desolate-earth-32333.herokuapp.com</a>/</p>
+
+<p>Uses the following gems : * <a
+href="https://github.com/thoughtbot/paperclip">paperclip</a> for documents
+processing * <a href="https://github.com/plataformatec/devise">devise</a>
+for user authentification * <a
+href="https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html">passenger</a>
+as the application server (in standalone mode) * <a
+href="https://github.com/aws/aws-sdk-ruby">aws-sdk</a> for storage on S3</p>
+
+<p>— - <a
+href="#installation-on-a-microsoft-window-development-machine">Installation
+on a Microsoft Window development machine</a>  - <a
+href="#requirements">Requirements</a>  - <a href="#rails">Rails</a>  - <a
+href="#imagemagick">ImageMagick</a>  - <a href="#nodejs">NodeJS</a>  - <a
+href="#installation">Installation</a>  - <a
+href="#setting-environmental-variables">Setting environmental variables</a>
+- <a href="#database-configuration">Database configuration</a>  - storage[#file-storage]<br>  - <a href="#use-local-file-system">Use local
+file system for storage</a>  - <a href="#use-amazon-s3">Use Amazon S3</a> -
+<a href="#configuring-mail-services">Configuring mail services</a> - <a
+href="#installation-on-heroku-for-production">Installation on Heroku (for
+production)</a>  - <a href="#from-a-development-server">From a development
+server</a>  - <a href="#from-a-github-repository">From a github
+repository</a> - <a href="#customization">Customization</a> - <a
+href="#working-behind-a-proxy-server">Working behind a proxy server</a> —</p>
+
+<h1 id="label-Installation+on+a+Microsoft+Window+development+machine">Installation on a Microsoft Window development machine</h1>
+
+<h2 id="label-Requirements">Requirements</h2>
+
+<p>Window All-In-One rails installer <a
+href="http://railsinstaller.org/en">Ruby on Rails</a> &gt;= 5.1.4 + NodeJS</p>
+
+<p><a href="http://www.imagemagick.org">ImageMagick</a> for documents
+processing</p>
+
+<p>Gem file is configured to use postgreSQL, so please install PGQSL window
+binary <a href="https://www.enterprisedb.com/">EDB POSTGRES</a></p>
+
+<p>If you want to use another DBMS, you will have to change the gem file</p>
+
+<h3 id="label-Rails">Rails</h3>
+
+<p>After having run RailsInstaller, launch a git bash, verify ruby version
+<code>ruby -v</code>, install Rails <code>gem install rails</code> and
+verify the version : <code> $ rails -v Rails 5.1.5 </code> Check you can
+create a new application named blog <code>rails new blog</code></p>
+
+<p>The system will create the app files and launch the command <code>bundle
+install</code> to fetch some gems</p>
+
+<p>Launch the server with the command <code>rails server</code>. The server
+should be up on port 3000. Browse the adress <a
+href="http://localhost:3000">localhost:3000</a> in Mozilla.</p>
+
+<h3 id="label-ImageMagick">ImageMagick</h3>
+
+<p>For a more detailed procedure, check <a
+href="https://github.com/thoughtbot/paperclip#requirements">github.com/thoughtbot/paperclip#requirements</a></p>
+
+<p>ImageMagick uses two utilities file.exe and convert.exe</p>
+
+<p>You will have to install file.exe from <a
+href="http://gnuwin32.sourceforge.net/packages/file.htm">gnuwin32</a></p>
+
+<p>When you install ImageMagick, don&#39;t forget to include the required
+legacy utilities among which you will find convert.exe</p>
+
+<p>&lt;img src=public/images/doc/imagemagick.png height=300&gt;</p>
+
+<p>Modify the system and user paths so that they begin with something like
+C:Program FilesImageMagick-7.0.6-Q16\ and C:Program Files (x86)GnuWin32.</p>
+
+<p>On windows 10, from the control panel : <code> Security and System &gt;
+System &gt; Advanced System Parameters &gt; Environment Variables </code></p>
+
+<p>Please note Window has got its own convert utility. Paperclip will not work
+with the Window convert.exe. ImageMagick&#39;s convert.exe should come
+first <code> $ where convert c:\Program
+Files\ImageMagick-7.0.6-Q16\convert.exe c:\Windows\System32\convert.exe
+</code> Check if everything is OK in the rails git bash : <code> $ which
+file /c/Program Files (x86)/GnuWin32/bin/file $ which convert /c/Program
+Files/ImageMagick-7.0.6-Q16/convert </code></p>
+
+<h3 id="label-NodeJS">NodeJS</h3>
+
+<p>Install <a href="https://nodejs.org/en/download/">NodeJS</a></p>
+
+<h2 id="label-Installation">Installation</h2>
+
+<p>Clone/Unzip the repository into your local rails directory, for example
+C:/Sites/. Open the resulting app directory in a git bash <code> $ cd
+/c/Sites/sharebox </code> Install the required gems <code>$ bundle
+install</code> or <code>$ bundle update</code></p>
+
+<p>Please note that the bcrypt gem needed for devise may malfunction. To
+correct, you have to reinstall manually <code> $ gem uninstall bcrypt $ gem
+uninstall bcrypt-ruby $ gem install bcrypt --platform=ruby </code></p>
+
+<h3 id="label-Setting+environmental+variables">Setting environmental variables</h3>
+
+<p>The application uses several variables, which you have to fix in the
+environment &lt;table&gt;&lt;tr&gt;&lt;td valign=top&gt;For S3 storage
+&lt;table&gt;  &lt;tr&gt; 
+&lt;td&gt;&lt;sub&gt;S3_BUCKET_NAME&lt;/sub&gt;&lt;/td&gt; 
+&lt;td&gt;&lt;sub&gt;&lt;a href=<a
+href="https://devcenter.heroku.com/articles/s3#s3-setup>Heroku“>devcenter.heroku.com/articles/s3#s3-setup>Heroku</a>
+specific doc&lt;/a&gt;&lt;/sub&gt;&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt; 
+&lt;td&gt;&lt;sub&gt;AWS_REGION&lt;/sub&gt;&lt;/td&gt;  &lt;td
+rowspan=2&gt;&lt;sub&gt;&lt;a href=<a
+href="https://docs.aws.amazon.com/fr_fr/general/latest/gr/rande.html#s3_region>AWS”>docs.aws.amazon.com/fr_fr/general/latest/gr/rande.html#s3_region>AWS</a>
+regional parameters&lt;/a&gt;<br>&lt;sub&gt; ex : AWS_REGION=eu-west-3 and
+AWS_HOST_NAME=s3.eu-west-3.amazonaws.com&lt;/sub&gt;&lt;/sub&gt;&lt;/td&gt;
+&lt;/tr&gt;  &lt;tr&gt; 
+&lt;td&gt;&lt;sub&gt;AWS_HOST_NAME&lt;/sub&gt;&lt;/td&gt;  &lt;/tr&gt; 
+&lt;tr&gt;  &lt;td&gt;&lt;sub&gt;AWS_URL&lt;/sub&gt;&lt;/td&gt; 
+&lt;td&gt;&lt;sub&gt;S3_BUCKET_NAME.AWS_HOST_NAME&lt;/sub&gt;&lt;/td&gt; 
+&lt;/tr&gt;  &lt;tr&gt; 
+&lt;td&gt;&lt;sub&gt;AWS_ACCESS_KEY_ID&lt;/sub&gt;&lt;/td&gt;  &lt;td
+rowspan=2&gt;&lt;sub&gt;&lt;a href=<a
+href="https://console.aws.amazon.com/iam/home#/users>IAM“>console.aws.amazon.com/iam/home#/users>IAM</a>
+- Identity and Access Management&lt;/a&gt;&lt;/sub&gt;&lt;/td&gt; 
+&lt;/tr&gt;  &lt;tr&gt; 
+&lt;td&gt;&lt;sub&gt;AWS_SECRET_ACCESS_KEY&lt;/sub&gt;&lt;/td&gt; 
+&lt;/tr&gt; &lt;/table&gt; &lt;/td&gt;&lt;td valign=top&gt;For Mail
+delivery &lt;table&gt;  &lt;tr&gt; 
+&lt;td&gt;&lt;sub&gt;GMAIL_USERNAME&lt;/sub&gt;&lt;/td&gt;  &lt;td
+rowspan=2&gt;&lt;sub&gt;&lt;a href=<a
+href="https://mail.google.com/>gmail</a></sub></td">mail.google.com/>gmail</a></sub></td</a>&gt;
+&lt;/tr&gt;  &lt;tr&gt; 
+&lt;td&gt;&lt;sub&gt;GMAIL_PASSWORD&lt;/sub&gt;&lt;/td&gt;  &lt;/tr&gt; 
+&lt;tr&gt;  &lt;td&gt;&lt;sub&gt;SMTP_ADDRESS&lt;/sub&gt;&lt;/td&gt; 
+&lt;td rowspan=2&gt;&lt;sub&gt;example if using gmail
+:<br>&lt;sub&gt;SMTP_ADDRESS=”smtp.gmail.com“ and
+SMTP_PORT=587&lt;/sub&gt;&lt;/sub&gt;&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt; 
+&lt;td&gt;&lt;sub&gt;SMTP_PORT&lt;/sub&gt;&lt;/td&gt;  &lt;/tr&gt; 
+&lt;tr&gt;  &lt;td&gt;&lt;sub&gt;DOMAIN&lt;/sub&gt;&lt;/td&gt; 
+&lt;td&gt;&lt;sub&gt;In development mode
+:<br>&lt;sub&gt;localhost&lt;/sub&gt;<br>For a production server
+:<br>&lt;sub&gt;ip address or domain name of the
+server&lt;/sub&gt;&lt;/sub&gt;&lt;/td&gt;  &lt;/tr&gt; &lt;/table&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</p>
+
+<h5 id="label-First+option">First option</h5>
+
+<p>Edit the set_env_var.bat file, fill it with your personal credentials and
+run this bat file from the main DOS shell. It will fix the environment
+details in all subsequent shells such as git bash or window power shell.
+You can start the server from a git bash with the classic method : <code> $
+rails server </code></p>
+
+<h5 id="label-Second+option">Second option</h5>
+
+<p>On Windows, this second option may permit to override specific problems
+related to environment variables beginning with /. Edit the .env file and
+fill it with your personal credentials. Install <a
+href="https://github.com/strongloop/node-foreman">node-foreman</a> and
+start the server from a git bash with the following command : <code> $ nf
+-p 3000 start -s -j Procfile_dev </code></p>
+
+<h3 id="label-Database+configuration">Database configuration</h3>
+
+<p>Modify the configenvironmentsdatabase.yml with your database credentials.
+Generally, the postgreSQL Window installer creates a user “postgres” for
+which you were asked a password during the installation process. <code>
+default: &amp;default   adapter: postgresql   encoding: unicode   # For
+details on connection pooling, see Rails configuration guide   #
+http://guides.rubyonrails.org/configuring.html#database-pooling   pool:
+&lt;%= ENV.fetch(&quot;RAILS_MAX_THREADS&quot;) { 5 } %&gt;   username:
+postgres   password: your_pass   host: localhost </code></p>
+
+<p>Create the database and the tables <code> $ rake db:create $ rails
+db:migrate </code> To create the database structure and the tables, you
+don&#39;t have to run all the migrations from scratch : <code> $ rails
+db:schema:load </code></p>
+
+<h2 id="label-File+storage">File storage</h2>
+
+<h3 id="label-Use+local+file+system">Use local file system</h3>
+
+<p>Document storage is configured for Amazon S3 but using local file system is
+possible. In that case, the aws-sdk gem is not needed.</p>
+
+<p>Remove the paperclip section in the configenvironmentsdeveloppment.rb
+<code> config.paperclip_defaults = {     storage: :s3,     s3_credentials:
+{         bucket: ENV.fetch(&#39;S3_BUCKET_NAME&#39;),        
+access_key_id: ENV.fetch(&#39;AWS_ACCESS_KEY_ID&#39;),        
+secret_access_key: ENV.fetch(&#39;AWS_SECRET_ACCESS_KEY&#39;),        
+s3_region: ENV.fetch(&#39;AWS_REGION&#39;),         s3_host_name:
+ENV.fetch(&#39;AWS_HOST_NAME&#39;),     } } </code> Modify the get method
+in the appcontrollersassets_controller.rb so that it uses send_file and not
+redirect_to <code> send_file asset.uploaded_file.path, :type =&gt;
+asset.uploaded_file_content_type #redirect_to
+asset.uploaded_file.expiring_url(10) </code> Modify the asset model
+appmodelsmodel.rb <code> has_attached_file :uploaded_file,      url:
+&#39;/forge/get/:id/:filename&#39;,                   path:
+&#39;:rails_root/forge/attachments/:id/:filename&#39;      #url:
+ENV.fetch(&#39;AWS_URL&#39;),      #path:
+&#39;/forge/attachments/:id/:filename&#39;,      #s3_permissions: :private
+</code></p>
+
+<h3 id="label-Use+Amazon+S3">Use Amazon S3</h3>
+
+<p>You may encounter difficulties due to some SSL defaults on your development
+machine.</p>
+
+<p>To override, create a file /config/initializers/paperclip.rb with the
+following command <code> OpenSSL::SSL::VERIFY_PEER =
+OpenSSL::SSL::VERIFY_NONE </code> Caution : only for a development purpose;
+not suitable for a production server !</p>
+
+<h1 id="label-Configuring+mail+services">Configuring mail services</h1>
+
+<p>Assuming you are using gmail for mail delivery, you may need to configure
+your google account in order to allow external applications to use it</p>
+
+<p>&lt;img src=public/images/doc/gmail_less_secure_apps.png&gt;</p>
+
+<p><a
+href="https://www.google.com/settings/security/lesssecureapps">www.google.com/settings/security/lesssecureapps</a></p>
+
+<p>On a production server, it may be necessary to clear the captcha in order
+to define the production server as an authorized application with auto
+sign-in activated</p>
+
+<p><a
+href="https://accounts.google.com/DisplayUnlockCaptcha">accounts.google.com/DisplayUnlockCaptcha</a></p>
+
+<p>The captcha is cleared for a few minutes. During that time, you can realize
+a password modification in order for your production server to be
+integrated in the list of authorized applications with auto sign-in
+activated.</p>
+
+<p>&lt;img src=public/images/doc/gmail_less_secure_captcha.png&gt;</p>
+
+<h1 id="label-Installation+on+Heroku+-28for+production-29">Installation on Heroku (for production)</h1>
+
+<p>You will need an heroku account and a S3 bucket as Heroku has an ephemeral
+file system</p>
+
+<h2 id="label-From+a+development+server">From a development server</h2>
+
+<p>Install <a href="https://devcenter.heroku.com/articles/heroku-cli">Heroku
+CLI</a></p>
+
+<p>Or <a
+href="https://cli-assets.heroku.com/branches/stable/heroku-windows-amd64.exe">cli-assets.heroku.com/branches/stable/heroku-windows-amd64.exe</a></p>
+
+<p>Open your local app directory in a git bash, and login to Heroku : <code> $
+cd /c/Sites/sharebox $ heroku login Enter your Heroku credentials: Email:
+alexandre.cuer@cerema.fr Password: ************* Logged in as
+alexandre.cuer@cerema.fr </code> Once succesfully logged, create a new
+heroku app : <code> $ heroku create Creating app... done,
+desolate-earth-32333 https://desolate-earth-32333.herokuapp.com/ |
+https://git.heroku.com/desolate-earth-32333.git </code> Heroku will define
+a random name for your production server, here : desolate-earth-32333.</p>
+
+<p>Push the files with git. <code> $ git init $ git add . $ git commit -a -m
+&quot;Switch to production&quot; $ git push heroku master </code> Fix
+environmental variables (we assume you are using gmail) <code> $ heroku
+config:set S3_BUCKET_NAME=&quot;your_bucket&quot; $ heroku config:set
+AWS_REGION=&quot;your_region&quot; $ heroku config:set
+AWS_HOST_NAME=&quot;your_host_name&quot; $ heroku config:set
+AWS_URL=&quot;your_url&quot; $ heroku config:set
+AWS_ACCESS_KEY_ID=&quot;your_access_key&quot; $ heroku config:set
+AWS_SECRET_ACCESS_KEY=&quot;your_secret_access_key&quot; $ heroku
+config:set GMAIL_USERNAME=&quot;your_gmail_address&quot; $ heroku
+config:set GMAIL_PASSWORD=&quot;your_gmail_password&quot; $ heroku
+config:set SMTP_ADDRESS=&quot;smtp.gmail.com&quot; $ heroku config:set
+SMTP_PORT=587 $ heroku config:set
+DOMAIN=&quot;desolate-earth-32333.herokuapp.com&quot; </code> If for some
+reason, one variable is not correctly fixed, you can correct it from the
+heroku dashboard.</p>
+
+<p>Go to <a
+href="https://dashboard.heroku.com/apps">dashboard.heroku.com/apps</a> &gt;
+Settings &gt; Reveal Config Vars</p>
+
+<p>Create the database and the tables <code> $ heroku run rake db:schema:load
+</code></p>
+
+<h2 id="label-From+a+github+repository">From a github repository</h2>
+
+<p>This is called github integration by the heroku team.</p>
+
+<p>If you don&#39;t have a github account, create one and fork the sharebox
+repository to your account.</p>
+
+<h1 id="label-Customization">Customization</h1>
+
+<p>Please modify appviewslayoutsapplication.html.erb</p>
+
+<h1 id="label-Working+behind+a+proxy+server">Working behind a proxy server</h1>
+
+<p>If you work behind a proxy, please set http_proxy and https_proxy variables
+<code> $ export
+https_proxy=&quot;http://user_name:password@proxy_url:proxy_port&quot; $
+export
+http_proxy=&quot;http://user_name:password@proxy_url:proxy_port&quot;
+</code></p>
+</div></div>
+
+      <div id="footer">
+  Generated on Fri Aug 24 18:06:33 2018 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.16 (ruby-2.3.3).
+</div>
+
+    </div>
+  </body>
+</html>

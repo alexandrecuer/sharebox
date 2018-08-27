@@ -1,3 +1,6 @@
+##
+# The folder model
+
 class Folder < ApplicationRecord
 
   belongs_to :user
@@ -16,18 +19,21 @@ class Folder < ApplicationRecord
 
   extend ActsAsTree::TreeWalker
   
-  # Retourne Vrai si le dossier a été partagé au moins une fois
+  ##
+  # Return true is the folder is shared
   def shared?
     !self.shared_folders.empty?
   end
 
-  # Retourne vrai si un sondage est attribué au dossier 
+  ##
+  # Return true if the folder is polled 
   def is_polled?
     # return true if self.poll_id != nil
     return true if Poll.where(id: self.poll_id).length != 0
   end
 
-  # Retourne vrai s'il existe au moins une réponse satisfaction pour le dossier
+  ##
+  # Return true if at least a satisfaction answer has been recorded on the folder
   def has_satisfaction_answer?
     if Satisfaction.find_by_folder_id(self.id)
       return true 
@@ -36,7 +42,8 @@ class Folder < ApplicationRecord
     end
   end
 
-  # Vrai si le répertoire donné contient des fichiers
+  ##
+  # Return true if the folder has got assets 
   def has_assets? 
     return true if Asset.find_by_folder_id(self.id)
   end
@@ -51,15 +58,15 @@ class Folder < ApplicationRecord
     end
   end
 
-  # retourne les fichiers d'un répertoire donné 
+  # return all assets belonging to a folder (directly - ie its own assets, not the ones in its subfolders)<br>
   # inutile non - folder.assets donne le même résultat
   def get_assets
     return Asset.where(folder_id: self.id)
   end
 
   ##
-  # Return all subfolders, assets and shares related to the folder, directly or indirectly
-  # work recursively
+  # Return all subfolders, assets and shares related to the folder, directly or indirectly<br>
+  # works recursively
   def get_subs_assets_shares
     folders = Folder.where(parent_id: self.id)
     assets = Asset.where(folder_id: self.id)
@@ -70,7 +77,7 @@ class Folder < ApplicationRecord
       if c.has_sub_asset_or_share?
         childrens += c.get_subs_assets_shares
       end
-      puts ("end of search for subfolder "+c.name.to_s+ " numéro "+c.id.to_s)
+      puts ("end of search for subfolder "+c.name.to_s+ " number "+c.id.to_s)
     end
     
     return childrens
