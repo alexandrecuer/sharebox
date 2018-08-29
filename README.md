@@ -18,24 +18,6 @@ Uses the following gems :
 
 ## Will have to switch from paperclip to [ActiveStorage](http://guides.rubyonrails.org/active_storage_overview.html) as paperclip is now deprecated
 
----
-- [Installation on a Microsoft Window development machine](#installation-on-a-microsoft-window-development-machine)
-  - [Requirements](#requirements)
-    - [Rails](#rails)
-    - [ImageMagick](#imagemagick)
-    - [NodeJS](#nodejs)
-  - [Installation](#installation)
-    - [Setting environmental variables](#setting-environmental-variables)
-    - [Database configuration](#database-configuration)
-  - [File storage](#file-storage)
-    - [Use Amazon S3](#use-amazon-s3)
-- [Configuring mail services](#configuring-mail-services)
-- [Installation on Heroku (for production)](#installation-on-heroku-for-production)
-  - [From a development server](#from-a-development-server)
-  - [From a github repository](#from-a-github-repository)
-- [Customization](#customization)
-- [Working behind a proxy server](#working-behind-a-proxy-server)
----
 
 # Installation on a Microsoft Window development machine
 ## Requirements
@@ -205,7 +187,7 @@ $ rails db:schema:load
 
 Document storage is configured for : 
 - Amazon S3 in production mode 
-- local file system in development mode. In that case, the aws-sdk gem is not needed.
+- local file system in development mode. In that case, the aws-sdk gem is not used.
 
 Switching between S3 mode and local storage mode can be done by modifying the value of config.local_storage 
 - in /config/environments/development.rb 
@@ -218,7 +200,7 @@ with config.local_storage = 0, all files will go in the defined S3 bucket
   <tr>
     <td></td>
     <td valign=top>S3 storage</td>
-    <td valogn=top>local storage</td>
+    <td valign=top>local storage</td>
   </tr>
   <tr>
     <td>\config\environments\developpment.rb</td>
