@@ -107,6 +107,16 @@ before_action :authenticate_user!
         #case 2 : asset belongs to a directory
         current_folder = Folder.find_by_id(asset.folder_id)
         if current_user.has_shared_access?(current_folder)
+          #a attempt to count the number of times the shared file has been opened by a share user 
+          if !current_user.has_asset_ownership?(asset)
+            @shared_folder = SharedFolder.find_by_share_user_id_and_folder_id(current_user.id,asset.folder_id)
+            puts("********************"+@shared_folder.id.to_s+" trying to download a file")
+            n = @shared_folder.message.to_i
+            n += 1
+            puts("*******"+n.to_s)
+            @shared_folder.message= n
+            @shared_folder.save
+          end
           # local or S3 storage ?
           if Rails.application::config.local_storage==1
             send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type

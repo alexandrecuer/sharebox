@@ -7,60 +7,66 @@
       <th><%= MAIN["mail"] %></th>
       <th><%= MAIN["status"] %></th>
     </tr>
-      <% @shared_folders.each do |f| %>
-        <% user = User.find_by_email(f.share_email) %>
-        <tr>
-          <% if user %>
-            <td>
-              <%= user.id %>
-            </td>
-            <% if user.has_completed_satisfaction?(@current_folder) %>
-              <% satisfaction = @satisfactions.find_by_user_id(user.id) %>
-              <td>
-                <a class="display_anchor" onclick="display(<%= satisfaction.id %>)"><%= f.share_email %></a>
-              </td>
-            <% else %>
-              <td>
-                <%= f.share_email %>
-              </td>
-            <% end %>
-            <td>
-              <%= user.statut %>
-            </td>
-            <td>
-              <% if !user.has_completed_satisfaction?(@current_folder) %>
-                <%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, shared_folder_path(f.folder_id, :share_email => f.share_email) %>
-              <% end %>
-            </td>
-            <td>
-              <% if !user.has_completed_satisfaction?(@current_folder) %>
-                <%= check_box_tag 'ids[]', f.id, false %>
-              <% end %>
-            </td>
-          <% else %>
-            <td>
-            </td>
-            <td>
-              <%= f.share_email %>
-            </td>
-            <td>
-            </td>
-            <td>
-              <%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, shared_folder_path(f.folder_id, :share_email => f.share_email) %>
-            </td>
-            <td>
-              <%= check_box_tag 'ids[]', f.id, false %>
-            </td>
-          <% end %>
-        </tr>
-      <% end %>
-    </table>
-  <%= submit_tag(MAIN["delete_share"]) %>
-<% end %>
+    
+<% 
+  # we browse all the shares created on the folder
+  @shared_folders.each do |f|
+    user = User.find_by_email(f.share_email)
+    if user
+      id = user.id
+      status = user.statut
+      if user.has_completed_satisfaction?(@current_folder)
+        satisfaction = @satisfactions.find_by_user_id(user.id)
+      end
+      if f.message?
+        numberofclics=f.message.to_i/2
+        if numberofclics == 1
+          noc_message="("+numberofclics.to_s+" clic)"
+        elsif numberofclics >1
+          noc_message="("+numberofclics.to_s+" clics)"
+        end        
+      end
+    end
+%>
+    <tr>
+      <td><%= id %></td>
+      <td>
+        <% if user && user.has_completed_satisfaction?(@current_folder) %>
+          <a class="display_anchor" onclick="display(<%= satisfaction.id %>)"><%= f.share_email %></a>
+        <% else %>
+          <%= f.share_email %>
+        <% end %>
+        <%= noc_message %>
+      </td>
+      <td><%= status %></td>
+      <td>
+        <% if !user || !user.has_completed_satisfaction?(@current_folder) %>
+          <%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, shared_folder_path(f.folder_id, :share_email => f.share_email) %>
+        <% end %>
+      </td>
+      <td>
+        <% if !user || !user.has_completed_satisfaction?(@current_folder) %>
+          <%= check_box_tag 'ids[]', f.id, false %>
+        <% end %>
+      </td>
+    </tr>
+<%
+  ##
+  # end of loop on @shared_folders
+  end
+%>
+  </table>
+<%= submit_tag(MAIN["delete_share"]) %>
+<% 
+end 
+%>
 
 <% @satisfactions.each do |s| %> 
     <div id="form_<%=s.id%>" style="display: none">
-        <% @satisfaction = s %>
+        <% 
+        @satisfaction = s
+        @poll = Poll.find_by_id(@satisfaction.poll_id)
+        %>
         <%= render 'satisfactions/form' %>
     </div>
 <% end %>

@@ -6,24 +6,42 @@ class SharedFoldersController < ApplicationController
   before_action :authenticate_user!
   
   ##
-  # Show the list of the shared emails<br>
-  # if a user already answered to the satisfaction form, clicking on his email can display his answer<br>
-  # If a user did not answer to the form yet :<br>
-  # - It's possible to remove the shared, useful if an error has been done when typing his email address<br>
-  # - you can send him an email inviting him to express his satisfaction or to access to a shared folder with file(s)<br>
+  # Show the control panel allowing to manage all share emails associated to a folder<br>
+  # Via the control panel, the folder owner can :<br>
+  # - display satisfaction answers by clicking on the email of the user who recorded the satisfaction<br>
+  # - remove shares one by one, unless a satisfaction answer was recorded on the share<br>
+  # - send automatic emails<br>
+  # For each share email, the control panel display the number of clicks on the shared assets<br>
+  # The form of the user email can be different depending on the 'shared' folder configuration<br>
+  # You can have many different folder configurations :<br>
+  # - folder with files but without any poll associated > file available type mel<br>
+  # - folder with files and with a poll associated > file+satisfaction type mel<br>
+  # - folder without files and with a poll associated > satisfaction type mel<br>
+  # - one of the above with satisfaction answer(s) > no email for users who already recorded their satisfaction<br>
+  # - folder with or without files, with satisfaction answer(s) and with no poll associated<br>
+  # - folder with or without files and with satisfaction answers(s) on a poll which was removed and replaced by another one<br>
+  # - folder with or without files and with satisfaction answer(s) on different polls<br>
+  # You cannot send email from an empty folder without any poll associated
   def show
     # Happens only when a mail is sent 
     if params[:share_email]
-      flash[:notice] = SHARED_FOLDERS_MSG["mail_sent_to"] + params[:share_email]
-      InformUserJob.perform_now(params[:share_email])
+      @folder = Folder.find_by_id(params[:id])
+      @shared_files = Asset.where("folder_id = "+params[:id])
+      if @shared_files.count == 0 && !@folder.is_polled?
+        flash[:notice] = "Vous ne pouvez pas envoyer de mel !<br>"
+        flash[:notice] += "D'une part, le répertoire partagé est vide<br>"
+        flash[:notice] += "D'autre part, le répertoire partagé n'est pas lié à une enquête satisfaction<br>"
+        flash[:notice] += "Chargez donc un livrable ou associez au répertoire une enquête satisfaction"
+      else
+        flash[:notice] = SHARED_FOLDERS_MSG["mail_sent_to"] + params[:share_email]
+        InformUserJob.perform_now(current_user,params[:share_email],params[:id])
+      end
       redirect_to shared_folder_path(params[:id])
     end
 
     @shared_folders = current_user.shared_folders.where("folder_id = "+params[:id]) 
     @current_folder = current_user.folders.find(params[:id])
-
-    @satisfactions = Satisfaction.where(folder_id: @current_folder.id)
-    @poll = Poll.find_by_id(@current_folder.poll_id)
+    @satisfactions = Satisfaction.where(folder_id: params[:id])
   end
   
   # This method is only used when following the route /complete_suid<br>

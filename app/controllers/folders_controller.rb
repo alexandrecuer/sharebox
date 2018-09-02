@@ -190,22 +190,32 @@ class FoldersController < ApplicationController
 
   ##
   # Move a folder<br>
-  # This feature is only for admins and is intended for annual archiving purposes
+  # This feature is only for admins and is maily intended for annual archiving purposes
   def moove_folder
     folder_to_moove = Folder.find_by_id(params[:id])
 
     if folder_to_moove
-      if params[:parent_id] == "0" 
-        # On déplace le répertoire à la racine 
+      if params[:parent_id].to_i == 0 
+        # we move the folder to the root
         folder_to_moove.parent_id = nil
+        # if the parent_id is like 0.xxx, with xxx corresponding to an existing user id
+        # we give the folder to that user id xxx
+        if params[:parent_id].length > 1
+          new_user_id=params[:parent_id].to_s[2..-1].to_i
+          if !User.find_by_id(new_user_id)
+            flash[:notice]="pas d'utilisateur à l'id "+new_user_id.to_s
+          else
+            folder_to_moove.user_id=new_user_id
+          end
+        end
         folder_to_moove.save
       else
         if Folder.find_by_id(params[:parent_id])
-          # On déplace le répertoire parent dans un autre
+          # we move the folder to another one
           folder_to_moove.parent_id = params[:parent_id]
           folder_to_moove.user_id = Folder.find_by_id(params[:parent_id]).user_id
           folder_to_moove.save
-          # on vérifie l'arborescence
+          # children check
           if folder_to_moove.has_sub_asset_or_share?
             folder_to_moove.get_subs_assets_shares.each do |c|
               c.user_id = folder_to_moove.user_id

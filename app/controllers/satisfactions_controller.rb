@@ -54,7 +54,7 @@ class SatisfactionsController < ApplicationController
         flash[:notice] = SATISFACTIONS_MSG["access_forbidden"]
         redirect_to root_url
       end
-      @poll = Poll.all.find_by_id(@current_folder.poll_id)
+      @poll = Poll.find_by_id(@satisfaction.poll_id)
       render 'new'
     end
   end

@@ -476,7 +476,17 @@ asset_id/asset_name</p>
 122
 123
 124
-125</pre>
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 87</span>
@@ -504,6 +514,16 @@ asset_id/asset_name</p>
       <span class='comment'>#case 2 : asset belongs to a directory
 </span>      <span class='id identifier rubyid_current_folder'>current_folder</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_asset'>asset</span><span class='period'>.</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='rparen'>)</span>
       <span class='kw'>if</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_has_shared_access?'>has_shared_access?</span><span class='lparen'>(</span><span class='id identifier rubyid_current_folder'>current_folder</span><span class='rparen'>)</span>
+        <span class='comment'>#a attempt to count the number of times the shared file has been opened by a share user 
+</span>        <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_has_asset_ownership?'>has_asset_ownership?</span><span class='lparen'>(</span><span class='id identifier rubyid_asset'>asset</span><span class='rparen'>)</span>
+          <span class='ivar'>@shared_folder</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="SharedFolder.html" title="SharedFolder (class)">SharedFolder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_share_user_id_and_folder_id'>find_by_share_user_id_and_folder_id</span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span><span class='id identifier rubyid_asset'>asset</span><span class='period'>.</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='rparen'>)</span>
+          <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>********************</span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='ivar'>@shared_folder</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> trying to download a file</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+          <span class='id identifier rubyid_n'>n</span> <span class='op'>=</span> <span class='ivar'>@shared_folder</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+          <span class='id identifier rubyid_n'>n</span> <span class='op'>+=</span> <span class='int'>1</span>
+          <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>*******</span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_n'>n</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
+          <span class='ivar'>@shared_folder</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='op'>=</span> <span class='id identifier rubyid_n'>n</span>
+          <span class='ivar'>@shared_folder</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+        <span class='kw'>end</span>
         <span class='comment'># local or S3 storage ?
 </span>        <span class='kw'>if</span> <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_application'>application</span><span class='op'>::</span><span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_local_storage'>local_storage</span><span class='op'>==</span><span class='int'>1</span>
           <span class='id identifier rubyid_send_file'>send_file</span> <span class='id identifier rubyid_asset'>asset</span><span class='period'>.</span><span class='id identifier rubyid_uploaded_file'>uploaded_file</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='symbol'>:type</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_asset'>asset</span><span class='period'>.</span><span class='id identifier rubyid_uploaded_file_content_type'>uploaded_file_content_type</span>
@@ -659,7 +679,7 @@ actually not used.…</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Aug 28 17:15:35 2018 by
+  Generated on Sun Sep  2 18:37:15 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

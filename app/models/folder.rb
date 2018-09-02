@@ -28,7 +28,6 @@ class Folder < ApplicationRecord
   ##
   # Return true if the folder is polled 
   def is_polled?
-    # return true if self.poll_id != nil
     return true if Poll.where(id: self.poll_id).length != 0
   end
 

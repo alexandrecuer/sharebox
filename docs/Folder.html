@@ -352,12 +352,12 @@ résultat</p>
       <pre class="lines">
 
 
+62
 63
-64
-65</pre>
+64</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 63</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 62</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_assets'>get_assets</span>
   <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="Asset.html" title="Asset (class)">Asset</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>folder_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -394,6 +394,7 @@ indirectly<br> works recursively</p>
       <pre class="lines">
 
 
+69
 70
 71
 72
@@ -408,11 +409,10 @@ indirectly<br> works recursively</p>
 81
 82
 83
-84
-85</pre>
+84</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 69</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_subs_assets_shares'>get_subs_assets_shares</span>
   <span class='id identifier rubyid_folders'>folders</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>parent_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -474,12 +474,12 @@ indirectly<br> works recursively</p>
       <pre class="lines">
 
 
+46
 47
-48
-49</pre>
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 46</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_assets?'>has_assets?</span> 
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Asset.html" title="Asset (class)">Asset</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_folder_id'>find_by_folder_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -529,16 +529,16 @@ folder</p>
       <pre class="lines">
 
 
+36
 37
 38
 39
 40
 41
-42
-43</pre>
+42</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 37</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 36</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_satisfaction_answer?'>has_satisfaction_answer?</span>
   <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Satisfaction.html" title="Satisfaction (class)">Satisfaction</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_folder_id'>find_by_folder_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -592,16 +592,16 @@ related to the folder</p>
       <pre class="lines">
 
 
+52
 53
 54
 55
 56
 57
-58
-59</pre>
+58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_sub_asset_or_share?'>has_sub_asset_or_share?</span> 
   <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Asset.html" title="Asset (class)">Asset</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_folder_id'>find_by_folder_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='const'><span class='object_link'><a href="" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_parent_id'>find_by_parent_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='const'><span class='object_link'><a href="SharedFolder.html" title="SharedFolder (class)">SharedFolder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_folder_id'>find_by_folder_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -656,15 +656,13 @@ related to the folder</p>
 
 30
 31
-32
-33</pre>
+32</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 30</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_polled?'>is_polled?</span>
-  <span class='comment'># return true if self.poll_id != nil
-</span>  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Poll.html" title="Poll (class)">Poll</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_poll_id'>poll_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>!=</span> <span class='int'>0</span>
+  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Poll.html" title="Poll (class)">Poll</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_poll_id'>poll_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>!=</span> <span class='int'>0</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -730,7 +728,7 @@ related to the folder</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Aug 28 17:15:34 2018 by
+  Generated on Sun Sep  2 18:37:14 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>
