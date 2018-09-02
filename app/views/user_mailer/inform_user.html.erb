@@ -26,10 +26,10 @@ Ceci est un message de la part de <br>
 <br>
 
 <% if @user %>
-  Pour y accéder, suivez le lien <%= folder_url(@folder.id) %><br><br>
+  Pour y accéder, suivez le lien <%= link_to folder_url(@folder.id).to_s, folder_url(@folder.id) %><br><br>
   Pour mémoire, vous êtes enregistré sur ce site avec le mel <%= @email %><br>
-  Si vous avez perdu votre mot de passe, vous pouvez en recréer un nouveau : <%= new_user_password_url %><br>
+  Si vous avez perdu votre mot de passe, vous pouvez en recréer un nouveau : <%=link_to new_user_password_url.to_s, new_user_password_url %><br>
 <% else %>
-  Pour y accéder, il vous suffit de vous inscrire à l'adresse suivante : <%= new_user_session_url%><br>
+  Pour y accéder, il vous suffit de vous inscrire à l'adresse suivante : <%= link_to new_user_registration_url.to_s, new_user_registration_url %><br>
   Lors de l'inscription, merci d'utiliser le mel <%= @email %><br>
 <% end %>

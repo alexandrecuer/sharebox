@@ -206,6 +206,13 @@ class FoldersController < ApplicationController
             flash[:notice]="pas d'utilisateur à l'id "+new_user_id.to_s
           else
             folder_to_moove.user_id=new_user_id
+            # children check
+            if folder_to_moove.has_sub_asset_or_share?
+              folder_to_moove.get_subs_assets_shares.each do |c|
+                c.user_id = new_user_id
+                c.save
+              end
+            end
           end
         end
         folder_to_moove.save
