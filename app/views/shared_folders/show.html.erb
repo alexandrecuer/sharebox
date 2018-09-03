@@ -20,11 +20,7 @@
       end
       if f.message?
         numberofclics=f.message.to_i/2
-        if numberofclics == 1
-          noc_message="("+numberofclics.to_s+" clic)"
-        elsif numberofclics >1
-          noc_message="("+numberofclics.to_s+" clics)"
-        end        
+        noc_message="("+numberofclics.to_s+" clic".pluralize(numberofclics)+")"      
       end
     end
 %>
@@ -70,5 +66,3 @@ end
         <%= render 'satisfactions/form' %>
     </div>
 <% end %>
-
-

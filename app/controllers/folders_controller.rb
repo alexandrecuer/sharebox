@@ -81,6 +81,8 @@ class FoldersController < ApplicationController
   # Private users can only modify the folders they own<br> 
   # Modifications includes : change the name, affect a case number, trigger a poll<br>
   # please note a poll on a folder can be triggered only if the folder has been previously shared<br>
+  # the owner can remove at any time the link between the poll and the folder, via the edit method of the folder controller<br>
+  # **********************************************************************************************<br>
   # admins have full control on all folders created in the application but not via the edit method<br>
   # they can take full control via the moove_folder method they can use within the folders index
   def edit 
