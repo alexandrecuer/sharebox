@@ -3,6 +3,7 @@ class UserMailer < ApplicationMailer
   default from: MAIN["admin_mel"]
   
   ##
+  # inform admin when a share is created and of all users registration till all pending share emails did not register 
   def inform_admin(current_user,text)
     @user = current_user
     @text = text
@@ -10,6 +11,8 @@ class UserMailer < ApplicationMailer
   end
 
   ##
+  # generate email in order to inform users if files were shared and/or satisfaction survey was launched<br>
+  # this method is used on a specific folder and is called by the folder owner<br>
   def inform_user(current_user,email,folder_id)
     @email = email
     @user = User.find_by_email(email)
