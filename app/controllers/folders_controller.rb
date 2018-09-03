@@ -21,7 +21,7 @@ class FoldersController < ApplicationController
   # if current_folder exists, we can go further :<br>
   # In case the current user has answered to a poll on the folder, we have to show the details of his answer<br>
   # We can consider we are waiting for the current user to express his satisfaction :<br>
-  # - if current user is not the owner of the folder, <br>
+  # - if current user is not the owner and is granted a share on the folder, <br>
   # - if a poll has been triggered on the folder, <br>
   # - and if the current user has not answered to the poll<br> 
   def show
@@ -35,7 +35,7 @@ class FoldersController < ApplicationController
         # if we are waiting for the current user to express his satisfaction, we redirect to new satisfaction_on_folder_path(@current_folder)
         if @satisfaction = current_user.satisfactions.find_by_folder_id(@current_folder.id)
           redirect_to satisfaction_path(@satisfaction.id)
-        elsif @current_folder.is_polled? && !current_user.has_ownership?(@current_folder)
+        elsif @current_folder.is_polled? && current_user.shared_folders_by_others.include?(folder)
           redirect_to new_satisfaction_on_folder_path(@current_folder)
         end
       else
