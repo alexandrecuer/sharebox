@@ -77,27 +77,27 @@ class SharedFoldersController < ApplicationController
   # the sharing activity details are emailed to the admin (cf variable admin_mel as declared in the main section of config.yml)<br>
   def create
     flash[:notice]=""
-    emails=params[:shared_folder][:share_email]
-    if emails == "" 
+    mel_text=""
+    emails=params[:shared_folder][:share_email].delete(" ")
+    if emails == ""
       flash[:notice]= SHARED_FOLDERS_MSG["email_needed"]
     else
       email_addresses = emails.split(",")
-      mel_text=""
       email_addresses.each do |email_address|
         email_address=email_address.delete(' ')
         if email_address == current_user.email
           flash[:notice] += SHARED_FOLDERS_MSG["you_are_folder_owner"] + "<br>"
         else
-          @shared_folder = current_user.shared_folders.new(shared_folder_params)
-          @shared_folder.share_email = email_address
-          # We search if the email exist in the user table
-          # if not, we'll have to update the share_user_id field after registration
-          share_user = User.find_by_email(email_address)
-          @shared_folder.share_user_id = share_user.id if share_user
-          exist = current_user.shared_folders.where("share_email = '"+email_address+"' and folder_id = "+params[:shared_folder][:folder_id])
-          if exist.length >0
+          # is the email_address already in the folder's shares ?
+          if current_user.shared_folders.find_by_share_email_and_folder_id(email_address,params[:shared_folder][:folder_id])
             flash[:notice] += SHARED_FOLDERS_MSG["already_shared_to"].to_s + email_address + "<br>"
           else
+            @shared_folder = current_user.shared_folders.new(shared_folder_params)
+            @shared_folder.share_email = email_address
+            # We search if the email exist in the user table
+            # if not, we'll have to update the share_user_id field after registration
+            share_user = User.find_by_email(email_address)
+            @shared_folder.share_user_id = share_user.id if share_user
             if @shared_folder.save
               a=SHARED_FOLDERS_MSG["shared_to"] + email_address + "<br>"
               flash[:notice]+=a
