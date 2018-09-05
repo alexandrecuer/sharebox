@@ -79,8 +79,10 @@ class SharedFoldersController < ApplicationController
     flash[:notice]=""
     mel_text=""
     emails=params[:shared_folder][:share_email].delete(" ")
+    saved=""
     if emails == ""
       flash[:notice]= SHARED_FOLDERS_MSG["email_needed"]
+      redirect_to new_share_on_folder_path(params[:shared_folder][:folder_id])
     else
       email_addresses = emails.split(",")
       email_addresses.each do |email_address|
@@ -99,6 +101,7 @@ class SharedFoldersController < ApplicationController
             share_user = User.find_by_email(email_address)
             @shared_folder.share_user_id = share_user.id if share_user
             if @shared_folder.save
+              saved="1"
               a=SHARED_FOLDERS_MSG["shared_to"] + email_address + "<br>"
               flash[:notice]+=a
               mel_text+=a
@@ -108,10 +111,20 @@ class SharedFoldersController < ApplicationController
           end
         end
       end
+      # we leave the sharing form (app/views/shared_folders/_form.html.erb)
+      # the id of the folder that we just shared is given by : params[:shared_folders][:folder_id]
+      @folder = current_user.folders.find(params[:shared_folder][:folder_id])
+      if saved=="1"
+        if @folder.parent_id
+          redirect_to folder_path(@folder.parent_id)
+        else
+          redirect_to root_url
+        end
+      else
+        redirect_to new_share_on_folder_path(params[:shared_folder][:folder_id])
+      end
     end
-    # we leave the sharing form (app/views/shared_folders/_form.html.erb)
-    # the id of the folder that we just shared is given by : params[:shared_folders][:folder_id]
-    @folder = current_user.folders.find(params[:shared_folder][:folder_id])
+    
     # if mel_text exist, then we send the mail
     if mel_text != ""
       entete=SHARED_FOLDERS_MSG["folder"]+params[:shared_folder][:folder_id]
@@ -121,11 +134,7 @@ class SharedFoldersController < ApplicationController
       # alternative not using jobs
       #UserMailer.inform_admin(current_user,mel_text).deliver_now
     end
-    if @folder.parent_id
-      redirect_to folder_path(@folder.parent_id)
-    else
-      redirect_to root_url
-    end
+    
   end
 
   ##
