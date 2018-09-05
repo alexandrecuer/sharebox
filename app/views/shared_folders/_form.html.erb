@@ -1,10 +1,35 @@
+<script>
+$(function(){
+  var split = function( val ) {
+    return val.split( "," );
+  };
+  
+  var extractLast = function( term ) {
+    return split( term ).pop();
+  };
+  
+  $('#shared_folder_share_email').autocomplete({
+    source: function( request, response ) {
+        response( $.ui.autocomplete.filter(
+            $('#shared_folder_share_email').data('autocomplete-source'), extractLast( request.term ) ) );
+    },
+    select: function( event, ui ) {
+        var terms = split( this.value );
+        terms.pop();
+        terms.push( ui.item.value );
+        terms.push( "" );
+        this.value = terms.join( "," );
+        return false;
+    }
+  });
+});
+</script>
+
 <% if @to_be_shared_folder %>
     <%= form_for @shared_folder, url: shared_folders_path do |f| %>
-        <small><%= MAIN["share_label"] %></small><br>
-        <%= f.text_field :share_email, size:50 %>
+        <%= f.text_field :share_email, data: { autocomplete_source: User.all.map(&:email) }, placeholder: MAIN["share_label"], size:100  %>
         <%= f.submit MAIN["share"].to_s+"'"+@to_be_shared_folder.name+"'" %>
         <%= f.button MAIN["reset"], type: 'reset' %>
-      
         <%= f.hidden_field :folder_id %>     
         <br><br>
     <% end %>

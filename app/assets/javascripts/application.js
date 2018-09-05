@@ -11,27 +11,8 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery-ui/widgets/autocomplete
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
 
-//tried to use a sort of unobstrusive javascript (UJS) with no success
-//<div data-sharing=<%= f.id %> data-folder_name='<%= f.name %>' >partager</div>
-//UPDATED !!! with turbolinks correctly activated, UJS is working fine
-//so no need to use the old vintage unsecure way
-//<div sharing=<%= f.id %> folder_name='<%= f.name %>' onclick="show(<%= f.id %>, '<%= f.name %>')">partager</div>
-/*
-$(function() {
-    $("a").on("click",function(){
-        var hash = $(this).attr("href");
-        document.getElementById("affiche").innerHTML = hash ;
-        location.assign(hash);
-    });
-    $("div[data-sharing]").on("click",function(){
-        var id=$(this).data("sharing");
-        var text=$(this).data("folder_name");
-        //document.getElementById("affiche").innerHTML = "<h2>Partager le dossier <u>" + text + "</u><h2>";
-        return show(id, text);
-    })
-});
-*/

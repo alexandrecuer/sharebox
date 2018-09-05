@@ -67,3 +67,5 @@ gem 'jquery-rails'
 gem 'aws-sdk', '~> 3'
 
 gem "font-awesome-rails"
+
+gem 'jquery-ui-rails'
