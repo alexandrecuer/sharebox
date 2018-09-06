@@ -12,14 +12,14 @@ Ceci est un message de la part de <br>
 <% if @shared_files.count > 0 %>
   <%= @assetlist.html_safe %>
   <% if @folder.is_polled? %>
-    <h3>Si vous avez quelques minutes, merci de remplir l'enquête satisfaction.</h3>
-    Vous trouverez cette enquête dans le site juste au dessous des livrables.<br> 
+    <h3>Nous vous remercions de consacrer quelques minutes à notre enquête satisfaction.</h3>
+    Vous trouverez cette enquête dans le site juste au dessous du(es) livrable(s).<br> 
     Nos équipes ont besoin de votre retour !<br>
   <% end %>
 <% else %>
   <% if @folder.is_polled? %>
     Nous aimerions recueillir votre satisfaction sur l'ensemble des prestations que nous avons réalisées pour vous cette année.<br>
-    Merci de bien vouloir consacrer quelques minutes à ce questionnaire court et concis.<br>
+    Nous vous remercions de consacrer quelques minutes à ce questionnaire court et concis.<br>
     Vos réponses nous aideront à identifier d'éventuels points d'amélioration.<br>
   <% end %>
 <% end %>
