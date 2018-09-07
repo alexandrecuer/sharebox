@@ -54,17 +54,17 @@ class UsersController < ApplicationController
   # only for admins  
   def destroy
     if !(current_user.is_admin?)
-        flash[:notice] = MAIN["only_admin_may_delete_user"]
+        flash[:notice] = USERS_MSG["only_admin_may_delete_user"]
     else
         if current_user.id.to_i == params[:id].to_i
             # devise can do it but we do not integrate this feature
-            flash[:notice] = MAIN["yu_cannot_delete_yur_own_account"]
+            flash[:notice] = USERS_MSG["yu_cannot_delete_yur_own_account"]
         else
             @user = User.find(params[:id])
             if @user.destroy
-                flash[:notice]="#{MAIN["user"]} #{params[:id]} #{MAIN["deleted"]}..."
+                flash[:notice]="#{USERS_MSG["user"]} #{params[:id]} #{USERS_MSG["deleted"]}..."
             else 
-                flash[:notice]=MAIN["user_not_deleted"]
+                flash[:notice]=USERS_MSG["user_not_deleted"]
             end
         end
     end
