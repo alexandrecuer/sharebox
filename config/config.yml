@@ -95,14 +95,20 @@ folders_msg:
   no_folder_on_that_id: " ne correspond à aucun répertoire existant"
   not_a_proper_new_folder_route: "new what? new_folder? new_file?"
 
-home_msg:
+users_msg:
   only_for_admin: "Seul les admins peuvent changer le status des utilisateurs"
   error_changing_status: "Erreur lors du changement de status"
-  new_status: " a désormais le status "
+  new_status: "a désormais le status"
   own_status_nor_superadmin_cannot_be_changed: "Vous ne pouvez pas changer votre propre status ou celui du super administrateur"
   inexisting_user: "Vous ne pouvez pas changer le status d'un utilisateur inexistant"
   invalid_status: "Statut invalide"
   user_managing_forbidden: "Les utilisateurs publics ne peuvent ni visualiser ni gérer les autres utilisateurs"
+  only_admin_may_delete_user: "Vous devez être administrateur pour supprimer un utilisateur"
+  yu_cannot_delete_yur_own_account: "Vous ne pouvez supprimer votre propre compte"
+  user: "utilisateur"
+  deleted: "supprimé"
+  user_not_deleted: "Echec de la suppression"
+  
   
 assets_msg: 
   rights_missing: "Vous ne pouvez pas mettre en ligne de fichier"

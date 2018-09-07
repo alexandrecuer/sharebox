@@ -21,11 +21,9 @@ Rails.application.routes.draw do
    
    get "folders/:folder_id/new_folder" => "folders#new", :as => "new_sub_folder"
    
-   get "listusers" => "home#list", :as => "list"
-   
    get "shared_folders/:id/new" => "shared_folders#new", :as => "new_share_on_folder"
 
-   # vu que l'URI assets/new permet de potser un nouveau fichier à la racine
+   # vu que l'URI assets/new permet de poster un nouveau fichier à la racine
    # si un utilisateur modifie l'URI en assets/folder_id/new il faut que celà déclenche la même action que folders/folder_id/new_file
    get "assets/:folder_id/new" => "assets#new", :as => "new_sub_assetb"
    
@@ -38,11 +36,7 @@ Rails.application.routes.draw do
    get "complete_suid" => "shared_folders#complete_suid", :as => "complete_suid"
 
    get "folders/:id/satisfaction" => "satisfactions#new", :as => "new_satisfaction_on_folder"
-   
-   patch '/listusers' => 'home#update', :as => 'update_user'
 
    patch '/folders' => 'folders#moove_folder', :as => 'moove_folder'
-
-   patch '/shared_folders/:id' => 'shared_folders#destroy', :as => 'delete_shared_folder'
 
 end

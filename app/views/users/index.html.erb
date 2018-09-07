@@ -1,5 +1,10 @@
 <%= render 'shared/nav' %>
 
+Email server : <%= Rails.application.config.action_mailer.smtp_settings[:address] %><br>
+Address sending emails to users for password change : <%= Devise.mailer_sender %><br>
+Address collecting information related to users activity (shared folders & unregistered users with shares) : <%= MAIN["admin_mel"] %><br><br>
+
+
 <table class="recap">
 <tr><th colspan="4"><%= MAIN["users_list"]%>(<%= @users.count%>)</th>
 </tr>
@@ -14,21 +19,18 @@
         <td><%= u.id %></td>
         <td><%= u.email %></td>
         <td><%= u.has_shared_folders_from_others? %></td>
-        <td><%= u.statut %><td>
+        <td>
+          <%= form_tag(user_path(u), method: "patch") do %>
+          <%= select_tag :statut, options_for_select(["public", "private", "admin" ], { selected: u.statut })%>
+          <%= submit_tag(MAIN["process_to_status_mod"]) %>
+          <% end %>
+        <td>
         <td><%= link_to "delete", user_path(u), method: :delete, data: {confirm: MAIN["are_yu_sure"] } %></td>
+        </tr>
 <% end %>
 </table>
 
-<br>
 
-<%= form_tag(update_user_path, method: "patch") do %>
-<%= label_tag(:id, MAIN["user_id"]) %>
-<%= text_field_tag(:id) %>
-<%= select_tag :statut, options_for_select(["public", "private", "admin" ])%>
-<%= submit_tag(MAIN["process_to_status_mod"]) %>
-<% end %>
-
-<br><br>
 
 <table class="recap">
 <tr><th colspan="4">Folders shared to an unregistered user (at sharing time)</th>

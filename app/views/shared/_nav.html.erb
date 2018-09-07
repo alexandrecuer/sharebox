@@ -21,7 +21,7 @@ end
 
 <%
   if current_user.is_admin? %>
-        <%= link_to MAIN["users_list"], list_path %>
+        <%= link_to MAIN["users_list"], users_path %>
         <div class="dropdown">
           <a class="dropbtn"><%= MAIN["manage_polls"] %></a>
           <div class="dropdown-content">

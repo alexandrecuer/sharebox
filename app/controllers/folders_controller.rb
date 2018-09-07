@@ -77,7 +77,7 @@ class FoldersController < ApplicationController
   end
 
   ##
-  # Show the 'edit' form in order for the user to modify an axisting folder<br>
+  # Show the 'edit' form in order for the user to modify an existing folder<br>
   # Private users can only modify the folders they own<br> 
   # Modifications includes : change the name, affect a case number, trigger a poll<br>
   # please note a poll on a folder can be triggered only if the folder has been previously shared<br>
