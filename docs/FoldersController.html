@@ -199,14 +199,17 @@ once will be rejected (usefull??).</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Show the &#39;edit&#39; form in order for the user to modify an axisting
+<p>Show the &#39;edit&#39; form in order for the user to modify an existing
 folder<br> Private users can only modify the folders they own<br> 
 Modifications includes : change the name, affect a case number, trigger a
 poll<br> please note a poll on a folder can be triggered only if the folder
-has been previously shared<br> admins have full control on all folders
-created in the application but not via the edit method<br> they can take
-full control via the moove_folder method they can use within the folders
-index.</p>
+has been previously shared<br> the owner can remove at any time the link
+between the poll and the folder, via the edit method of the folder
+controller<br>
+**********************************************************************************************<br>
+admins have full control on all folders created in the application but not
+via the edit method<br> they can take full control via the moove_folder
+method they can use within the folders index.</p>
 </div></span>
   
 </li>
@@ -341,8 +344,9 @@ initialize current_folder<br> if current_folder exists, we can go further
 :<br> In case the current user has answered to a poll on the folder, we
 have to show the details of his answer<br> We can consider we are waiting
 for the current user to express his satisfaction :<br> - if current user is
-not the owner of the folder, <br> - if a poll has been triggered on the
-folder, <br> - and if the current user has not answered to the poll<br>.</p>
+not the owner and is granted a share on the folder, <br> - if a poll has
+been triggered on the folder, <br> - and if the current user has not
+answered to the poll<br>.</p>
 </div></span>
   
 </li>
@@ -420,8 +424,6 @@ once will be rejected (usefull??)</p>
       <pre class="lines">
 
 
-113
-114
 115
 116
 117
@@ -445,10 +447,12 @@ once will be rejected (usefull??)</p>
 135
 136
 137
-138</pre>
+138
+139
+140</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 113</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 115</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
   <span class='ivar'>@folder</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_folders'>folders</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_folder_params'>folder_params</span><span class='rparen'>)</span>
@@ -507,8 +511,6 @@ once will be rejected (usefull??)</p>
       <pre class="lines">
 
 
-179
-180
 181
 182
 183
@@ -517,10 +519,12 @@ once will be rejected (usefull??)</p>
 186
 187
 188
-189</pre>
+189
+190
+191</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 179</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 181</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
   <span class='ivar'>@folder</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_folders'>folders</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -550,14 +554,17 @@ once will be rejected (usefull??)</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Show the &#39;edit&#39; form in order for the user to modify an axisting
+<p>Show the &#39;edit&#39; form in order for the user to modify an existing
 folder<br> Private users can only modify the folders they own<br> 
 Modifications includes : change the name, affect a case number, trigger a
 poll<br> please note a poll on a folder can be triggered only if the folder
-has been previously shared<br> admins have full control on all folders
-created in the application but not via the edit method<br> they can take
-full control via the moove_folder method they can use within the folders
-index</p>
+has been previously shared<br> the owner can remove at any time the link
+between the poll and the folder, via the edit method of the folder
+controller<br>
+**********************************************************************************************<br>
+admins have full control on all folders created in the application but not
+via the edit method<br> they can take full control via the moove_folder
+method they can use within the folders index</p>
 
 
   </div>
@@ -571,8 +578,6 @@ index</p>
       <pre class="lines">
 
 
-86
-87
 88
 89
 90
@@ -590,10 +595,12 @@ index</p>
 102
 103
 104
-105</pre>
+105
+106
+107</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 86</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 88</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_edit'>edit</span> 
   <span class='ivar'>@folder</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -647,13 +654,13 @@ route, an error message will be returned</p>
       <pre class="lines">
 
 
-238
-239
-240
-241</pre>
+256
+257
+258
+259</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 238</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 256</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_error'>error</span>
   <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='op'>=</span> <span class='const'>FOLDERS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>not_a_proper_new_folder_route</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
@@ -741,8 +748,6 @@ annual archiving purposes</p>
       <pre class="lines">
 
 
-194
-195
 196
 197
 198
@@ -780,50 +785,84 @@ annual archiving purposes</p>
 230
 231
 232
-233</pre>
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 194</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 196</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_moove_folder'>moove_folder</span>
-  <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 
-  <span class='kw'>if</span> <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span>
-    <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='op'>==</span> <span class='int'>0</span> 
-      <span class='comment'># we move the folder to the root
-</span>      <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span> <span class='op'>=</span> <span class='kw'>nil</span>
-      <span class='comment'># if the parent_id is like 0.xxx, with xxx corresponding to an existing user id
-</span>      <span class='comment'># we give the folder to that user id xxx
-</span>      <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>&gt;</span> <span class='int'>1</span>
-        <span class='id identifier rubyid_new_user_id'>new_user_id</span><span class='op'>=</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lbracket'>[</span><span class='int'>2</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
-        <span class='kw'>if</span> <span class='op'>!</span><span class='const'><span class='object_link'><a href="User.html" title="User (class)">User</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_new_user_id'>new_user_id</span><span class='rparen'>)</span>
-          <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pas d&#39;utilisateur à l&#39;id </span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_new_user_id'>new_user_id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
-        <span class='kw'>else</span>
-          <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span><span class='op'>=</span><span class='id identifier rubyid_new_user_id'>new_user_id</span>
+  <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='op'>=</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='op'>==</span><span class='int'>0</span>
+    <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Préciser le numéro du répertoire à déplacer</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_folders_path'>folders_path</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='comment'># we first check is the folder to move exists
+</span>    <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span>
+      <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='const'>FOLDERS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>no_folder_on_that_id</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_folders_path'>folders_path</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_stop'>stop</span> <span class='op'>=</span> <span class='int'>0</span>
+      <span class='id identifier rubyid_position'>position</span><span class='op'>=</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_position'>position</span>
+        <span class='id identifier rubyid_destination_folder_id'>destination_folder_id</span><span class='op'>=</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>..</span><span class='id identifier rubyid_position'>position</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+        <span class='id identifier rubyid_destination_user_id'>destination_user_id</span><span class='op'>=</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lbracket'>[</span><span class='id identifier rubyid_position'>position</span><span class='op'>+</span><span class='int'>1</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_destination_folder_id'>destination_folder_id</span><span class='op'>=</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_destination_folder_id'>destination_folder_id</span> <span class='op'>=</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='id identifier rubyid_destination_folder_id'>destination_folder_id</span> <span class='op'>==</span> <span class='int'>0</span>
+      <span class='id identifier rubyid_destination'>destination</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_destination_folder_id'>destination_folder_id</span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_destination'>destination</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_destination_folder_id'>destination_folder_id</span> <span class='op'>!=</span> <span class='kw'>nil</span>
+        <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='const'>FOLDERS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>no_folder_on_that_id</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
+        <span class='id identifier rubyid_stop'>stop</span> <span class='op'>=</span> <span class='int'>1</span>
+      <span class='kw'>end</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span> <span class='op'>==</span> <span class='id identifier rubyid_destination_folder_id'>destination_folder_id</span>
+        <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> le répertoire est déjà là où vous voulez l&#39;envoyer&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
+        <span class='id identifier rubyid_stop'>stop</span> <span class='op'>=</span> <span class='int'>1</span>
+      <span class='kw'>end</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_destination_user_id'>destination_user_id</span>
+        <span class='kw'>if</span> <span class='op'>!</span><span class='const'><span class='object_link'><a href="User.html" title="User (class)">User</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_destination_user_id'>destination_user_id</span><span class='rparen'>)</span>
+          <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> Pas d&#39;utilisateur ayant </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_destination_user_id'>destination_user_id</span><span class='embexpr_end'>}</span><span class='tstring_content'> comme id&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
+          <span class='id identifier rubyid_stop'>stop</span> <span class='op'>=</span> <span class='int'>1</span>
         <span class='kw'>end</span>
       <span class='kw'>end</span>
-      <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
-    <span class='kw'>else</span>
-      <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-        <span class='comment'># we move the folder to another one
-</span>        <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span>
-        <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span>
-        <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
-        <span class='comment'># children check
-</span>        <span class='kw'>if</span> <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_has_sub_asset_or_share?'>has_sub_asset_or_share?</span>
-          <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_get_subs_assets_shares'>get_subs_assets_shares</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
-            <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>=</span> <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span>
-            <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+      <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_destination_user_id'>destination_user_id</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_destination'>destination</span>
+          <span class='id identifier rubyid_destination_user_id'>destination_user_id</span> <span class='op'>=</span> <span class='id identifier rubyid_destination'>destination</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_stop'>stop</span> <span class='op'>==</span> <span class='int'>0</span>
+        <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span> <span class='op'>=</span> <span class='id identifier rubyid_destination_folder_id'>destination_folder_id</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_destination_user_id'>destination_user_id</span>
+          <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>=</span> <span class='id identifier rubyid_destination_user_id'>destination_user_id</span>
+          <span class='kw'>if</span> <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_children_give_to'>children_give_to</span><span class='lparen'>(</span><span class='id identifier rubyid_destination_user_id'>destination_user_id</span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> changement de propriétaire pour les objets enfant&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
           <span class='kw'>end</span>
         <span class='kw'>end</span>
-      <span class='kw'>else</span>
-        <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:parent_id</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>+</span> <span class='const'>FOLDERS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>no_folder_on_that_id</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+        <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> répertoire déplacé&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_folder_to_moove'>folder_to_moove</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
       <span class='kw'>end</span>
-    <span class='kw'>end</span>
-  <span class='kw'>else</span>
-    <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>+</span> <span class='const'>FOLDERS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>no_folder_on_that_id</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_folders_path'>folders_path</span>
+    <span class='kw'>end</span> 
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_folders_path'>folders_path</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -932,7 +971,7 @@ initialize current_folder<br> if current_folder exists, we can go further
 have to show the details of his answer<br> We can consider we are waiting
 for the current user to express his satisfaction :<br></p>
 <ul><li>
-<p>if current user is not the owner of the folder, <br></p>
+<p>if current user is not the owner and is granted a share on the folder, <br></p>
 </li><li>
 <p>if a poll has been triggered on the folder, <br></p>
 </li><li>
@@ -989,7 +1028,7 @@ for the current user to express his satisfaction :<br></p>
 </span>      <span class='comment'># if we are waiting for the current user to express his satisfaction, we redirect to new satisfaction_on_folder_path(@current_folder)
 </span>      <span class='kw'>if</span> <span class='ivar'>@satisfaction</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='period'>.</span><span class='id identifier rubyid_find_by_folder_id'>find_by_folder_id</span><span class='lparen'>(</span><span class='ivar'>@current_folder</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
         <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_satisfaction_path'>satisfaction_path</span><span class='lparen'>(</span><span class='ivar'>@satisfaction</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
-      <span class='kw'>elsif</span> <span class='ivar'>@current_folder</span><span class='period'>.</span><span class='id identifier rubyid_is_polled?'>is_polled?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_has_ownership?'>has_ownership?</span><span class='lparen'>(</span><span class='ivar'>@current_folder</span><span class='rparen'>)</span>
+      <span class='kw'>elsif</span> <span class='ivar'>@current_folder</span><span class='period'>.</span><span class='id identifier rubyid_is_polled?'>is_polled?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_shared_folders_by_others'>shared_folders_by_others</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_folder'>folder</span><span class='rparen'>)</span>
         <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_new_satisfaction_on_folder_path'>new_satisfaction_on_folder_path</span><span class='lparen'>(</span><span class='ivar'>@current_folder</span><span class='rparen'>)</span>
       <span class='kw'>end</span>
     <span class='kw'>else</span>
@@ -1034,8 +1073,6 @@ already registered in the database</p>
       <pre class="lines">
 
 
-143
-144
 145
 146
 147
@@ -1066,10 +1103,12 @@ already registered in the database</p>
 172
 173
 174
-175</pre>
+175
+176
+177</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 143</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/folders_controller.rb', line 145</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_update'>update</span>
   <span class='ivar'>@folder</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -1114,7 +1153,7 @@ already registered in the database</p>
 </div>
 
       <div id="footer">
-  Generated on Sun Sep  2 18:37:15 2018 by
+  Generated on Mon Sep 10 09:10:04 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

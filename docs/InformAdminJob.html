@@ -103,7 +103,18 @@
   
 </div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>main class for jobs focusing on mel delivery to the site admin</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -135,7 +146,11 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>deliver electronic message to site admin to report on current_user
+activity<br> the text message should have been prepared somewhere else (in
+a controller).</p>
+</div></span>
   
 </li>
 
@@ -165,18 +180,31 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>deliver electronic message to site admin to report on current_user
+activity<br> the text message should have been prepared somewhere else (in
+a controller)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-4
-5
-6</pre>
+10
+11
+12</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/jobs/inform_admin_job.rb', line 4</span>
+      <pre class="code"><span class="info file"># File 'app/jobs/inform_admin_job.rb', line 10</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_perform'>perform</span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='comma'>,</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
 	<span class='const'><span class='object_link'><a href="UserMailer.html" title="UserMailer (class)">UserMailer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_inform_admin'><span class='object_link'><a href="UserMailer.html#inform_admin-instance_method" title="UserMailer#inform_admin (method)">inform_admin</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='comma'>,</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_deliver_now'>deliver_now</span>
@@ -191,7 +219,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sun Sep  2 18:37:14 2018 by
+  Generated on Mon Sep 10 09:10:03 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

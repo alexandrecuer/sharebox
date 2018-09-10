@@ -103,7 +103,19 @@
   
 </div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>mailing system for the admin (automatic, to follow shares and new users
+registration)<br> mailing system for the private users (manual)</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -135,7 +147,10 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>inform admin when a share is created and of all users registration till all
+pending share emails did not register.</p>
+</div></span>
   
 </li>
 
@@ -157,7 +172,11 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>generate email in order to inform users that files were shared and/or
+satisfaction survey was launched<br> this method is used on a specific
+folder and is called by the folder owner<br>.</p>
+</div></span>
   
 </li>
 
@@ -187,20 +206,32 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>inform admin when a share is created and of all users registration till all
+pending share emails did not register</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-5
-6
-7
-8
-9</pre>
+11
+12
+13
+14
+15</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/mailers/user_mailer.rb', line 5</span>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_mailer.rb', line 11</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inform_admin'>inform_admin</span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='comma'>,</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
   <span class='ivar'>@user</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span>
@@ -221,21 +252,25 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>generate email in order to inform users that files were shared and/or
+satisfaction survey was launched<br> this method is used on a specific
+folder and is called by the folder owner<br></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-11
-12
-13
-14
-15
-16
-17
-18
-19
 20
 21
 22
@@ -281,10 +316,20 @@
 62
 63
 64
-65</pre>
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/mailers/user_mailer.rb', line 11</span>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_mailer.rb', line 20</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inform_user'>inform_user</span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='comma'>,</span><span class='id identifier rubyid_email'>email</span><span class='comma'>,</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='rparen'>)</span>
   <span class='ivar'>@email</span> <span class='op'>=</span> <span class='id identifier rubyid_email'>email</span>
@@ -293,53 +338,54 @@
   <span class='ivar'>@folder</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='rparen'>)</span>
   <span class='ivar'>@shared_files</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Asset.html" title="Asset (class)">Asset</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>folder_id = </span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='rparen'>)</span>
   
-  <span class='comment'># default email title
-</span>  <span class='id identifier rubyid_title'>title</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Livrable(s) disponible(s) en ligne</span><span class='tstring_end'>&quot;</span></span>
+  <span class='comment'># email title generation
+</span>  <span class='comment'># the shared_folders controller forbids all mel from a (shared) folder without files and not linked to a poll
+</span>  <span class='kw'>if</span> <span class='ivar'>@folder</span><span class='period'>.</span><span class='id identifier rubyid_is_polled?'>is_polled?</span>
+    <span class='id identifier rubyid_etitle'>etitle</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Courte enquête de satisfaction</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='ivar'>@shared_files</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span><span class='op'>&gt;</span><span class='int'>0</span>
+    <span class='id identifier rubyid_ftitle'>ftitle</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Livrable(s) en ligne</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_title'>title</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ftitle'>ftitle</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_etitle'>etitle</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  
   <span class='comment'># if email is registered in the database, @user exists
 </span>  <span class='comment'># we check if @user has already checked his deliverables
-</span>  <span class='comment'># if so, the message target is to collect the client&#39;s satisfaction
 </span>  <span class='kw'>if</span> <span class='ivar'>@user</span>
     <span class='ivar'>@share</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="SharedFolder.html" title="SharedFolder (class)">SharedFolder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_share_user_id_and_folder_id'>find_by_share_user_id_and_folder_id</span><span class='lparen'>(</span><span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='rparen'>)</span>
     <span class='comment'># share.message is used to stock the number of &#39;get&#39; on files - cf assets_controller.rb get method 
 </span>    <span class='comment'># if share.message is not nil, the share user already checked once his deliverables
-</span>    <span class='comment'># we can consider we want to retrieve his satisfaction unless the folder is not polled
-</span>    <span class='comment'># please note a owner can remove at any time the link between the poll and the folder, via the edit méthod of the folder controller
-</span>    <span class='kw'>if</span> <span class='ivar'>@share</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@folder</span><span class='period'>.</span><span class='id identifier rubyid_is_polled?'>is_polled?</span>
-      <span class='id identifier rubyid_title'>title</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Le Cerema vous sollicite pour une courte enquête satisfaction</span><span class='tstring_end'>&quot;</span></span>
+</span>    <span class='kw'>if</span> <span class='ivar'>@share</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span>
       <span class='id identifier rubyid_numberofclics'>numberofclics</span> <span class='op'>=</span> <span class='ivar'>@share</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='op'>/</span><span class='int'>2</span>
-      <span class='id identifier rubyid_visited'>visited</span><span class='op'>=</span><span class='int'>1</span>
     <span class='kw'>end</span>   
   <span class='kw'>end</span>
+  
   <span class='comment'>#generation of the asset(s) list
-</span>  <span class='ivar'>@assetlist</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+</span>  <span class='id identifier rubyid_t2'>t2</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Nous avons comptabilisé </span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_t3'>t3</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> accès fichier(s)</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>if</span> <span class='ivar'>@shared_files</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>==</span> <span class='int'>1</span>
-    <span class='kw'>if</span> <span class='id identifier rubyid_visited'>visited</span><span class='op'>==</span><span class='int'>1</span>
-      <span class='ivar'>@assetlist</span> <span class='op'>+=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Vous avez déjà visité ce répertoire contenant le fichier suivant :&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_asset'>asset</span> <span class='op'>=</span> <span class='ivar'>@shared_files</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_uploaded_file_file_name'>uploaded_file_file_name</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_numberofclics'>numberofclics</span>
+      <span class='id identifier rubyid_t1'>t1</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Vous avez déjà visité ce répertoire contenant le fichier suivant :</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_t4'>t4</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t2'>t2</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_numberofclics'>numberofclics</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t3'>t3</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
     <span class='kw'>else</span>
-      <span class='ivar'>@assetlist</span> <span class='op'>+=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Un livrable vous a été partagé :&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_t1'>t1</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Un livrable vous a été partagé :</span><span class='tstring_end'>&quot;</span></span>
     <span class='kw'>end</span>
-    <span class='ivar'>@assetlist</span> <span class='op'>+=</span> <span class='ivar'>@shared_files</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_uploaded_file_file_name'>uploaded_file_file_name</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>elsif</span> <span class='ivar'>@shared_files</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>&gt;</span> <span class='int'>1</span>
-    <span class='kw'>if</span> <span class='id identifier rubyid_visited'>visited</span><span class='op'>==</span><span class='int'>1</span>
-      <span class='ivar'>@assetlist</span> <span class='op'>+=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Vous avez déjà visité ce répertoire contenant les fichiers suivants :&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
-    <span class='kw'>else</span>
-      <span class='ivar'>@assetlist</span> <span class='op'>+=</span> <span class='ivar'>@shared_files</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> livrables vous ont été partagés :&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
-    <span class='kw'>end</span>
+    <span class='id identifier rubyid_asset'>asset</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span> 
     <span class='ivar'>@shared_files</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='period'>.</span><span class='id identifier rubyid_with_index'>with_index</span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='comma'>,</span><span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
-      <span class='ivar'>@assetlist</span> <span class='op'>+=</span> <span class='id identifier rubyid_index'>index</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>) </span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_uploaded_file_file_name'>uploaded_file_file_name</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_asset'>asset</span> <span class='op'>+=</span> <span class='id identifier rubyid_index'>index</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>) </span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_uploaded_file_file_name'>uploaded_file_file_name</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_numberofclics'>numberofclics</span>
+      <span class='id identifier rubyid_t1'>t1</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Vous avez déjà visité ce répertoire contenant les fichiers suivants :</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_t4'>t4</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t2'>t2</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_numberofclics'>numberofclics</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t3'>t3</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_t1'>t1</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@shared_files</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span><span class='embexpr_end'>}</span><span class='tstring_content'> livrables vous ont été partagés :</span><span class='tstring_end'>&quot;</span></span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_numberofclics'>numberofclics</span>
-    <span class='ivar'>@assetlist</span> <span class='op'>+=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Nous avons comptabilisé </span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_numberofclics'>numberofclics</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> accès fichier(s)&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>end</span>
-  <span class='comment'># At this stage, if there is no file in the folder, we can consider we want to collect a general satisfaction
-</span>  <span class='comment'># By general satisfaction, we mean satisfaction on the overall business for a client
-</span>  <span class='comment'># This test on the presence of files in the folder is enough, no need to test also if the folder is polled
-</span>  <span class='comment'># Indeed, if the folder has got no files and is not polled, the shared_folders controller forbids all email, so we cannot arrive here  
-</span>  <span class='kw'>if</span> <span class='op'>!</span><span class='lparen'>(</span><span class='ivar'>@shared_files</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>&gt;</span> <span class='int'>0</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_title'>title</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Le Cerema vous sollicite pour une courte enquête satisfaction</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>end</span>
-  <span class='id identifier rubyid_mail'>mail</span><span class='lparen'>(</span><span class='label'>to:</span> <span class='id identifier rubyid_email'>email</span><span class='comma'>,</span> <span class='label'>from:</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_email'>email</span><span class='comma'>,</span> <span class='label'>subject:</span> <span class='id identifier rubyid_title'>title</span><span class='rparen'>)</span>
+  <span class='ivar'>@assetlist</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t1'>t1</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;br&gt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_asset'>asset</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;br&gt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t4'>t4</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;br&gt;</span><span class='tstring_end'>&quot;</span></span>
+  
+  <span class='comment'># email delivery
+</span>  <span class='id identifier rubyid_mail'>mail</span><span class='lparen'>(</span><span class='label'>to:</span> <span class='id identifier rubyid_email'>email</span><span class='comma'>,</span> <span class='label'>from:</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_email'>email</span><span class='comma'>,</span> <span class='label'>subject:</span> <span class='id identifier rubyid_title'>title</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -351,7 +397,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sun Sep  2 18:37:14 2018 by
+  Generated on Mon Sep 10 09:10:03 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

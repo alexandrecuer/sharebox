@@ -103,7 +103,18 @@
   
 </div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>the shared folder model</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -217,12 +228,12 @@ fills the share_user_id field in the table shared_folders</p>
       <pre class="lines">
 
 
-23
-24
-25</pre>
+26
+27
+28</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/shared_folder.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'app/models/shared_folder.rb', line 26</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_fetch_user_id_associated_to_email'>fetch_user_id_associated_to_email</span>
   <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="User.html" title="User (class)">User</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>email:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_share_email'>share_email</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_ids'>ids</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
@@ -271,12 +282,12 @@ fills the share_user_id field in the table shared_folders</p>
       <pre class="lines">
 
 
-13
-14
-15</pre>
+16
+17
+18</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/shared_folder.rb', line 13</span>
+      <pre class="code"><span class="info file"># File 'app/models/shared_folder.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_missing_share_user_id?'>missing_share_user_id?</span>
   <span class='kw'>return</span> <span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_share_email'>share_email</span> <span class='kw'>and</span> <span class='kw'>not</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_share_user_id'>share_user_id</span><span class='rparen'>)</span>
@@ -291,7 +302,7 @@ fills the share_user_id field in the table shared_folders</p>
 </div>
 
       <div id="footer">
-  Generated on Sun Sep  2 18:37:14 2018 by
+  Generated on Mon Sep 10 09:10:03 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>
