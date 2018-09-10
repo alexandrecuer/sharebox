@@ -1,3 +1,6 @@
+##
+# the satisfaction model
+
 class Satisfaction < ApplicationRecord
 
   belongs_to :folder

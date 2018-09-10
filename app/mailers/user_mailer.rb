@@ -1,3 +1,7 @@
+##
+# mailing system for the admin (automatic, to follow shares and new users registration)<br>
+# mailing system for the private users (manual) 
+
 class UserMailer < ApplicationMailer
 
   default from: MAIN["admin_mel"]
@@ -11,7 +15,7 @@ class UserMailer < ApplicationMailer
   end
 
   ##
-  # generate email in order to inform users if files were shared and/or satisfaction survey was launched<br>
+  # generate email in order to inform users that files were shared and/or satisfaction survey was launched<br>
   # this method is used on a specific folder and is called by the folder owner<br>
   def inform_user(current_user,email,folder_id)
     @email = email

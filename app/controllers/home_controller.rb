@@ -1,9 +1,8 @@
 ##
-# User managing within the sharebox site
+# main home page
 
 class HomeController < ApplicationController
 
   before_action :authenticate_user!
     
-  
 end

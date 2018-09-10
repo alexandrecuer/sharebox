@@ -42,22 +42,26 @@ class User < ApplicationRecord
   # Sends an email to the admin
   def complete_suid
     @shared_folders=SharedFolder.where("share_user_id IS NULL")
-    mel_text=""
+    missing_share_user_id_filled=""
+    unregistered_emails=""
     @shared_folders.each do |u|
+      folder=Folder.find_by_id(u.folder_id)
+      share="share (#{u.id}) on folder #{folder.name} (#{u.folder_id})"
       if u.missing_share_user_id?
         if u.fetch_user_id_associated_to_email
           u.share_user_id=u.fetch_user_id_associated_to_email
           if u.save
-            mel_text+="share_user_id("+u.share_user_id.to_s+") -> partage("+u.id.to_s+")<br>"
+            missing_share_user_id_filled="#{missing_share_user_id_filled} -> filled share_user_id (#{u.share_user_id}) for #{share}<br><br>"
           end
         else
-          mel_text+=u.share_email+" pas encore inscrit<br>"
+          unregistered_emails="#{unregistered_emails} -> #{u.share_email} not yet registered for #{share}<br><br>"
         end
       end
     end
-    if mel_text != ""
-      mel_text="ACTION complete_suid<br>"+mel_text
-      InformAdminJob.perform_now(self,mel_text)
+    mel_to_admin="#{missing_share_user_id_filled}#{unregistered_emails}"
+    if mel_to_admin != ""
+      mel_to_admin="<h2>Report - complete_suid user method</h2><br><br>#{mel_to_admin}"
+      InformAdminJob.perform_now(self,mel_to_admin)
     end
   end
 
@@ -74,6 +78,10 @@ class User < ApplicationRecord
       if return_value 
         return true
       end
+      #********************************************************
+      #experimental 09-09-2018
+      return true if self.folders.include?(ancestor_folder)
+      #experimental end
     end
     return false
   end
@@ -128,6 +136,12 @@ class User < ApplicationRecord
   # Return true if user has answered to a satisfaction survey on the folder
   def has_completed_satisfaction?(folder)
     return true if Satisfaction.where(folder_id: folder.id, user_id: self.id).length != 0 
+  end
+  
+  ##
+  # Return all users with email containing the specific term
+  def self.search(term)
+    where('LOWER(email) LIKE :term', term: "%#{term.downcase}%")
   end
   
 end

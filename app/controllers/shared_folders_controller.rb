@@ -28,10 +28,11 @@ class SharedFoldersController < ApplicationController
       @folder = Folder.find_by_id(params[:id])
       @shared_files = Asset.where("folder_id = "+params[:id])
       if @shared_files.count == 0 && !@folder.is_polled?
-        flash[:notice] = "Vous ne pouvez pas envoyer de mel !<br>"
-        flash[:notice] += "D'une part, le répertoire partagé est vide<br>"
-        flash[:notice] += "D'autre part, le répertoire partagé n'est pas lié à une enquête satisfaction<br>"
-        flash[:notice] += "Chargez donc un livrable ou associez au répertoire une enquête satisfaction"
+        t1 = "Vous ne pouvez pas envoyer de mel !"
+        t2 = "D'une part, le répertoire partagé est vide"
+        t3 = "D'autre part, le répertoire partagé n'est pas lié à une enquête satisfaction"
+        t4 = "Chargez donc un livrable ou associez au répertoire une enquête satisfaction"
+        flash[:notice] = "#{t1}<br>#{t2}<br>#{t3}<br>#{t4}"
       else
         flash[:notice] = SHARED_FOLDERS_MSG["mail_sent_to"] + params[:share_email]
         InformUserJob.perform_now(current_user,params[:share_email],params[:id])
@@ -51,7 +52,7 @@ class SharedFoldersController < ApplicationController
   def complete_suid
     current_user.complete_suid
     if current_user.set_admin
-      flash[:notice] = current_user.email + " root/admin"
+      flash[:notice] = "#{current_user.email} root/admin"
     end
     redirect_to root_url
   end
@@ -76,10 +77,11 @@ class SharedFoldersController < ApplicationController
   # the method verify if shared emails are already registered in the database for the specified folder (folder_id)<br>
   # the sharing activity details are emailed to the admin (cf variable admin_mel as declared in the main section of config.yml)<br>
   def create
+  
     flash[:notice]=""
-    mel_text=""
+    saved_shares=""
     emails=params[:shared_folder][:share_email].delete(" ")
-    saved=""
+
     if emails == ""
       flash[:notice]= SHARED_FOLDERS_MSG["email_needed"]
       redirect_to new_share_on_folder_path(params[:shared_folder][:folder_id])
@@ -88,11 +90,11 @@ class SharedFoldersController < ApplicationController
       email_addresses.each do |email_address|
         email_address=email_address.delete(' ')
         if email_address == current_user.email
-          flash[:notice] += SHARED_FOLDERS_MSG["you_are_folder_owner"] + "<br>"
+          flash[:notice] = "#{flash[:notice]} #{SHARED_FOLDERS_MSG["you_are_folder_owner"]}<br>"
         else
           # is the email_address already in the folder's shares ?
           if current_user.shared_folders.find_by_share_email_and_folder_id(email_address,params[:shared_folder][:folder_id])
-            flash[:notice] += SHARED_FOLDERS_MSG["already_shared_to"].to_s + email_address + "<br>"
+            flash[:notice] = "#{flash[:notice]} #{SHARED_FOLDERS_MSG["already_shared_to"]} #{email_address}<br>"
           else
             @shared_folder = current_user.shared_folders.new(shared_folder_params)
             @shared_folder.share_email = email_address
@@ -101,12 +103,11 @@ class SharedFoldersController < ApplicationController
             share_user = User.find_by_email(email_address)
             @shared_folder.share_user_id = share_user.id if share_user
             if @shared_folder.save
-              saved="1"
-              a=SHARED_FOLDERS_MSG["shared_to"] + email_address + "<br>"
-              flash[:notice]+=a
-              mel_text+=a
+              a = "#{SHARED_FOLDERS_MSG["shared_to"]} #{email_address}"
+              flash[:notice] = "#{flash[:notice]} #{a}<br>"
+              saved_shares = "#{saved_shares} #{a}<br>"
             else
-              flash[:notice]+= SHARED_FOLDERS_MSG["unable_share_for"] + email_address + "<br>"
+              flash[:notice] = "#{flash[:notice]} #{SHARED_FOLDERS_MSG["unable_share_for"]} #{email_address}<br>"
             end
           end
         end
@@ -114,7 +115,7 @@ class SharedFoldersController < ApplicationController
       # we leave the sharing form (app/views/shared_folders/_form.html.erb)
       # the id of the folder that we just shared is given by : params[:shared_folders][:folder_id]
       @folder = current_user.folders.find(params[:shared_folder][:folder_id])
-      if saved=="1"
+      if saved_shares != ""
         if @folder.parent_id
           redirect_to folder_path(@folder.parent_id)
         else
@@ -125,14 +126,13 @@ class SharedFoldersController < ApplicationController
       end
     end
     
-    # if mel_text exist, then we send the mail
-    if mel_text != ""
-      entete=SHARED_FOLDERS_MSG["folder"]+params[:shared_folder][:folder_id]
-      entete+="<br><b>["+@folder.name.html_safe+"]</b><br>"
-      mel_text=entete+mel_text
-      InformAdminJob.perform_now(current_user,mel_text)
+    # if new shares were successfully saved, then we inform the admin
+    if saved_shares != ""
+      mel_to_admin = "#{SHARED_FOLDERS_MSG["folder"]} #{params[:shared_folder][:folder_id]}<br>"
+      mel_to_admin = "#{mel_to_admin}<b>[#{@folder.name.html_safe}]</b><br>#{saved_shares}"
+      InformAdminJob.perform_now(current_user,mel_to_admin)
       # alternative not using jobs
-      #UserMailer.inform_admin(current_user,mel_text).deliver_now
+      #UserMailer.inform_admin(current_user,mel_to_admin).deliver_now
     end
     
   end

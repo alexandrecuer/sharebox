@@ -1,3 +1,6 @@
+##
+# the shared folder model
+
 class SharedFolder < ApplicationRecord
 
   belongs_to :user

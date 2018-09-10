@@ -82,5 +82,16 @@ class Folder < ApplicationRecord
     return childrens
 
   end
+  
+  ##
+  # Fix user_id to i on all folder's children (assets, subfolders, subassets, shares, subshares)
+  def children_give_to(i)
+    if self.has_sub_asset_or_share?
+      self.get_subs_assets_shares.each do |c|
+        c.user_id = i
+        c.save
+      end
+    end
+  end
 
 end

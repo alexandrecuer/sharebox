@@ -1,3 +1,6 @@
+##
+# the poll model
+
 class Poll < ApplicationRecord
 
   belongs_to :user
