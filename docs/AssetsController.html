@@ -485,9 +485,7 @@ asset_id/asset_name</p>
 131
 132
 133
-134
-135
-136</pre>
+134</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 87</span>
@@ -515,9 +513,7 @@ asset_id/asset_name</p>
       <span class='comment'>#case 2 : asset belongs to a directory
 </span>      <span class='id identifier rubyid_current_folder'>current_folder</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_asset'>asset</span><span class='period'>.</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='rparen'>)</span>
       <span class='kw'>if</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_has_shared_access?'>has_shared_access?</span><span class='lparen'>(</span><span class='id identifier rubyid_current_folder'>current_folder</span><span class='rparen'>)</span>
-        <span class='comment'>#a attempt to count the number of times the shared file has been opened by a share user 
-</span>        <span class='comment'>#if !current_user.has_asset_ownership?(asset)
-</span>        <span class='comment'># line above commented on 09/09/2018
+        <span class='comment'>#a attempt to count the number of times the shared file has been opened by a public user for whom the share was created 
 </span>        <span class='kw'>if</span> <span class='ivar'>@shared_folder</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="SharedFolder.html" title="SharedFolder (class)">SharedFolder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_share_user_id_and_folder_id'>find_by_share_user_id_and_folder_id</span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span><span class='id identifier rubyid_asset'>asset</span><span class='period'>.</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='rparen'>)</span>
           <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>*******</span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='ivar'>@shared_folder</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> trying to download a file</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
           <span class='id identifier rubyid_n'>n</span> <span class='op'>=</span> <span class='ivar'>@shared_folder</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
@@ -681,7 +677,7 @@ actually not used.…</p>
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 10 09:10:03 2018 by
+  Generated on Wed Sep 12 20:32:34 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

@@ -39,13 +39,14 @@ class SharedFoldersController < ApplicationController
       end
       redirect_to shared_folder_path(params[:id])
     end
-
-    @shared_folders = current_user.shared_folders.where("folder_id = "+params[:id]) 
-    @current_folder = current_user.folders.find(params[:id])
+    # everybody can access to the sharing list on an existing folder
+    # this is absolutely not a secret thing
+    @shared_folders = SharedFolder.where("folder_id = "+params[:id]) 
+    @current_folder = Folder.find(params[:id])
     @satisfactions = Satisfaction.where(folder_id: params[:id])
   end
   
-  # This method is only used when following the route /complete_suid<br>
+  # This method is only used when MANUALLY following the route /complete_suid<br>
   # it does the following tasks :<br>
   # - send to the admin a list with all the unregistered emails which benefited from shared access to a folder<br>
   # - manually launch the set_admin method (cf user model)<br>

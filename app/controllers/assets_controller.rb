@@ -107,9 +107,7 @@ before_action :authenticate_user!
         #case 2 : asset belongs to a directory
         current_folder = Folder.find_by_id(asset.folder_id)
         if current_user.has_shared_access?(current_folder)
-          #a attempt to count the number of times the shared file has been opened by a share user 
-          #if !current_user.has_asset_ownership?(asset)
-          # line above commented on 09/09/2018
+          #a attempt to count the number of times the shared file has been opened by a public user for whom the share was created 
           if @shared_folder = SharedFolder.find_by_share_user_id_and_folder_id(current_user.id,asset.folder_id)
             puts("*******"+@shared_folder.id.to_s+" trying to download a file")
             n = @shared_folder.message.to_i

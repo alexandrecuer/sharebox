@@ -70,19 +70,31 @@ class User < ApplicationRecord
   # "shared access" means being owner or being granted of a share<br>
   # if folder is a subfolder of a folder shared to the user, we consider the user has shared access on the subfolder
   def has_shared_access?(folder)
+    return true if self.is_admin?
     return true if self.folders.include?(folder)
     return true if self.shared_folders_by_others.include?(folder)
-    return_value = false
     folder.ancestors.each do |ancestor_folder|
-      return_value = self.shared_folders_by_others.include?(ancestor_folder)
-      if return_value 
-        return true
-      end
+      return true if self.shared_folders_by_others.include?(ancestor_folder)
       #********************************************************
       #experimental 09-09-2018
+      # if a folder has been swarmed in a user's tree, the user has shared access
+      # to verify if the folder has been swarmed to the user, we have to check the ancestors
       return true if self.folders.include?(ancestor_folder)
-      #experimental end
     end
+    # if you have swarmed a folder, you need to access to the whole tree of the primo ancestor of the folder 
+    # the purpose is to assure a correct navigation
+    # by primo ancestor, we mean the root folder which hosts directly or indirectly the folder 
+    # we explore all the subfolders directly or indirectly related to the primo ancestor of the folder
+    # if one folder belongs to the user, the user is considered to have a shared access
+    if folder.is_root?
+      base = folder
+    else 
+      base = folder.ancestors.reverse[0]
+    end
+    base.get_all_sub_folders.each do |sub|
+        return true if self.folders.include?(sub)
+      end
+    #experimental end
     return false
   end
 

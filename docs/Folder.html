@@ -162,7 +162,7 @@ subassets, shares, subshares).</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#get_assets-instance_method" title="#get_assets (instance method)">#<strong>get_assets</strong>  &#x21d2; Object </a>
+      <a href="#get_all_sub_folders-instance_method" title="#get_all_sub_folders (instance method)">#<strong>get_all_sub_folders</strong>  &#x21d2; Object </a>
     
 
     
@@ -177,9 +177,7 @@ subassets, shares, subshares).</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>return all assets belonging to a folder (directly - ie its own assets, not
-the ones in its subfolders)<br> inutile non - folder.assets donne le même
-résultat.</p>
+<p>returns all subfolders related to the folder, directly or indirectly.</p>
 </div></span>
   
 </li>
@@ -311,6 +309,81 @@ related to the folder.</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#is_root%3F-instance_method" title="#is_root? (instance method)">#<strong>is_root?</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>return all assets belonging to a folder (directly - ie its own assets, not
+the ones in its subfolders)<br> inutile non - folder.assets donne le même
+résultat def get_assets  return Asset.where(folder_id: self.id) end.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#is_swarmed%3F-instance_method" title="#is_swarmed? (instance method)">#<strong>is_swarmed?</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>is the folder swarmed ?<br> has the folder been created or dropped in a
+directory belonging to another private user ?.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#is_swarmed_to_user%3F-instance_method" title="#is_swarmed_to_user? (instance method)">#<strong>is_swarmed_to_user?</strong>(user)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>is the folder swarmed to the specified user ?.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#shared%3F-instance_method" title="#shared? (instance method)">#<strong>shared?</strong>  &#x21d2; Boolean </a>
     
 
@@ -376,17 +449,17 @@ subassets, shares, subshares)</p>
       <pre class="lines">
 
 
-88
-89
-90
-91
-92
-93
-94
-95</pre>
+102
+103
+104
+105
+106
+107
+108
+109</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 88</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 102</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_children_give_to'>children_give_to</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_has_sub_asset_or_share?'>has_sub_asset_or_share?</span>
@@ -402,9 +475,9 @@ subassets, shares, subshares)</p>
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="get_assets-instance_method">
+  <h3 class="signature " id="get_all_sub_folders-instance_method">
   
-    #<strong>get_assets</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>get_all_sub_folders</strong>  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -413,9 +486,7 @@ subassets, shares, subshares)</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>return all assets belonging to a folder (directly - ie its own assets, not
-the ones in its subfolders)<br> inutile non - folder.assets donne le même
-résultat</p>
+<p>returns all subfolders related to the folder, directly or indirectly</p>
 
 
   </div>
@@ -429,15 +500,27 @@ résultat</p>
       <pre class="lines">
 
 
-62
-63
-64</pre>
+90
+91
+92
+93
+94
+95
+96
+97
+98</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 90</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_get_assets'>get_assets</span>
-  <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="Asset.html" title="Asset (class)">Asset</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>folder_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_get_all_sub_folders'>get_all_sub_folders</span>
+  <span class='id identifier rubyid_subfolders'>subfolders</span><span class='op'>=</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_children'>children</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_children'>children</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_children_folder'>children_folder</span><span class='op'>|</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_children_folder'>children_folder</span><span class='period'>.</span><span class='id identifier rubyid_children'>children</span>
+      <span class='id identifier rubyid_subfolders'>subfolders</span> <span class='op'>+=</span> <span class='id identifier rubyid_children_folder'>children_folder</span><span class='period'>.</span><span class='id identifier rubyid_get_all_sub_folders'>get_all_sub_folders</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_subfolders'>subfolders</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -471,9 +554,6 @@ indirectly<br> works recursively</p>
       <pre class="lines">
 
 
-69
-70
-71
 72
 73
 74
@@ -486,10 +566,12 @@ indirectly<br> works recursively</p>
 81
 82
 83
-84</pre>
+84
+85
+86</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 69</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 72</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_subs_assets_shares'>get_subs_assets_shares</span>
   <span class='id identifier rubyid_folders'>folders</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>parent_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -505,7 +587,6 @@ indirectly<br> works recursively</p>
   <span class='kw'>end</span>
   
   <span class='kw'>return</span> <span class='id identifier rubyid_childrens'>childrens</span>
-
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -747,6 +828,190 @@ related to the folder</p>
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="is_root?-instance_method">
+  
+    #<strong>is_root?</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>return all assets belonging to a folder (directly - ie its own assets, not
+the ones in its subfolders)<br> inutile non - folder.assets donne le même
+résultat def get_assets</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>return</span> <span class='const'><span class='object_link'><a href="Asset.html" title="Asset (class)">Asset</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>folder_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>end</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+65
+66
+67</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 65</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_is_root?'>is_root?</span>
+  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span> <span class='op'>==</span> <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="is_swarmed?-instance_method">
+  
+    #<strong>is_swarmed?</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>is the folder swarmed ?<br> has the folder been created or dropped in a
+directory belonging to another private user ?</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+114
+115
+116
+117
+118
+119</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 114</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_is_swarmed?'>is_swarmed?</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_ancestors'>ancestors</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='op'>|</span>
+    <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>!=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="is_swarmed_to_user?-instance_method">
+  
+    #<strong>is_swarmed_to_user?</strong>(user)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>is the folder swarmed to the specified user ?</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+123
+124
+125
+126
+127
+128
+129</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 123</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_is_swarmed_to_user?'>is_swarmed_to_user?</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_has_ownership?'>has_ownership?</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_ancestors'>ancestors</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='op'>|</span>
+    <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>==</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="shared?-instance_method">
   
     #<strong>shared?</strong>  &#x21d2; <tt>Boolean</tt> 
@@ -805,7 +1070,7 @@ related to the folder</p>
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 10 09:10:03 2018 by
+  Generated on Wed Sep 12 20:32:33 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

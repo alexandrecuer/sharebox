@@ -3,99 +3,108 @@
 # initialization of @assets, @folders and @shared_folders_by_others if we are in the user's root directory
 if @current_folder
   @assets = @current_folder.assets.order("uploaded_file_file_name desc")
-  @folders = @current_folder.children
+  @folders = @current_folder.children.order("name asc")
 else
-  @folders=current_user.folders.roots
+  @folders=current_user.folders.roots.order("name asc")
+  if current_user.folders.all.length>0
+    # we search for all folders owned by the user and swarmed in other users directories
+    values = "#{current_user.folders.ids}".gsub("[","(").gsub("]",")")
+    @swarmed_folders=Folder.where("user_id = #{current_user.id} and parent_id not in #{values}").order("name asc")
+    @folders= @swarmed_folders + @folders
+  end
   @assets=current_user.assets.where("folder_id is NULL").order("uploaded_file_file_name desc")
   @shared_folders_by_others=current_user.shared_folders_by_others
-end 
-
+end
 # test do we have to print something ?
-if @assets.length > 0 or @folders.length > 0 or (current_user.has_shared_folders_from_others? && !@current_folder)
 %>
-    <table class="list_folders">
+
+<% if @assets.length > 0 or @folders.length > 0 or (current_user.has_shared_folders_from_others? && !@current_folder) %>
+<table class="list_folders">
         <tr>
-	        <td colspan=3></td>
-            <td><%= MAIN["asset_or_folder_name"] %></td>
-            <td><%= MAIN["asset_or_folder_last_update"] %></td>
-            <td><%= MAIN["asset_or_folder_length"] %></td>
+	      <td colspan=3></td>
+          <td><%= MAIN["asset_or_folder_name"] %></td>
+          <td><%= MAIN["asset_or_folder_last_update"] %></td>
+          <td><%= MAIN["asset_or_folder_length"] %></td>
         </tr>
-<%
-  # we are in the user's root directory - if folders have been shared to the user, we have to display them
-  if !@current_folder
-    @shared_folders_by_others.order(name: :ASC).each do |f|
-%>
+    <% # we are in the user's root directory - if folders have been shared to the user, we have to display them %>
+    <% if !@current_folder %>
+      <% @shared_folders_by_others.order(name: :ASC).each do |f| %>
         <tr>
-            <td colspan=3><%= MAIN["owner"] %><br><%= User.find_by_id(f.user_id).email %></td>
-            <td><div class="folder_shared_by_others"><%= link_to f.name, folder_path(f) %></div></td>
-            <td><%= f.updated_at %></td>
-            <td></td>
+          <td colspan=3><%= MAIN["owner"] %><br><%= User.find_by_id(f.user_id).email %></td>
+          <td><div class="folder_shared_by_others"><%= link_to f.name, folder_path(f) %></div></td>
+          <td><%= f.updated_at %></td>
+          <td></td>
         </tr>
+      <% end %>
+    <% end %>
 <%
-    end
-  end
   # we have displayed all folders shared to the user
   # we loop on the folders
-  @folders.order(name: :ASC).each do |f|
+  @folders.each do |f|
+    if f.shared? && !f.has_satisfaction_answer?
+      showshares = " #{link_to MAIN["see_shares"], shared_folder_path(f)}".html_safe
+    elsif f.has_satisfaction_answer?
+      showshares = " #{link_to MAIN["see_answers"], shared_folder_path(f)}".html_safe
+    end
+    # owner case
     if current_user.has_ownership?(f)
-      if current_user.is_admin? || current_user.is_private?
-%>
-        <tr>
-            <td><%= link_to MAIN["delete_folder"], folder_path(f), method: :delete, data: {confirm: MAIN["are_yu_sure"] } %></td>
-            <td><%= link_to MAIN["share_folder"], new_share_on_folder_path(f) %></td>
-            <td><%= link_to MAIN["manage_folder"], edit_folder_path(f) %></td>
-            <td>
-                <div class="folder<%= f.shared? ? '_shared' : '' %>"><%= link_to f.name, folder_path(f) %>
-<%      if f.shared? && !f.has_satisfaction_answer? %>
-                <%= link_to MAIN["see_shares"], shared_folder_path(f) %>
-<%      elsif f.has_satisfaction_answer? %>
-                <%= link_to MAIN["see_answers"], shared_folder_path(f) %>
-<%      end %>
-                </div>
-            </td>
-<%
-      end
+      #if current_user.is_admin? || current_user.is_private?
+        delete_zone = "<td>#{link_to MAIN["delete_folder"], folder_path(f), method: :delete, data: {confirm: MAIN["are_yu_sure"]} }</td>".html_safe
+        newshare_zone = "<td>#{link_to MAIN["share_folder"], new_share_on_folder_path(f)}</td>".html_safe
+        manage_zone = "<td>#{link_to MAIN["manage_folder"], edit_folder_path(f)}</td>".html_safe
+        if f.shared?
+          start = "<div class='folder_shared'>".html_safe
+        else
+          start = "<div class='folder'>".html_safe
+        end
+        folderbutton = "#{link_to f.name, folder_path(f)}".html_safe
+        shares_zone = showshares
+        close = "</div>".html_safe
+        updatefield = "<td>#{f.updated_at}</td>".html_safe
+      #end
     elsif current_user.has_shared_access?(f)
-%>
-        <tr>
-            <td colspan=3><%= MAIN["owner"] %><br><%= User.find_by_id(f.user_id).email %></td>
-            <td><div class="folder_sub_shared_by_others"><%= link_to f.name, folder_path(f) %></div></td>
-<% 
+      ownerinfo = "<td colspan=3>#{MAIN["owner"]}<br>#{User.find_by_id(f.user_id).email}</td>".html_safe
+      start = "<div class='folder_sub_shared_by_others'>".html_safe
+      folderbutton = "#{link_to f.name, folder_path(f)}".html_safe
+      if f.is_swarmed_to_user?(current_user)
+        shares_zone = showshares
+      end
+      close = "</div>".html_safe
+      updatefield = "<td>#{f.updated_at}</td>".html_safe
     end
 %>
-            <td><%= f.updated_at %></td>
-            <td></td>
-        </tr>    
+        <tr>
+          <%= delete_zone %>
+          <%= newshare_zone %>
+          <%= manage_zone %>
+          <%= ownerinfo %>
+          <td><%= start %><%= folderbutton %><%= shares_zone %><%= close %></td>
+          <%= updatefield %>
+          <td></td>
+        </tr>          
+   
 <%
   # end of the folders'loop
   end
   # we loop on the assets
   @assets.each do |f|
+    fileclose = "</div>".html_safe
     if current_user.has_asset_ownership?(f)
-%>
-        <tr>
-            <td colspan="3"><%= link_to MAIN["delete_asset"], asset_path(f), method: :delete, data: {confirm: MAIN["are_yu_sure"] } %></td>
-            <td><div class="file"><%= link_to f.uploaded_file_file_name, download_url(f) %></div></td>
-<%
+      deletefile_zone = "#{link_to MAIN["delete_asset"], asset_path(f), method: :delete, data: {confirm: MAIN["are_yu_sure"] }}".html_safe
+      filestart = "<div class='file'>".html_safe
     else
+      fileowner = "#{MAIN["owner"]}<br>#{User.find_by_id(f.user_id).email}".html_safe
+      filestart = "<div class='file_shared'>".html_safe
+    end
 %>
         <tr>
-            <td colspan=3><%= MAIN["owner"] %><br><%= User.find_by_id(f.user_id).email %></td>
-            <td><div class="file_shared"><%= link_to f.uploaded_file_file_name, download_url(f) %></div></td>
-<%
-    end
-            # we could do f.uploaded_file_updated_at.strftime("%d/%m/%Y %l:%M%p") 
-            # but we have done it directly in /config/environnement so we don't have to repeat it in the views
-%>
-            <td><%= f.uploaded_file_updated_at %></td>
-            <td><%= number_to_human_size(f.uploaded_file_file_size, :precision => 2) %></td>
+          <td colspan="3"><%= deletefile_zone %><%= fileowner %></td>
+          <td><%= filestart %><%= link_to f.uploaded_file_file_name, download_url(f) %><%= fileclose %></td>
+          <td><%= f.uploaded_file_updated_at %></td>
+          <td><%= number_to_human_size(f.uploaded_file_file_size, :precision => 2) %></td>
         </tr>
-<%
-  # end of the assets'loop
-  end 
-%>
-    </table>
-<%
-# end of test do we have to print something ? 
-end 
-%>
+  <% # end of the assets'loop %>
+  <% end %>
+</table>
+<% # end of test do we have to print something ? %>
+<% end %>

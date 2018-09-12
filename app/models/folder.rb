@@ -59,8 +59,11 @@ class Folder < ApplicationRecord
 
   # return all assets belonging to a folder (directly - ie its own assets, not the ones in its subfolders)<br>
   # inutile non - folder.assets donne le même résultat
-  def get_assets
-    return Asset.where(folder_id: self.id)
+  #def get_assets
+  #  return Asset.where(folder_id: self.id)
+  #end
+  def is_root?
+    return true if self.parent_id == nil
   end
 
   ##
@@ -80,7 +83,18 @@ class Folder < ApplicationRecord
     end
     
     return childrens
-
+  end
+  
+  ##
+  # returns all subfolders related to the folder, directly or indirectly
+  def get_all_sub_folders
+    subfolders=self.children
+    self.children.each do |children_folder|
+      if children_folder.children
+        subfolders += children_folder.get_all_sub_folders
+      end
+    end
+    return subfolders
   end
   
   ##
@@ -92,6 +106,26 @@ class Folder < ApplicationRecord
         c.save
       end
     end
+  end
+  
+  ##
+  # is the folder swarmed ?<br>
+  # has the folder been created or dropped in a directory belonging to another private user ?
+  def is_swarmed?
+    self.ancestors.each do |a|
+      return true if a.user_id != self.user_id
+    end
+    return false
+  end
+  
+  ##
+  # is the folder swarmed to the specified user ?
+  def is_swarmed_to_user?(user)
+    return false if user.has_ownership?(self)
+    self.ancestors.each do |a|
+      return true if a.user_id == user.id
+    end
+    return false
   end
 
 end

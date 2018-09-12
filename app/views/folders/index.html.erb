@@ -1,46 +1,50 @@
 <%= render 'shared/nav' %>
-<% 
+
+<%
+# whole application tree exploration
 Folder.walk_tree do |folder, level|
-  name=folder.name.to_s+" (D" + folder.id.to_s + ")"
+  # the folder's names
+  name = "#{folder.name}(D#{folder.id})"
   # if the folder is shared, we have to display the share numbers after the file name
   if folder.shared?
-    name+=" { "
+    shares = "{<span class='shared_to'"
     SharedFolder.where(folder_id: folder.id).each do |p|
-      name += "->P"+p.id.to_s+">"+p.share_email.to_s+"("+p.share_user_id.to_s+") "
+      shares = "#{shares} ->P#{p.id}>#{p.share_email}(#{p.share_user_id}) "
     end
-    name+="}"
+    shares = "#{shares}</span>}".html_safe
   end
-  
+  # has the folder some files ?
+  if folder.has_assets?
+    assets_list = ""
+	folder.assets.each do |asset|
+      assets_list = "#{assets_list}<span class='asset_span' style='margin-left:#{level * 10}px'>#{asset.uploaded_file_file_name}</span><br>".html_safe
+    end
+  end
   # case 1 : we are in a subfolder
-  if level > 0 
-%> 
-        <%= link_to '|_'+"#{name}", folder_path(folder), :style =>'margin-left:'+(level * 10).to_s+'px;' %><br>
-<%
-    # we display all belonging files
-    if folder.has_assets?
-	  folder.get_assets.each do |asset|
-%>
-            <span class="asset_span" style="margin-left:<%= level * 10%>px"%><%= asset.uploaded_file_file_name %></span><br>
-<%
-      end
+  if level > 0
+    # we add some graphics to the name to make a visual link with the parent folder
+    name = "|_#{name}"
+    # is the folder belonging to another private user ?
+    if folder.is_swarmed?
+      user = User.find_by_id(folder.user_id)
+      swarmed_owner = "<span class='swarmed_to'>#{user.email}(#{user.id})</span>".html_safe
     end
   # case 2 : root folder, without any parent
   # we display the owner's mel
   else
-    # who's the folder's owner ?
     user = User.find_by_id(folder.user_id)
-%>
-  		<br><%= link_to "#{name}", folder_path(folder) %><%= " (" + user.email + ")" %><br>
-<%
-    if folder.has_assets?	
-      folder.get_assets.each do |asset|
-%> 
-            <span class="asset_span"><%= asset.uploaded_file_file_name %></span><br>
-<%
-      end
-    end
+    owner = "#{user.email}(#{user.id})"
   end
-end
+%> 
+  <%= link_to name, folder_path(folder), :style =>"margin-left:#{level * 10}px;" %>
+  <%= swarmed_owner %>
+  <%= owner %>
+  <%= shares %>
+  <br>
+  <%= assets_list %>
+<%
+#end of tree walking on Folder
+end 
 %>
 
 <h2><%= MAIN["folder_move"]%></h2>

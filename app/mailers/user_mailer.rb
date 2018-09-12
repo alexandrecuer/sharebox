@@ -62,7 +62,7 @@ class UserMailer < ApplicationMailer
         asset += index.to_s+") "+f.uploaded_file_file_name+"<br>"
       end
       if numberofclics
-        t1="Vous avez déjà visité ce répertoire contenant les fichiers suivants :"
+        t1="Vous avez déjà visité ce répertoire contenant les fichiers :"
         t4="#{t2}#{numberofclics.to_s}#{t3}"
       else
         t1="#{@shared_files.count} livrables vous ont été partagés :"

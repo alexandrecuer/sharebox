@@ -191,54 +191,91 @@ class FoldersController < ApplicationController
   end
 
   ##
-  # Move a folder<br>
-  # This feature is only for admins and is maily intended for annual archiving purposes
+  # Move a folder and/or change owner<br>
+  # changing owner should be understood by fixing a new user_id for the folder and all its related objets (assets, subfolders, subassets, shares)<br>
+  # This feature is only for admins<br>
+  # it is basically intended for annual archiving purposes but also to architecture collaborative views between private users working together
   def moove_folder
-    folder_to_moove = Folder.find_by_id(params[:id])
-
-    if folder_to_moove
-      if params[:parent_id].to_i == 0 
-        # we move the folder to the root
-        folder_to_moove.parent_id = nil
-        # if the parent_id is like 0.xxx, with xxx corresponding to an existing user id
-        # we give the folder to that user id xxx
-        if params[:parent_id].length > 1
-          new_user_id=params[:parent_id].to_s[2..-1].to_i
-          if !User.find_by_id(new_user_id)
-            flash[:notice]="pas d'utilisateur à l'id "+new_user_id.to_s
-          else
-            folder_to_moove.user_id=new_user_id
-            # children check
-            if folder_to_moove.has_sub_asset_or_share?
-              folder_to_moove.get_subs_assets_shares.each do |c|
-                c.user_id = new_user_id
-                c.save
-              end
-            end
-          end
-        end
-        folder_to_moove.save
-      else
-        if Folder.find_by_id(params[:parent_id])
-          # we move the folder to another one
-          folder_to_moove.parent_id = params[:parent_id]
-          folder_to_moove.user_id = Folder.find_by_id(params[:parent_id]).user_id
-          folder_to_moove.save
-          # children check
-          if folder_to_moove.has_sub_asset_or_share?
-            folder_to_moove.get_subs_assets_shares.each do |c|
-              c.user_id = folder_to_moove.user_id
-              c.save
-            end
-          end
-        else
-          flash[:notice] = (params[:parent_id]).to_s + FOLDERS_MSG["no_folder_on_that_id"]
-        end
-      end
+  
+    params[:id]=params[:id].to_i
+    if params[:id]==0
+      flash[:notice]="Préciser le numéro du répertoire à déplacer"
+      redirect_to folders_path
     else
-      flash[:notice] = (params[:id]).to_s + FOLDERS_MSG["no_folder_on_that_id"]
+      folder_to_moove = Folder.find_by_id(params[:id])
+      # we first check is the folder to move exists
+      if !folder_to_moove
+        flash[:notice] = "#{params[:id].to_i} #{FOLDERS_MSG["no_folder_on_that_id"]}<br>"
+        redirect_to folders_path
+      else
+        # changeowner = 0 we do not have to fix a new user_id
+        # movefolder = 0 we do not have to move the folder
+        # by default, these two variables are set to 1
+        changeowner = 1
+        movefolder = 1
+        position=params[:parent_id].to_s.index(".")
+        # case 1 : we mention a new owner 
+        # we must check if this destination_user_id exists
+        if position
+          destination_folder_id=params[:parent_id].to_s[0..position-1].to_i
+          destination_user_id=params[:parent_id].to_s[position+1..-1].to_i
+          if !User.find_by_id(destination_user_id)
+            flash[:notice]="#{flash[:notice]} Pas d'utilisateur ayant #{destination_user_id} comme id<br>"
+            changeowner = 0
+          end
+        # case 2 : we do not mention any new destination_user_id
+        else
+          destination_folder_id=params[:parent_id].to_i
+        end
+        destination_folder_id = nil if destination_folder_id == 0
+        
+        # is there an existing destination ?
+        destination = Folder.find_by_id(destination_folder_id)
+        if !destination && destination_folder_id != nil
+          flash[:notice] = "#{flash[:notice]} #{destination_folder_id} #{FOLDERS_MSG["no_folder_on_that_id"]}<br>"
+          movefolder = 0
+        end
+        
+        # if we've launched a move without specifying a new owner, we'll give children to the destination folder owner
+        # so we define destination_user_id equal to destination folder owner id 
+        if !destination_user_id
+          if destination
+            destination_user_id = destination.user_id
+          end
+        end
+        
+        # is the proposed 'new owner' already the owner of the folder_to_moove ?
+        if destination_user_id == folder_to_moove.user_id
+          flash[:notice]="#{flash[:notice]} le répertoire appartient déjà à l'utilisateur #{destination_user_id}<br>"
+          changeowner = 0
+        end
+        
+        # is the folder_to_moove already in the proposed destination folder ?
+        if folder_to_moove.parent_id == destination_folder_id
+          flash[:notice] = "#{flash[:notice]} le répertoire est déjà là où vous voulez l'envoyer<br>"
+          movefolder = 0
+        end
+        
+        # we realize a move
+        if movefolder == 1
+          folder_to_moove.parent_id = destination_folder_id
+          flash[:notice]="#{flash[:notice]} ACTION : répertoire déplacé<br>" if folder_to_moove.save
+        end
+        
+        # we change the owner
+        if changeowner == 1
+          if destination_user_id
+            folder_to_moove.user_id = destination_user_id
+            flash[:notice]="#{flash[:notice]} ACTION : changement de propriétaire pour l'objet<br>" if folder_to_moove.save
+            if folder_to_moove.children_give_to(destination_user_id)
+              flash[:notice]="#{flash[:notice]} ACTION : changement de propriétaire pour les enfants<br>"
+            end
+          end
+        end
+
+        redirect_to folders_path
+      end 
     end
-    redirect_to folders_path
   end
 
   ##
@@ -254,4 +291,5 @@ class FoldersController < ApplicationController
     def folder_params
       params.require(:folder).permit(:name, :parent_id, :poll_id, :case_number, :id)
     end
+    
 end
