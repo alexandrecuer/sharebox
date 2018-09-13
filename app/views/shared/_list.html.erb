@@ -5,12 +5,16 @@ if @current_folder
   @assets = @current_folder.assets.order("uploaded_file_file_name desc")
   @folders = @current_folder.children.order("name asc")
 else
-  @folders=current_user.folders.roots.order("name asc")
-  if current_user.folders.all.length>0
-    # we search for all folders owned by the user and swarmed in other users directories
-    values = "#{current_user.folders.ids}".gsub("[","(").gsub("]",")")
-    @swarmed_folders=Folder.where("user_id = #{current_user.id} and parent_id not in #{values}").order("name asc")
-    @folders= @swarmed_folders + @folders
+  if current_user.is_admin?
+    @folders=Folder.roots
+  else
+    @folders=current_user.folders.roots.order("name asc")
+    if current_user.folders.all.length>0
+      # we search for all folders owned by the user and swarmed in other users directories
+      values = "#{current_user.folders.ids}".gsub("[","(").gsub("]",")")
+      @swarmed_folders=Folder.where("user_id = #{current_user.id} and parent_id not in #{values}").order("name asc")
+      @folders= @swarmed_folders + @folders
+    end
   end
   @assets=current_user.assets.where("folder_id is NULL").order("uploaded_file_file_name desc")
   @shared_folders_by_others=current_user.shared_folders_by_others
@@ -66,7 +70,7 @@ end
       ownerinfo = "<td colspan=3>#{MAIN["owner"]}<br>#{User.find_by_id(f.user_id).email}</td>".html_safe
       start = "<div class='folder_sub_shared_by_others'>".html_safe
       folderbutton = "#{link_to f.name, folder_path(f)}".html_safe
-      if f.is_swarmed_to_user?(current_user)
+      if f.is_swarmed_to_user?(current_user) || current_user.is_admin?
         shares_zone = showshares
       end
       close = "</div>".html_safe

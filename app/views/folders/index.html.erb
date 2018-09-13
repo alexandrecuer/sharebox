@@ -16,7 +16,7 @@ Folder.walk_tree do |folder, level|
   # has the folder some files ?
   if folder.has_assets?
     assets_list = ""
-	folder.assets.each do |asset|
+    folder.assets.each do |asset|
       assets_list = "#{assets_list}<span class='asset_span' style='margin-left:#{level * 10}px'>#{asset.uploaded_file_file_name}</span><br>".html_safe
     end
   end
