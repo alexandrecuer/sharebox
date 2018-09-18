@@ -1,74 +1,98 @@
-<div style="height:40px">
-<!-- navigation menu -->
-        <%= current_user.email %>(<%= current_user.statut %>)
-        | <%= link_to MAIN["disconnect"], destroy_user_session_path, :method => :delete %>
-<% 
+<%
 if current_user.is_admin? || current_user.is_private?
   if @current_folder
     if current_user.has_ownership?(@current_folder)
-%>
-        | <%= link_to MAIN["upload_file"], new_sub_asset_path(@current_folder) %>
-        | <%= link_to MAIN["create_dir"], new_sub_folder_path(@current_folder) %>
-<%
+      uploadfile="#{link_to MAIN['upload_file'], new_sub_asset_path(@current_folder), class: 'dropdown-item'}".html_safe
+      createdir="#{link_to MAIN['create_dir'], new_sub_folder_path(@current_folder), class: 'dropdown-item'}".html_safe
+      createdirmodal= "#{link_to MAIN['create_dir'], new_sub_folder_path(@current_folder),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
     end
-  else %>
-        | <%= link_to MAIN["upload_file"], new_asset_path %>
-        | <%= link_to MAIN["create_dir"], new_folder_path %>
-<% 
+  else
+      uploadfile="#{link_to MAIN['upload_file'], new_asset_path, class: 'dropdown-item'}".html_safe
+      createdir="#{link_to MAIN['create_dir'], new_folder_path, class: 'dropdown-item'}".html_safe
+      createdirmodal= "#{link_to MAIN['create_dir'], new_folder_path,  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
   end
+end
+
+if current_user.is_admin?
+  line = "<div class='dropdown-divider'></div>".html_safe
+  managefolders="#{link_to MAIN['manage_folders'], folders_path, class: 'dropdown-item'}".html_safe
+  manageusers="#{link_to MAIN['users_list'], users_path, class: 'dropdown-item'}".html_safe
+  newpoll="#{link_to MAIN['new_poll'], new_poll_path, class: 'dropdown-item'}".html_safe
+  managepolls="<table>"
+  Poll.all.each do |poll|
+    managepolls="#{managepolls}<tr><td>#{link_to poll.name, edit_poll_path(poll), class: 'dropdown-item'}</td>"
+    managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item' do fa_icon 'eye' end}</td>"
+    managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item', method: :delete, data: {confirm: MAIN['are_yu_sure']} do fa_icon 'times' end}"
+    managepolls="#{managepolls}</td></tr>"
+  end
+  managepolls="#{managepolls}</table>".html_safe
+end
+
+# navigation menu
+%>
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <%= link_to MAIN["site_name"].html_safe, root_url , class: "navbar-brand" %>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= current_user.email %>(<%= current_user.statut %>)
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <%= link_to MAIN["disconnect"].html_safe, destroy_user_session_path, :method => :delete, class: "dropdown-item" %>
+          <%= uploadfile %>
+          <%#= createdir %>
+          <%= createdirmodal  %>
+          <%= line %>
+          <%= managefolders %>
+          <%= manageusers %>
+          <%= line %>
+          <%= newpoll %>
+          <%= managepolls %>      
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<%
+# bread crumbs navigation if any / fil d'ariane si présent
+if @current_folder
+  breadcrumb = "<nav aria-label='breadcrumb'><ol class='breadcrumb'>"
+  breadcrumb = "#{breadcrumb}<li class='breadcrumb-item'>#{link_to MAIN["root"], root_url}</li>"
+  @current_folder.ancestors.reverse.each do |folder|
+    if current_user.has_shared_access?(folder)
+      breadcrumb = "#{breadcrumb}<li class='breadcrumb-item'>#{link_to folder.name, folder_path(folder)}</li>"
+    else
+      breadcrumb = "#{breadcrumb}<li class='breadcrumb-item'><div class='dropdown'><a class='dropbtn'>#{folder.name}</a>"
+      breadcrumb = "#{breadcrumb}<div class='dropdown-content'>yu cannot browse this folder</div></div></li>"
+    end
+  end
+  breadcrumb = "#{breadcrumb}<li class='breadcrumb-item active' aria-current='page'>#{@current_folder.name}</li>"
+  breadcrumb = "#{breadcrumb}</ol></nav>".html_safe
 end
 %>
 
-<%
-  if current_user.is_admin? %>
-        <%= link_to MAIN["users_list"], users_path %>
-        <div class="dropdown">
-          <a class="dropbtn"><%= MAIN["manage_polls"] %></a>
-          <div class="dropdown-content">
-            <ul>
-              <%= link_to MAIN["new_poll"], new_poll_path %>
-<%
-    Poll.all.each do |poll|
-%>
-              <li>
-                <%= link_to poll.name, edit_poll_path(poll) %>
-                <%= link_to poll_path(poll) do %><i class="far fa-eye fa-2x"></i><% end %>
-                <%= link_to poll_path(poll), method: :delete, data: {confirm: MAIN["are_yu_sure"] } do %><i class="fas fa-times fa-2x"></i><% end %>
-              </li>
-<%
-    end
-%>
-            </ul>
-          </div>
-        </div>
-        <%= link_to MAIN["manage_folders"], folders_path %>
+<%= breadcrumb %>
+
+<% if notice %>
+  <div class="alert alert-success" role="alert"><p class="notice"><%= notice.html_safe %></p></div>
+<% end %>
+<% if alert %>
+  <p class="alert"><%= alert %></p>
 <% end %>
 
 
-<!-- bread crumbs navigation if any / fil d'ariane si présent-->
-<% 
-if @current_folder 
-%>
-        <br><%= link_to MAIN["root"], root_url %>
-<% 
-  @current_folder.ancestors.reverse.each do |folder|
-    if current_user.has_shared_access?(folder)
-%>
-        / <%= link_to folder.name, folder_path(folder) %>
-<%
-    else 
-%>
-        <div class="dropdown">
-        / <a class="dropbtn"><%= folder.name %></a>
-          <div class="dropdown-content">yu cannot browse this folder</div>
-        </div>
-<%
-    end
-  end 
-%>
-        / <%= @current_folder.name %> 
-<%
-end
-%>
 
+
+<!-- Modal -->
+<div class="modal fade" id="modalfolderwin" tabindex="-1" role="dialog" aria-labelledby="FolderWindow" aria-hidden="true">
+</div>
+
+<div class="modal fade" id="modalassetwin" tabindex="-1" role="dialog" aria-hidden="true">
 </div>

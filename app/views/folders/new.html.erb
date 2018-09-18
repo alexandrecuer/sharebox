@@ -1,5 +1,10 @@
 <%= render 'shared/nav' %>
 
-<%= render 'form' %>
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#modalfolderwin").html("<%= escape_javascript(render 'new') %>");
+  $('#modalfolderwin').modal();
+  });
+</script>
 
 <%= render 'shared/list' %>

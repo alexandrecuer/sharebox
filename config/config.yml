@@ -67,7 +67,7 @@ main:
   disconnect: "se déconnecter"
   upload_file: "charger un document"
   create_dir: "créer un répertoire"
-  users_list: "[Liste des utilisateurs]"
+  users_list: "[Gestion des utilisateurs]"
   manage_polls: "[Gestion des sondages]"
   new_poll: "NOUVEAU SONDAGE"
   manage_folders: "[Gestion des dossiers]"

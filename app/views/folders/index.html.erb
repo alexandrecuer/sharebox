@@ -1,17 +1,34 @@
 <%= render 'shared/nav' %>
 
+<h2><%= MAIN["folder_move"]%></h2>
+
+<%= form_tag(moove_folder_path, method: "patch") do %>
+<%= label_tag(:id, MAIN["folder_id_to_move"]) %>
+<%= text_field_tag(:id) %>
+
+<%= label_tag(:parent_id, MAIN["destination_folder_id"]) %>
+<%= text_field_tag(:parent_id) %>
+
+<%= submit_tag(MAIN["validate_move"]) %>
+<% end %>
+
 <%
 # whole application tree exploration
 Folder.walk_tree do |folder, level|
   # the folder's names
   name = "#{folder.name}(D#{folder.id})"
   # if the folder is shared, we have to display the share numbers after the file name
+  # we also display the poll_id
   if folder.shared?
     shares = "{<span class='shared_to'"
     SharedFolder.where(folder_id: folder.id).each do |p|
       shares = "#{shares} ->P#{p.id}>#{p.share_email}(#{p.share_user_id}) "
     end
-    shares = "#{shares}</span>}".html_safe
+    shares = "#{shares}</span>}"
+    if folder.poll_id
+      shares = "#{shares}<span class='polled'>{Sondage: #{folder.poll_id}}</span>"
+    end
+    shares = shares.html_safe
   end
   # has the folder some files ?
   if folder.has_assets?
@@ -24,7 +41,7 @@ Folder.walk_tree do |folder, level|
   if level > 0
     # we add some graphics to the name to make a visual link with the parent folder
     name = "|_#{name}"
-    # is the folder belonging to another private user ?
+    # has the folder been dropped in a foreign folder (ie belonging to another private user) ?
     if folder.is_swarmed?
       user = User.find_by_id(folder.user_id)
       swarmed_owner = "<span class='swarmed_to'>#{user.email}(#{user.id})</span>".html_safe
@@ -46,15 +63,3 @@ Folder.walk_tree do |folder, level|
 #end of tree walking on Folder
 end 
 %>
-
-<h2><%= MAIN["folder_move"]%></h2>
-
-<%= form_tag(moove_folder_path, method: "patch") do %>
-<%= label_tag(:id, MAIN["folder_id_to_move"]) %>
-<%= text_field_tag(:id) %>
-
-<%= label_tag(:parent_id, MAIN["destination_folder_id"]) %>
-<%= text_field_tag(:parent_id) %>
-
-<%= submit_tag(MAIN["validate_move"]) %>
-<% end %>

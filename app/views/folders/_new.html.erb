@@ -1,0 +1,34 @@
+<%
+# in all the cases, @folder exists, initialized by one of the new or edit methods of the folder controller
+#if we are editing/modifying an existing folder, @folder.id exists
+if @folder.id
+  folder=@folder
+  title="Gestion/modification du répertoire"
+end
+#if we have tried to create a subdir @folder.parent_id exists and @folder.id does not
+if !@folder.id && @folder.parent_id
+  folder=Folder.find_by_id(@folder.parent_id)
+  title="Création d'un sous-répertoire au sein du répertoire"
+end
+#we can generate the full title
+if folder
+  title="#{title} #{folder.name} (numéro #{folder.id})".html_safe
+else
+  title="Création d'un répertoire".html_safe
+end
+
+%>
+ 
+ <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="FolderWindow"><%= title %></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= render 'form' %>
+      </div>
+    </div>
+  </div>

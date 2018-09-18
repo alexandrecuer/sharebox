@@ -47,7 +47,7 @@ class FoldersController < ApplicationController
       redirect_to root_url
     end
   end
-
+  
   ##
   # show the 'new' form in order for the user to create a new directory<br>
   # Control if current user has got the ability to create a new folder : all public users will be rejected<br>
@@ -134,7 +134,7 @@ class FoldersController < ApplicationController
         if @folder.parent_id
           @current_folder = Folder.find_by_id(@folder.parent_id)
         end
-        render 'new'
+       render 'new'
       end
     end
   end

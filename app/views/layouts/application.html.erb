@@ -1,39 +1,24 @@
 <!DOCTYPE html>
 <html>
+
   <head>
-    <title>Cerema ShareBox</title>
+    <title>Cerema sharebox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link rel="shortcut icon" href="/images/divers/logo.jpg"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
   </head>
 
   <body>
-    <div class="image">
-      <table>
-        <tr>
-          <td>
-            <img src="https://www.cerema.fr/themes/custom/uas_base/images/logo-seul.svg" height=150 border=0>
-          </td>
-          <td>
-             <img src="https://www.cerema.fr/sites/default/files/styles/uas_wide_large/public/images/region/2017/cerema-centre-est.jpg" height=150 border=0>
-          </td>
-          <td>
-            <img src="https://www.cerema.fr/sites/default/files/styles/uas_wide_medium/public/images/technology/2017/cerema-plateforme-9-10.jpg" height=150 border=0>
-          </td>
-        </tr>
-    </table>
-    <h5>
-      <%= link_to MAIN["site_name"].html_safe, root_url, class: "rootlink" %>
-    </h5>
-  </div>
-
-  <p class="notice"><% if notice %><%= notice.html_safe %><% end %></p>
-  <p class="alert"><%= alert %></p>
   <%# if we want to use other flash message%> 
   <%#= flash[:error] %>
   <%= yield %>
   </body>
+  
 </html>

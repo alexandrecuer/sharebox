@@ -1,66 +1,136 @@
 <%= render 'shared/nav' %>
 
-<table class="recap">
-	<tr>
-		<th><%= MAIN["date"] %></th>
-		<th><%= MAIN["mail"] %></th>
-		<th><%= MAIN["case_or_product"] %></th>
-		<% @arrayclosed = @poll.get_names %>
-		<% @arrayclosed.each do |c| %>
-			<th><%= c %></th>
-		<% end %>
-	</tr>
+<script>
+$('.carousel').carousel()
+</script>
+<%
+# colmax represent the max number of elements on a single line
+# change it if you want more or less
+colmax=3
+nlines=@poll.closed_names_number/colmax
+modulo=@poll.closed_names_number%colmax
+@arrayclosed = @poll.get_closed_names
+@arrayopen = @poll.get_open_names
+modaltitle="Synthèse de l'enquête<br>#{@poll.name}".html_safe
+# TODO > code the jointure in rails mode - drop this raw SQL
+jointure=SharedFolder.joins("INNER JOIN folders ON folders.id = shared_folders.folder_id WHERE folders.poll_id = #{@poll.id}")
+%>
+<b>Enquête <%= @poll.name %></b><br>
+<%= Satisfaction.where(poll_id: @poll.id).length %> retour(s) satisfaction<br>
+<%= jointure.all.length %> questionnaire(s) envoyé(s)<br>
+<%= link_to 'Voir la synthèse', "#", :data => {:toggle => "modal", :target => "#ModalSynth"} %><br>
+<%= link_to MAIN["download_csv"], poll_path(@poll, format: "csv") %><br>
 
-	<% Satisfaction.where(poll_id: @poll.id).each do |s| %>
-
-	<tr>
-		<td><%= s.created_at %></td>
-		<td><%= @hash[s.user_id] %></td>
-		<td><%= Folder.find_by_id(s.folder_id).name + " - (" + s.case_number + ")" %></td>
-		<% for i in 1..@poll.closed_names_number %>
-			<td><%= s.public_send("closed#{i}") %></td>
-		<% end %>
-		<% for i in 1..@poll.open_names_number %>
-			<td><%= s.public_send("open#{i}") %></td>
-		<% end %>
-		<td>
-			<%= link_to 'X' ,satisfaction_path(s), method: :delete, data: {confirm: MAIN["are_yu_sure"] } %>
-		</td>
-	</tr>
-
-	<% end %>
-	<% tab = @poll.calc %>
-	<tr>
-		<th colspan="3"><%= MAIN["satisfaction_level_4"] %></th>
-		<% for i in 1..@poll.closed_names_number %>
-			<td><%= tab[i-1][4] %>%</td>
-		<% end %>
-	</tr>
-	<tr>
-		<th colspan="3"><%= MAIN["satisfaction_level_3"] %></th>
-		<% for i in 1..@poll.closed_names_number %>
-			<td><%= tab[i-1][3] %>%</td>
-		<% end %>
-	</tr>
-	<tr>
-		<th colspan="3"><%= MAIN["satisfaction_level_2"] %></th>
-		<% for i in 1..@poll.closed_names_number %>
-			<td><%= tab[i-1][2] %>%</td>
-		<% end %>
-	</tr>
-	<tr>
-		<th colspan="3"><%= MAIN["satisfaction_level_1"] %></th>
-		<% for i in 1..@poll.closed_names_number %>
-			<td><%= tab[i-1][1] %>%</td>
-		<% end %>
-	</tr>
-	<tr>
-		<th colspan="3"><%= MAIN["blank"] %></th>
-		<% for i in 1..@poll.closed_names_number %>
-			<td><%= tab[i-1][0] %>%</td>
-		<% end %>
-	</tr>
-
-</table>
-
-<%= link_to MAIN["download_csv"], poll_path(@poll, format: "csv") %>
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" id="ModalSynth" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><%= modaltitle %></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <% tab = @poll.calc %>
+        <table class="table table-striped table-bordered table-hover table-sm">
+          <tr>
+            <td></td>
+            <td><%= MAIN["satisfaction_level_4"] %></td>
+            <td><%= MAIN["satisfaction_level_3"] %></td>
+            <td><%= MAIN["satisfaction_level_2"] %></td>
+            <td><%= MAIN["satisfaction_level_1"] %></td>
+            <td><%= MAIN["blank"] %></td>
+          </tr>
+          <% @arrayclosed.each_with_index do |c,index| %>
+          <tr>
+            <th><%= c %></th>
+            <td><%= tab[index-1][4] %>%</td>
+            <td><%= tab[index-1][3] %>%</td>
+            <td><%= tab[index-1][2] %>%</td>
+            <td><%= tab[index-1][1] %>%</td>
+            <td><%= tab[index-1][0] %>%</td>
+          </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<% if Satisfaction.where(poll_id: @poll.id).length > 0 %>
+<div id="carousel" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <%
+    # loop on all the satisfactions recorded on the poll
+    Satisfaction.where(poll_id: @poll.id).each_with_index do |s,index| 
+      line1="Retour satisfaction du client #{@hash[s.user_id]}"
+      line1="#{line1} #{link_to satisfaction_path(s), method: :delete, data: {confirm: MAIN["are_yu_sure"] } do fa_icon 'times' end}".html_safe
+      line2="Enregistré le #{s.created_at}<br>".html_safe
+      if folder=Folder.find_by_id(s.folder_id)
+        line3="Dossier : #{folder.name}".html_safe
+        if folder.case_number != ""
+          line4="(affaire #{folder.case_number})".html_safe
+        end
+      end
+      divclass="carousel-item"
+      divclass="#{divclass} active" if index == 0
+      opentext=""
+      for i in 1..@poll.open_names_number
+        openanswer = s.public_send("open#{i}")
+        if openanswer != ""
+          opentext = "#{opentext}<br><i>#{@arrayopen[i-1]}</i><br>#{openanswer}<br>"
+        end
+      end
+      opentext = opentext.html_safe
+    %>
+      <div class="<%= divclass %>">
+        <table width="60%" align="center">
+          <tr><th><%= line1 %></th></tr>
+          <tr><td><i><%= line2 %></i></td></tr>
+          <tr><th><%= line3 %> <%= line4 %></i></th></tr>
+          <tr>
+            <td>
+            <% for n in 0..nlines-1 %>
+                <% for j in colmax*n+1..colmax*(n+1) %>
+                  <% doabreak=nil %>
+                  <% if s.public_send("closed#{j}") %>
+                    <% doabreak = 1 %>
+                    <% if s.public_send("closed#{j}")==4 %><button type="button" class="btn btn-success">
+                    <% elsif s.public_send("closed#{j}")==3 %><button type="button" class="btn btn-info">
+                    <% elsif s.public_send("closed#{j}")==2 %><button type="button" class="btn btn-warning">
+                    <% elsif s.public_send("closed#{j}")==1 %><button type="button" class="btn btn-danger">
+                    <% end %>
+                    <%= @arrayclosed[j-1] %></button>
+                  <% end %>
+                <% end %>
+                <% if doabreak %><br><% end %>
+            <% end %>
+            <% for j in colmax*nlines+1..@poll.closed_names_number %>
+                <% if s.public_send("closed#{j}") %>
+                    <% if s.public_send("closed#{j}")==4 %><button type="button" class="btn btn-success">
+                    <% elsif s.public_send("closed#{j}")==3 %><button type="button" class="btn btn-info">
+                    <% elsif s.public_send("closed#{j}")==2 %><button type="button" class="btn btn-warning">
+                    <% elsif s.public_send("closed#{j}")==1 %><button type="button" class="btn btn-danger">
+                    <% end %>
+                    <%= @arrayclosed[j-1] %></button>
+                <% end %>
+            <% end %>
+            </td>
+	      </tr>
+          <tr>
+            <td>
+              <%= opentext %>
+            </td>
+          </tr>
+        </table>
+      </div>
+    <% end %>
+  </div>
+  <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+    <i class="fa fa-chevron-left" style="color:black"></i>
+  </a>
+  <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+    <i class="fa fa-chevron-right" style="color:black"></i>
+  </a>
+</div>
+<% end %>
