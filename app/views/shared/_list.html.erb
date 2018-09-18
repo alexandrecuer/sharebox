@@ -29,6 +29,7 @@ end
         <tr>
 	      <th></th>
           <th><%= MAIN["asset_or_folder_name"] %></th>
+          <th></th>
           <th><%= MAIN["asset_or_folder_last_update"] %></th>
           <th><%= MAIN["asset_or_folder_length"] %></th>
         </tr>
@@ -41,6 +42,7 @@ end
         <tr>
           <th><p class='text-left'><%= MAIN["owner"] %><br><%= prenom_nom %></p></th>
           <th><div class='folder_shared_by_others'><%= link_to f.name, folder_path(f) %></div></th>
+          <th></th>
           <th><%= f.updated_at %></th>
           <th></th>
         </tr>
@@ -101,8 +103,10 @@ end
           <th>
             <%= start %>
             <%= folderbutton %>
-            <%= shares_zone %>
             <%= close %>
+          </th>
+          <th>
+            <%= shares_zone %>
           </th>
           <th><%= updatefield %></th>
           <th></th>
@@ -126,15 +130,17 @@ end
         <tr>
           <th>
             <% if fileowner %>
-              <p class='text-left'><%= fileowner %></p></th>
+              <p class='text-left'><%= fileowner %></p>
             <% else %>
-              <p class='text-right'><%= deletefile_zone %></p></th>
+              <p class='text-right'><%= deletefile_zone %></p>
             <% end %>
+          </th>
           <th>
             <%= filestart %>
             <%= link_to f.uploaded_file_file_name, download_url(f) %>
             <%= fileclose %>
           </th>
+          <th></th>
           <th><%= f.uploaded_file_updated_at %></th>
           <th><%= number_to_human_size(f.uploaded_file_file_size, :precision => 2) %></th>
         </tr>
