@@ -93,6 +93,7 @@ end
               <p class='text-left'><%= ownerinfo %></p>
             <% else %>
               <p class='text-right'>
+                <%= shares_zone %>&nbsp;
                 <%= delete_zone %>&nbsp;
                 <%= newshare_zone %>&nbsp;
                 <%#= manage_zone %>
@@ -105,8 +106,7 @@ end
             <%= folderbutton %>
             <%= close %>
           </th>
-          <th>
-            <%= shares_zone %>
+          <th>  
           </th>
           <th><%= updatefield %></th>
           <th></th>
