@@ -41,7 +41,7 @@ end
         <% prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1] %>
         <tr>
           <th><p class='text-left'><%= MAIN["owner"] %><br><%= prenom_nom %></p></th>
-          <th><div class='folder_shared_by_others'><%= link_to f.name, folder_path(f) %></div></th>
+          <th><div class='folder_shared_by_others'><%= link_to f.name, folder_path(f), class: 'btn btn-link' %></div></th>
           <th></th>
           <th><%= f.updated_at %></th>
           <th></th>
@@ -70,7 +70,7 @@ end
         else
           start = "<div class='folder'>".html_safe
         end
-        folderbutton = "#{link_to f.name, folder_path(f)}".html_safe
+        folderbutton = "#{link_to f.name, folder_path(f), class: 'btn btn-link'}".html_safe
         shares_zone = showshares
         close = "</div>".html_safe
         updatefield = "#{f.updated_at}".html_safe
@@ -79,7 +79,7 @@ end
       prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1]
       ownerinfo = "#{MAIN['owner']}<br>#{prenom_nom}".html_safe
       start = "<div class='folder_sub_shared_by_others'>".html_safe
-      folderbutton = "#{link_to f.name, folder_path(f)}".html_safe
+      folderbutton = "#{link_to f.name, folder_path(f), class: 'btn btn-link'}".html_safe
       if f.is_swarmed_to_user?(current_user) || current_user.is_admin?
         shares_zone = showshares
       end
