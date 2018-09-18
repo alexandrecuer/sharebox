@@ -51,9 +51,9 @@ end
   # we loop on the folders
   @folders.each do |f|
     if f.shared? && !f.has_satisfaction_answer?
-      showshares = " #{link_to MAIN['see_shares'], shared_folder_path(f)}".html_safe
+      showshares = " #{link_to MAIN['see_shares'], shared_folder_path(f), class: 'btn btn-outline-warning btn-sm'}".html_safe
     elsif f.has_satisfaction_answer?
-      showshares = " #{link_to MAIN['see_answers'], shared_folder_path(f)}".html_safe
+      showshares = " #{link_to MAIN['see_answers'], shared_folder_path(f), class: 'btn btn-outline-warning btn-sm'}".html_safe
     end
     # owner case
     if current_user.has_ownership?(f)
