@@ -37,8 +37,9 @@ end
     <% # we are in the user's root directory - if folders have been shared to the user, we have to display them %>
     <% if !@current_folder %>
       <% @shared_folders_by_others.order(name: :ASC).each do |f| %>
+        <% prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1] %>
         <tr>
-          <th><p class='text-left'><%= MAIN["owner"] %><br><%= User.find_by_id(f.user_id).email %></p></th>
+          <th><p class='text-left'><%= MAIN["owner"] %><br><%= prenom_nom %></p></th>
           <th><div class='folder_shared_by_others'><%= link_to f.name, folder_path(f) %></div></th>
           <th><%= f.updated_at %></th>
           <th></th>
@@ -117,7 +118,8 @@ end
       deletefile_zone = "#{link_to MAIN['delete_asset'], asset_path(f), method: :delete, data: {confirm: MAIN['are_yu_sure'] }, class: 'btn btn-outline-danger btn-sm'}".html_safe
       filestart = "<div class='file'>".html_safe
     else
-      fileowner = "#{MAIN["owner"]}<br>#{User.find_by_id(f.user_id).email}".html_safe
+      prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1]
+      fileowner = "#{MAIN["owner"]}<br>#{prenom_nom}".html_safe
       filestart = "<div class='file_shared'>".html_safe
     end
 %>
@@ -143,4 +145,3 @@ end
 </div>
 <% # end of test do we have to print something ? %>
 <% end %>
-
