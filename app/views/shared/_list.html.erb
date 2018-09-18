@@ -23,6 +23,7 @@ end
 %>
 
 <% if @assets.length > 0 or @folders.length > 0 or (current_user.has_shared_folders_from_others? && !@current_folder) %>
+<div class="table-responsive-sm">
 <table class="table table-hover table-sm">
     <thead>
         <tr>
@@ -56,11 +57,11 @@ end
     # owner case
     if current_user.has_ownership?(f)
       #if current_user.is_admin? || current_user.is_private?
-        delete_zone = "#{link_to MAIN['delete_folder'], folder_path(f), method: :delete, data: {confirm: MAIN['are_yu_sure']}, class: 'btn btn-outline-danger'}"
+        delete_zone = "#{link_to MAIN['delete_folder'], folder_path(f), method: :delete, data: {confirm: MAIN['are_yu_sure']}, class: 'btn btn-outline-danger btn-sm'}"
         delete_zone = "#{delete_zone}".html_safe
-        newshare_zone = "#{link_to MAIN['share_folder'], new_share_on_folder_path(f), class: 'btn btn-outline-primary'}".html_safe
-        manage_zone = "#{link_to MAIN['manage_folder'], edit_folder_path(f), class: 'btn btn-outline-success'}".html_safe
-        manage_zone_modal= "#{link_to MAIN['manage_folder'], edit_folder_path(f),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'btn btn-outline-success'} }".html_safe
+        newshare_zone = "#{link_to MAIN['share_folder'], new_share_on_folder_path(f), class: 'btn btn-outline-primary btn-sm'}".html_safe
+        manage_zone = "#{link_to MAIN['manage_folder'], edit_folder_path(f), class: 'btn btn-outline-success btn-sm'}".html_safe
+        manage_zone_modal= "#{link_to MAIN['manage_folder'], edit_folder_path(f),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'btn btn-outline-success btn-sm'} }".html_safe
         if f.shared?
           start = "<div class='folder_shared'>".html_safe
         else
@@ -112,7 +113,7 @@ end
   @assets.each do |f|
     fileclose = "</div>".html_safe
     if current_user.has_asset_ownership?(f)
-      deletefile_zone = "#{link_to MAIN['delete_asset'], asset_path(f), method: :delete, data: {confirm: MAIN['are_yu_sure'] }, class: 'btn btn-outline-danger'}".html_safe
+      deletefile_zone = "#{link_to MAIN['delete_asset'], asset_path(f), method: :delete, data: {confirm: MAIN['are_yu_sure'] }, class: 'btn btn-outline-danger btn-sm'}".html_safe
       filestart = "<div class='file'>".html_safe
     else
       fileowner = "#{MAIN["owner"]}<br>#{User.find_by_id(f.user_id).email}".html_safe
@@ -138,6 +139,7 @@ end
   <% end %>
     </tbody>
 </table>
+</div>
 <% # end of test do we have to print something ? %>
 <% end %>
 
