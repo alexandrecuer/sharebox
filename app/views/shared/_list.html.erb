@@ -73,7 +73,8 @@ end
         updatefield = "#{f.updated_at}".html_safe
       #end
     elsif current_user.has_shared_access?(f)
-      ownerinfo = "#{MAIN['owner']}<br>#{User.find_by_id(f.user_id).email}".html_safe
+      prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1]
+      ownerinfo = "#{MAIN['owner']}<br>#{prenom_nom}".html_safe
       start = "<div class='folder_sub_shared_by_others'>".html_safe
       folderbutton = "#{link_to f.name, folder_path(f)}".html_safe
       if f.is_swarmed_to_user?(current_user) || current_user.is_admin?
