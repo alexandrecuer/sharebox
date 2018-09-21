@@ -1,3 +1,4 @@
+
 <%= form_for @satisfaction do |f| %>
 	
     <% if @satisfaction.new_record? %>
@@ -15,30 +16,36 @@
     <% @arrayclosed.each do |c| %>
 
         <% i = @arrayclosed.index(c) + 1 %>
-
-        <div class="stars">
-        <div class="closed_text"><%= c %></div>
-        <% a = "closed" + i.to_s %>
-
-            <%= f.radio_button a.to_sym, '4', disabled: !@satisfaction.new_record? %><label class="star-4" for="satisfaction_closed<%= i %>_4"></label>
-            <%= f.radio_button a.to_sym, '3', disabled: !@satisfaction.new_record? %><label class="star-3" for="satisfaction_closed<%= i %>_3"></label>
-            <%= f.radio_button a.to_sym, '2', disabled: !@satisfaction.new_record? %><label class="star-2" for="satisfaction_closed<%= i %>_2"></label>
-            <%= f.radio_button a.to_sym, '1', disabled: !@satisfaction.new_record? %><label class="star-1" for="satisfaction_closed<%= i %>_1"></label>
-
-        </div><br>
+        <div class="d-flex align-items-center justify-content-start bd-highlight mb-3">
+            <div class="p-2 bd-highlight"><%= c %></div>
+            <div class="p-2 bd-highlight">
+                <div class="stars">
+                  <% a = "closed" + i.to_s %>
+                  <%= f.radio_button a.to_sym, '4', disabled: !@satisfaction.new_record? %>
+                      <label class="star-4" for="satisfaction_closed<%= i %>_4"></label>
+                  <%= f.radio_button a.to_sym, '3', disabled: !@satisfaction.new_record? %>
+                      <label class="star-3" for="satisfaction_closed<%= i %>_3"></label>
+                  <%= f.radio_button a.to_sym, '2', disabled: !@satisfaction.new_record? %>
+                      <label class="star-2" for="satisfaction_closed<%= i %>_2"></label>
+                  <%= f.radio_button a.to_sym, '1', disabled: !@satisfaction.new_record? %>
+                      <label class="star-1" for="satisfaction_closed<%= i %>_1"></label>
+                </div>
+            </div>
+        </div>
 
     <% end %>
 
     <% @arrayopen = @poll.get_open_names %>
 
     <% @arrayopen.each do |o| %>
-        <div class="open"><div class="open_text"><%= o %></div>
-
-        <% i = @arrayopen.index(o) + 1 %>
-        <% a = "open" + i.to_s %>
-        <%= f.text_area a.to_sym, size: "50x5", disabled: !@satisfaction.new_record? %><br>
+        <div class="d-flex align-items-center justify-content-start bd-highlight mb-3">
+            <div class="p-2 bd-highlight"><%= o %></div>
+            <div class="p-2 bd-highlight">
+               <% i = @arrayopen.index(o) + 1 %>
+               <% a = "open" + i.to_s %>
+               <%= f.text_area a.to_sym, size: "50x5", disabled: !@satisfaction.new_record?, class: "form-control" %>
+            </div>
         </div>
-
     <% end %>
 
     <% @satisfaction.folder_id = @current_folder.id %> 
