@@ -40,7 +40,12 @@ end
       <% @shared_folders_by_others.order(name: :ASC).each do |f| %>
         <% prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1] %>
         <tr>
-          <th><p class='text-left'><%= MAIN["owner"] %><br><%= prenom_nom %></p></th>
+          <th>
+            <div class="d-flex align-items-center flex-row-reverse bd-highlight mb-3">
+              <div class="p-1"><%= MAIN["owner"] %><%= prenom_nom %></div>
+              <div class="p-1"></div>
+            </div>
+          </th>
           <th><div class='folder_shared_by_others'><%= link_to f.name, folder_path(f), class: 'btn btn-link' %></div></th>
           <th></th>
           <th><%= f.updated_at %></th>
