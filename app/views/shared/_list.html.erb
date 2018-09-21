@@ -77,7 +77,7 @@ end
       #end
     elsif current_user.has_shared_access?(f)
       prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1]
-      ownerinfo = "#{MAIN['owner']}<br>#{prenom_nom}".html_safe
+      ownerinfo = "#{MAIN['owner']}#{prenom_nom}".html_safe
       start = "<div class='folder_sub_shared_by_others'>".html_safe
       folderbutton = "#{link_to f.name, folder_path(f), class: 'btn btn-link'}".html_safe
       if f.is_swarmed_to_user?(current_user) || current_user.is_admin?
@@ -89,17 +89,16 @@ end
 %>
         <tr>
           <th>
-            <% if ownerinfo %>
-              <p class='text-left'><%= ownerinfo %></p>
-            <% else %>
-              <p class='text-right'>
+            <div class="d-flex align-items-center flex-row-reverse bd-highlight mb-3">
+              <div class="p-1"><%= ownerinfo %></div>
+              <div class="p-1">
                 <%= shares_zone %>&nbsp;
                 <%= delete_zone %>&nbsp;
                 <%= newshare_zone %>&nbsp;
                 <%#= manage_zone %>
                 <%= manage_zone_modal %>
-              </p>
-            <% end %>
+              </div>
+            </div>
           </th>
           <th>
             <%= start %>
@@ -123,17 +122,18 @@ end
       filestart = "<div class='file'>".html_safe
     else
       prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1]
-      fileowner = "#{MAIN["owner"]}<br>#{prenom_nom}".html_safe
+      fileowner = "#{MAIN["owner"]}#{prenom_nom}".html_safe
       filestart = "<div class='file_shared'>".html_safe
     end
 %>
         <tr>
           <th>
-            <% if fileowner %>
-              <p class='text-left'><%= fileowner %></p>
-            <% else %>
-              <p class='text-right'><%= deletefile_zone %></p>
-            <% end %>
+            <div class="d-flex align-items-center flex-row-reverse bd-highlight mb-3">
+              <div class="p-1"><%= fileowner %></div>
+              <div class="p-1">
+                  <%= deletefile_zone %>    
+              </div>
+            </div>
           </th>
           <th>
             <%= filestart %>
