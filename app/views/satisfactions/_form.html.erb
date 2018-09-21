@@ -18,7 +18,7 @@
         <% i = @arrayclosed.index(c) + 1 %>
         <div class="d-flex align-items-center justify-content-start bd-highlight mb-3">
             <div class="p-2 bd-highlight"><%= c %></div>
-            <div class="p-2 bd-highlight">
+            <div class="p-2 w-100 bd-highlight">
                 <div class="stars">
                   <% a = "closed" + i.to_s %>
                   <%= f.radio_button a.to_sym, '4', disabled: !@satisfaction.new_record? %>
