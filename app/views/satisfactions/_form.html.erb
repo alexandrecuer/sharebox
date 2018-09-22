@@ -11,29 +11,36 @@
         <% end %>
     <% end %>
 
+<div class="container">
+    <div class="row align-items-center justify-content-center">
     <% @arrayclosed = @poll.get_closed_names %>
-
     <% @arrayclosed.each do |c| %>
 
         <% i = @arrayclosed.index(c) + 1 %>
-        <div class="d-flex align-items-center justify-content-start bd-highlight mb-3">
-            <div class="p-2 bd-highlight"><%= c %></div>
-            <div class="p-2 w-100 bd-highlight">
+            
+              <div class="col-6 col-md-4">
                 <div class="stars">
                   <% a = "closed" + i.to_s %>
+
                   <%= f.radio_button a.to_sym, '4', disabled: !@satisfaction.new_record? %>
                       <label class="star-4" for="satisfaction_closed<%= i %>_4"></label>
+
                   <%= f.radio_button a.to_sym, '3', disabled: !@satisfaction.new_record? %>
                       <label class="star-3" for="satisfaction_closed<%= i %>_3"></label>
+                      
                   <%= f.radio_button a.to_sym, '2', disabled: !@satisfaction.new_record? %>
                       <label class="star-2" for="satisfaction_closed<%= i %>_2"></label>
+
                   <%= f.radio_button a.to_sym, '1', disabled: !@satisfaction.new_record? %>
                       <label class="star-1" for="satisfaction_closed<%= i %>_1"></label>
-                </div>
-            </div>
-        </div>
+                </div>  
+              </div>
+              <div class="col-6 col-md-4"><%= c %></div>
+              <div class="w-100"></div>
 
     <% end %>
+    </div>
+</div>
 
     <% @arrayopen = @poll.get_open_names %>
 

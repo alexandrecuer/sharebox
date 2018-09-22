@@ -9,13 +9,16 @@
 <% end %>
 
 <%= form_for @folder do |f| %>
+
     <div class="form-group">
-      <%= f.text_field :name, placeholder: MAIN["dir_name"], size: 50 %>
+      <%= f.text_field :name, placeholder: MAIN["dir_name"], class: 'form-control' %>
     </div>
+    
     <div class="form-group">
-	  <%= f.text_field :case_number, placeholder: MAIN["case_number"], size: 20 %><br>
+	  <%= f.text_field :case_number, placeholder: MAIN["case_number"], class: 'form-control' %><br>
     <%= f.hidden_field :parent_id %>
     </div>
+    
     <% if @folder.shared? %>
       <div class="form-group">
     	<% polls_array = Poll.all.map { |poll| [poll.name, poll.id] } %>
@@ -30,10 +33,9 @@
     <% end %>
 
     <% if @folder.new_record? %>
-        <%= f.submit MAIN["create_folder"] %>
+        <%= f.submit MAIN["create_folder"], class: 'btn' %>
     <% else %>
-        <%= f.submit MAIN["update_folder"] %>
+        <%= f.submit MAIN["update_folder"], class: 'btn' %>
     <% end %>
-
 
 <% end %>

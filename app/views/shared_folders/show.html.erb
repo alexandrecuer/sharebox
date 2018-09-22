@@ -1,68 +1,89 @@
 <%= render 'shared/nav' %>
 
+<% missing_answer=0 %>
 <%= form_tag(shared_folder_path, method: "delete") do %> 
-  <table class="recap">
-    <tr>
-      <th><%= MAIN["user_id"] %></th>
-      <th><%= MAIN["mail"] %></th>
-      <th><%= MAIN["status"] %></th>
-    </tr>
+  <table class="table table-hover table-sm">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Liste des partages et/ou réponses</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
     
-<% 
-  # we browse all the shares created on the folder
-  @shared_folders.each do |f|
-    user = User.find_by_email(f.share_email)
-    if user
-      id = user.id
-      status = user.statut
-      if user.has_completed_satisfaction?(@current_folder)
-        satisfaction = @satisfactions.find_by_user_id(user.id)
+    <% 
+    # we browse all the shares created on the folder
+    @shared_folders.each do |f|
+      user = User.find_by_email(f.share_email)
+      if user
+        id = user.id
+        status = user.statut
+        if user.has_completed_satisfaction?(@current_folder)
+          satisfaction = @satisfactions.find_by_user_id(user.id)
+        end
+        if f.message?
+          numberofclics=f.message.to_i/2
+          noc_message="("+numberofclics.to_s+" clic".pluralize(numberofclics)+")"      
+        end
       end
-      if f.message?
-        numberofclics=f.message.to_i/2
-        noc_message="("+numberofclics.to_s+" clic".pluralize(numberofclics)+")"      
-      end
-    end
-%>
-    <tr>
-      <td><%= id %></td>
-      <td>
-        <% if user && user.has_completed_satisfaction?(@current_folder) %>
-          <a class="display_anchor" onclick="display(<%= satisfaction.id %>)"><%= f.share_email %></a>
-        <% else %>
-          <%= f.share_email %>
-        <% end %>
-        <%= noc_message %>
-      </td>
-      <td><%= status %></td>
-      <td>
-        <% if !user || !user.has_completed_satisfaction?(@current_folder) %>
-          <%= link_to '<i class="fas fa-envelope fa-2x"></i>'.html_safe, shared_folder_path(f.folder_id, :share_email => f.share_email) %>
-        <% end %>
-      </td>
-      <td>
-        <% if !user || !user.has_completed_satisfaction?(@current_folder) %>
-          <%= check_box_tag 'ids[]', f.id, false %>
-        <% end %>
-      </td>
-    </tr>
-<%
-  ##
-  # end of loop on @shared_folders
-  end
-%>
+    %>
+      <tr>
+        <td class="align-middle">
+          <% if !user || !user.has_completed_satisfaction?(@current_folder) %>
+            <% missing_answer=1 %>
+            <div class="form-group form-check">
+              <%= check_box_tag 'ids[]', f.id, false, class: 'form-check-input' %>
+            </div>
+          <% end %>
+        </td>
+        <td class="align-middle">
+          Partage <%= f.id %> - <%= f.share_email %> (<%= id %>-<%= status %>) <%= noc_message %>
+        </td>
+        <td class="align-middle">
+          <% if user && user.has_completed_satisfaction?(@current_folder) %>
+            <a data-toggle="modal" data-target="#SatisModal<%= satisfaction.id %>" class="dropdown-item">
+              <i class="fa fa-eye fa-2x"></i>
+            </a>
+          <% end %>
+          <% if !user || !user.has_completed_satisfaction?(@current_folder) %>
+            <%= link_to shared_folder_path(f.folder_id, :share_email => f.share_email), class: 'dropdown-item' do fa_icon 'envelope 2x' end %>
+          <% end %>       
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
   </table>
-<%= submit_tag(MAIN["delete_share"]) %>
-<% 
-end 
-%>
+  
+  <% if missing_answer == 1 %>
+    <%= submit_tag MAIN["delete_share"], class: 'btn' %>
+  <% end %>
+
+  <% end %>
+
 
 <% @satisfactions.each do |s| %> 
-    <div id="form_<%=s.id%>" style="display: none">
-        <% 
-        @satisfaction = s
-        @poll = Poll.find_by_id(@satisfaction.poll_id)
-        %>
-        <%= render 'satisfactions/form' %>
+    <div class="modal fade bd-modal-lg" id="SatisModal<%= s.id %>" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              Fiche de satisfaction <%= s.id %><br>
+              Dossier <%= @current_folder.name%>
+              <% if @current_folder.case_number != "" %>
+                <%= @current_folder.case_number %>
+              <% end %>
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          <% @satisfaction = s %>
+          <% @poll = Poll.find_by_id(@satisfaction.poll_id) %>
+          <%= render 'satisfactions/form' %>
+          </div>
+        </div>
+      </div>
     </div>
 <% end %>
