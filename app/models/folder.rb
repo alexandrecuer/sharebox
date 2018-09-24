@@ -127,5 +127,30 @@ class Folder < ApplicationRecord
     end
     return false
   end
+  
+  ##
+  # is there a subfolder swarmed by another user ?
+  def has_sub_swarmed?
+    self.get_all_sub_folders.each do |s|
+      return true if s.user_id != self.user_id
+    end
+    return false
+  end
+  
+  ##
+  # is the folder explicitely shared to the user ?<br>
+  # by a share in the shared_folders table
+  def is_shared_to_user?(user)
+    return true if SharedFolder.find_by_share_user_id_and_folder_id(user.id, self.id)
+  end
 
+  ##
+  # is there a subfolder swarmed by user given in argument ?
+  def has_sub_swarmed_to_user?(user)
+    return false if user.has_ownership?(self)
+    self.get_all_sub_folders.each do |s|
+      return true if s.user_id == user.id
+    end
+    return false  
+  end
 end

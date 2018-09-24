@@ -17,6 +17,7 @@
 Folder.walk_tree do |folder, level|
   # the folder's names
   name = "#{folder.name}(D#{folder.id})"
+  name = "#{name} (#{folder.case_number})" if folder.case_number !=""
   # if the folder is shared, we have to display the share numbers after the file name
   # we also display the poll_id
   if folder.shared?

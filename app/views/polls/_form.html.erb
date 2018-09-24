@@ -1,21 +1,21 @@
 <%= form_for @poll do |poll| %>
 
     <p><%= MAIN["poll_title"] %></p>
-    <%= poll.text_area(:name, size: "100x1") %><br>
+    <%= poll.text_area(:name, class: "form-control") %><br>
 
     <p><%= MAIN["poll_description"] %></p>
-    <%= poll.text_area(:description, size: "100x10") %><br>
+    <%= poll.text_area(:description, class: "form-control") %><br>
 
     <p><%= MAIN["enter_closed_questions"] %></p>
-    <%= poll.text_area(:closed_names, size: "100x3") %><br>
+    <%= poll.text_area(:closed_names, class: "form-control") %><br>
 
     <p><%= MAIN["enter_open_questions"] %></p>
-    <%= poll.text_area(:open_names, size: "100x3") %><br>
+    <%= poll.text_area(:open_names, class: "form-control") %><br>
 
     <% if @poll.new_record? %>
-        <%= poll.submit MAIN["create_poll"], onclick: "calc_names_number();" %>
+        <%= poll.submit MAIN["create_poll"], onclick: "calc_names_number();", class: 'btn' %>
     <% else %>
-        <%= poll.submit MAIN["update_poll"], onclick: "calc_names_number();" %>
+        <%= poll.submit MAIN["update_poll"], onclick: "calc_names_number();", class: 'btn' %>
     <% end %>
 
 <% end %>

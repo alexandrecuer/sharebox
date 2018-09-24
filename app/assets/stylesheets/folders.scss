@@ -2,13 +2,11 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-//an other theme, in ../images directly
-//folder.png
-//shared_folder.png
-//shared_folder_by_others.png
-// 20px 21 px
 
-.folder, .folder_shared, .folder_shared_by_others, .folder_sub_shared_by_others {
+.folder, .folder_shared, .folder_shared_by_other, .folder_swarmed,
+.folder_shared_swarmed, .folder_having_sub_swarmed, .folder_shared_having_sub_swarmed,
+.folder_swarmed_by_other, .folder_owned_by_other, .folder_shared_owned_by_other, .folder_shared_swarmed_by_other,
+.folder_owned_by_other_having_sub_swarmed, .folder_shared_owned_by_other_having_sub_swarmed {
     background:url("../images/window/window_owned.png") no-repeat scroll left center transparent; 
     padding-left :40px;
 	height:40px;
@@ -19,14 +17,51 @@
     background:url("../images/window/window_shared.png") no-repeat scroll left center transparent;
 }
 
-.folder_shared_by_others {
-    background:url("../images/window/window_shared_by_others.png") no-repeat scroll left center transparent;
+.folder_shared_by_other {
+    background:url("../images/window/window_shared_by_other.png") no-repeat scroll left center transparent;
 }
 
-.folder_sub_shared_by_others {
-    background:url("../images/window/window_sub_shared_by_others.png") no-repeat scroll left center transparent;
+.folder_swarmed {
+    background:url("../images/window/window_swarmed.png") no-repeat scroll left center transparent;
 }
 
+.folder_shared_swarmed {
+    background:url("../images/window/window_shared_swarmed.png") no-repeat scroll left center transparent;
+}
+
+.folder_having_sub_swarmed {
+    background:url("../images/window/window_having_sub_swarmed.png") no-repeat scroll left center transparent;
+}
+
+.folder_shared_having_sub_swarmed {
+    background:url("../images/window/window_shared_having_sub_swarmed.png") no-repeat scroll left center transparent;
+}
+
+.folder_swarmed_by_other {
+    background:url("../images/window/window_swarmed_by_other.png") no-repeat scroll left center transparent;
+}
+
+.folder_owned_by_other {
+    background:url("../images/window/window_owned_by_other.png") no-repeat scroll left center transparent;
+}
+
+.folder_shared_owned_by_other {
+    background:url("../images/window/window_shared_owned_by_other.png") no-repeat scroll left center transparent;
+}
+
+.folder_shared_swarmed_by_other {
+    background:url("../images/window/window_shared_swarmed_by_other.png") no-repeat scroll left center transparent;
+}
+
+.folder_owned_by_other_having_sub_swarmed {
+    background:url("../images/window/window_owned_by_other_having_sub_swarmed.png") no-repeat scroll left center transparent;
+}
+
+.folder_shared_owned_by_other_having_sub_swarmed {
+    background:url("../images/window/window_shared_owned_by_other_having_sub_swarmed.png") no-repeat scroll left center transparent;
+}
+
+//only for the admin folders management panel
 .swarmed_to {
   background-color: orange;
   color: white;

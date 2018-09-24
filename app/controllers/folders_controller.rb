@@ -158,7 +158,7 @@ class FoldersController < ApplicationController
       old_case_number = @folder.case_number
       if @folder.update(folder_params)
       # Updating a case number on a folder also update every case number on satisfactions of the same folder
-        Satisfaction.where(case_number: old_case_number).each do |f|
+        Satisfaction.where(folder_id: @folder.id).each do |f|
           f.case_number = @folder.case_number
           f.save
         end
