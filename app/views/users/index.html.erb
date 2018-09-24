@@ -5,18 +5,20 @@ Application Mailer default from : <%= ApplicationMailer.default[:from] %><br>
 Address sending emails to users for password change : <%= Devise.mailer_sender %><br>
 Address collecting information related to users activity (shared folders & unregistered users with shares) : <%= MAIN["admin_mel"] %><br><br>
 
-
-<table class="recap">
-<tr><th colspan="4"><%= MAIN["users_list"]%>(<%= @users.count%>)</th>
-</tr>
-<tr>
-<th><%= sortable "id" %></th>
-<th><%= sortable "email", MAIN["mail"] %></th>
-<th><%= MAIN["has_shared_folders_from_others?"] %></th>
-<th><%= sortable "statut", MAIN["status"] %></th>
-</tr>
-<% @users.each do |u| %>
-        <tr>
+<div class="table-responsive-sm">
+  <table class="table table-hover">
+    <tr>
+        <th colspan="5"><%= MAIN["users_list"]%>(<%= @users.count%>)</th>
+    </tr>
+    <tr>
+        <th><%= sortable "id" %></th>
+        <th><%= sortable "email", MAIN["mail"] %></th>
+        <th><%= MAIN["has_shared_folders_from_others?"] %></th>
+        <th><%= sortable "statut", MAIN["status"] %></th>
+        <th></th>
+    </tr>
+  <% @users.each do |u| %>
+    <tr>
         <td><%= u.id %></td>
         <td><%= u.email %></td>
         <td><%= u.has_shared_folders_from_others? %></td>
@@ -25,29 +27,33 @@ Address collecting information related to users activity (shared folders & unreg
           <%= select_tag :statut, options_for_select(["public", "private", "admin" ], { selected: u.statut })%>
           <%= submit_tag(MAIN["process_to_status_mod"]) %>
           <% end %>
-        <td>
+        </td>
         <td><%= link_to "delete", user_path(u), method: :delete, data: {confirm: MAIN["are_yu_sure"] } %></td>
-        </tr>
-<% end %>
-</table>
-
-
-
-<table class="recap">
-<tr><th colspan="4">Folders shared to an unregistered user (at sharing time)</th>
-</tr>
-<tr>
-<th>folder_id</th>
-<th>prop_id</th>
-<th>share_email</th>
-<th>calculated share_user_id</th>
-</tr>
-<% SharedFolder.where("share_user_id IS NULL").each do |u| %>
-    <tr bgcolor=#EEEEEE>
-    <td><%= u.folder_id %></td>
-    <td><%= u.user_id %></td>
-    <td><%= u.share_email %></td>
-    <td><%= u.fetch_user_id_associated_to_email %></td>
     </tr>
-<% end %>
+  <% end %>
+  </table>
+</div>
+<% uncompletedshares=SharedFolder.where("share_user_id IS NULL") %>
+<% if uncompletedshares.length > 0 %>
+<div class="table-responsive-sm">
+  <table class="table table-hover">
+    <tr><th colspan="4">
+      Folders shared to an unregistered user (at sharing time)</th>
+    </tr>
+    <tr>
+      <th>folder_id</th>
+      <th>prop_id</th>
+      <th>share_email</th>
+      <th>calculated share_user_id</th>
+    </tr>
+  <% uncompletedshares.each do |u| %>
+    <tr>
+       <td><%= u.folder_id %></td>
+       <td><%= u.user_id %></td>
+       <td><%= u.share_email %></td>
+       <td><%= u.fetch_user_id_associated_to_email %></td>
+    </tr>
+  <% end %>
 </table>
+</div>
+<% end %>

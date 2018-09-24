@@ -34,8 +34,8 @@ end
         </tr>
     </thead>
     <tbody>
-    <% # we are in the user's root directory - if folders have been shared to the user, we have to display them %>
-    <% if !@current_folder %>
+    <% # we are in the user's root directory - if folders have been shared to the user, we have to display them, unless the user is an admin %>
+    <% if !@current_folder && !current_user.is_admin? %>
       <% @shared_folders_by_others.order(name: :ASC).each do |f| %>
         <% prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1] %>
         <tr>
