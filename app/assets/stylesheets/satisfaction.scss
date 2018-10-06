@@ -18,24 +18,6 @@ div.stars {
   padding: 5px;
 }
 
-.closed_text {
-  position: absolute;
-  top: 40%;
-  transform: translateY(-40%);
-  transform: translateX(200px);
-  }
-
-.open {
-  position: relative;
-  }
-
-.open_text {
-  position: absolute;
-  top: 30%;
-  transform: translateY(-30%);
-  transform: translateX(450px);
-  }
-
 .stars input { display: none; }
 
 .stars label {
@@ -89,7 +71,7 @@ i{
 }
 
 textarea{
-	margin: 10px;
+  margin: 10px;
   resize: none;
 }
 
