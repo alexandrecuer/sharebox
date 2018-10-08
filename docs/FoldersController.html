@@ -479,7 +479,7 @@ once will be rejected (usefull??)</p>
       <span class='kw'>if</span> <span class='ivar'>@folder</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span>
         <span class='ivar'>@current_folder</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='ivar'>@folder</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span><span class='rparen'>)</span>
       <span class='kw'>end</span>
-      <span class='id identifier rubyid_render'>render</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>new</span><span class='tstring_end'>&#39;</span></span>
+     <span class='id identifier rubyid_render'>render</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>new</span><span class='tstring_end'>&#39;</span></span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -1184,7 +1184,7 @@ already registered in the database</p>
     <span class='id identifier rubyid_old_case_number'>old_case_number</span> <span class='op'>=</span> <span class='ivar'>@folder</span><span class='period'>.</span><span class='id identifier rubyid_case_number'>case_number</span>
     <span class='kw'>if</span> <span class='ivar'>@folder</span><span class='period'>.</span><span class='id identifier rubyid_update'>update</span><span class='lparen'>(</span><span class='id identifier rubyid_folder_params'>folder_params</span><span class='rparen'>)</span>
     <span class='comment'># Updating a case number on a folder also update every case number on satisfactions of the same folder
-</span>      <span class='const'><span class='object_link'><a href="Satisfaction.html" title="Satisfaction (class)">Satisfaction</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>case_number:</span> <span class='id identifier rubyid_old_case_number'>old_case_number</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='op'>|</span>
+</span>      <span class='const'><span class='object_link'><a href="Satisfaction.html" title="Satisfaction (class)">Satisfaction</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>folder_id:</span> <span class='ivar'>@folder</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='op'>|</span>
         <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_case_number'>case_number</span> <span class='op'>=</span> <span class='ivar'>@folder</span><span class='period'>.</span><span class='id identifier rubyid_case_number'>case_number</span>
         <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
       <span class='kw'>end</span>
@@ -1211,7 +1211,7 @@ already registered in the database</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Sep 12 20:32:34 2018 by
+  Generated on Mon Oct  8 16:37:13 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

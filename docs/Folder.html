@@ -285,6 +285,54 @@ related to the folder.</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#has_sub_swarmed%3F-instance_method" title="#has_sub_swarmed? (instance method)">#<strong>has_sub_swarmed?</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>is there a subfolder swarmed by another user ?.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#has_sub_swarmed_to_user%3F-instance_method" title="#has_sub_swarmed_to_user? (instance method)">#<strong>has_sub_swarmed_to_user?</strong>(user)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>is there a subfolder swarmed by user given in argument ?.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#is_polled%3F-instance_method" title="#is_polled? (instance method)">#<strong>is_polled?</strong>  &#x21d2; Boolean </a>
     
 
@@ -327,6 +375,31 @@ related to the folder.</p>
 <p>return all assets belonging to a folder (directly - ie its own assets, not
 the ones in its subfolders)<br> inutile non - folder.assets donne le même
 résultat def get_assets  return Asset.where(folder_id: self.id) end.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#is_shared_to_user%3F-instance_method" title="#is_shared_to_user? (instance method)">#<strong>is_shared_to_user?</strong>(user)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>is the folder explicitely shared to the user ?<br> by a share in the
+shared_folders table.</p>
 </div></span>
   
 </li>
@@ -774,6 +847,128 @@ related to the folder</p>
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="has_sub_swarmed?-instance_method">
+  
+    #<strong>has_sub_swarmed?</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>is there a subfolder swarmed by another user ?</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+133
+134
+135
+136
+137
+138</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 133</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_has_sub_swarmed?'>has_sub_swarmed?</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_all_sub_folders'>get_all_sub_folders</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span>
+    <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>!=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="has_sub_swarmed_to_user?-instance_method">
+  
+    #<strong>has_sub_swarmed_to_user?</strong>(user)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>is there a subfolder swarmed by user given in argument ?</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+149
+150
+151
+152
+153
+154
+155</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 149</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_has_sub_swarmed_to_user?'>has_sub_swarmed_to_user?</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_has_ownership?'>has_ownership?</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_all_sub_folders'>get_all_sub_folders</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span>
+    <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>==</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>false</span>  
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="is_polled?-instance_method">
   
     #<strong>is_polled?</strong>  &#x21d2; <tt>Boolean</tt> 
@@ -882,6 +1077,61 @@ résultat def get_assets</p>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_root?'>is_root?</span>
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span> <span class='op'>==</span> <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="is_shared_to_user?-instance_method">
+  
+    #<strong>is_shared_to_user?</strong>(user)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>is the folder explicitely shared to the user ?<br> by a share in the
+shared_folders table</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+143
+144
+145</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 143</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_is_shared_to_user?'>is_shared_to_user?</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="SharedFolder.html" title="SharedFolder (class)">SharedFolder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_share_user_id_and_folder_id'>find_by_share_user_id_and_folder_id</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1070,7 +1320,7 @@ directory belonging to another private user ?</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Sep 12 20:32:33 2018 by
+  Generated on Mon Oct  8 16:37:12 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

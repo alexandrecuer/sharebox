@@ -59,7 +59,8 @@
 
       <div id="content"><div id='filecontents'><h1>A social network tool with your clients for your business</h1>
 
-<p>This application can also be qualified as a Ruby on Rails SharingFile System</p>
+<p><img src=public/images/doc/colibri_front.png>
+This application can also be qualified as a Ruby on Rails SharingFile System</p>
 
 <p>If you deliver files and documents to your clients and if you want to record your clients&#39;satisfaction, this tool is for you</p>
 
@@ -77,9 +78,98 @@
 <li><a href="https://github.com/plataformatec/devise">devise</a> for user authentification</li>
 <li><a href="https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html">passenger</a> as the application server (in standalone mode)</li>
 <li><a href="https://github.com/aws/aws-sdk-ruby">aws-sdk</a> for storage on S3</li>
+<li><a href="https://github.com/twbs/bootstrap-rubygem">bootstrap</a> as the frontoffice framework</li>
+<li><a href="https://github.com/bokmann/font-awesome-rails">font-awesome</a> for icons and cosmectic details</li>
 </ul>
 
 <h2>Will have to switch from paperclip to <a href="http://guides.rubyonrails.org/active_storage_overview.html">ActiveStorage</a> as paperclip is now deprecated</h2>
+
+<h1>Deployment to Heroku through GitHub integration</h1>
+
+<p>This application has been designed for an automatic deployment from github to the heroku cloud
+You will need a S3 bucket as Heroku has an ephemeral file system</p>
+
+<h2>Fork and customize the repository to your needs</h2>
+
+<p>Assuming you have a GitHub account and you are logged in, fork the sharebox repository into your GitHub account</p>
+
+<p><img src=public/images/doc/01_fork.png></p>
+
+<p>To customize the application to your needs, edit the following files </p>
+
+<ul>
+<li>config/config.yml</li>
+<li>config/initializers/devise.rb</li>
+</ul>
+
+<p><img src=public/images/doc/02_customization.png></p>
+
+<p>You have to setup the following parameters :</p>
+
+<ul>
+<li>in config.yml, site_name and admin_mel</li>
+<li>in devise.rb, config.mailer_sender</li>
+</ul>
+
+<p>admin_mel will receive activity notifications : new shares, pending users. Pending users are unregistered users benefiting from at least one shared access to a folder</p>
+
+<p>config.mailer_sender will be the sending email as far as authentification issues are considered (eg password changes)</p>
+
+<p>You can find the two site’s logos in the /app/assets/images directory </p>
+
+<p><img src=public/images/doc/03_site_logos.png></p>
+
+<p>colibri.jpg is the main logo appearing above the login box</p>
+
+<p>logo.jpg is the logo used in emails sent by private users to public users</p>
+
+<p>The sharebox repository Gemfile may suggest a ruby version not suitable with the recommanded heroku stack, that is to say created with a deprecated heroku stack</p>
+
+<p>For the heroku-18 stack, please note you will  have to proceed to the following modifications</p>
+
+<ul>
+<li>in the Gemfile, change <code>ruby &#39;2.3.3&#39;</code> to <code>ruby &#39;2.5.1&#39;</code></li>
+<li>in the Gemfile.lock, RUBY VERSION section, change <code>ruby 2.3.3p222</code> to <code>ruby 2.5.1p57</code></li>
+</ul>
+
+<h2>Create a new Heroku app and link it to the GitHub repository previously forked</h2>
+
+<p>Create an heroku account if you do not have one yet, and once logged in, access to the heroku dashboard in order to create a new heroku app, here named « cerema-autun »</p>
+
+<p><img src=public/images/doc/04_create_app.png></p>
+
+<p>Once the application is created, you will be redirected to the application control panel</p>
+
+<p>Go to the deploy tab and choose the GitHub deployment method (Please note you need to be logged into your GitHub account)</p>
+
+<p><img src=public/images/doc/05_connect_to_github_1.png></p>
+
+<p><img src=public/images/doc/06_connect_to_github_2.png></p>
+
+<p>Your GitHub and heroku accounts are now linked together.</p>
+
+<h2>Fill all the needed config variables</h2>
+
+<p>Before proceeding to a deployment, fill all the needed config vars.</p>
+
+<p>11 config vars are needed by the sharebox application and if one is missing, the deployment will fail.</p>
+
+<p><img src=public/images/doc/07_config_vars.png></p>
+
+<p>If the bucket does not exist, it will be created when the first file will be uploaded to S3.</p>
+
+<p>Everything is ready for a manual deploy.</p>
+
+<h2>Proceed to a manual deploy</h2>
+
+<p><img src=public/images/doc/08_manual_deploy.png></p>
+
+<p>The manual deploy will initialize the missing config variables, related to Heroku and create an empty database. 
+Just create the database tables with a rake db:schema:load command in the Heroku console and your app is on line.</p>
+
+<p><img src=public/images/doc/09_create_table.png></p>
+
+<p>Please note that the first user to register in the system will be given admin rights !!</p>
 
 <h1>Installation on a Microsoft Window development machine</h1>
 
@@ -118,7 +208,7 @@ Rails 5.1.5
 
 <p>When you install ImageMagick, don&#39;t forget to include the required legacy utilities among which you will find convert.exe</p>
 
-<p><img src=public/images/doc/imagemagick.png height=300></p>
+<p><img src=/docs/images/imagemagick.png height=300></p>
 
 <p>Modify the system and user paths so that they begin with something like C:\Program Files\ImageMagick-7.0.6-Q16\ and C:\Program Files (x86)\GnuWin32.</p>
 
@@ -357,11 +447,9 @@ with config.local_storage = 0, all files will go in the defined S3 bucket</p>
 
 <p><img src=public/images/doc/gmail_less_secure_captcha.png></p>
 
-<h1>Installation on Heroku (for production)</h1>
+<h1>Installation on Heroku (for production) from a development server</h1>
 
-<p>You will need an heroku account and a S3 bucket as Heroku has an ephemeral file system</p>
-
-<h2>From a development server</h2>
+<p>If you don&#39;t want to use the github integration method, an alternative option is possible</p>
 
 <p>Install <a href="https://devcenter.heroku.com/articles/heroku-cli">Heroku CLI</a></p>
 
@@ -418,16 +506,6 @@ $ heroku config:set DOMAIN=&quot;desolate-earth-32333.herokuapp.com&quot;
 <pre class="code ruby"><code class="ruby">$ heroku run rake db:schema:load
 </code></pre>
 
-<h2>From a github repository</h2>
-
-<p>This is called github integration by the heroku team.</p>
-
-<p>If you don&#39;t have a github account, create one and fork the sharebox repository to your account.</p>
-
-<h1>Customization</h1>
-
-<p>Please modify \app\views\layouts\application.html.erb</p>
-
 <h1>Working behind a proxy server</h1>
 
 <p>If you work behind a proxy, please set http_proxy and https_proxy variables</p>
@@ -438,7 +516,7 @@ $ export http_proxy=&quot;http://user_name:password@proxy_url:proxy_port&quot;
 </div></div>
 
       <div id="footer">
-  Generated on Wed Sep 12 20:32:31 2018 by
+  Generated on Mon Oct  8 16:37:10 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>
