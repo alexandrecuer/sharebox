@@ -1,5 +1,5 @@
 # A social network tool with your clients for your business
-<img src=public/images/doc/colibri_front.png>
+
 This application can also be qualified as a Ruby on Rails SharingFile System
 
 If you deliver files and documents to your clients and if you want to record your clients'satisfaction, this tool is for you
@@ -20,6 +20,8 @@ Uses the following gems :
 * [font-awesome](https://github.com/bokmann/font-awesome-rails) for icons and cosmectic details
 
 ## Will have to switch from paperclip to [ActiveStorage](http://guides.rubyonrails.org/active_storage_overview.html) as paperclip is now deprecated
+
+<img src=public/images/doc/colibri_front.png>
 
 # Deployment to Heroku through GitHub integration
 This application has been designed for an automatic deployment from github to the heroku cloud
@@ -201,14 +203,22 @@ The application uses several variables, which you have to fix in the environment
 <table>
     <tr>
         <td><sub>GMAIL_USERNAME</sub></td>
-        <td rowspan=2><sub><a href=https://mail.google.com/>gmail</a></sub></td>
+        <td rowspan=2>
+          SendGrid is the preferred option<br>
+          <sub><a href=https://sendgrid.com/>sendgrid</a></sub><br><br>
+          <sub><a href=https://mail.google.com/>gmail</a></sub><br>
+          <sub>Please note gmail is not a reliable solution as a backoffice mailer</sub><br>
+          <sub>if, however, you were considering using gmail for mail delivery, you may need to configure your google account in order to allow external applications to use it</sub><br>
+          <sub><a href=https://www.google.com/settings/security/lesssecureapps>lesssecureapps</a></sub><br>
+          <sub><a href=https://accounts.google.com/DisplayUnlockCaptcha>unlockcaptach</a></sub><br>
+        </td>
     </tr>
     <tr>
         <td><sub>GMAIL_PASSWORD</sub></td>
     </tr>
     <tr>
         <td><sub>SMTP_ADDRESS</sub></td>
-        <td rowspan=2><sub>example if using gmail :<br><sub>SMTP_ADDRESS="smtp.gmail.com" and SMTP_PORT=587</sub></sub></td>
+        <td rowspan=2><sub>example if using sendgrid :<br><sub>SMTP_ADDRESS="smtp.sengrid.net" and SMTP_PORT=587</sub></sub></td>
     </tr>
     <tr>
       <td><sub>SMTP_PORT</sub></td>
@@ -329,23 +339,6 @@ To override, create a file /config/initializers/paperclip.rb with the following 
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 ```
 Caution : only for a development purpose; not suitable for a production server !
-
-
-# Configuring mail services
-Assuming you are using gmail for mail delivery, you may need to configure your google account in order to allow external applications to use it 
-
-<img src=public/images/doc/gmail_less_secure_apps.png>
-
-https://www.google.com/settings/security/lesssecureapps
-
-On a production server, it may be necessary to clear the captcha in order to define the production server as an authorized application with auto sign-in activated
-
-https://accounts.google.com/DisplayUnlockCaptcha
-
-The captcha is cleared for a few minutes. During that time, you can realize a password modification in order for your production server to be integrated in the list of authorized applications with auto sign-in activated.
-
-<img src=public/images/doc/gmail_less_secure_captcha.png>
-
 
 # Installation on Heroku (for production) from a development server
 If you don't want to use the github integration method, an alternative option is possible
