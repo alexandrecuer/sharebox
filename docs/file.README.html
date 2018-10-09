@@ -59,8 +59,7 @@
 
       <div id="content"><div id='filecontents'><h1>A social network tool with your clients for your business</h1>
 
-<p><img src=public/images/doc/colibri_front.png>
-This application can also be qualified as a Ruby on Rails SharingFile System</p>
+<p>This application can also be qualified as a Ruby on Rails SharingFile System</p>
 
 <p>If you deliver files and documents to your clients and if you want to record your clients&#39;satisfaction, this tool is for you</p>
 
@@ -83,6 +82,8 @@ This application can also be qualified as a Ruby on Rails SharingFile System</p>
 </ul>
 
 <h2>Will have to switch from paperclip to <a href="http://guides.rubyonrails.org/active_storage_overview.html">ActiveStorage</a> as paperclip is now deprecated</h2>
+
+<p><img src=public/images/doc/colibri_front.png></p>
 
 <h1>Deployment to Heroku through GitHub integration</h1>
 
@@ -289,14 +290,22 @@ $ gem install bcrypt --platform=ruby
 <table>
     <tr>
         <td><sub>GMAIL_USERNAME</sub></td>
-        <td rowspan=2><sub><a href=https://mail.google.com/>gmail</a></sub></td>
+        <td rowspan=2>
+          SendGrid is the preferred option<br>
+          <sub><a href=https://sendgrid.com/>sendgrid</a></sub><br><br>
+          <sub><a href=https://mail.google.com/>gmail</a></sub><br>
+          <sub>Please note gmail is not a reliable solution as a backoffice mailer</sub><br>
+          <sub>if, however, you were considering using gmail for mail delivery, you may need to configure your google account in order to allow external applications to use it</sub><br>
+          <sub><a href=https://www.google.com/settings/security/lesssecureapps>lesssecureapps</a></sub><br>
+          <sub><a href=https://accounts.google.com/DisplayUnlockCaptcha>unlockcaptach</a></sub><br>
+        </td>
     </tr>
     <tr>
         <td><sub>GMAIL_PASSWORD</sub></td>
     </tr>
     <tr>
         <td><sub>SMTP_ADDRESS</sub></td>
-        <td rowspan=2><sub>example if using gmail :<br><sub>SMTP_ADDRESS="smtp.gmail.com" and SMTP_PORT=587</sub></sub></td>
+        <td rowspan=2><sub>example if using sendgrid :<br><sub>SMTP_ADDRESS="smtp.sengrid.net" and SMTP_PORT=587</sub></sub></td>
     </tr>
     <tr>
       <td><sub>SMTP_PORT</sub></td>
@@ -431,22 +440,6 @@ with config.local_storage = 0, all files will go in the defined S3 bucket</p>
 
 <p>Caution : only for a development purpose; not suitable for a production server !</p>
 
-<h1>Configuring mail services</h1>
-
-<p>Assuming you are using gmail for mail delivery, you may need to configure your google account in order to allow external applications to use it </p>
-
-<p><img src=public/images/doc/gmail_less_secure_apps.png></p>
-
-<p><a href="https://www.google.com/settings/security/lesssecureapps">https://www.google.com/settings/security/lesssecureapps</a></p>
-
-<p>On a production server, it may be necessary to clear the captcha in order to define the production server as an authorized application with auto sign-in activated</p>
-
-<p><a href="https://accounts.google.com/DisplayUnlockCaptcha">https://accounts.google.com/DisplayUnlockCaptcha</a></p>
-
-<p>The captcha is cleared for a few minutes. During that time, you can realize a password modification in order for your production server to be integrated in the list of authorized applications with auto sign-in activated.</p>
-
-<p><img src=public/images/doc/gmail_less_secure_captcha.png></p>
-
 <h1>Installation on Heroku (for production) from a development server</h1>
 
 <p>If you don&#39;t want to use the github integration method, an alternative option is possible</p>
@@ -516,7 +509,7 @@ $ export http_proxy=&quot;http://user_name:password@proxy_url:proxy_port&quot;
 </div></div>
 
       <div id="footer">
-  Generated on Mon Oct  8 17:50:31 2018 by
+  Generated on Tue Oct  9 09:00:56 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>
