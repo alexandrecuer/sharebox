@@ -55,9 +55,9 @@ logo.jpg is the logo used in emails sent by private users to public users
 
 The sharebox repository Gemfile may suggest a ruby version not suitable with the recommanded heroku stack, that is to say created with a deprecated heroku stack
 
-For the heroku-18 stack, please note you will  have to proceed to the following modifications
-- in the Gemfile, change ``ruby '2.3.3'`` to ``ruby '2.5.1'``
-- in the Gemfile.lock, RUBY VERSION section, change ``ruby 2.3.3p222`` to ``ruby 2.5.1p57``
+~~For the heroku-18 stack, please note you will  have to proceed to the following modifications~~
+~~- in the Gemfile, change ``ruby '2.3.3'`` to ``ruby '2.5.1'``
+- in the Gemfile.lock, RUBY VERSION section, change ``ruby 2.3.3p222`` to ``ruby 2.5.1p57``~~
 
 ## Create a new Heroku app and link it to the GitHub repository previously forked
 Create an heroku account if you do not have one yet, and once logged in, access to the heroku dashboard in order to create a new heroku app, here named « cerema-autun »
