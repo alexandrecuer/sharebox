@@ -1,8 +1,3 @@
-validate();
-
-$("#process_options").on("change",".form-control",function(){
-    validate();
-});
 
 function validate()
 {
@@ -10,7 +5,7 @@ function validate()
     
     //description validation
     var description = $("#s_description").val();
-    if (description !="") {
+    if (description !=="") {
         $("#s_description").css("background-color","#eeffee");
     } else {
         $("#s_description").css("background-color","#ffeeee");
@@ -36,11 +31,19 @@ function validate()
     
     if (valid) {
         $("#create").show(); 
-        console.log("all inputs valid");
-    } else $("#create").hide();
+        //console.log("all inputs valid");
+    } else {
+        $("#create").hide();
+    }
     
     return valid;
 }
+
+validate();
+
+$("#process_options").on("change",".form-control",function(){
+    validate();
+});
 
 //building select menu with poll names
 $.ajax({
@@ -54,7 +57,7 @@ $.ajax({
             options+="<option value="+array.id+">"+array.name+" (S"+array.id+")</option>";
         });
         options+="<select>";
-        $('#s_poll_id').html(options);
+        $("#s_poll_id").html(options);
         //console.log(options);
     } 
 });
@@ -67,9 +70,11 @@ $("#create").click(function(){
     params["by"]=$("#s_by").val();
     params["poll_id"]=$("#s_poll_id").val();
     
-    if (!validate()) return false;
+    if (!validate()) {
+        return false;
+    }
     
-    console.log(params);
+    //console.log(params);
     
     $.ajax({
         type: "POST",
@@ -77,7 +82,7 @@ $("#create").click(function(){
         data: params,
         async: true, 
         success: function(result) { 
-            console.log(result); 
+            //console.log(result); 
             surveylist_update();
             $("#create").hide();
             $("#s_description").val("");
@@ -93,7 +98,7 @@ $("#create").click(function(){
 
 
 //emails autocompletion
-$('#s_by').on('input',function(e){
+$("#s_by").on("input",function(e){
     var saisie = $(this).val();
     //console.log(saisie);
     $.ajax({
@@ -106,13 +111,13 @@ $('#s_by').on('input',function(e){
             result.forEach(function(r){
                 some.push(r["email"]);
             });
-            $('#s_by').autocomplete({source: some});
+            $("#s_by").autocomplete({source: some});
             //console.log(result);
         }      
     });  
 });
 
-$('#s_client_mel').on('input',function(e){
+$("#s_client_mel").on("input",function(e){
     var saisie = $(this).val();
     //console.log(saisie);
     $.ajax({
@@ -125,21 +130,16 @@ $('#s_client_mel').on('input',function(e){
             result.forEach(function(r){
                 some.push(r["email"]);
             });
-            $('#s_client_mel').autocomplete({source: some});
+            $("#s_client_mel").autocomplete({source: some});
             //console.log(result);
         }     
     });
 });
 
-surveylist_update();
-answers_update();
-//setInterval(surveylist_update,5000);
-
-
 function surveylist_update()
 {
     $.ajax({ url: "/surveys", 
-        dataType: 'json', 
+        dataType: "json", 
         async: true, 
         success: function(data) {
             var out = [];
@@ -166,8 +166,8 @@ function surveylist_update()
 }
 
 $("#surveylist").on("click",".send",function(){
-    id = $(this).val();
-    console.log("processing survey "+id);
+    var id = $(this).val();
+    //console.log("processing survey "+id);
     $.ajax({
         type: "GET",
         url: "/surveys/"+id+"?email=send",
@@ -183,19 +183,19 @@ $("#surveylist").on("click",".send",function(){
 
 //implementing action for all .btn 'dynamic' element starting from his ancestor which has to be a static element
 $("#surveylist").on("click",".btn",function(){
-    id = $(this).val();
-    console.log("triggering the deletion of survey "+id);
+    var id = $(this).val();
+    //console.log("triggering the deletion of survey "+id);
     $.ajax({
         type: "DELETE",
         url: "/surveys/"+id,
         dataType: "json",
         async: false,
         success: function(result) {
-            console.log(result.responseText);
+            //console.log(result.responseText);
             //surveylist_update();
         },
         error: function(result) {
-            console.log(result.responseText);
+            alert(result.responseText);
         }
     });
     surveylist_update();
@@ -203,9 +203,9 @@ $("#surveylist").on("click",".btn",function(){
 
 function answers_update()
 {
-    console.log("triggering a list of answers");
+    //console.log("triggering a list of answers");
     $.ajax({ url: "/freelist", 
-        dataType: 'json', 
+        dataType: "json", 
         async: true, 
         success: function(data) {            
             var out = [];
@@ -220,21 +220,21 @@ function answers_update()
 }
 
 $("#answers").on("click",".btn",function(){
-    id = $(this).val();
-    console.log(id);
+    var id = $(this).val();
+    //console.log(id);
     $.ajax({ url: "/satisfactions/"+id, 
-        dataType: 'json', 
+        dataType: "json", 
         async: true, 
         success: function(data) {
             var out = "";
             var header = "";
             out+="<table class=table>";
-            s=Object.getOwnPropertyNames(data);
-            s.forEach(function(val,i){
+            var s=Object.getOwnPropertyNames(data);
+            s.forEach(function(val){
                 if(val=="date" || val=="affaire") header+="<b>"+data[val]+"</b><br>";
                 else {
-                    numrx=/^[0-9]$/;
-                    v=String(data[val]);
+                    var numrx=/^[0-9]$/;
+                    var v=String(data[val]);
                     if (v.match(numrx)) {
                         var note=parseInt(data[val]);
                         var i;
@@ -247,15 +247,20 @@ $("#answers").on("click",".btn",function(){
                         }
                         out+="<div class='col-6 col-md-4'>"+val+"</div>";
                         out+="</div></td></tr>";
-                    } else
+                    } else {
                         out+="<tr><td>"+val+"</td><td>"+data[val]+"</td></tr>";
+                    }
                 }
             });
             out+="</table>";
-            $('#mtitle').html(header);
-            $('#modal-content').html(out);
-            $('#AnswerModal').modal('show');
+            $("#mtitle").html(header);
+            $("#modal-content").html(out);
+            $("#AnswerModal").modal('show');
         }
     });
     
 });
+
+surveylist_update();
+answers_update();
+//setInterval(surveylist_update,5000);
