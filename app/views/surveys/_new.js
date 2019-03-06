@@ -1,3 +1,49 @@
+function surveylist_update()
+{
+    $.ajax({ url: "/surveys", 
+        dataType: "json", 
+        async: true, 
+        success: function(data) {
+            var out = [];
+            $.each(data, function(index, array){
+                if (! array.token.includes("disabled")){
+                    out.push("<tr>");
+                    out.push("<td><a href=/surveys/"+array.id+"/md5/"+array.token+">"+array.id+"</a><br>S"+array.poll_id+"</td>");
+                    var temp="<div style='width:250px; float:left'><b>Description</b><br>"+array.description+"</div>";
+                    temp+="<div style='width:200px; float:left'><b>Chargé d'affaire</b><br>"+array.by+"</div>";
+                    temp+="<div style='width:200px; float:left'><b>Client</b><br>"+array.client_mel+"</div>";
+                    temp+="<div style='width:200px; float:left'><b>Propriétaire</b><br>"+array.owner_mel+"("+array.user_id+")</div>";
+                    temp+="<div style='width:150px; float:left'><b>Date</b><br>"+array.updated_at.split("T")[0]+"</div>";
+                    out.push("<td>"+temp+"</td>");
+                    out.push("<td><div style='margin-top: 50%; transform: translateY(-50%);'><button class='send btn-secondary' value="+array.id+"><i class='fa fa-envelope fa-2x' ></i></button></div></td>");
+                    out.push("<td><button class='btn' id='deletesurvey"+array.id+"' value="+array.id+">supprimer</button></td>");
+                    out.push("</tr>");
+                }                    
+            });
+            //console.log(out.join(''));
+            $("#surveylist").html(out);
+            
+        }
+    });
+}
+
+function answers_update()
+{
+    //console.log("triggering a list of answers");
+    $.ajax({ url: "/freelist", 
+        dataType: "json", 
+        async: true, 
+        success: function(data) {            
+            var out = [];
+            out.push("<tr><td>");
+            $.each(data.reverse(), function(index, array){
+                out.push("<div style='width:50px; float:left'><button data-toggle='modal' class='btn btn-link' value='"+array.id+"'>"+array.id+"</button></div>");                      
+            });
+            out.push("</td></tr>");
+            $("#answers").html(out); 
+        }
+    });
+}
 
 function validate()
 {
@@ -40,6 +86,9 @@ function validate()
 }
 
 validate();
+surveylist_update();
+answers_update();
+//setInterval(surveylist_update,5000);
 
 $("#process_options").on("change",".form-control",function(){
     validate();
@@ -136,35 +185,6 @@ $("#s_client_mel").on("input",function(e){
     });
 });
 
-function surveylist_update()
-{
-    $.ajax({ url: "/surveys", 
-        dataType: "json", 
-        async: true, 
-        success: function(data) {
-            var out = [];
-            $.each(data, function(index, array){
-                if (! array.token.includes("disabled")){
-                    out.push("<tr>");
-                    out.push("<td><a href=/surveys/"+array.id+"/md5/"+array.token+">"+array.id+"</a><br>S"+array.poll_id+"</td>");
-                    var temp="<div style='width:250px; float:left'><b>Description</b><br>"+array.description+"</div>";
-                    temp+="<div style='width:200px; float:left'><b>Chargé d'affaire</b><br>"+array.by+"</div>";
-                    temp+="<div style='width:200px; float:left'><b>Client</b><br>"+array.client_mel+"</div>";
-                    temp+="<div style='width:200px; float:left'><b>Propriétaire</b><br>"+array.owner_mel+"("+array.user_id+")</div>";
-                    temp+="<div style='width:150px; float:left'><b>Date</b><br>"+array.updated_at.split("T")[0]+"</div>";
-                    out.push("<td>"+temp+"</td>");
-                    out.push("<td><div style='margin-top: 50%; transform: translateY(-50%);'><button class='send btn-secondary' value="+array.id+"><i class='fa fa-envelope fa-2x' ></i></button></div></td>");
-                    out.push("<td><button class='btn' id='deletesurvey"+array.id+"' value="+array.id+">supprimer</button></td>");
-                    out.push("</tr>");
-                }                    
-            });
-            //console.log(out.join(''));
-            $("#surveylist").html(out);
-            
-        }
-    });
-}
-
 $("#surveylist").on("click",".send",function(){
     var id = $(this).val();
     //console.log("processing survey "+id);
@@ -176,7 +196,7 @@ $("#surveylist").on("click",".send",function(){
             alert(data);
         },
         error: function(data) {
-            alert("data");
+            alert(data);
         }
     });
 });
@@ -201,24 +221,6 @@ $("#surveylist").on("click",".btn",function(){
     surveylist_update();
 });
 
-function answers_update()
-{
-    //console.log("triggering a list of answers");
-    $.ajax({ url: "/freelist", 
-        dataType: "json", 
-        async: true, 
-        success: function(data) {            
-            var out = [];
-            out.push("<tr><td>");
-            $.each(data.reverse(), function(index, array){
-                out.push("<div style='width:50px; float:left'><button data-toggle='modal' class='btn btn-link' value='"+array.id+"'>"+array.id+"</button></div>");                      
-            });
-            out.push("</td></tr>");
-            $("#answers").html(out); 
-        }
-    });
-}
-
 $("#answers").on("click",".btn",function(){
     var id = $(this).val();
     //console.log(id);
@@ -231,12 +233,16 @@ $("#answers").on("click",".btn",function(){
             out+="<table class=table>";
             var s=Object.getOwnPropertyNames(data);
             s.forEach(function(val){
-                if(val=="date" || val=="affaire") header+="<b>"+data[val]+"</b><br>";
-                else {
+                if(val==="date" || val==="affaire") {
+                    header+="<b>"+data[val]+"</b><br>";
+                } else {
                     var numrx=/^[0-9]$/;
                     var v=String(data[val]);
                     if (v.match(numrx)) {
-                        var note=parseInt(data[val]);
+                        var note=parseInt(10,data[val]);
+                        if (!note) {
+                            note = 0;
+                        }
                         var i;
                         out+="<tr><td colspan=2><div class='row align-items-center justify-content-center'>";
                         for (i=0;i<note;i++){
@@ -260,7 +266,3 @@ $("#answers").on("click",".btn",function(){
     });
     
 });
-
-surveylist_update();
-answers_update();
-//setInterval(surveylist_update,5000);
