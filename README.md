@@ -7,6 +7,7 @@ If you deliver files and documents to your clients and if you want to record you
 If you are a developper, check online class documentation :
 https://alexandrecuer.github.io/sharebox/
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a95e122b23344c968f4e1c9f90d53f36)](https://app.codacy.com/app/alexandrecuer/sharebox?utm_source=github.com&utm_medium=referral&utm_content=alexandrecuer/sharebox&utm_campaign=Badge_Grade_Settings)
 [![Build Status](https://travis-ci.org/alexandrecuer/sharebox.svg?branch=master)](https://travis-ci.org/alexandrecuer/sharebox)
 
 Check online prototype : https://desolate-earth-32333.herokuapp.com/
