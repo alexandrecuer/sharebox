@@ -1,5 +1,7 @@
 class ClientsController < ApplicationController
 
+  before_action :authenticate_user!
+
   def index
     if melfrag=params[:melfrag]
       allclients = Client.where("mel LIKE ?", "%#{melfrag}%")

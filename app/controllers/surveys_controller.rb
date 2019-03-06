@@ -62,9 +62,9 @@ class SurveysController < ApplicationController
         @survey = Survey.find_by_id(params[:id])
         if @survey.user_id == current_user.id || current_user.is_admin?
           @survey.destroy
-          render plain: "successfully deleted survey #{params[:id]}"
+          render plain: "Enquête #{params[:id]} supprimée"
         else
-          render plain: "you do not have sufficient rights"
+          render plain: "Vous n'avez pas les droits nécessaires"
         end
     end
         

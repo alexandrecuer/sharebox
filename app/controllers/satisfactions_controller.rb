@@ -7,6 +7,7 @@ class SatisfactionsController < ApplicationController
   ##
   # render a json view of all satisfactions answers
   def index
+      authenticate_user!
       satisfactions= Satisfaction.all
       polls= Poll.all
       open=[]

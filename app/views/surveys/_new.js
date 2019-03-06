@@ -255,7 +255,7 @@ $("#answers").on("click",".btn",function(){
             out+="</table>";
             $("#mtitle").html(header);
             $("#modal-content").html(out);
-            $("#AnswerModal").modal('show');
+            $("#AnswerModal").modal("show");
         }
     });
     
