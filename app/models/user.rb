@@ -16,6 +16,8 @@ class User < ApplicationRecord
   has_many :shared_folders_by_others, :through => :being_shared_folders, :source => :folder
 
   has_many :polls, :dependent=> :destroy
+  
+  has_many :surveys, :dependent=> :destroy
 
   has_many :satisfactions, :dependent=> :destroy
   
@@ -70,6 +72,7 @@ class User < ApplicationRecord
   # "shared access" means being owner or being granted of a share<br>
   # if folder is a subfolder of a folder shared to the user, we consider the user has shared access on the subfolder
   def has_shared_access?(folder)
+    puts("shared_access_testing...")
     return true if self.is_admin?
     return true if self.folders.include?(folder)
     return true if self.shared_folders_by_others.include?(folder)

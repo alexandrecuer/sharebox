@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :shared_folders
   resources :satisfactions
   resources :polls
+  resources :surveys
+  resources :clients
   
   devise_for :users, :path_prefix => 'my'
   
@@ -38,5 +40,13 @@ Rails.application.routes.draw do
    get "folders/:id/satisfaction" => "satisfactions#new", :as => "new_satisfaction_on_folder"
 
    patch '/folders' => 'folders#moove_folder', :as => 'moove_folder'
+   
+   get "getpolls" => "surveys#getpolls", :as => "getpolls"
+   
+   get "surveys/:id/md5/:md5" => "satisfactions#freenew", :as => "new_satisfaction_no_folder"
+   
+   get "freelist" => "satisfactions#freelist", :as => "freelist"
+   
+   get "list" => "folders#list", :as => "list"
 
 end

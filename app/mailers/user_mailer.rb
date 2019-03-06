@@ -73,4 +73,12 @@ class UserMailer < ApplicationMailer
     # email delivery
     mail(to: email, from: current_user.email, subject: title)
   end
+
+  ##
+  # generate email in order to inform a client non registered in Colibri of a survey
+  def send_free_survey(id)
+    @survey = Survey.find_by_id(id)
+    title="[Cerema][courte enquête de satisfaction]#{@survey.description}"
+    mail(to: @survey.client_mel, from: @survey.by, subject: title)
+  end
 end

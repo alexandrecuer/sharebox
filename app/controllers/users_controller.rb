@@ -72,16 +72,25 @@ class UsersController < ApplicationController
   end
   
   ##
-  # Show a complete view of all users registered<br>
-  # Only for private and admin users
+  # 1) permits to search a list of users corresponding to a given mel fragment and render to json
+  # 2) Show a complete view of all users registered<br>
+  #    Only for private and admin users
   def index
-    @users=User.all.order(sort_column + " " + sort_direction)
-    if current_user.is_public?
-      flash[:notice] = USERS_MSG["user_managing_forbidden"]
-      redirect_to root_url
+    if melfrag=params[:melfrag]
+      allusers = User.where("email LIKE ?", "%#{melfrag}%")
+      results=[]
+      allusers.each do |u|
+        results<< {"email": u.email,"id": u.id}
+      end
+      render json: results
+    else
+      @users=User.all.order(sort_column + " " + sort_direction)
+      if current_user.is_public?
+        flash[:notice] = USERS_MSG["user_managing_forbidden"]
+        redirect_to root_url
+      end
     end
   end
-  
 
   ##
   # Functions used by the sortable method in application_helper and in the view users/index.html.erb

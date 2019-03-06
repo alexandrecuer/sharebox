@@ -10,6 +10,8 @@ class Poll < ApplicationRecord
   validates :description, length: { in: 1..1000 }
   
   has_many :satisfactions, :dependent=> :destroy
+  
+  has_many :surveys, :dependent=> :destroy
 
   ##
   # generate the csv file containing all the results to the poll

@@ -15,6 +15,36 @@ class FoldersController < ApplicationController
     @parent_folders = Folder.all.where(parent_id: nil)
   end
   
+  def list
+    user_id=current_user.id
+    results={}
+    @folders={}
+    @assets={}
+    @shared_folders_by_others={}
+    @toto={}
+    if id=params[:id]
+      current_folder=Folder.find_by_id_and_user_id(id, user_id)
+      if !current_folder
+        results = {folder: "inexisting or insufficient rigths"}
+      else
+        @folders=Folder.where(parent_id: id)
+        @assets=Asset.where(folder_id: id)
+        results = {"owner": user_id, folder: current_folder.name}
+      end
+    else
+      @folders=Folder.where(parent_id: nil, user_id: user_id)
+      @assets=Asset.where(folder_id: nil, user_id: user_id)
+      @shared_folders_by_others=current_user.shared_folders_by_others
+      @toto=SharedFolder.joins(:user).joins(:folder).select("folders.*, users.email as user_name, users.statut as statut").where(share_user_id: current_user.id).order("folders.name ASC")
+    end
+    
+    results.merge!({subfolders: @folders.as_json})
+    results.merge!({assets: @assets.as_json})
+    results.merge!({shared_folders_by_others: @shared_folders_by_others.as_json})
+    results.merge!({toto: @toto.as_json})
+    render json: results
+  end
+  
   ##
   # Following the route /folders/:id, browse to folder identified by id<br>
   # We check if the current user has shared access on the folder and if yes we can initialize current_folder<br>

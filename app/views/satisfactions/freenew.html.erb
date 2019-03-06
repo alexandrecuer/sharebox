@@ -1,0 +1,20 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <%= link_to MAIN["site_name"].html_safe, root_url , class: "navbar-brand" %>
+    <img src=https://www.cerema.fr/themes/custom/uas_base/images/logo-seul.svg width=60>
+</nav>
+
+<%
+if @survey
+  client_username=@survey.client_mel.to_s.split("@");
+  client_username[0].sub!("."," ");
+  by_username=@survey.by.to_s.split("@");
+  by_username[0].sub!("."," ")
+end
+%>
+<% if @survey %>
+<h3>Bonjour <%=client_username[0].titleize %></h3>
+<h3>Nous venons de terminer une prestation à votre bénéfice</h3>
+<h4><%= @survey.description %></h4>
+<h5>sous le pilotage du chargé d'affaire :  <%= mail_to @survey.by, by_username[0].titleize %></h5>
+<% end %>
+<%= render 'form' %>

@@ -5,7 +5,10 @@
         <p><%= @poll.description.html_safe %></p><br>
     <% else %>
         <% if current_user.is_private? || current_user.is_admin? %>
-            <p><%= MAIN["message_for_private_and_admin_after_record"] %><%= User.find_by_id(@satisfaction.user_id).email %> - <%= @satisfaction.created_at %></p>
+            <p>
+            <%= MAIN["message_for_private_and_admin_after_record"] %>
+            <% if @satisfaction.user_id >0 %><%= User.find_by_id(@satisfaction.user_id).email %> - <% end %>
+            <%= @satisfaction.created_at %></p>
         <% else %>
             <p><%= MAIN["message_user_after_record"].html_safe %><%= @satisfaction.created_at %><br><br></p>
         <% end %>
@@ -54,16 +57,18 @@
             </div>
         </div>
     <% end %>
-
+    
+    <% if @current_folder %>
     <% @satisfaction.folder_id = @current_folder.id %> 
     <% @satisfaction.poll_id = @current_folder.poll_id %>
     <% @satisfaction.case_number = @current_folder.case_number %>
     <%= f.hidden_field :folder_id %> 
 	<%= f.hidden_field :poll_id %> 
 	<%= f.hidden_field :case_number %>
-
-	<% if @satisfaction.new_record? %>
-    	<%= f.submit MAIN["record_satisfaction"] %>
     <% end %>
 
+	<% if @satisfaction.new_record? %>
+    	<%= f.submit MAIN["record_satisfaction"], class: 'btn' %>
+    <% end %>
+    <br><br>
 <% end %>
