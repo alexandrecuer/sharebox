@@ -14,7 +14,7 @@ if @current_folder
   puts("join on assets !!!")
   @assets=@current_folder.assets.joins(:user).select("assets.*, users.email as owner_mel").order("uploaded_file_file_name desc")
   @folders = @current_folder.children.joins(:user).order("name asc").select("users.email as owner_mel, folders.*, '?' as status")
-  # at this stage, we can check if the status folder by checkink its user_id and its parent_id
+  # at this stage, we can check if the status folder by checking its user_id and its parent_id
   @folders.each do |f|
     if f.user_id != current_user.id 
       if /#{f.parent_id}/.match(values)
@@ -133,7 +133,6 @@ end
           # current_user is the folder owner - so we check if he has eventually swarmed the folder to another user
           if f.status == 'swarmed'
             start = "<div class='folder_swarmed'>"
-            puts("w've gone")
           # 05/03/2019 - remove the elsif but it could be interesting
           #elsif f.has_sub_swarmed?
           #  start = "<div class='folder_having_sub_swarmed'>"
