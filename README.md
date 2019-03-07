@@ -8,6 +8,7 @@ If you are a developper, check online class documentation :
 https://alexandrecuer.github.io/sharebox/
 
 [![Build Status](https://travis-ci.org/alexandrecuer/sharebox.svg?branch=master)](https://travis-ci.org/alexandrecuer/sharebox)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ed6f26a2613349e0a92b404d515a4b29)](https://www.codacy.com/app/alexandrecuer/sharebox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=alexandrecuer/sharebox&amp;utm_campaign=Badge_Grade)
 
 Check online prototype : https://desolate-earth-32333.herokuapp.com/
 
