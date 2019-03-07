@@ -20,7 +20,7 @@ class PollsController < ApplicationController
   # This view allows you to edit a poll. 
   def edit
     @poll = Poll.find_by_id(params[:id])
-    if !@poll
+    unless @poll
       flash[:notice] = POLLS_MSG["inexisting_poll"]
       redirect_to root_url
     end
