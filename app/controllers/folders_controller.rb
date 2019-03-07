@@ -8,7 +8,7 @@ class FoldersController < ApplicationController
   # Show a complete view of all directories and files present in the application<br>
   # Only for admin users
   def index 
-    if !current_user.is_admin?
+    unless current_user.is_admin?
       flash[:notice] = FOLDERS_MSG["index_forbidden"]
       redirect_to root_url
     end
@@ -46,26 +46,22 @@ class FoldersController < ApplicationController
   end
   
   ##
-  # Following the route /folders/:id, browse to folder identified by id<br>
-  # We check if the current user has shared access on the folder and if yes we can initialize current_folder<br>
-  # if current_folder exists, we can go further :<br>
+  # Following the route /folders/:id, browse to folder @current_folder identified by id<br>
+  # We check if the current user has shared access on the folder and if yes, we can go further :<br>
   # In case the current user has answered to a poll on the folder, we have to show the details of his answer<br>
   # We can consider we are waiting for the current user to express his satisfaction :<br>
   # - if current user is not the owner and is granted a share on the folder, <br>
   # - if a poll has been triggered on the folder, <br>
   # - and if the current user has not answered to the poll<br> 
   def show
-    folder = Folder.find_by_id(params[:id])
-    if folder
-      if current_user.has_shared_access?(folder)
-        @current_folder = folder
-      end
-      if @current_folder
+    @current_folder = Folder.find_by_id(params[:id])
+    if @current_folder
+      if current_user.has_shared_access?(@current_folder)
         # if the user has answered to the poll, we show the details of the answer
-        # if we are waiting for the current user to express his satisfaction, we redirect to new satisfaction_on_folder_path(@current_folder)
+        # if we are waiting for the current user to express his satisfaction, we redirect to new satisfaction_on_folder_path(folder)
         if @satisfaction = current_user.satisfactions.find_by_folder_id(@current_folder.id)
           redirect_to satisfaction_path(@satisfaction.id)
-        elsif @current_folder.is_polled? && current_user.shared_folders_by_others.include?(folder)
+        elsif @current_folder.is_polled? && current_user.shared_folders_by_others.include?(@current_folder)
           redirect_to new_satisfaction_on_folder_path(@current_folder)
         end
       else
@@ -85,7 +81,7 @@ class FoldersController < ApplicationController
   # 1) if current user browse a directory shared by another user, he will not be able to create any subfolder in it<br>
   # 2) if current user has ownership, then we fetch parent_id, in order to fill the parent_id field hidden in the form
   def new
-    if !(current_user.is_admin? || current_user.is_private?)
+    unless (current_user.is_admin? || current_user.is_private?)
       flash[:notice] = FOLDERS_MSG["no_folder_creation"]
       redirect_to root_url
     end
@@ -95,7 +91,7 @@ class FoldersController < ApplicationController
       @current_folder = Folder.find_by_id(params[:folder_id])
       if @current_folder
         @folder.parent_id = @current_folder.id
-        if !current_user.has_ownership?(@current_folder)
+        unless current_user.has_ownership?(@current_folder)
           flash[:notice] = FOLDERS_MSG["no_subfolder_out_of_yur_folder"]
           redirect_to root_url
         end
