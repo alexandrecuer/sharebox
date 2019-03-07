@@ -4,12 +4,12 @@
 class PollsController < ApplicationController
 
   before_action :authenticate_user!, :check_admin
-
+  
   ##
   # check if user has admin rights<br>
   # All the views and features related to polls are destinated only for admins
   def check_admin
-    if !current_user.is_admin?
+    unless current_user.is_admin?
       flash[:notice] = POLLS_MSG["admin_rights_missing"]
       redirect_to root_url
     end
@@ -34,12 +34,26 @@ class PollsController < ApplicationController
     array = poll_params[:closed_names].split(";") + poll_params[:open_names].split(";")
     if array.uniq.count != array.size
       flash[:notice] = POLLS_MSG["same_questions"]
+    elsif params[:poll][:description] == ""
+      flash[:notice] = POLLS_MSG["missing_required_fields"]
+    elsif params[:poll][:name] == ""
+      flash[:notice] = POLLS_MSG["missing_required_fields"]
+    elsif params[:poll][:open_names] == "" && params[:poll][:closed_names] == ""
+      flash[:notice] = POLLS_MSG["missing_required_fields"]
     else
+      params[:poll][:closed_names].strip!
+      params[:poll][:open_names].strip!
+      params[:poll][:closed_names_number]=params[:poll][:closed_names].split(";").length
+      params[:poll][:open_names_number]=params[:poll][:open_names].split(";").length
+      flash[:notice]= "#{params[:poll][:closed_names_number]} question(s) fermée(s) #{params[:poll][:open_names_number]} question(s) ouverte(s)"
       if @poll.update(poll_params)
-        flash[:notice] = POLLS_MSG["poll_updated"]
+        flash[:notice] = "#{flash[:notice]} - #{POLLS_MSG["poll_updated"]}"
+      else
+        flash[:notice] = "#{flash[:notice]} - mise à jour non effectuée"
       end
     end
-    redirect_to root_url
+    #redirect_to root_url
+    render 'edit'
   end
 
   ##
@@ -57,7 +71,7 @@ class PollsController < ApplicationController
     @poll = Poll.find_by_id(params[:id])
     @hash = current_user.get_all_emails
 
-    if !@poll
+    unless @poll
       flash[:notice] = POLLS_MSG["inexisting_poll_number"]
       redirect_to root_url
     end
@@ -65,7 +79,7 @@ class PollsController < ApplicationController
     # CSV functionality
     respond_to do |format|
       format.html
-      format.csv { send_data @poll.to_csv(@hash), filename: "polls-#{Date.today}.csv" }
+      format.csv { send_data @poll.to_csv(@hash), filename: "polls-#{Time.zone.today}.csv" }
     end
   end
 
@@ -75,9 +89,15 @@ class PollsController < ApplicationController
   # duplicate questions will be rejected and the poll creation will fail
   def create
     @poll = current_user.polls.new(poll_params)
-    if (( @poll.open_names == "" && @poll.closed_names == "" ) || @poll.description == "" || @poll.name == "" )
+    if @poll.description == ""
+      flash[:notice] = POLLS_MSG["missing_required_fields"]
+    elsif @poll.name == ""
+      flash[:notice] = POLLS_MSG["missing_required_fields"]
+    elsif @poll.open_names == "" && @poll.closed_names == ""
       flash[:notice] = POLLS_MSG["missing_required_fields"]
     else
+      @poll.closed_names_number=@poll.closed_names.split(";").length
+      @poll.open_names_number=@poll.open_names.split(";").length
       array = @poll.get_names
       if array.uniq.count != array.size
         flash[:notice] = POLLS_MSG["same_questions"]
@@ -86,13 +106,14 @@ class PollsController < ApplicationController
         flash[:notice] = POLLS_MSG["poll_created"]
       end
     end
-    redirect_to root_url
+    render 'new'
+    #redirect_to root_url
   end
 
   ##
   # Destroy a poll/survey <br>
   # Every folder related to this poll will be updated (reinitialize poll_id) <br>
-  # All satisfaction answers related to the poll will be deleted.
+  # All satisfaction answers related to the poll will be deleted cause they all belong to a poll
   def destroy
     @poll = Poll.find_by_id(params[:id])
     Folder.where(poll_id: @poll.id).each do |f|

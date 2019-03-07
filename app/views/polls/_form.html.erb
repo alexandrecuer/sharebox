@@ -13,9 +13,9 @@
     <%= poll.text_area(:open_names, class: "form-control") %><br>
 
     <% if @poll.new_record? %>
-        <%= poll.submit MAIN["create_poll"], onclick: "calc_names_number();", class: 'btn' %>
+        <%= poll.submit MAIN["create_poll"], class: 'btn' %>
     <% else %>
-        <%= poll.submit MAIN["update_poll"], onclick: "calc_names_number();", class: 'btn' %>
+        <%= poll.submit MAIN["update_poll"], class: 'btn' %>
     <% end %>
 
 <% end %>
