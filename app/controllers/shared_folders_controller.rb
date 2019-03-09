@@ -23,11 +23,20 @@ class SharedFoldersController < ApplicationController
   # - folder with or without files and with satisfaction answer(s) on different polls<br>
   # You cannot send email from an empty folder without any poll associated
   def show
+    @current_folder = Folder.find_by_id(params[:id])
+    unless @current_folder
+      flash[:notice] = FOLDERS_MSG["inexisting_folder"]
+      redirect_to root_url
+    end
+    unless (current_user.is_admin? || current_user.has_shared_access?(@current_folder))
+      flash[:notice] = "cette action ne vous est pas autorisée"
+      redirect_to root_url
+    end
     # Happens only when a mail is sent 
     if params[:share_email]
-      @folder = Folder.find_by_id(params[:id])
-      @shared_files = Asset.where("folder_id = "+params[:id])
-      if @shared_files.count == 0 && !@folder.is_polled?
+      nbfiles_in_folder=@current_folder.assets.count
+      puts("**************#{nbfiles_in_folder} file(s) in the folder #{params[:id]}");
+      if nbfiles_in_folder && !@current_folder.is_polled?
         t1 = "Vous ne pouvez pas envoyer de mel !"
         t2 = "D'une part, le répertoire partagé est vide"
         t3 = "D'autre part, le répertoire partagé n'est pas lié à une enquête satisfaction"
@@ -39,11 +48,8 @@ class SharedFoldersController < ApplicationController
       end
       redirect_to shared_folder_path(params[:id])
     end
-    # everybody can access to the sharing list on an existing folder
-    # this is absolutely not a secret thing
-    @shared_folders = SharedFolder.where("folder_id = "+params[:id]) 
-    @current_folder = Folder.find(params[:id])
-    @satisfactions = Satisfaction.where(folder_id: params[:id])
+    @shared_folders = @current_folder.shared_folders
+    @satisfactions = @current_folder.satisfactions
   end
   
   # This method is only used when MANUALLY following the route /complete_suid<br>
