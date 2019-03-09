@@ -3,7 +3,7 @@
     <h3><%= pluralize(@folder.errors.count, "erreur") %></h3>
 	<ul>
 	<% @folder.errors.full_messages.each do |msg| %>
-		<li><%= msg.html_safe %></li>
+		<li><%= sanitize msg.html_safe %></li>
 	<% end %>
 	</ul>
 <% end %>
