@@ -1,3 +1,11 @@
+<%
+if @poll.new_record?
+  label = MAIN["create_poll"]
+else
+  label = MAIN["update_poll"]
+end
+%>
+
 <%= form_for @poll do |poll| %>
 
     <p><%= MAIN["poll_title"] %></p>
@@ -12,10 +20,6 @@
     <p><%= MAIN["enter_open_questions"] %></p>
     <%= poll.text_area(:open_names, class: "form-control") %><br>
 
-    <% if @poll.new_record? %>
-        <%= poll.submit MAIN["create_poll"], class: 'btn' %>
-    <% else %>
-        <%= poll.submit MAIN["update_poll"], class: 'btn' %>
-    <% end %>
+    <%= poll.submit label, class: 'btn' %>
 
 <% end %>
