@@ -63,7 +63,7 @@ class Folder < ApplicationRecord
   #  return Asset.where(folder_id: self.id)
   #end
   def is_root?
-    return true if self.parent_id == nil
+    self.parent_id.nil?
   end
 
   ##
