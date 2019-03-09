@@ -114,11 +114,11 @@ class SatisfactionsController < ApplicationController
         flash[:notice] = SATISFACTIONS_MSG["folder_owner"]
         redirect_to folder_path(@current_folder)
       end
-      if !current_user.has_shared_access?(@current_folder)
+      unless current_user.has_shared_access?(@current_folder)
         flash[:notice] = SATISFACTIONS_MSG["unshared_folder"]
         redirect_to root_url
       end
-      if !@current_folder.is_polled?
+      unless @current_folder.is_polled?
         flash[:notice] = SATISFACTIONS_MSG["unpolled_folder"]
         redirect_to folder_path(@current_folder)
       end
@@ -165,7 +165,7 @@ class SatisfactionsController < ApplicationController
         render json: results
       else        
         @current_folder = Folder.find_by_id(@satisfaction.folder_id)
-        if !( current_user.has_shared_access?(@current_folder) || current_user.is_admin? )
+        unless ( current_user.has_shared_access?(@current_folder) || current_user.is_admin? )
           flash[:notice] = SATISFACTIONS_MSG["access_forbidden"]
           redirect_to root_url
         end

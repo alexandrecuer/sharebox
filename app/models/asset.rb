@@ -7,11 +7,11 @@ class Asset < ApplicationRecord
   
   # s3_permissions permet d'uploader des fichiers sur S3 en mode private....
   # par defaut paperclip procède à des uploads en mode public
-  if Rails.application::config.local_storage==1
+  if Rails.application.config.local_storage==1
     has_attached_file :uploaded_file,
                       url: '/forge/get/:id/:filename',          
                       path: ':rails_root/forge/attachments/:id/:filename'
-  elsif Rails.application::config.local_storage==0
+  elsif Rails.application.config.local_storage==0
     has_attached_file :uploaded_file,
                       url: ENV.fetch('AWS_URL'),
                       path: '/forge/attachments/:id/:filename',
