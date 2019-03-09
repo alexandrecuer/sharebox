@@ -90,11 +90,11 @@ class FoldersController < ApplicationController
       #@current_folder = current_user.folders.find(params[:folder_id])
       @current_folder = Folder.find_by_id(params[:folder_id])
       if @current_folder
-        @folder.parent_id = @current_folder.id
         unless current_user.has_ownership?(@current_folder)
           flash[:notice] = FOLDERS_MSG["no_subfolder_out_of_yur_folder"]
           redirect_to root_url
         end
+        @folder.parent_id = @current_folder.id
       else
         flash[:notice] = FOLDERS_MSG["no_subfolder_in_inexisting_folder"]
         redirect_to root_url
@@ -140,7 +140,8 @@ class FoldersController < ApplicationController
   # All non blank case numbers already used once will be rejected (usefull??)
   def create
     @folder = current_user.folders.new(folder_params)
-    if ( Folder.where(case_number: @folder.case_number).length > 0 && @folder.case_number != "" ) 
+    #if ( Folder.where(case_number: @folder.case_number).length > 0 && @folder.case_number != "" ) 
+    if ( Folder.find_by_case_number(@folder.case_number) && @folder.case_number != "" ) 
       flash[:notice] = FOLDERS_MSG["case_number_used"]
       if @folder.parent_id
         redirect_to folder_path(@folder.parent_id)
@@ -173,7 +174,7 @@ class FoldersController < ApplicationController
     # case number update !!
     # we can get the existing case number via @folder.case_number
     # we can get the new case number via 'folder_params[:case_number]'
-    if ( Folder.where(case_number: folder_params[:case_number]).length > 0 && folder_params[:case_number] != "" && folder_params[:case_number] != @folder.case_number) 
+    if ( Folder.find_by_case_number(folder_params[:case_number]) && folder_params[:case_number] != "" && folder_params[:case_number] != @folder.case_number)
       flash[:notice] = FOLDERS_MSG["case_number_used"]
       if @folder.parent_id
         redirect_to folder_path(@folder.parent_id)
@@ -181,12 +182,12 @@ class FoldersController < ApplicationController
         redirect_to root_url
       end
     else
-      old_case_number = @folder.case_number
       if @folder.update(folder_params)
       # Updating a case number on a folder also update every case number on satisfactions of the same folder
-        Satisfaction.where(folder_id: @folder.id).each do |f|
-          f.case_number = @folder.case_number
-          f.save
+        #Satisfaction.where(folder_id: @folder.id).each do |s|
+        @folder.satisfactions.each do |s|
+          s.case_number = @folder.case_number
+          s.save
         end
         if @folder.parent_id
           redirect_to folder_path(@folder.parent_id)
@@ -245,7 +246,7 @@ class FoldersController < ApplicationController
         if position
           destination_folder_id=params[:parent_id].to_s[0..position-1].to_i
           destination_user_id=params[:parent_id].to_s[position+1..-1].to_i
-          if !User.find_by_id(destination_user_id)
+          unless User.find_by_id(destination_user_id)
             flash[:notice]="#{flash[:notice]} Pas d'utilisateur ayant #{destination_user_id} comme id<br>"
             changeowner = 0
           end
@@ -257,14 +258,14 @@ class FoldersController < ApplicationController
         
         # is there an existing destination ?
         destination = Folder.find_by_id(destination_folder_id)
-        if !destination && destination_folder_id != nil
+        if !destination && !destination_folder_id.nil?
           flash[:notice] = "#{flash[:notice]} #{destination_folder_id} #{FOLDERS_MSG["no_folder_on_that_id"]}<br>"
           movefolder = 0
         end
         
         # if we've launched a move without specifying a new owner, we'll give children to the destination folder owner
         # so we define destination_user_id equal to destination folder owner id 
-        if !destination_user_id
+        unless destination_user_id
           if destination
             destination_user_id = destination.user_id
           end
