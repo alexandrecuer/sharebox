@@ -21,7 +21,7 @@ before_action :authenticate_user!
   # Only admin or private users are able to upload files<br>
   # They cannot upload files outside the folders they own
   def new
-    if !(current_user.is_admin? || current_user.is_private?)
+    unless (current_user.is_admin? || current_user.is_private?)
       flash[:notice] = ASSETS_MSG["rights_missing"]
       redirect_to root_url
     end
@@ -29,15 +29,13 @@ before_action :authenticate_user!
     # If there is a folder_id, we attach the file to the corresponding folder<br>
     # if not, ir will be a root located file 
     if params[:folder_id]
-      @current_folder = Folder.find_by_id(params[:folder_id])
+      @current_folder = current_user.folders.find_by_id(params[:folder_id])
       if @current_folder
         @asset.folder_id = @current_folder.id
-        if !current_user.has_ownership?(@current_folder)  
-            flash[:notice] = ASSETS_MSG["not_yur_folder"]
-            redirect_to root_url
-        end
       else
-        flash[:notice] = ASSETS_MSG["inexisting_folder"]
+        flash[:notice] = "Cette action n'est pas autorisée<br>"
+        flash[:notice] = "#{flash[:notice]} - #{ASSETS_MSG["inexisting_folder"]}<br>"
+        flash[:notice] = "#{flash[:notice]} - #{ASSETS_MSG["not_yur_folder"]}"
         redirect_to root_url
       end
     end
@@ -80,10 +78,6 @@ before_action :authenticate_user!
 
   ##
   # Permits the user to download a file<br>
-  # 2 different options for file storage are possible :<br>
-  # - 1) local storage in application_root/forge/attachments/<br>
-  # - 2) Amazon S3 mode, in a cloud storage<br>
-  # asset will be stored in a directory named with the asset id : asset_id/asset_name
   def get
     #asset = current_user.assets.find_by_id(params[:id])
     asset = Asset.find_by_id(params[:id])
@@ -92,13 +86,7 @@ before_action :authenticate_user!
       #case 1 : asset is a root file
       if !asset.folder_id
         if current_user.has_asset_ownership?(asset)
-          # switching to S3, we use "redirect_to asset.uploaded_file.expiring_url(10)"
-          # this creates a valid 10s url that allows access to private S3 files
-          if Rails.application::config.local_storage==1
-            send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-          elsif Rails.application::config.local_storage==0
-            redirect_to asset.uploaded_file.expiring_url(10)
-          end
+          get_file(asset)
         else
           flash[:notice] = ASSETS_MSG["asset_not_for_yu"]
           redirect_to root_url
@@ -107,21 +95,15 @@ before_action :authenticate_user!
         #case 2 : asset belongs to a directory
         current_folder = Folder.find_by_id(asset.folder_id)
         if current_user.has_shared_access?(current_folder)
-          #a attempt to count the number of times the shared file has been opened by a public user for whom the share was created 
+          #using the shared_folders message field to track file openings from a given share on folder
           if @shared_folder = SharedFolder.find_by_share_user_id_and_folder_id(current_user.id,asset.folder_id)
-            puts("*******"+@shared_folder.id.to_s+" trying to download a file")
-            n = @shared_folder.message.to_i
-            n += 1
-            puts("*******"+n.to_s)
+            n = @shared_folder.message.to_i + 1
+            puts("*******trying to download a file from share number #{@shared_folder.id.to_s}")
+            puts("*******tracked #{n.to_s} access from that share !!")
             @shared_folder.message= n
             @shared_folder.save
           end
-          # local or S3 storage ?
-          if Rails.application::config.local_storage==1
-            send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-          elsif Rails.application::config.local_storage==0
-            redirect_to asset.uploaded_file.expiring_url(10)
-          end
+          get_file(asset)
         else
           flash[:notice] = ASSETS_MSG["asset_not_for_yu"]
           redirect_to root_url
@@ -138,5 +120,23 @@ before_action :authenticate_user!
       params.require(:asset).permit(:uploaded_file, :folder_id)
       # previous config when form was only composed of a file input
       #params.require(:asset).permit(:uploaded_file, :folder_id) if params[:asset]
+    end
+    
+    ##
+    # private method for file opening management<br>
+    # 2 different options for file storage are possible :<br>
+    # - 1) local storage in application_root/forge/attachments/<br>
+    # - 2) Amazon S3 mode, in a cloud storage<br>
+    # asset will be stored in a directory named with the asset id : asset_id/asset_name
+    def get_file(asset)
+      # switching to S3, we use "redirect_to asset.uploaded_file.expiring_url(10)"
+      # this creates a valid 10s url that allows access to private S3 files
+      if Rails.application.config.local_storage==1
+        puts ("opening local file")
+        send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+      elsif Rails.application.config.local_storage==0
+        puts ("opening amazon S3 file")
+        redirect_to asset.uploaded_file.expiring_url(10)
+      end
     end
 end
