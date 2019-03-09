@@ -55,7 +55,7 @@ before_action :authenticate_user!
         end
       else
         if @asset.folder_id
-          @current_folder = Folder.find_by_id(@asset.folder_id)
+          @current_folder = current_user.folders.find_by_id(@asset.folder_id)
         end
         render 'new'
       end
@@ -98,8 +98,8 @@ before_action :authenticate_user!
           #using the shared_folders message field to track file openings from a given share on folder
           if @shared_folder = SharedFolder.find_by_share_user_id_and_folder_id(current_user.id,asset.folder_id)
             n = @shared_folder.message.to_i + 1
-            puts("*******trying to download a file from share number #{@shared_folder.id.to_s}")
-            puts("*******tracked #{n.to_s} access from that share !!")
+            puts("*******trying to download a file from share number #{@shared_folder.id}")
+            puts("*******tracked #{n} access from that share !!")
             @shared_folder.message= n
             @shared_folder.save
           end
