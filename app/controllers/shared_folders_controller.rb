@@ -68,8 +68,8 @@ class SharedFoldersController < ApplicationController
   # Show the sharing form<br>
   # When a folder is shared to a user, you must give at least one email address or more but separated by a ","
   def new
-    @to_be_shared_folder = Folder.find_by_id(params[:id])
-    if !current_user.has_ownership?(@to_be_shared_folder)
+    unless @to_be_shared_folder = current_user.folders.find_by_id(params[:id])
+    #if !current_user.has_ownership?(@to_be_shared_folder)
       flash[:notice] = SHARED_FOLDERS_MSG["inexisting_folder"]
       redirect_to root_url
     else
@@ -157,7 +157,7 @@ class SharedFoldersController < ApplicationController
       flash[:notice] = SHARED_FOLDERS_MSG["shares_destroyed"]
     end
 
-    if !SharedFolder.find_by_folder_id(params[:id])
+    unless SharedFolder.find_by_folder_id(params[:id])
       redirect_to root_url
     else
       redirect_to shared_folder_path(params[:id])
