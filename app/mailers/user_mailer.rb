@@ -52,7 +52,7 @@ class UserMailer < ApplicationMailer
       asset = @shared_files[0].uploaded_file_file_name
       if numberofclics
         t1="Vous avez déjà visité ce répertoire contenant le fichier suivant :"
-        t4="#{t2}#{numberofclics.to_s}#{t3}"
+        t4="#{t2}#{numberofclics}#{t3}"
       else
         t1="Un livrable vous a été partagé :"
       end
