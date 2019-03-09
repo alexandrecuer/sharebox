@@ -40,19 +40,19 @@ class Poll < ApplicationRecord
   ##
   # Return a table with all closed questions
   def get_closed_names
-    c = self.closed_names.split(';')
+    self.closed_names.split(';')
   end
 
   ##
   # Return a table with all open questions
   def get_open_names
-    o = self.open_names.split(';')
+    self.open_names.split(';')
   end
 
   ##
   # Return a table with all closed and open questions 
   def get_names
-    o = get_closed_names + get_open_names
+    get_closed_names + get_open_names
   end
 
   ##
@@ -79,6 +79,7 @@ class Poll < ApplicationRecord
         tab[i][y] = ( tab[i][y].to_f / number_of_satisfactions * 100 ).round(2)
       end
     end
+    # we return tab
     tab
   end
 end
