@@ -125,7 +125,7 @@ nb+=Satisfaction.where("user_id < ? and poll_id= ?", 0, @poll.id).count+Survey.w
 	      </tr>
           <tr>
             <td>
-              <%= opentext %>
+              <%= opentext.html_safe %>
             </td>
           </tr>
         </table>
