@@ -27,7 +27,7 @@ nb+=Satisfaction.where("user_id < ? and poll_id= ?", 0, @poll.id).count+Survey.w
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><%= modaltitle %></h5>
+        <h5 class="modal-title" id="exampleModalLabel"><%= sanitize modaltitle %></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -91,9 +91,9 @@ nb+=Satisfaction.where("user_id < ? and poll_id= ?", 0, @poll.id).count+Survey.w
     %>
       <div class="<%= divclass %>">
         <table width="60%" align="center">
-          <tr><th><%= line1 %></th></tr>
-          <tr><td><i><%= line2 %></i></td></tr>
-          <tr><th><%= line3 %> <%= line4 %></i></th></tr>
+          <tr><th><%= sanitize line1 %></th></tr>
+          <tr><td><i><%= sanitize line2 %></i></td></tr>
+          <tr><th><%= line3 %> <%= sanitize line4 %></i></th></tr>
           <tr>
             <td>
             <% for n in 0..nlines-1 %>
