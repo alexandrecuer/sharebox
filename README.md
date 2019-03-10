@@ -27,14 +27,19 @@ Uses the following gems :
 # Deployment to Heroku through GitHub integration
 This application has been designed for an automatic deployment from github to the heroku cloud
 You will need a S3 bucket as Heroku has an ephemeral file system
-## Fork and customize the repository to your needs
+Here are the main steps :
+- Fork and customize the repository to your needs
+- Create a new Heroku app and link it to the GitHub repository previously forked
+- Fill all the needed config variables
+- Proceed to a manual deploy
+
 To customize the application to your needs, check the following files 
 - config/config.yml
 - config/initializers/devise.rb
+
 You can find the two site’s logos in the /app/assets/images directory
-## Create a new Heroku app and link it to the GitHub repository previously forked
-## Fill all the needed config variables
-## Proceed to a manual deploy
+
+There are eleven environment variables to fill plus an extra one
 
 Please note that the first user to register in the system will be given admin rights !!
 
