@@ -4,6 +4,14 @@ This application can also be qualified as a Ruby on Rails SharingFile System
 
 If you deliver files and documents to your clients and if you want to record your clients'satisfaction, this tool is for you
 
+4 different user profiles are available :
+
+0) external user: customer who is not registered in the tool and who has received a token by email to answer a satisfaction survey not related to a deliverable
+1) standard public user: customer who wants to access a deliverable and to complete an associated satisfaction survey, if any
+2) public user with address type "first_name.name@team_domain": team member who wants to send customer satisfaction surveys without making deliverables available on the cloud - initialize TEAM config var with your domain name to make this work - otherwise there will be no difference between profile 1 and profile 2 
+3) private user: full team member who dematerializes his productions
+4) admin: all powers - access to all data directories, all surveys, surveys management, ability to modify directories (moving and changing ownership)
+
 Online class documentation (not up to date) :
 https://alexandrecuer.github.io/sharebox/
 
@@ -46,6 +54,8 @@ config.mailer_sender will be the sending email as far as authentification issues
 You can find the two site’s logos in the /app/assets/images directory
 
 Please note that the first user to register in the system will be given admin rights !!
+
+for more details : [deploy on heroku in images](/public/images/doc/deploy_on_heroku.pdf)
 
 # Installation on a Microsoft Window development machine
 ## Requirements
