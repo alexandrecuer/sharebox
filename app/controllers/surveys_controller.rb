@@ -2,9 +2,16 @@
 # a very volatile class in order to be able to generate satisfaction surveys out of the folders/assets system
 
 class SurveysController < ApplicationController
+    before_action :inteam
+
+    def inteam
+        authenticate_user!
+        unless current_user.belongs_to_team?
+          redirect_to root_url
+        end
+    end
 
     def index
-        authenticate_user!
         @surveys = Survey.all.order("id DESC");
         users=current_user.get_all_emails
         results=[]
@@ -20,7 +27,6 @@ class SurveysController < ApplicationController
     end
     
     def show
-        authenticate_user!
         survey=Survey.find_by_id(params[:id])
         if survey
           if params[:email]=="send"
@@ -38,12 +44,10 @@ class SurveysController < ApplicationController
     end
     
     def new
-        authenticate_user!
         @survey = Survey.new
     end
     
     def create
-        authenticate_user!
         @survey = current_user.surveys.new
         @survey.description=params[:description]
         @survey.client_mel=params[:client_mel]
@@ -58,7 +62,6 @@ class SurveysController < ApplicationController
     end
     
     def destroy
-        authenticate_user!
         @survey = Survey.find_by_id(params[:id])
         if @survey.user_id == current_user.id || current_user.is_admin?
           @survey.destroy

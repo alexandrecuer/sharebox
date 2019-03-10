@@ -26,6 +26,14 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  
+  ##
+  # check if user belongs to the team if any
+  def belongs_to_team?
+    team=ENV.fetch('TEAM')
+    self.email.split("@")[1]==team
+  end
+  
   ##
   # This method is used after a user creation<br>
   # It realize a concrete action only once in theory<br>

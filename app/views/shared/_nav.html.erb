@@ -28,6 +28,10 @@ if current_user.is_admin?
   managepolls="#{managepolls}</table>".html_safe
 end
 
+if current_user.belongs_to_team?
+  managefreesurveys = "#{link_to 'enquêtes client sans mise à disposition de livrables', new_survey_path, class: 'dropdown-item'}"
+end
+
 # navigation menu
 %>
 
@@ -45,17 +49,19 @@ end
           <%= current_user.email %>(<%= current_user.statut %>)
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <%= link_to "manager des enquêtes client", new_survey_path, class: "dropdown-item" %>
-          <%= link_to MAIN["disconnect"].html_safe, destroy_user_session_path, :method => :delete, class: "dropdown-item" %>
-          <%= uploadfile %>
+          <%#= link_to "manager des enquêtes client", new_survey_path, class: "dropdown-item" %>
+          <%= sanitize managefreesurveys %>
+          
+          <%= sanitize uploadfile %>
           <%#= createdir %>
-          <%= createdirmodal  %>
-          <%= line %>
+          <%= sanitize createdirmodal  %>
+          <%= sanitize line %>
           <%= managefolders %>
-          <%= manageusers %>
-          <%= line %>
-          <%= newpoll %>
-          <%= managepolls %>      
+          <%= sanitize manageusers %>
+          <%= sanitize line %>
+          <%= sanitize newpoll %>
+          <%= managepolls %>    
+          <%= link_to MAIN["disconnect"].html_safe, destroy_user_session_path, :method => :delete, class: "dropdown-item" %>          
         </div>
       </li>
     </ul>
@@ -80,7 +86,7 @@ if @current_folder
 end
 %>
 
-<%= breadcrumb %>
+<%= sanitize breadcrumb %>
 
 <% if notice %>
   <div class="alert alert-success" role="alert"><p class="notice"><%= notice.html_safe %></p></div>
