@@ -30,8 +30,11 @@ class User < ApplicationRecord
   ##
   # check if user belongs to the team if any
   def belongs_to_team?
-    team=ENV.fetch('TEAM')
-    self.email.split("@")[1]==team
+    a = true
+    if ENV['TEAM']
+      a = self.email.split("@")[1]==ENV.fetch('TEAM')
+    end
+    a
   end
   
   ##
