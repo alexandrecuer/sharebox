@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Class: InformUserJob
+  Class: SurveyClientJob
   
     &mdash; Documentation by YARD 0.9.16
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  pathId = "InformUserJob";
+  pathId = "SurveyClientJob";
   relpath = '';
 </script>
 
@@ -36,10 +36,10 @@
       <div id="header">
         <div id="menu">
   
-    <a href="_index.html">Index (I)</a> &raquo;
+    <a href="_index.html">Index (S)</a> &raquo;
     
     
-    <span class="title">InformUserJob</span>
+    <span class="title">SurveyClientJob</span>
   
 </div>
 
@@ -59,7 +59,7 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Class: InformUserJob
+      <div id="content"><h1>Class: SurveyClientJob
   
   
   
@@ -78,7 +78,7 @@
           
             <li class="next"><span class='object_link'><a href="ApplicationJob.html" title="ApplicationJob (class)">ApplicationJob</a></span></li>
           
-            <li class="next">InformUserJob</li>
+            <li class="next">SurveyClientJob</li>
           
         </ul>
         <a href="#" class="inheritanceTree">show all</a>
@@ -98,7 +98,7 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>app/jobs/inform_user_job.rb</dd>
+    <dd>app/jobs/survey_client_job.rb</dd>
   </dl>
   
 </div>
@@ -133,7 +133,7 @@ of a shared folder</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#perform-instance_method" title="#perform (instance method)">#<strong>perform</strong>(current_user, email, folder_id)  &#x21d2; Object </a>
+      <a href="#perform-instance_method" title="#perform (instance method)">#<strong>perform</strong>(survey_id)  &#x21d2; Object </a>
     
 
     
@@ -148,10 +148,7 @@ of a shared folder</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>deliver electronic message from current_user to specified email<br> email
-can be registered in the application or not<br> if not, the message will
-include the new registration link<br> the message only concerns a specific
-folder which actually can be considered as a deliverable terminal<br>.</p>
+<p>deliver electronic message from a specific survey<br>.</p>
 </div></span>
   
 </li>
@@ -176,7 +173,7 @@ folder which actually can be considered as a deliverable terminal<br>.</p>
       <div class="method_details first">
   <h3 class="signature first" id="perform-instance_method">
   
-    #<strong>perform</strong>(current_user, email, folder_id)  &#x21d2; <tt>Object</tt> 
+    #<strong>perform</strong>(survey_id)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -185,10 +182,7 @@ folder which actually can be considered as a deliverable terminal<br>.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>deliver electronic message from current_user to specified email<br> email
-can be registered in the application or not<br> if not, the message will
-include the new registration link<br> the message only concerns a specific
-folder which actually can be considered as a deliverable terminal<br></p>
+<p>deliver electronic message from a specific survey<br></p>
 
 
   </div>
@@ -202,15 +196,15 @@ folder which actually can be considered as a deliverable terminal<br></p>
       <pre class="lines">
 
 
-12
-13
-14</pre>
+9
+10
+11</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/jobs/inform_user_job.rb', line 12</span>
+      <pre class="code"><span class="info file"># File 'app/jobs/survey_client_job.rb', line 9</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_perform'>perform</span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='comma'>,</span><span class='id identifier rubyid_email'>email</span><span class='comma'>,</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='rparen'>)</span>
-  <span class='const'><span class='object_link'><a href="UserMailer.html" title="UserMailer (class)">UserMailer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_inform_user'><span class='object_link'><a href="UserMailer.html#inform_user-instance_method" title="UserMailer#inform_user (method)">inform_user</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='comma'>,</span><span class='id identifier rubyid_email'>email</span><span class='comma'>,</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_deliver_now'>deliver_now</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_perform'>perform</span><span class='lparen'>(</span><span class='id identifier rubyid_survey_id'>survey_id</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="UserMailer.html" title="UserMailer (class)">UserMailer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_send_free_survey'><span class='object_link'><a href="UserMailer.html#send_free_survey-instance_method" title="UserMailer#send_free_survey (method)">send_free_survey</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_survey_id'>survey_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_deliver_now'>deliver_now</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>

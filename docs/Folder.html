@@ -1076,7 +1076,7 @@ résultat def get_assets</p>
       <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 65</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_root?'>is_root?</span>
-  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span> <span class='op'>==</span> <span class='kw'>nil</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1320,7 +1320,7 @@ directory belonging to another private user ?</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Oct  9 09:03:15 2018 by
+  Generated on Sun Mar 10 13:24:56 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

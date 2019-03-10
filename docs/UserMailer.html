@@ -181,6 +181,31 @@ folder and is called by the folder owner<br>.</p>
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#send_free_survey-instance_method" title="#send_free_survey (instance method)">#<strong>send_free_survey</strong>(id)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>generate email in order to inform a client non registered in Colibri of a
+survey.</p>
+</div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -366,7 +391,7 @@ folder and is called by the folder owner<br></p>
     <span class='id identifier rubyid_asset'>asset</span> <span class='op'>=</span> <span class='ivar'>@shared_files</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_uploaded_file_file_name'>uploaded_file_file_name</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_numberofclics'>numberofclics</span>
       <span class='id identifier rubyid_t1'>t1</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Vous avez déjà visité ce répertoire contenant le fichier suivant :</span><span class='tstring_end'>&quot;</span></span>
-      <span class='id identifier rubyid_t4'>t4</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t2'>t2</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_numberofclics'>numberofclics</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t3'>t3</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_t4'>t4</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t2'>t2</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_numberofclics'>numberofclics</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t3'>t3</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
     <span class='kw'>else</span>
       <span class='id identifier rubyid_t1'>t1</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Un livrable vous a été partagé :</span><span class='tstring_end'>&quot;</span></span>
     <span class='kw'>end</span>
@@ -392,12 +417,58 @@ folder and is called by the folder owner<br></p>
 </table>
 </div>
     
+      <div class="method_details ">
+  <h3 class="signature " id="send_free_survey-instance_method">
+  
+    #<strong>send_free_survey</strong>(id)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>generate email in order to inform a client non registered in Colibri of a
+survey</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+79
+80
+81
+82
+83</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_mailer.rb', line 79</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_send_free_survey'>send_free_survey</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='ivar'>@survey</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Survey.html" title="Survey (class)">Survey</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_title'>title</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[Cerema][courte enquête de satisfaction]</span><span class='embexpr_beg'>#{</span><span class='ivar'>@survey</span><span class='period'>.</span><span class='id identifier rubyid_description'>description</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_mail'>mail</span><span class='lparen'>(</span><span class='label'>to:</span> <span class='ivar'>@survey</span><span class='period'>.</span><span class='id identifier rubyid_client_mel'>client_mel</span><span class='comma'>,</span> <span class='label'>from:</span> <span class='ivar'>@survey</span><span class='period'>.</span><span class='id identifier rubyid_by'>by</span><span class='comma'>,</span> <span class='label'>subject:</span> <span class='id identifier rubyid_title'>title</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
 </div>
 
       <div id="footer">
-  Generated on Tue Oct  9 09:03:15 2018 by
+  Generated on Sun Mar 10 13:24:56 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>
