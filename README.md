@@ -30,16 +30,18 @@ You will need a S3 bucket as Heroku has an ephemeral file system
 Here are the main steps :
 - Fork and customize the repository to your needs
 - Create a new Heroku app and link it to the GitHub repository previously forked
-- Fill all the needed config variables
+- Fill all the eleven needed config variables (AWS_ACCESS_KEY_ID, AWS_HOST_NAME, AWS_REGION, AWS_SECRET_ACCESS_KEY, AWS_URL, DOMAIN, GMAIL_PASSWORD, GMAIL_USERNAME, S3_BUCKET_NAME, SMTP_ADDRESS, SMTP_PORT plus an extra one: TEAM)
 - Proceed to a manual deploy
 
 To customize the application to your needs, check the following files 
-- config/config.yml
-- config/initializers/devise.rb
+- config/config.yml (site_name and admin_mel)
+- config/initializers/devise.rb (config.mailer_sender)
+
+admin_mel will receive activity notifications : new shares, pending users. Pending users are unregistered users benefiting from at least one shared access to a folder
+
+config.mailer_sender will be the sending email as far as authentification issues are considered (eg password changes)
 
 You can find the two site’s logos in the /app/assets/images directory
-
-There are eleven environment variables to fill plus an extra one
 
 Please note that the first user to register in the system will be given admin rights !!
 
