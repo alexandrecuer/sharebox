@@ -12,7 +12,7 @@ If you deliver files and documents to your clients and if you want to record you
 0) external user: customer who is not registered in the tool and who has received a token by email to answer a satisfaction survey not related to a deliverable
 1) standard public user: customer who wants to access a deliverable and to complete an associated satisfaction survey, if any
 2) public user with address type "first_name.name@team_domain": team member who wants to send customer satisfaction surveys without making deliverables available on the cloud - initialize TEAM config var with your domain name to make this work - otherwise there will be no difference between profile 1 and profile 2 
-3) private user: full team member who dematerializes his productions
+3) private user: full team member who dematerializes his productions - private users can swarm directories in other private users'folders - this constitutes a primitive kind of collaborative work
 4) admin: all powers - access to all data directories, all surveys, surveys management, ability to modify directories (moving and changing ownership)
 
 Online class documentation (not up to date) :
