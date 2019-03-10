@@ -28,71 +28,13 @@ Uses the following gems :
 This application has been designed for an automatic deployment from github to the heroku cloud
 You will need a S3 bucket as Heroku has an ephemeral file system
 ## Fork and customize the repository to your needs
-Assuming you have a GitHub account and you are logged in, fork the sharebox repository into your GitHub account
-
-<img src=public/images/doc/01_fork.png>
-
-To customize the application to your needs, edit the following files 
+To customize the application to your needs, check the following files 
 - config/config.yml
 - config/initializers/devise.rb
-
-<img src=public/images/doc/02_customization.png>
-
-You have to setup the following parameters :
-- in config.yml, site_name and admin_mel
-- in devise.rb, config.mailer_sender
-
-admin_mel will receive activity notifications : new shares, pending users. Pending users are unregistered users benefiting from at least one shared access to a folder
-
-config.mailer_sender will be the sending email as far as authentification issues are considered (eg password changes)
-
-You can find the two site’s logos in the /app/assets/images directory 
-
-<img src=public/images/doc/03_site_logos.png>
-
-colibri.jpg is the main logo appearing above the login box
-
-logo.jpg is the logo used in emails sent by private users to public users
-
-The sharebox repository Gemfile may suggest a ruby version not suitable with the recommanded heroku stack, that is to say created with a deprecated heroku stack
-
-~~For the heroku-18 stack, please note you will  have to proceed to the following modifications~~
-~~- in the Gemfile, change ``ruby '2.3.3'`` to ``ruby '2.5.1'``~~
-~~- in the Gemfile.lock, RUBY VERSION section, change ``ruby 2.3.3p222`` to ``ruby 2.5.1p57``~~
-
+You can find the two site’s logos in the /app/assets/images directory
 ## Create a new Heroku app and link it to the GitHub repository previously forked
-Create an heroku account if you do not have one yet, and once logged in, access to the heroku dashboard in order to create a new heroku app, here named « cerema-autun »
-
-<img src=public/images/doc/04_create_app.png>
-
-Once the application is created, you will be redirected to the application control panel
-
-Go to the deploy tab and choose the GitHub deployment method (Please note you need to be logged into your GitHub account)
-
-<img src=public/images/doc/05_connect_to_github_1.png>
-
-<img src=public/images/doc/06_connect_to_github_2.png>
-
-Your GitHub and heroku accounts are now linked together.
-
 ## Fill all the needed config variables
-Before proceeding to a deployment, fill all the needed config vars.
-
-11 config vars are needed by the sharebox application and if one is missing, the deployment will fail.
-
-<img src=public/images/doc/07_config_vars.png>
-
-If the bucket does not exist, it will be created when the first file will be uploaded to S3.
-
-Everything is ready for a manual deploy.
-
 ## Proceed to a manual deploy
-<img src=public/images/doc/08_manual_deploy.png>
-
-The manual deploy will initialize the missing config variables, related to Heroku and create an empty database. 
-Just create the database tables with a rake db:schema:load command in the Heroku console and your app is on line.
-
-<img src=public/images/doc/09_create_table.png>
 
 Please note that the first user to register in the system will be given admin rights !!
 
