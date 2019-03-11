@@ -226,11 +226,11 @@ $.ajax({
     dataType: "json",
     async: true,
     success: function (data) {
-        var answerstitle = $("#titleandcsv").html()
+        var answerstitle = $("#titleandcsv").html();
         data.forEach(function(poll){
             answerstitle+="&nbsp;<a href=/surveys?csv=1&poll_id="+poll+">[CSV_sondage"+poll+"]</a>";
         });
-        $("#titleandcsv").html(answerstitle)
+        $("#titleandcsv").html(answerstitle);
     }
 });
  
