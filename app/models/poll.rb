@@ -12,27 +12,35 @@ class Poll < ApplicationRecord
   has_many :satisfactions, :dependent=> :destroy
   
   has_many :surveys, :dependent=> :destroy
+  
+  ##
+  # generate the attributes to explore a satisfactions active record associated to a poll<br>
+  # structure is [created_at, case_number/description, all closed questions separated by comma, all open questions separated by comma]
+  def fetch_attributes
+    attributes = []
+    attributes.push("created_at")
+    attributes.push("case_number")
+
+    for i in 1..self.closed_names_number
+        attributes.push("closed"+i.to_s)
+    end
+    for i in 1..self.open_names_number
+        attributes.push("open"+i.to_s)
+    end
+    attributes
+  end
 
   ##
   # generate the csv file containing all the results to the poll
   def to_csv(emails)
-    headers = self.get_names.insert(0,'Date').insert(1,'Email').insert(2,'N° d''affaire')
-
+    headers = self.get_names.insert(0,'Email').insert(1,'Date').insert(2,'N° affaire')
+    attributes=self.fetch_attributes
+    
     CSV.generate(headers: true, :col_sep => ';') do |csv|
       csv << headers
 
-      attributes = ["created_at"]
-      attributes1 = ["case_number"]
-
-      for i in 1..self.closed_names_number
-        attributes1.push("closed"+i.to_s)
-      end
-      for i in 1..self.open_names_number
-        attributes1.push("open"+i.to_s)
-      end
-
       Satisfaction.where(poll_id: self.id).each do |s|
-        csv << s.attributes.values_at(*attributes) + emails.values_at(s.user_id) + s.attributes.values_at(*attributes1)
+        csv << emails.values_at(s.user_id) + s.attributes.values_at(*attributes)
       end
     end
   end
@@ -82,4 +90,6 @@ class Poll < ApplicationRecord
     # we return tab
     tab
   end
+  
+  
 end

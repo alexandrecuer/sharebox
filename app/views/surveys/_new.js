@@ -221,6 +221,19 @@ $("#surveylist").on("click",".btn",function(){
     surveylist_update();
 });
 
+$.ajax({ 
+    url: "/getpolls?mynums=1",
+    dataType: "json",
+    async: true,
+    success: function (data) {
+        var answerstitle = $("#titleandcsv").html()
+        data.forEach(function(poll){
+            answerstitle+="&nbsp;<a href=/surveys?csv=1&poll_id="+poll+">[CSV_sondage"+poll+"]</a>";
+        });
+        $("#titleandcsv").html(answerstitle)
+    }
+});
+ 
 $("#answers").on("click",".btn",function(){
     var id = $(this).val();
     //console.log(id);

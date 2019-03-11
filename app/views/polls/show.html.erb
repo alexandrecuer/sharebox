@@ -14,7 +14,7 @@ modulo=@poll.closed_names_number%colmax
 modaltitle="Synthèse de l'enquête<br>#{@poll.name}".html_safe
 # TODO > code the jointure in rails mode - drop this raw SQL
 nb=SharedFolder.joins("INNER JOIN folders ON folders.id = shared_folders.folder_id WHERE folders.poll_id = #{@poll.id}").count
-nb+=Satisfaction.where("user_id < ? and poll_id= ?", 0, @poll.id).count+Survey.where(poll_id: @poll.id).count
+nb+=Satisfaction.where("folder_id < ? and poll_id= ?", 0, @poll.id).count+Survey.where(poll_id: @poll.id).count
 %>
 <b>Enquête <%= @poll.name %></b><br>
 <%= Satisfaction.where(poll_id: @poll.id).length %> retour(s) satisfaction<br>
@@ -66,10 +66,11 @@ nb+=Satisfaction.where("user_id < ? and poll_id= ?", 0, @poll.id).count+Survey.w
     <%
     # loop on all the satisfactions recorded on the poll
     Satisfaction.where(poll_id: @poll.id).each_with_index do |s,index| 
-      line1="Retour satisfaction du client #{@hash[s.user_id]}"
+      line1="Retour satisfaction numéro #{s.id}"
       line1="#{line1} #{link_to satisfaction_path(s), method: :delete, data: {confirm: MAIN["are_yu_sure"] } do fa_icon 'times' end}".html_safe
       line2="Enregistré le #{s.created_at}<br>".html_safe
       if folder=Folder.find_by_id(s.folder_id)
+        line2="#{line2} par le client #{@hash[s.user_id]}"
         line3="Dossier : #{folder.name}".html_safe
         if folder.case_number != ""
           line4="(affaire #{folder.case_number})".html_safe

@@ -36,7 +36,7 @@ class SatisfactionsController < ApplicationController
         else
           results[i]["folder_name"]=""
         end
-        if s.user_id > 0
+        if s.folder_id > 0
           results[i]["de"]=User.find_by_id(s.user_id).email        
           results[i]["pour"]=User.find_by_id(Folder.find_by_id(s.folder_id).user_id).email
         else
@@ -66,16 +66,18 @@ class SatisfactionsController < ApplicationController
   # to retrieve for a given registered user all ids for the satisfaction answers collected out of the folders/assets system
   def freelist
       authenticate_user!
-      id = -current_user.id
-      @surveys=Satisfaction.where(user_id: id).map {|x| {id: x.id}}
+      # 10/03/2019
+      #id = -current_user.id
+      #@surveys=Satisfaction.where(user_id: id).map {|x| {id: x.id}}
+      @surveys=current_user.satisfactions.where("folder_id < ?",0).map {|x| {id: x.id}}
       render json: @surveys
   end
   
   ##
-  # Show the new form in order to retrieve satisfactions from users not registered in the Colibri
-  # WEAK LOGIC PROCESS 2019
-  # please note we temporary use the folder_id field to store (-1)*@survey id
-  # when satisfaction will be recorded in th database, folder_id field will be recycled to store the client id
+  # Show the new form in order to retrieve satisfactions from users not registered in the Colibri<br>
+  # WEAK LOGIC PROCESS 2019<br>
+  # please note we temporary use the folder_id field to store (-1)*@survey id<br>
+  # when satisfaction will be recorded in the database, folder_id field will be recycled to store the client id
   def freenew
       @satisfaction=Satisfaction.new
       @survey=Survey.find_by_id(params[:id])
@@ -176,11 +178,11 @@ class SatisfactionsController < ApplicationController
   end
 
   ##
-  # Save a satisfaction answer
-  # 2 scenarios : 
-  # 1) folder_id is <0, there is no link with an existing folder - the survey is independent
-  #    in that case and at this stage (only), the absolute value of folder_id is temporary equal to survey_id
-  # 2) folder_id is >0 and it is a classic satisfaction survey associated to an existing folder
+  # Save a satisfaction answer<br>
+  # 2 scenarios : <br>
+  # 1) folder_id is <0, there is no link with an existing folder - the survey is independent<br>
+  #    in that case and at this stage (only), the absolute value of folder_id is temporary equal to survey_id<br>
+  # 2) folder_id is >0 and it is a classic satisfaction survey associated to an existing folder<br>
   def create
     if params[:satisfaction][:folder_id].to_i < 0
       @satisfaction = Satisfaction.new(satisfaction_params)
@@ -204,7 +206,9 @@ class SatisfactionsController < ApplicationController
                 # everything should be fine at this stage - we can fix things
                 # folder_id will contain (-1)*client_id
                 # user_id will be (-1)*user_id of the registered user who launched the interaction
-                @satisfaction.user_id = -survey.user_id
+                # @satisfaction.user_id = -survey.user_id
+                # 10/03/2019
+                @satisfaction.user_id = survey.user_id
                 @satisfaction.folder_id = -client.id
                 if @satisfaction.save
                   survey.token="disabled#{@satisfaction.id}"
@@ -224,7 +228,9 @@ class SatisfactionsController < ApplicationController
                 client=Client.new
                 client.mel=survey.client_mel
                 if client.save
-                  @satisfaction.user_id = -survey.user_id
+                  #@satisfaction.user_id = -survey.user_id
+                  # 10/03/2019
+                  @satisfaction.user_id = survey.user_id
                   @satisfaction.folder_id = -client.id
                   if @satisfaction.save    
                     if survey.destroy
