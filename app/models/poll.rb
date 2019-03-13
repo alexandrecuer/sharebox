@@ -22,10 +22,10 @@ class Poll < ApplicationRecord
     attributes.push("case_number")
 
     for i in 1..self.closed_names_number
-        attributes.push("closed"+i.to_s)
+        attributes.push("closed#{i}")
     end
     for i in 1..self.open_names_number
-        attributes.push("open"+i.to_s)
+        attributes.push("open#{i}")
     end
     attributes
   end
