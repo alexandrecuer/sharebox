@@ -226,9 +226,10 @@ $.ajax({
     dataType: "json",
     async: true,
     success: function (data) {
-        var answerstitle = $("#titleandcsv").html();
+        var answerstitle = "Les retours";
         data.forEach(function(poll){
-            answerstitle+="&nbsp;<a href=/surveys?csv=1&poll_id="+poll+">[CSV_sondage"+poll+"]</a>";
+            answerstitle+="&nbsp;<a href=/surveys?csv=1&poll_id="+poll+">[CSV_sondage"+poll+"_vos_retours]</a>";
+            answerstitle+="&nbsp;<a href=/surveys?csv=1&poll_id="+poll+"&all=1>[CSV_sondage"+poll+"_tous]</a>";
         });
         $("#titleandcsv").html(answerstitle);
     }

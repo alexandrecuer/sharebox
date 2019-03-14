@@ -1,11 +1,12 @@
 <%= render 'shared/nav' %>
 
-<h2>Envoi fiches satisfactions sans mise à disposition de livrables sur Colibri</h2>
+<h2>Envoi enquête(s) satisfaction sans mise à disposition de livrables sur Colibri</h2>
 
 <div id="process_options">
-<input type="text" id="s_description" placeholder="description avec mention numéro affaire sigma si sondage sur affaire" name="s[description]" class="form-control" ><br>
+<input type="text" id="s_description" placeholder="description avec mention numéro affaire sigma si enquête sur affaire" name="s[description]" class="form-control" ><br>
 <input type="text" id="s_client_mel" placeholder="email du client" name="s[client_mel]" class="form-control" ><br>
 <input type="text" id="s_by" placeholder="email du chargé d'affaire" name="s[by]" class="form-control" ><br>
+Choisissez le sondage à utiliser dans le menu déroulant :
 <select id="s_poll_id" name="s[poll_id]" class="form-control"></select><br>
 </div>
 <div><button id="create" class="btn" style="display:none">Enregistrer</button><br><br></div>

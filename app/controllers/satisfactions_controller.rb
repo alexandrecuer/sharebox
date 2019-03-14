@@ -273,7 +273,15 @@ class SatisfactionsController < ApplicationController
     authenticate_user!
     @satisfaction = Satisfaction.find_by_id(params[:id])
     @poll = Poll.find_by_id(@satisfaction.poll_id)
-    @satisfaction.destroy
+    unless current_user.is_admin?
+      flash[:notice] = "vous n'avez pas les droits nécessaires"
+    else
+      if @satisfaction.destroy
+        flash[:notice] = "fiche satisfaction supprimée"
+      else
+        flash[:notice] = "impossible de supprimer la fiche"
+      end
+    end
     redirect_to poll_path(@poll)
   end
 

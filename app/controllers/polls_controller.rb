@@ -3,7 +3,7 @@
 
 class PollsController < ApplicationController
 
-  before_action :authenticate_user!, :check_admin
+  before_action :authenticate_user!
   
   ##
   # check if user has admin rights<br>
@@ -19,6 +19,7 @@ class PollsController < ApplicationController
   # Show the edit form in order for the admin to update existing polls (title, description...)<br>
   # This view allows you to edit a poll. 
   def edit
+    check_admin
     @poll = Poll.find_by_id(params[:id])
     unless @poll
       flash[:notice] = POLLS_MSG["inexisting_poll"]
@@ -30,6 +31,7 @@ class PollsController < ApplicationController
   # Saves the changes<br>
   # You can delete or add open & closed questions
   def update
+    check_admin
     @poll = Poll.find_by_id(params[:id])
     array = poll_params[:closed_names].split(";") + poll_params[:open_names].split(";")
     if array.uniq.count != array.size
@@ -61,6 +63,7 @@ class PollsController < ApplicationController
   # open & closed questions can be defined, via two different textarea<br>
   # Questions must be separated by ";"
   def new
+    check_admin
     @poll = current_user.polls.new
   end
 
@@ -68,6 +71,11 @@ class PollsController < ApplicationController
   # Show all satisfaction answers related to the poll<br>
   # A csv file containing all the datas can be downloaded 
   def show
+    
+    unless current_user.belongs_to_team?
+      redirect_to root_url
+    end
+    
     @poll = Poll.find_by_id(params[:id])
     @hash = current_user.get_all_emails
 
@@ -88,6 +96,7 @@ class PollsController < ApplicationController
   # possible only if there is a title, a description and at least 1 question (open or closed)<br>
   # duplicate questions will be rejected and the poll creation will fail
   def create
+    check_admin
     @poll = current_user.polls.new(poll_params)
     if @poll.description == ""
       flash[:notice] = POLLS_MSG["missing_required_fields"]
@@ -115,6 +124,7 @@ class PollsController < ApplicationController
   # Every folder related to this poll will be updated (reinitialize poll_id) <br>
   # All satisfaction answers related to the poll will be deleted cause they all belong to a poll
   def destroy
+    check_admin
     @poll = Poll.find_by_id(params[:id])
     Folder.where(poll_id: @poll.id).each do |f|
       f.poll_id = nil

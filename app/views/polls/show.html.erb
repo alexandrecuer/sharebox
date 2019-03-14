@@ -92,7 +92,7 @@ nb+=Satisfaction.where("folder_id < ? and poll_id= ?", 0, @poll.id).count+Survey
     %>
       <div class="<%= divclass %>">
         <table width="60%" align="center">
-          <tr><th><%= sanitize line1 %></th></tr>
+          <tr><th><%= line1 %></th></tr>
           <tr><td><i><%= sanitize line2 %></i></td></tr>
           <tr><th><%= sanitize line3 %> <%= sanitize line4 %></i></th></tr>
           <tr>

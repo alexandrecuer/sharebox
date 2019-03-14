@@ -14,22 +14,28 @@ if current_user.is_admin? || current_user.is_private?
 end
 
 if current_user.is_admin?
-  line = "<div class='dropdown-divider'></div>".html_safe
   managefolders="#{link_to MAIN['manage_folders'], folders_path, class: 'dropdown-item'}".html_safe
   manageusers="#{link_to MAIN['users_list'], users_path, class: 'dropdown-item'}".html_safe
   newpoll="#{link_to MAIN['new_poll'], new_poll_path, class: 'dropdown-item'}".html_safe
-  managepolls="<table>"
-  Poll.all.each do |poll|
-    managepolls="#{managepolls}<tr><td>#{link_to poll.name, edit_poll_path(poll), class: 'dropdown-item'}</td>"
-    managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item' do fa_icon 'eye' end}</td>"
-    managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item', method: :delete, data: {confirm: MAIN['are_yu_sure']} do fa_icon 'times' end}"
-    managepolls="#{managepolls}</td></tr>"
-  end
-  managepolls="#{managepolls}</table>".html_safe
 end
 
 if current_user.belongs_to_team?
+  line = "<div class='dropdown-divider'></div>".html_safe
   managefreesurveys = "#{link_to 'enquêtes client sans mise à disposition de livrables', new_survey_path, class: 'dropdown-item'}"
+  managepolls="<table><tr>"
+  Poll.all.each do |poll|
+    if current_user.is_admin?
+      managepolls="#{managepolls}<td>#{link_to poll.name, edit_poll_path(poll), class: 'dropdown-item'}</td>"
+    else
+      managepolls="#{managepolls}<td><div class='dropdown-item'>#{poll.name}</div></td>"
+    end
+    managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item' do fa_icon 'eye' end}</td>"
+    if current_user.is_admin?
+      managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item', method: :delete, data: {confirm: MAIN['are_yu_sure']} do fa_icon 'times' end}</td>"
+    end     
+    managepolls="#{managepolls}</tr>"
+  end
+  managepolls="#{managepolls}</table>".html_safe
 end
 
 # navigation menu
@@ -49,9 +55,6 @@ end
           <%= current_user.email %>(<%= current_user.statut %>)
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <%#= link_to "manager des enquêtes client", new_survey_path, class: "dropdown-item" %>
-          <%= sanitize managefreesurveys %>
-          
           <%= sanitize uploadfile %>
           <%#= createdir %>
           <%= sanitize createdirmodal  %>
@@ -59,8 +62,10 @@ end
           <%= managefolders %>
           <%= sanitize manageusers %>
           <%= sanitize line %>
+          <%= sanitize managefreesurveys %>
           <%= sanitize newpoll %>
-          <%= managepolls %>    
+          <%= managepolls %>
+          <%= sanitize line %>
           <%= link_to MAIN["disconnect"].html_safe, destroy_user_session_path, :method => :delete, class: "dropdown-item" %>          
         </div>
       </li>
