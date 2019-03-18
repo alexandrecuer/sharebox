@@ -2,6 +2,30 @@
     <%= link_to MAIN["site_name"].html_safe, root_url , class: "navbar-brand" %>
     <img src=https://www.cerema.fr/themes/custom/uas_base/images/logo-seul.svg width=60>
 </nav>
+<script>
+$('#legend').modal('show');
+var out = "";
+out+="<table class='table'>";
+var i;
+legend[4]="très satisfaisant";
+legend[3]="satisfaisant";
+legend[2]="peu satisfaisant";
+legend[1]="pas satisfaisant";
+for (i=4;i>=1;i--){
+    out+="<tr><td colspan=2><div class='row align-items-center justify-content-center'>";
+    var j;
+    for (j=1;j<=i;j++){
+        out+="<div class='stars'><input type=radio value="+i+" checked='checked'><label class='star-"+i+"'></label></div>";
+    }
+    for (j=i+1;j<=4;j++){
+        out+="<div class='stars'><input type=radio disabled='disabled'><label class='star'></label></div>";
+    }
+    out+="<div class='col-6 col-md-4'>"+legend[i]+"</div>";
+    out+="</div></td></tr>";
+}
+out+="</table>";
+$("#legend-content").html(out);
+</script>
 
 <%
 if @survey
@@ -18,3 +42,18 @@ end
 <h5>sous le pilotage du chargé d'affaire :  <%= mail_to @survey.by, by_username[0].titleize %></h5>
 <% end %>
 <%= render 'form' %>
+
+<div class="modal" id="legend" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Légende</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="legend-content">
+      </div>
+    </div>
+  </div>
+</div>
