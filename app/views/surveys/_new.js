@@ -253,7 +253,7 @@ $("#answers").on("click",".btn",function(){
                     var numrx=/^[0-9]$/;
                     var v=String(data[val]);
                     if (v.match(numrx)) {
-                        var note=parseInt(10,data[val]);
+                        var note=parseInt(data[val],10);
                         if (!note) {
                             note = 0;
                         }
