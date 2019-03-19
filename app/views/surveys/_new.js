@@ -36,8 +36,17 @@ function answers_update()
         success: function(data) {            
             var out = [];
             out.push("<tr><td>");
+            var lib;
+            var w;
             $.each(data.reverse(), function(index, array){
-                out.push("<div style='width:50px; float:left'><button data-toggle='modal' class='btn btn-link' value='"+array.id+"'>"+array.id+"</button></div>");                      
+                if (array.case_number){
+                    lib=array.case_number;
+                    w=100;
+                } else {
+                    lib=array.id;
+                    w=50;
+                }
+                out.push("<div style='width:"+w+"px; float:left'><button data-toggle='modal' class='btn btn-link' value='"+array.id+"'>"+lib+"</button></div>");                      
             });
             out.push("</td></tr>");
             $("#answers").html(out); 

@@ -66,11 +66,11 @@ class SatisfactionsController < ApplicationController
   # to retrieve for a given registered user all ids for the satisfaction answers collected out of the folders/assets system
   def freelist
       authenticate_user!
-      # 10/03/2019
-      #id = -current_user.id
-      #@surveys=Satisfaction.where(user_id: id).map {|x| {id: x.id}}
-      @surveys=current_user.satisfactions.where("folder_id < ?",0).map {|x| {id: x.id}}
-      render json: @surveys
+      freesats=current_user.satisfactions.where("folder_id < ?",0).map {|x| {id: x.id, case_number: x.case_number}}
+      freesats.each_with_index do |s,i|
+         freesats[i][:case_number]= /[a-zA-Z][0-9]{1,2}[a-zA-Z]{1,2}[0-9]{1,4}/.match(s[:case_number]).to_s
+      end
+      render json: freesats
   end
   
   ##
