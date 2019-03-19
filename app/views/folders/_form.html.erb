@@ -13,12 +13,11 @@ if !@folder.parent_id || @folder.is_swarmed?
   swarming_array=[]
   swarming_array[0]=["racine (pas d'essaimage)",nil]
   i=1
-  selection=Folder.where.not(user_id: current_user.id)
+  selection=Folder.joins(:user).where.not(user_id: current_user.id).select("folders.*, users.email as email")
   selection.walk_tree do |folder, level|
-    user=User.find_by_id(folder.user_id)
     spacing="&nbsp;"*level
     spacing="#{spacing}|_" if level >0
-    texte = "#{spacing}#{folder.name} (#{user.email})"
+    texte = "#{spacing}#{folder.name} (#{folder.email})"
     swarming_array[i]=[texte.html_safe,folder.id]
     i=i+1
   end
