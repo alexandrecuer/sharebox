@@ -16,7 +16,7 @@ class SharedFoldersController < ApplicationController
   # You can have many different folder configurations :<br>
   # - folder with files but without any poll associated > file available type mel<br>
   # - folder with files and with a poll associated > file+satisfaction type mel<br>
-  # - folder without files and with a poll associated > satisfaction type mel<br>
+  # - folder without files and with a poll associated (TO BAN) > satisfaction type mel<br>
   # - one of the above with satisfaction answer(s) > no email for users who already recorded their satisfaction<br>
   # - folder with or without files, with satisfaction answer(s) and with no poll associated<br>
   # - folder with or without files and with satisfaction answers(s) on a poll which was removed and replaced by another one<br>
@@ -36,7 +36,7 @@ class SharedFoldersController < ApplicationController
     if params[:share_email]
       nbfiles_in_folder=@current_folder.assets.count
       puts("**************#{nbfiles_in_folder} file(s) in the folder #{params[:id]}");
-      if nbfiles_in_folder && !@current_folder.is_polled?
+      unless (nbfiles_in_folder>0 || @current_folder.is_polled?)
         t1 = "Vous ne pouvez pas envoyer de mel !"
         t2 = "D'une part, le répertoire partagé est vide"
         t3 = "D'autre part, le répertoire partagé n'est pas lié à une enquête satisfaction"
