@@ -3,6 +3,7 @@
 	
     <% if @satisfaction.new_record? %>
         <p><%= @poll.description.html_safe %></p><br>
+        <div id="legend-content"></div>
     <% else %>
         <% if current_user.is_private? || current_user.is_admin? %>
             <p>
@@ -15,7 +16,7 @@
     <% end %>
 
 <div class="container">
-    <div class="row align-items-center justify-content-center">
+    <div class="row align-items-center justify-content-left">
     <% @arrayclosed = @poll.get_closed_names %>
     <% @arrayclosed.each do |c| %>
 

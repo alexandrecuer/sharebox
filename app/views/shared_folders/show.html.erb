@@ -13,24 +13,32 @@
     <tbody>
     
     <% 
+    # retrieve @poll record, needed in the satisfactions/form used to build the modals 
+    if @satisfactions
+      @poll = Poll.find_by_id(@current_folder.poll_id)
+    end
     # we browse all the shares created on the folder
     @shared_folders.each do |f|
       user = User.find_by_email(f.share_email)
       if user
         id = user.id
         status = user.statut
-        if user.has_completed_satisfaction?(@current_folder)
-          satisfaction = @satisfactions.find_by_user_id(user.id)
+        has_answered=false
+        if @satisfactions
+          if satisfaction=user.has_completed_satisfaction?(@current_folder, @satisfactions)
+            has_answered=true
+          end
         end
         if f.message?
           numberofclics=f.message.to_i/2
           noc_message="("+numberofclics.to_s+" clic".pluralize(numberofclics)+")"      
         end
       end
+      
     %>
       <tr>
         <td class="align-middle">
-          <% if !user || !user.has_completed_satisfaction?(@current_folder) %>
+          <% if !user || !has_answered %>
             <% missing_answer=1 %>
             <div class="form-group form-check">
               <%= check_box_tag 'ids[]', f.id, false, class: 'form-check-input' %>
@@ -41,12 +49,14 @@
           Partage <%= f.id %> - <%= f.share_email %> (<%= id %>-<%= status %>) <%= noc_message %>
         </td>
         <td class="align-middle">
-          <% if user && user.has_completed_satisfaction?(@current_folder) %>
+          <% if user && has_answered %>
+          <%# if user && user.has_completed_satisfaction?(@current_folder) %>
             <a data-toggle="modal" data-target="#SatisModal<%= satisfaction.id %>" class="dropdown-item">
               <i class="fa fa-eye fa-2x"></i>
             </a>
           <% end %>
-          <% if !user || !user.has_completed_satisfaction?(@current_folder) %>
+          <% if !user || !has_answered %>
+          <%# if !user || !user.has_completed_satisfaction?(@current_folder) %>
             <%= link_to shared_folder_path(f.folder_id, :share_email => f.share_email), class: 'dropdown-item' do fa_icon 'envelope 2x' end %>
           <% end %>       
         </td>
@@ -60,7 +70,6 @@
   <% end %>
 
   <% end %>
-
 
 <% @satisfactions.each do |s| %> 
     <div class="modal fade bd-modal-lg" id="SatisModal<%= s.id %>" tabindex="-1" role="dialog" aria-hidden="true">
@@ -80,7 +89,7 @@
           </div>
           <div class="modal-body">
           <% @satisfaction = s %>
-          <% @poll = Poll.find_by_id(@satisfaction.poll_id) %>
+          <%# @poll = Poll.find_by_id(@satisfaction.poll_id) %>
           <%= render 'satisfactions/form' %>
           </div>
         </div>

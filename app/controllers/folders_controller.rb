@@ -62,6 +62,7 @@ class FoldersController < ApplicationController
         if @satisfaction = current_user.satisfactions.find_by_folder_id(@current_folder.id)
           redirect_to satisfaction_path(@satisfaction.id)
         elsif @current_folder.is_polled? && current_user.shared_folders_by_others.include?(@current_folder)
+          puts("we move to #{new_satisfaction_on_folder_path(@current_folder)}")
           redirect_to new_satisfaction_on_folder_path(@current_folder)
         end
       else

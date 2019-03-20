@@ -82,6 +82,7 @@ class User < ApplicationRecord
   # Return true if user has "shared access" on the folder<br>
   # "shared access" means being owner or being granted of a share<br>
   # if folder is a subfolder of a folder shared to the user, we consider the user has shared access on the subfolder
+  # VERY SQL COSTLY - do not use heavily
   def has_shared_access?(folder)
     puts("shared_access_testing...")
     return true if self.is_admin?
@@ -159,9 +160,27 @@ class User < ApplicationRecord
   end
 
   ##
-  # Return true if user has answered to a satisfaction survey on the folder
-  def has_completed_satisfaction?(folder)
-    return true if Satisfaction.where(folder_id: folder.id, user_id: self.id).length != 0 
+  # return the corresponding satisfaction record if user has answered to a satisfaction survey on the folder
+  # return false if user has not answered
+  # if a satisfaction list record is given, do not burn a SQL request
+  def has_completed_satisfaction?(folder, satisfactions=nil)
+    unless satisfactions
+      #return true if Satisfaction.where(folder_id: folder.id, user_id: self.id).length != 0
+      result=self.satisfactions.find_by_folder_id(folder.id)
+      unless result
+        result=false
+      end
+    else
+      result=false
+      satisfactions.each do |s|
+        if s.folder_id==folder.id && s.user_id==self.id 
+          result = s
+        end
+      end
+      
+    end
+    puts("user model - test if current_user has completed satisfaction - result is #{result}")
+    return result
   end
   
   ##
