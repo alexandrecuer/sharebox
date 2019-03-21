@@ -6,6 +6,53 @@ class SharedFoldersController < ApplicationController
   before_action :authenticate_user!
   
   ##
+  # ?id=1 show metadatas for folder 1
+  # ?id=1&update_meta=1 update metadatas for folder 1
+  # ?update_meta=1 update metadatas for all folders
+  def index
+    unless current_user.is_admin?
+      flash[:notice]="vous n'avez pas les droits suffisants"
+      redirect_to root_url
+    end
+    if params[:update_meta]
+      all_saved=true
+      unless params[:id]
+        folders=Folder.all
+        folders.each do |folder|
+          folder.lists=folder.calc_meta
+          unless folder.save
+            all_saved=false
+          end
+        end
+        if all_saved
+          render plain: "all folders metadatas updated"
+        else
+          render plain: "something got wrong while updating folders metadatas"
+        end
+      else
+        folder = current_user.folders.find(params[:id])
+        folder.lists=folder.calc_meta
+        if folder.save
+          render plain: "folder meta lists updated"
+        else
+          render plain: "impossible to update folder meta lists"
+        end
+      end
+    else
+      unless params[:id]
+        render plain: "please give a folder id, for example ?id=1"
+      else
+        folder = current_user.folders.find(params[:id])
+        if folder.lists
+          render json: folder.lists
+        else
+          render plain: "nothing to show"
+        end
+      end
+    end
+  end
+  
+  ##
   # Show the control panel allowing to manage all share emails associated to a folder<br>
   # Via the control panel, the folder owner can :<br>
   # - display satisfaction answers by clicking on the email of the user who recorded the satisfaction<br>

@@ -159,4 +159,51 @@ class Folder < ApplicationRecord
     end
     return false  
   end
+  
+  ##
+  # return a list of all metadatas for a given folder id
+  # list["shares"] will contain a table with all share ids
+  # list["satis"] will contain a table with all satisfaction ids
+  # to be inserted in the folder 'lists' field
+  # to decode when reading the folder record : ActiveSupport::JSON.decode(folder.lists)
+  def calc_meta
+    meta={}
+    # all shares ids associated to the folder
+    shares=SharedFolder.where(folder_id: self.id).select("id")
+    tab=[]
+    shares.each do |s|
+      tab << s.id
+    end
+    meta["shares"]=tab
+    # all satisfactions ids associated to the folder
+    satisfactions=Satisfaction.where(folder_id: self.id).select("id")
+    tab=[]
+    satisfactions.each do |s|
+      tab << s.id
+    end
+    meta["satis"]=tab
+    ActiveSupport::JSON.encode(meta)
+  end
+  
+  ##
+  # return an empty metadata object (for folder creation)
+  def initialize_meta
+    meta={}
+    meta["shares"]=[]
+    meta["satis"]=[]
+    ActiveSupport::JSON.encode(meta)
+  end
+  
+  ##
+  # decoding the meta for an interpretation as a json object
+  def get_meta
+    meta={}
+    meta["shares"]=[]
+    meta["satis"]=[]
+    if (self.lists)
+      meta=ActiveSupport::JSON.decode(self.lists)
+    end
+    meta
+  end
+  
 end
