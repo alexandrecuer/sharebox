@@ -103,10 +103,17 @@ end
 <%
   # we have displayed all folders shared to the user
   # we loop on the folders
+  # 21/03/2019 - using the new metadatas
   @folders.each do |f|
-    if f.shared? && !f.has_satisfaction_answer?
+    meta =f.get_meta
+    puts ("on folder #{f.name} shares are #{meta['shares']} and length is #{meta['shares'].length}")
+    puts ("on folder #{f.name} satis are #{meta['satis']} and length is #{meta['satis'].length}")
+    puts ("*****************************************")
+    if meta["shares"].length > 0 && meta["satis"].length == 0
+    #if f.shared? && !f.has_satisfaction_answer?
       showshares = " #{link_to MAIN['see_shares'], shared_folder_path(f), class: 'btn btn-outline-warning btn-sm'}".html_safe
-    elsif f.has_satisfaction_answer?
+    elsif meta["satis"].length > 0
+    #elsif f.has_satisfaction_answer?
       showshares = " #{link_to MAIN['see_answers'], shared_folder_path(f), class: 'btn btn-outline-warning btn-sm'}".html_safe
     end
     # owner case
