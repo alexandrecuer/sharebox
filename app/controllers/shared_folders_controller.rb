@@ -19,7 +19,9 @@ class SharedFoldersController < ApplicationController
       unless params[:id]
         folders=Folder.all
         folders.each do |f|
-          f.lists=f.calc_meta
+          a=f.calc_meta
+          f.lists=a
+          puts("****#{a}")
           unless f.save
             all_saved=false
           end
