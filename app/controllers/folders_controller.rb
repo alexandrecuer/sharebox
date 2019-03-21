@@ -28,21 +28,6 @@ class FoldersController < ApplicationController
         results = {folder: "inexisting or insufficient rigths"}
       else
         @folders=Folder.where(parent_id: id)
-        @folders.each_with_index do |f,i|
-          a = f.get_meta
-          if a["shares"].length > 0
-            metas="ce répertoire #{f.name} a des partages #{a['shares']}"
-          else
-            metas="ce répertoire #{f.name} n'a pas de partage"
-          end
-          if a["satis"].length > 0
-            metas="#{metas} et a des retours satisfaction #{a['satis']}"
-          else
-            metas="#{metas} et n'a pas de retour satisfaction"
-          end
-          puts(metas)
-          @folders[i].lists=metas
-        end
         @assets=Asset.where(folder_id: id)
         results = {"owner": user_id, folder: current_folder.name}
       end
@@ -166,7 +151,6 @@ class FoldersController < ApplicationController
       end
     else
       # if creation is a success, we redirect to the parent directory or to the root directory
-      @folder.lists=@folder.initialize_meta
       if @folder.save
         if @folder.parent_id
           redirect_to folder_path(@folder.parent_id)

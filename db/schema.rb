@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190317202751) do
+ActiveRecord::Schema.define(version: 20190227093726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20190317202751) do
     t.datetime "updated_at", null: false
     t.string "case_number"
     t.integer "poll_id"
-    t.text "lists"
     t.index ["parent_id"], name: "index_folders_on_parent_id"
     t.index ["poll_id"], name: "index_folders_on_poll_id"
     t.index ["user_id"], name: "index_folders_on_user_id"

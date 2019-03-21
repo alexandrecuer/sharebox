@@ -6,53 +6,6 @@ class SharedFoldersController < ApplicationController
   before_action :authenticate_user!
   
   ##
-  # ?id=1 show metadatas for folder 1
-  # ?id=1&update_meta=1 update metadatas for folder 1
-  # ?update_meta=1 update metadatas for all folders
-  def index
-    unless current_user.is_admin?
-      flash[:notice]="vous n'avez pas les droits suffisants"
-      redirect_to root_url
-    end
-    if params[:update_meta]
-      all_saved=true
-      unless params[:id]
-        folders=Folder.all
-        folders.each do |folder|
-          folder.lists=folder.calc_meta
-          unless folder.save
-            all_saved=false
-          end
-        end
-        if all_saved
-          render plain: "all folders metadatas updated"
-        else
-          render plain: "something got wrong while updating folders metadatas"
-        end
-      else
-        folder = current_user.folders.find(params[:id])
-        folder.lists=folder.calc_meta
-        if folder.save
-          render plain: "folder meta lists updated"
-        else
-          render plain: "impossible to update folder meta lists"
-        end
-      end
-    else
-      unless params[:id]
-        render plain: "please give a folder id, for example ?id=1"
-      else
-        folder = current_user.folders.find(params[:id])
-        if folder.lists
-          render json: folder.lists
-        else
-          render plain: "nothing to show"
-        end
-      end
-    end
-  end
-  
-  ##
   # Show the control panel allowing to manage all share emails associated to a folder<br>
   # Via the control panel, the folder owner can :<br>
   # - display satisfaction answers by clicking on the email of the user who recorded the satisfaction<br>
@@ -169,10 +122,6 @@ class SharedFoldersController < ApplicationController
       # we leave the sharing form (app/views/shared_folders/_form.html.erb)
       # the id of the folder that we just shared is given by : params[:shared_folders][:folder_id]
       @folder = current_user.folders.find(params[:shared_folder][:folder_id])
-      @folder.lists=@folder.calc_meta
-      unless @folder.save
-        flash[:notice] = "#{flash[:notice]} impossible de mettre à jour les metadonnées du répertoire !!<br>"
-      end
       if saved_shares != ""
         if @folder.parent_id
           redirect_to folder_path(@folder.parent_id)
@@ -199,27 +148,13 @@ class SharedFoldersController < ApplicationController
   # Delete specific share(s) within the show view<br>
   # After deletion, we redirect to root view if all shares were deleted
   def destroy
-    folder = Folder.find_by_id(params[:id])
-    unless folder
-      flash[:notice] = "ce répertoire n'existe pas"
-      redirect_to root_url
-    end
-    unless (current_user.is_admin? || current_user.has_shared_access?(folder))
-      flash[:notice] = "cette action ne vous est pas autorisée"
-      redirect_to root_url
-    end
-    unless params[:ids]
+    if !params[:ids]
       flash[:notice] = SHARED_FOLDERS_MSG["no_share_selected"]
     else
       params[:ids].each do |id|
         SharedFolder.find_by_id(id).destroy
       end
       flash[:notice] = SHARED_FOLDERS_MSG["shares_destroyed"]
-      # some shares were deleted - we have to update folder metadatas
-      folder.lists=folder.calc_meta
-      unless folder.save
-        flash[:notice] = "#{flash[:notice]} impossible de mettre à jour les metadonnées du répertoire !!<br>"
-      end
     end
 
     unless SharedFolder.find_by_folder_id(params[:id])

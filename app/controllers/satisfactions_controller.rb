@@ -259,10 +259,6 @@ class SatisfactionsController < ApplicationController
       if @satisfaction.save
         flash[:notice] = SATISFACTIONS_MSG["satisfaction_created"]
         @poll = Poll.all.find_by_id(@satisfaction.poll_id)
-        @current_folder.lists=@current_folder.calc_meta
-        unless @current_folder.save
-          flash[:notice] = "#{flash[:notice]} impossible de mettre à jour les metadonnées du répertoire !!<br>"
-        end
       else
         flash[:notice] = SATISFACTIONS_MSG["satisfaction_error"]
       end
@@ -276,19 +272,12 @@ class SatisfactionsController < ApplicationController
   def destroy
     authenticate_user!
     @satisfaction = Satisfaction.find_by_id(params[:id])
-    folder_id=@satisfaction.folder_id
     @poll = Poll.find_by_id(@satisfaction.poll_id)
     unless current_user.is_admin?
       flash[:notice] = "vous n'avez pas les droits nécessaires"
     else
       if @satisfaction.destroy
         flash[:notice] = "fiche satisfaction supprimée"
-        if folder = Folder.find_by_id(folder_id)
-          folder.lists=folder.calc_meta
-          unless folder.save
-            flash[:notice] = "#{flash[:notice]} impossible de mettre à jour les metadonnées du répertoire !!<br>"
-          end
-        end
       else
         flash[:notice] = "impossible de supprimer la fiche"
       end
