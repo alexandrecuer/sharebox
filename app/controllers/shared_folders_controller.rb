@@ -93,7 +93,7 @@ class SharedFoldersController < ApplicationController
         t4 = "Chargez donc un livrable ou associez au répertoire une enquête satisfaction"
         flash[:notice] = "#{t1}<br>#{t2}<br>#{t3}<br>#{t4}"
       else
-        flash[:notice] = SHARED_FOLDERS_MSG["mail_sent_to"] + params[:share_email]
+        flash[:notice] = "#{SHARED_FOLDERS_MSG["mail_sent_to"]} #{params[:share_email]}"
         InformUserJob.perform_now(current_user,params[:share_email],params[:id])
       end
       redirect_to shared_folder_path(params[:id])
