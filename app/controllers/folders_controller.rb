@@ -4,6 +4,7 @@
 class FoldersController < ApplicationController
 	
   before_action :authenticate_user!
+  
   ##
   # Show a complete view of all directories and files present in the application<br>
   # Only for admin users
@@ -15,48 +16,58 @@ class FoldersController < ApplicationController
     @parent_folders = Folder.all.where(parent_id: nil)
   end
   
+  ##
+  # list?id=1 json output of files and folders of a folder identified by id=1, if shared to the current_user
+  # list json output of files and folders of the current_user root 
   def list
     user_id=current_user.id
     results={}
-    @folders={}
+    @subfolders={}
     @assets={}
     @shared_folders_by_others={}
-    @toto={}
     if id=params[:id]
-      current_folder=Folder.find_by_id_and_user_id(id, user_id)
-      if !current_folder
-        results = {folder: "inexisting or insufficient rigths"}
+      puts("current folder request")
+      current_folder=Folder.find_by_id(id)
+      puts("current folder request")
+      unless current_folder
+        results= {folder: "inexisting folder"}
       else
-        @folders=Folder.where(parent_id: id)
-        @folders.each_with_index do |f,i|
-          a = f.get_meta
-          if a["shares"].length > 0
-            metas="ce répertoire #{f.name} a des partages #{a['shares']}"
-          else
-            metas="ce répertoire #{f.name} n'a pas de partage"
-          end
-          if a["satis"].length > 0
-            metas="#{metas} et a des retours satisfaction #{a['satis']}"
-          else
-            metas="#{metas} et n'a pas de retour satisfaction"
-          end
-          puts(metas)
-          @folders[i].lists=metas
+        unless current_user.has_shared_access?(current_folder)
+          results={folder: "insufficient rights to access this folder"}
+          puts("******shared access test - FAILURE!!!!!!")
+        else
+          puts("******shared access test - SUCCESS!!!!!!")
+          results = {current_user: user_id, folder: current_folder.name}
+          @subfolders=Folder.joins(:user).where(parent_id: id).select("folders.*, users.email as owner_name, users.id as owner_id, users.statut as owner_statut")
+          @assets=Asset.joins(:user).where(folder_id: id).select("assets.*, users.email as owner_name, users.id as owner_id, users.statut as owner_statut")
         end
-        @assets=Asset.where(folder_id: id)
-        results = {"owner": user_id, folder: current_folder.name}
       end
     else
-      @folders=Folder.where(parent_id: nil, user_id: user_id)
-      @assets=Asset.where(folder_id: nil, user_id: user_id)
-      @shared_folders_by_others=current_user.shared_folders_by_others
-      @toto=SharedFolder.joins(:user).joins(:folder).select("folders.*, users.email as user_name, users.statut as statut").where(share_user_id: current_user.id).order("folders.name ASC")
+      results = {current_user: user_id, folder: "user root"}
+      @subfolders=current_user.folders.where(parent_id: nil)
+      @assets=current_user.assets.where(folder_id: nil)
+      #nearly the same as current_user.shared_folders_by_others but with more complet info on the user
+      @shared_folders_by_others=SharedFolder.joins(:user).joins(:folder).select("folders.*, users.email as user_name, users.statut as statut").where(share_user_id: current_user.id).order("folders.name ASC")
     end
-    
-    results.merge!({subfolders: @folders.as_json})
+    #temporary exploitation
+    @subfolders.each_with_index do |f,i|
+      a = f.get_meta
+      if a["shares"].length > 0
+        metas="ce répertoire #{f.name} a des partages #{a['shares']}"
+      else
+        metas="ce répertoire #{f.name} n'a pas de partage"
+      end
+      if a["satis"].length > 0
+        metas="#{metas} et a des retours satisfaction #{a['satis']}"
+      else
+        metas="#{metas} et n'a pas de retour satisfaction"
+      end
+      puts(metas)
+      @subfolders[i].lists=metas
+    end
+    results.merge!({subfolders: @subfolders.as_json})
     results.merge!({assets: @assets.as_json})
     results.merge!({shared_folders_by_others: @shared_folders_by_others.as_json})
-    results.merge!({toto: @toto.as_json})
     render json: results
   end
   

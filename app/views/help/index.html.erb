@@ -1,0 +1,156 @@
+<%= render 'shared/nav' %>
+<%
+help=[]
+help[0]={}
+help[0]["controller"]="surveys"
+help[0]["url"]="<a href=/surveys>#{root_url}surveys</a>"
+help[0]["text"]="sortie json de toutes les enquêtes (non associées à un livrable) envoyées et n'ayant pas de fait l'objet de réponse (pending surveys)"
+
+if max_poll_id=Poll.all.maximum(:id)
+  a={}
+  a["controller"]="surveys"
+  a["url"]="<a href=surveys?csv=1&poll_id=#{max_poll_id}>#{root_url}surveys?csv=1&poll_id=#{max_poll_id}</a>"
+  a["text"]="export csv de toutes les réponses récoltées par l'utilisateur connecté pour le sondage #{max_poll_id} sur des enquêtes non associées à un livrable qu'il a lancé"
+  help << a
+  a={}
+  a["controller"]="surveys"
+  a["url"]="<a href=surveys?csv=1&poll_id=#{max_poll_id}&all=1>#{root_url}surveys?csv=1&poll_id=#{max_poll_id}&all=1</a>"
+  a["text"]="export csv de toutes les réponses récoltées pour le sondage #{max_poll_id} sur des enquêtes non associées à un livrable"
+  help << a
+end
+
+if min_survey_id=Survey.all.minimum(:id)
+  a={}
+  a["controller"]="surveys"
+  a["url"]="<a href=/surveys/#{min_survey_id}>#{root_url}surveys/#{min_survey_id}</a>"
+  a["text"]="sortie json de l'enquête #{min_survey_id} qui n'a pas reçu de réponse"
+  help << a
+  a={}
+  a["controller"]="surveys"
+  a["url"]="<a href=/surveys/#{min_survey_id}?email=send>#{root_url}surveys/#{min_survey_id}?email=send</a>"
+  a["text"]="envoi le mel correspondant à l'enquête #{min_survey_id} si elle est encore active (ie pas encore de réponse)"
+  help << a
+end
+
+a={}
+a["controller"]="surveys"
+a["url"]="<a href=/getpolls>#{root_url}getpolls</a>"
+a["text"]="sortie json de tous les types de sondages disponibles (pattern polls)"
+help << a
+
+a={}
+a["controller"]="surveys"
+a["url"]="<a href=/getpolls?mynums=1>#{root_url}getpolls?mynums=1</a>"
+a["text"]="Liste des numéros de sondages sur lesquels l'utilisateur connecté a reçu des réponses après avoir déclenché des enquêtes non associées à un livrable"
+help << a
+
+
+a={}
+a["controller"]="satisfactions"
+a["url"]="<a href=/satisfactions>#{root_url}satisfactions</a>"
+a["text"]="sortie json de toutes les réponses obtenues, toutes enquêtes confondues"
+help << a
+
+if min_satisfaction_id=Satisfaction.where("folder_id <?",0).minimum(:id)
+  a={}
+  a["controller"]="satisfactions"
+  a["url"]="<a href=satisfactions/#{min_satisfaction_id}>#{root_url}satisfactions/#{min_satisfaction_id}</a>"
+  a["text"]="sortie json de la réponse de satisfaction #{min_satisfaction_id} si elle existe"
+  help << a
+end
+
+a={}
+a["controller"]="satisfactions"
+a["url"]="<a href=freelist>#{root_url}freelist</a>"
+a["text"]="couple (id/numéro affaire) des réponses satisfaction obtenus par l'utilisateur connecté sur des enquêtes non associées à un livrable qu'il a lancé"
+help << a
+
+a={}
+a["controller"]="clients"
+a["url"]="<a href=clients>#{root_url}clients</a>"
+a["text"]="sortie json de tous les clients (hors utilisateurs enregistrés) dans la base - un client n'est enregistré que s'il a effectivement répondu à une enquête"
+help << a
+
+if min_client_id=Client.all.minimum(:id)
+  a={}
+  a["controller"]="clients"
+  a["url"]="<a href=clients/#{min_client_id}>#{root_url}clients/#{min_client_id}</a>"
+  a["text"]="sortie json du client #{min_client_id}"
+  help << a
+end
+
+a={}
+a["controller"]="clients"
+melfrag="ademe"
+a["url"]="<a href=clients?melfrag=#{melfrag}>#{root_url}clients?melfrag=#{melfrag}</a>"
+a["text"]="sortie json de tous les clients dans la base dont l'adresse mel contient le fragment #{melfrag}"
+help << a
+
+a={}
+a["controller"]="users"
+melfrag="a"
+a["url"]="<a href=users?melfrag=#{melfrag}>#{root_url}users?melfrag=#{melfrag}</a>"
+a["text"]="sortie json de tous les utilisateurs dans la base dont l'adresse mel contient le fragment #{melfrag}"
+help << a
+
+a={}
+a["controller"]="shared_folders"
+a["url"]="<a href=shared_folders?update_meta=1>#{root_url}shared_folders?update_meta=1</a>"
+a["text"]="met à jour les metadonnées de tous les répertoires - utile en cas de migration depuis une version obsolète de colibri"
+help << a
+
+if min_folder_id=current_user.folders.minimum(:id)
+  a={}
+  a["controller"]="shared_folders"
+  a["url"]="<a href=shared_folders?id=#{min_folder_id}>#{root_url}shared_folders?id=#{min_folder_id}</a>"
+  a["text"]="sortie json des metadonnées (partages, retours satisfactions) du répertoire #{min_folder_id}"
+  help << a
+  a={}
+  a["controller"]="shared_folders"
+  a["url"]="<a href=shared_folders?id=#{min_folder_id}&update_meta=1>#{root_url}shared_folders?id=#{min_folder_id}&update_meta=1</a>"
+  a["text"]="met à jour les metadonnées (partages, retours satisfactions) du répertoire #{min_folder_id}"
+  help << a
+  a={}
+  a["controller"]="folders"
+  a["url"]="<a href=list?id=#{min_folder_id}>#{root_url}list?id=#{min_folder_id}</a>"
+  a["text"]="sortie json des répertoires et fichiers du répertoire #{min_folder_id} si l'utilisateur y a accès"
+  help << a
+end
+
+a={}
+a["controller"]="folders"
+a["url"]="<a href=list>#{root_url}list</a>"
+a["text"]="sortie json des répertoires et fichiers racines de l'utilisateur et des répertoires qui lui sont partagés"
+help << a
+
+%>
+
+<h1>API help</h1>
+<table class=table>
+<thead>
+  <td>
+    Controlleur
+  </td>
+  <td>
+    URL
+  </td>
+  <td>
+    action
+  </td>
+</thead>
+
+<% help.each do |h| %>
+<tr>
+  <td>
+    <%= h["controller"] %>
+  </td>
+  <td>
+    <%= h["url"].html_safe %>
+  </td>
+  <td>
+    <%= h["text"] %>
+  </td>
+</tr>
+<% end %>
+
+</table>

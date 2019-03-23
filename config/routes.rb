@@ -48,5 +48,7 @@ Rails.application.routes.draw do
    get "freelist" => "satisfactions#freelist", :as => "freelist"
    
    get "list" => "folders#list", :as => "list"
+   
+   get "help" => "help#index", :as => "help"
 
 end

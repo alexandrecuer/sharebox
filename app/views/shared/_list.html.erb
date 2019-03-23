@@ -56,7 +56,6 @@ else
   #@shared_folders_by_others=current_user.shared_folders_by_others.order(name: :ASC)
   @shared_folders_by_others=SharedFolder.joins(:user).joins(:folder).select("folders.*, users.email as owner_mel").where(share_user_id: current_user.id).order("folders.name ASC")
 end
-# test do we have to print something ?
 %>
 
 <%# for debugging %>
@@ -90,7 +89,7 @@ end
         <tr>
           <th>
             <div class="d-flex align-items-center flex-row-reverse bd-highlight mb-3">
-              <div class="p-1"><%= MAIN["owner"] %><%= prenom_nom %></div>
+              <div class="p-1">[<%= prenom_nom %>]</div>
               <div class="p-1"></div>
             </div>
           </th>
@@ -156,7 +155,7 @@ end
       #puts("all shared access tests on folder finished")
       prenom_nom=f.owner_mel.split('@')[0]
       #prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1]
-      ownerinfo = "#{MAIN['owner']}#{prenom_nom}".html_safe
+      ownerinfo = "[#{prenom_nom}]".html_safe
       # speeding up things - no interest to have shared icon and non shared icon as there is specific button to show shares
       #if f.shared?
       #  if f.is_shared_to_user?(current_user)
@@ -226,7 +225,7 @@ end
       # speeding up things - 04/03/2019
       prenom_nom= f.owner_mel.split('@')[0]
       #prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1]
-      fileowner = "#{MAIN["owner"]}#{prenom_nom}".html_safe
+      fileowner = "[#{prenom_nom}]".html_safe
       filestart = "<div class='file_shared'>".html_safe
     end
 %>
@@ -252,5 +251,4 @@ end
     </tbody>
 </table>
 </div>
-<% # end of test do we have to print something ? %>
 <% end %>

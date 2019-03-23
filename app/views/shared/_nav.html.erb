@@ -71,6 +71,9 @@ end
       </li>
     </ul>
   </div>
+  <% if current_user.is_admin? %>
+  <%= link_to "API help", help_path %>
+  <% end %>
 </nav>
 
 <%

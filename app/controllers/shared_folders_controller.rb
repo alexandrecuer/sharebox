@@ -11,50 +11,58 @@ class SharedFoldersController < ApplicationController
   # ?update_meta=1 update metadatas for all folders
   def index
     unless current_user.is_admin?
-      flash[:notice]="vous n'avez pas les droits suffisants"
-      redirect_to root_url
-    end
-    if params[:update_meta]
-      all_saved=true
-      unless params[:id]
-        folders=Folder.all
-        folders.each do |f|
-          a=f.calc_meta
-          f.lists=a
-          puts("****#{a}")
-          unless f.save
-            all_saved=false
-          end
-        end
-        if all_saved
-          render plain: "all folders metadatas updated"
-        else
-          render plain: "something got wrong while updating folders metadatas"
-        end
-      else
-        folder = current_user.folders.find(params[:id])
-        folder.lists=folder.calc_meta
-        if folder.save
-          render plain: "folder meta lists updated"
-        else
-          render plain: "impossible to update folder meta lists"
-        end
-      end
+      log="vous n'avez pas les droits suffisants"
     else
-      unless params[:id]
-        render plain: "please give a folder id, for example ?id=1"
-      else
-        unless folder = Folder.find_by_id(params[:id])
-          render plain: "inexisting folder"
-        else
-          if folder.lists
-            render json: folder.lists
+      if params[:update_meta]
+        all_saved=true
+        log="updating metadatas on Colibri....\n"
+        unless params[:id]
+          folders=Folder.all
+          folders.each do |f|
+            a=f.calc_meta
+            f.lists=a
+            puts("****#{a}")
+            unless f.save
+              all_saved=false
+            else
+              log="#{log} -> folder #{f.id} named (#{f.name}) metadatas are now #{f.lists}\n"
+            end
+          end
+          if all_saved 
+            log="#{log}So good so far, all folders metadatas should now be up-to-date"
           else
-            render plain: "nothing to show"
+            log="#{log}Something got wrong while updating folders metadatas"
+          end
+        else
+          if f = current_user.folders.find_by_id(params[:id])
+            f.lists=f.calc_meta
+            if f.save
+              log="#{log} -> folder #{f.id} named (#{f.name}) metadatas are now #{f.lists}"
+            else 
+              log="#{log} -> impossible to update metadatas for folder #{f.id} named #{f.name}"
+            end
+          else
+            log="#{log} -> inexisting folder - cannot go further"
+          end
+        end
+      else
+        unless params[:id] 
+          log="please give a folder id, for example ?id=1\n"
+        else
+          unless folder = Folder.find_by_id(params[:id])
+            log="inexisting folder\n"
+          else
+            if folder.lists
+              log="checking metadatas on a single folder.....\n"
+              log="#{log} -> folder #{folder.id} named (#{folder.name}) metadatas are #{folder.lists} \n"
+            else
+              log="nothing to show - no metadata - should process to update \n"
+            end
           end
         end
       end
     end
+    @log=log
   end
   
   ##

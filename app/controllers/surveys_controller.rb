@@ -26,29 +26,32 @@ class SurveysController < ApplicationController
           else
             allanswers=current_user.satisfactions.where("folder_id < ? and poll_id=?",0,params[:poll_id])
           end
-          poll=Poll.find_by_id(params[:poll_id])
-          #headers = poll.get_names.insert(0,'récolté par').insert(1,'Date réception').insert(2,'Description')
-          headers = ['id','Affaire','client','chargé d\'affaire','récolté par','Date réception','Description']+poll.get_names
-          attributes=poll.fetch_attributes
-          csv = CSV.generate(headers: true, :col_sep => ';') do |c|
-            c << headers
-            allanswers.each do |a|
-              casenum = /[a-zA-Z][0-9]{1,2}[a-zA-Z]{1,2}[0-9]{1,4}/.match(a.case_number)
-              client = /Client: ([^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4})/.match(a.case_number)[1].to_s
-              w=/Chargé d'affaire: ([^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4})/.match(a.case_number)[1].to_s
-              #c << users.values_at(a.user_id) + a.attributes.values_at(*attributes)
-              closed=[]
-              for i in (1..poll.closed_names_number.to_i)
-                closed << a["closed#{i}"]
+          if poll=Poll.find_by_id(params[:poll_id])
+            #headers = poll.get_names.insert(0,'récolté par').insert(1,'Date réception').insert(2,'Description')
+            headers = ['id','Affaire','client','chargé d\'affaire','récolté par','Date réception','Description']+poll.get_names
+            attributes=poll.fetch_attributes
+            csv = CSV.generate(headers: true, :col_sep => ';') do |c|
+              c << headers
+              allanswers.each do |a|
+                casenum = /[a-zA-Z][0-9]{1,2}[a-zA-Z]{1,2}[0-9]{1,4}/.match(a.case_number)
+                client = /Client: ([^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4})/.match(a.case_number)[1].to_s
+                w=/Chargé d'affaire: ([^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4})/.match(a.case_number)[1].to_s
+                #c << users.values_at(a.user_id) + a.attributes.values_at(*attributes)
+                closed=[]
+                for i in (1..poll.closed_names_number.to_i)
+                  closed << a["closed#{i}"]
+                end
+                open=[]
+                for i in (1..poll.open_names_number.to_i)
+                  open << a["open#{i}"]
+                end
+                c << [a.id,casenum,client,w]+users.values_at(a.user_id)+[a.updated_at,a.case_number]+closed+open             
               end
-              open=[]
-              for i in (1..poll.open_names_number.to_i)
-                open << a["open#{i}"]
-              end
-              c << [a.id,casenum,client,w]+users.values_at(a.user_id)+[a.updated_at,a.case_number]+closed+open             
             end
+            send_data csv, filename: "polls-#{Time.zone.today}.csv"
+          else 
+            render json: {poll: "inexisting poll"}
           end
-          send_data csv, filename: "polls-#{Time.zone.today}.csv"
         else
           @surveys = Survey.all.order("id DESC");
           results=[]
