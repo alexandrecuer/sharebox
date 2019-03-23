@@ -18,14 +18,14 @@ class SharedFoldersController < ApplicationController
         log="updating metadatas on Colibri....\n"
         unless params[:id]
           folders=Folder.all
-          folders.each do |f|
-            a=f.calc_meta
-            f.lists=a
+          folders.each do |fol|
+            a=fol.calc_meta
+            fol.lists=a
             puts("****#{a}")
-            unless f.save
+            unless fol.save
               all_saved=false
             else
-              log="#{log} -> folder #{f.id} named (#{f.name}) metadatas are now #{f.lists}\n"
+              log="#{log} -> folder #{fol.id} named (#{fol.name}) metadatas are now #{fol.lists}\n"
             end
           end
           if all_saved 
