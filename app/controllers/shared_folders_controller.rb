@@ -50,8 +50,6 @@ class SharedFoldersController < ApplicationController
           log="checking metadatas on all folders...\n"
           folders=Folder.all
           folders.each do |fol|
-            a=fol.calc_meta
-            fol.lists=a
             log="#{log} -> folder #{fol.id} named (#{fol.name}) metadatas are #{fol.lists}\n"
           end
         else
