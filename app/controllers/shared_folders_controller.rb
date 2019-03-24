@@ -47,7 +47,13 @@ class SharedFoldersController < ApplicationController
         end
       else
         unless params[:id] 
-          log="please give a folder id, for example ?id=1\n"
+          log="checking metadatas on all folders...\n"
+          folders=Folder.all
+          folders.each do |fol|
+            a=fol.calc_meta
+            fol.lists=a
+            log="#{log} -> folder #{fol.id} named (#{fol.name}) metadatas are #{fol.lists}\n"
+          end
         else
           unless folder = Folder.find_by_id(params[:id])
             log="inexisting folder\n"

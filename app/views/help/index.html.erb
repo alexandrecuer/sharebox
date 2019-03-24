@@ -99,6 +99,12 @@ a["url"]="<a href=shared_folders?update_meta=1>#{root_url}shared_folders?update_
 a["text"]="met à jour les metadonnées de tous les répertoires - utile en cas de migration depuis une version obsolète de colibri"
 help << a
 
+a={}
+a["controller"]="shared_folders"
+a["url"]="<a href=shared_folders>#{root_url}shared_folders</a>"
+a["text"]="sortie json des metadonnées de tous les répertoires"
+help << a
+
 if min_folder_id=current_user.folders.minimum(:id)
   a={}
   a["controller"]="shared_folders"
