@@ -14,7 +14,7 @@ by_username[0].sub!("."," ")
 <h4><%= @survey.description %></h4>
 <h5>sous le pilotage du chargé d'affaire : <%= by_username[0].titleize %></h5>
 
-<h3>Si vous avez quelques minutes, merci de remplir l'enquête satisfaction.</h3>
+<h3>Merci de remplir le questionnaire de satisfaction, ça ne vous prendra que quelques minutes.</h3>
 Vous trouverez cette enquête à l'adresse suivante : <br>
 <%= link_to new_satisfaction_no_folder_url(@survey.id,@survey.token).to_s, new_satisfaction_no_folder_url(@survey.id,@survey.token) %>
 <br>
