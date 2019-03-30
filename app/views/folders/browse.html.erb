@@ -7,7 +7,6 @@
   </div>
 </div>
 
-
 <div class="modal fade bd-modal-lg" id="context-menu" tabindex="-1" role="dialog" aria-hidden="true">
  <div class="modal-dialog modal-lg" role="document">
   <div class="modal-content">
@@ -237,6 +236,7 @@ $("#folder_view").on("click","#delete_asset",function(){
 
 //user upload a new asset
 $("#folder_view").on("click","#create_asset",function(){
+    $("#create_asset").replaceWith("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
     file=$("#assetUploadForm")[0];
     var datafile = new FormData(file); 
     var folder_id=$("#folder_parent_id").val();
