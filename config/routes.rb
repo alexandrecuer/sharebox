@@ -50,5 +50,11 @@ Rails.application.routes.draw do
    get "list" => "folders#list", :as => "list"
    
    get "help" => "help#index", :as => "help"
+   
+   get "browse" => "folders#browse", :as => "browse"
+   
+   post "upload_asset" => "assets#upload_asset", :as => ""
+   
+   delete "delete_asset/:id" => "assets#delete_asset", :as => ""
 
 end

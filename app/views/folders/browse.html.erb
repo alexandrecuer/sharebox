@@ -1,0 +1,298 @@
+<%= render 'shared/nav' %>
+
+<div class="container-fluid">
+  <div class="row flex-xl-nowrap">
+    <div class="col-sm" id="tree_view"></div>
+    <div class="col-sm" id="folder_view"></div>
+  </div>
+</div>
+
+
+<div class="modal fade bd-modal-lg" id="context-menu" tabindex="-1" role="dialog" aria-hidden="true">
+ <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="mtitle"></h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" id="mcontent">
+    </div>
+  </div>
+ </div>
+</div>
+
+<script>
+var lg = "#ececec";
+var vlg = "f6f6f6";
+
+
+//caution : folder_value is the position in the tree
+function child_meta(folder_value,folder_id)
+{
+    var regv=/([0-9]+)/;
+    var regi=/folder([0-9]+)/;
+    var a = folder_value.match(regv);
+    var f = folder_id.match(regi);
+    //console.log(a);console.log(f);
+    if (a && f ) {
+      var position = parseInt(a[0])+1;
+      var parent_id = parseInt(f[1]);
+      var tab="";
+      for (i=0;i<position;i++) {
+        tab+="&nbsp;&nbsp;";
+      }
+      return {parent_id: parent_id, level:position, tab:tab};
+    } else {
+      return false;
+    }
+}
+
+function genlink(asset)
+{
+    var link= "";
+    link+="<tr><td>";
+    link+="<div class='d-flex align-items-center flex-row-reverse bd-highlight mb-3'>";
+    link+="<button class='btn btn-outline-danger btn-sm' rel='nofollow' id=delete_asset value="+asset.id+">Supprimer</button>";
+    link+="</div>";
+    link+="</td><td>";
+    link+="<div class=file><a href=/forge/get/"+asset.id+">"+asset.uploaded_file_file_name+"</a></div>";
+    link+="</td></tr>";
+    return link;
+}
+
+
+function createtabs(folder_id)
+{
+    var tabs="";
+    tabs+="<ul class='nav nav-tabs' id=manage_tabs role=tablist>";
+    if (folder_id) {
+        tabs+="<li class=nav-item>";
+        tabs+="<a class=nav-link id=contact-tab data-toggle=tab href=#manage_folder role=tab aria-controls=manage_folder>Gérer dossier</a>";
+        tabs+="</li>";
+    }
+    tabs+="<li class=nav-item>";
+    tabs+="<a class='nav-link' id=folder-tab data-toggle=tab href=#new_folder role=tab aria-controls=new_folder>Créer sous-dossier</a>";
+    tabs+="</li>";
+    tabs+="<li class=nav-item>";
+    tabs+="<a class=nav-link id=profile-tab data-toggle=tab href=#new_asset role=tab aria-controls=new_asset>Charger un fichier</a>";
+    tabs+="</li>";
+    tabs+="</ul>";
+   
+    tabs+="<div class=tab-content id=alltabs>";
+   
+    //new subfolder form
+    tabs+="<div class='tab-pane fade' id=new_folder role=tabpanel><br>";
+    tabs+="<input type=text class=form-control id=folder_name name=folder[name] placeholder='nom du répertoire'><br>";
+    tabs+="<input type=text class=form-control id=folder_case_number name=folder[case_number] placeholder='N°affaire'>";
+    if (folder_id) {
+        tabs+="<input type=hidden class=form-control id=folder_parent_id name=folder[parent_id] value="+folder_id+">";
+    }
+    tabs+="</div>";
+   
+    //asset form
+    tabs+="<div class='tab-pane fade' id=new_asset role=tabpanel><br>";
+    tabs+="<form method=POST enctype=multipart/form-data id=assetUploadForm>";
+    //tabs+="<input type=hidden name='authenticity_token' value=<%= form_authenticity_token %>>";
+    tabs+="<input class=form-control-file type=file id=asset_uploaded_file name=asset[uploaded_file]>";
+    if (folder_id) {
+        tabs+="<input type=hidden id=asset_folder_id name=asset[folder_id] value="+folder_id+">";
+    } else {
+        tabs+="<input type=hidden id=asset_folder_id name=asset[folder_id]>";
+    }
+    tabs+="</form>";
+    tabs+="<br><button id=create_asset class=btn style=display:none>Charger le fichier</button>";
+    tabs+="</div>";
+   
+    // manage folder form
+    if (folder_id) {
+        tabs+="<div class='tab-pane fade' id=manage_folder role=tabpanel>...</div>";
+    }
+    tabs+="</div>";
+    return tabs;
+}
+
+function gensubfoldersassetslist(data,folder_id)
+{
+    var list="";
+    var hidden="";
+    if (data.currentfolder.id){
+        hidden="<input type=hidden id=current_folder_id value="+data.currentfolder.id+">";
+    }
+    list+="<table class=table><thead><td colspan=2 bgcolor="+lg+">"+data.currentfolder.name+"</td></thead>";
+    list+="<tr><td colspan=2>"+hidden+"</td></tr>";
+    list+="<tr><td colspan=2 bgcolor="+vlg+">"+createtabs(folder_id)+"</td></tr>";
+    data.subfolders.forEach(function(folder){
+        list+="<tr><td></td><td><div class=folder value="+folder.id+">"+folder.name+"</div></td></tr>";
+    });
+    data.assets.forEach(function(asset){
+        list+=genlink(asset);
+    });
+    list+="</table>";
+    return list;
+}
+
+//to materialize the status of the folder with a colored icon - shared = green - has satisfaction answsers = orange
+function icontofolder(lists)
+{
+    var icon="";
+    if (lists.shares.length>0) {
+        if (lists.satis.length>0) {
+            icon="&nbsp;<i class='fas fa-circle' style='color:orange'></i>";
+        } else {
+            icon="&nbsp;<i class='fas fa-circle' style='color:green'></i>";
+        }
+    }
+    return icon;
+}
+
+function genrootview()
+{
+    $.ajax({ 
+        url: "/list",
+        dataType: "json",
+        async: true,
+        success: function (data) {
+            console.log(data);
+            var root_name=data.currentfolder.name;
+            var root_tree = "";
+            root_tree="<div class=root>"+root_name+"</div>";
+            data.subfolders.forEach(function(folder){
+              var lists=JSON.parse(folder.lists);
+              root_tree+="<div class='child' id=folder"+folder.id+" value=1>&nbsp;&nbsp;|_"+folder.name+icontofolder(lists)+"</div>";
+              root_tree+="<div id=child"+folder.id+"></div>";
+            });
+            root_tree+="<br>";
+            $("#tree_view").html(root_tree);
+            $("#folder_view").html(gensubfoldersassetslist(data));
+            $(".root").css("background-color", lg);
+        }
+    });
+}
+
+//interrogate the API and update the folder_view div
+function genfolderview(folder_id)
+{
+    var myurl;
+    console.log("regenerating folder view for folder "+folder_id);
+    if (folder_id) {
+        myurl="/list?id="+folder_id;
+    } else {
+        myurl="/list";
+    }
+    $.ajax({ 
+        url: myurl,
+        dataType: "json",
+        async: true,
+        success: function (data) {
+            console.log(data);
+            $("#folder_view").html(gensubfoldersassetslist(data,folder_id));
+        }
+    });
+}
+
+$("#tree_view").css('border-right', '1px solid lightgrey');
+
+genrootview();
+
+$("#tree_view").on("click",".root",function(){
+    genrootview();
+});
+
+$("#folder_view").on("change","#asset_uploaded_file",function(){
+    var asset = $("#asset_uploaded_file").val();
+    if (asset) {
+        $("#create_asset").show();
+    }
+});
+
+//user click on a folder icon in folder_view
+$("#folder_view").on("click",".folder",function(){
+    //console.log($(this).attr('value'));
+    genfolderview($(this).attr('value'));
+});
+
+//delete an asset
+$("#folder_view").on("click","#delete_asset",function(){
+    var id=$(this).val();
+    var current_folder_id=$("#current_folder_id").attr('value');
+    console.log("asset number "+id+" in folder "+current_folder_id+" is going to be deleted"); 
+    $.ajax({
+        type: "DELETE",
+        url: "/delete_asset/"+id,
+        async: true,
+        success: function(result) {
+            alert(result);
+            if (result==="fichier supprimé") {
+                genfolderview(current_folder_id);
+            }
+        },
+        error: function(result) {
+            alert(result);
+        }
+    });
+    
+});
+
+//user upload a new asset
+$("#folder_view").on("click","#create_asset",function(){
+    file=$("#assetUploadForm")[0];
+    var datafile = new FormData(file); 
+    var folder_id=$("#folder_parent_id").val();
+    
+    $.ajax({
+        type: "POST",
+        processData: false,  // Important!
+        contentType: false,
+        //cache: false,
+        url: "/upload_asset",
+        data: datafile,
+        async: true, 
+        success: function(result) { 
+            if (folder_id) {
+              alert("répertoire "+folder_id+"\n"+result);
+            } else {
+              alert("répertoire racine\n"+result);
+            }
+            genfolderview(folder_id);
+        },
+        error: function(result) {
+            alert(result);
+        }
+    });
+});
+
+//update folder_tree in tree_view while exploring step by step
+$("#tree_view").on("click",".child",function(){
+    //var text = $(this).text();
+    var meta = child_meta($(this).attr('value'), $(this).attr('id'));
+    var value = meta.parent_id;
+    $(".root").css("background-color","#ffffff");
+    $(".child").each(function() {
+      $(this).css("background-color","#ffffff");
+    });
+    $(this).css("background-color",lg);
+    console.log("we are on folder "+value);
+    console.log("corresponding metas are:");
+    console.log(meta);
+    var folder_tree = "";
+    $.ajax({ 
+      url: "/list?id="+value,
+      dataType: "json",
+      async: true,
+      success: function (data) {
+        console.log(data);
+        data.subfolders.forEach(function(folder){
+          var lists=JSON.parse(folder.lists);
+          folder_tree+="<div class=child id=folder"+folder.id+" value='"+meta.level+"'>"+meta.tab+"|_"+folder.name+icontofolder(lists)+"</div>";
+          folder_tree+="<div id=child"+folder.id+"></div>";
+        });
+        $("#child"+value).html(folder_tree);
+        $("#folder_view").html(gensubfoldersassetslist(data,value));
+        
+      }
+    });      
+});
+
+</script>

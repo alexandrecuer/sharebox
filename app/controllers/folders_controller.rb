@@ -22,9 +22,10 @@ class FoldersController < ApplicationController
   def list
     user_id=current_user.id
     results={}
+    current_folder={}
     @subfolders={}
     @assets={}
-    @shared_folders_by_others={}
+    @sharedfoldersbyothers={}
     if id=params[:id]
       puts("current folder request")
       current_folder=Folder.find_by_id(id)
@@ -37,17 +38,20 @@ class FoldersController < ApplicationController
           puts("******shared access test - FAILURE!!!!!!")
         else
           puts("******shared access test - SUCCESS!!!!!!")
-          results = {current_user: user_id, folder: current_folder.name}
-          @subfolders=Folder.joins(:user).where(parent_id: id).select("folders.*, users.email as owner_name, users.id as owner_id, users.statut as owner_statut")
+          #30/03/2019 results = {current_user: user_id, folder: current_folder.name}
+          results = {currentuser: user_id}
+          @subfolders=Folder.joins(:user).where(parent_id: id).select("folders.*, users.email as owner_name, users.id as owner_id, users.statut as owner_statut").order("folders.name ASC")
           @assets=Asset.joins(:user).where(folder_id: id).select("assets.*, users.email as owner_name, users.id as owner_id, users.statut as owner_statut")
         end
       end
     else
-      results = {current_user: user_id, folder: "user root"}
-      @subfolders=current_user.folders.where(parent_id: nil)
+      #30/03/2019 results = {current_user: user_id, folder: "user root"}
+      results = {currentuser: user_id}
+      current_folder["name"]="user root";
+      @subfolders=current_user.folders.where(parent_id: nil).order("name ASC")
       @assets=current_user.assets.where(folder_id: nil)
       #nearly the same as current_user.shared_folders_by_others but with more complet info on the user
-      @shared_folders_by_others=SharedFolder.joins(:user).joins(:folder).select("folders.*, users.email as user_name, users.statut as statut").where(share_user_id: current_user.id).order("folders.name ASC")
+      @sharedfoldersbyothers=SharedFolder.joins(:user).joins(:folder).select("folders.*, users.email as user_name, users.statut as statut").where(share_user_id: current_user.id).order("folders.name ASC")
     end
     #temporary exploitation
     @subfolders.each_with_index do |f,i|
@@ -63,12 +67,17 @@ class FoldersController < ApplicationController
         metas="#{metas} et n'a pas de retour satisfaction"
       end
       puts(metas)
-      @subfolders[i].lists=metas
+      #@subfolders[i].lists=metas
     end
+    results.merge!({currentfolder: current_folder.as_json})
     results.merge!({subfolders: @subfolders.as_json})
     results.merge!({assets: @assets.as_json})
-    results.merge!({shared_folders_by_others: @shared_folders_by_others.as_json})
+    results.merge!({sharedfoldersbyothers: @shared_folders_by_others.as_json})
     render json: results
+  end
+  
+  def browse
+  
   end
   
   ##

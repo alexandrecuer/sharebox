@@ -10,7 +10,11 @@ before_action :authenticate_user!
   # Show the name of the file and its directory (forge/attachments/asset_id/asset_name)<br>
   # actually not used.... 
   def show
-    @asset = current_user.assets.find(params[:id])
+    if @asset = current_user.assets.find_by_id(params[:id])
+        render json: @asset
+    else
+        render json: {id: false, message:"inexisting asset or no right on that asset"}
+    end
   end
   
   ##
@@ -41,10 +45,27 @@ before_action :authenticate_user!
     end
   end
   
+  def upload_asset
+      puts("*****#{params}")
+      if current_user.is_private? || current_user.is_admin?
+	      @asset = current_user.assets.new(asset_params)
+          if @asset.save
+            result="fichier mis en ligne"
+          else
+            result="échec de la mise en ligne\n"
+            result="#{result}type non autorisé ou taille trop importante" 
+          end
+      else
+          result="vous ne pouvez pas mettre en ligne de fichiers"
+      end
+      render plain: result
+  end
+  
   ##
   # following the call to the new asset method, upload an asset and register it in the database<br>
   # if the asset is a root file, we redirect to root else we redirect to the parent folder
   def create
+      puts("*****#{params}")
 	  @asset = current_user.assets.new(asset_params)
       if @asset.save
         flash[:notice] = ASSETS_MSG["asset_uploaded"]
@@ -59,6 +80,19 @@ before_action :authenticate_user!
         end
         render 'new'
       end
+  end
+  
+  def delete_asset
+    puts(params)
+    if asset = current_user.assets.find_by_id(params[:id])
+      if asset.destroy
+        render plain: "fichier supprimé"
+      else
+        render plain: "impossible de supprimer le fichier"
+      end
+    else
+      render plain: "ce fichier n'existe pas ou ne vous appartient pas"
+    end
   end
   
   ##
