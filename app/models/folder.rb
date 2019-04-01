@@ -206,4 +206,47 @@ class Folder < ApplicationRecord
     meta
   end
   
+  ##
+  # execute all 'folder sharing' operations providing a text list of emails (separator ,) 
+  def process_share_emails(emails,current_user)
+      result=""
+      saved_shares=""
+      unless emails
+        result="impossible de continuer : vous n'avez pas fourni d'adresses mel"
+      else
+        email_addresses = emails.split(",")
+        email_addresses.each do |email_address|
+          email_address=email_address.delete(' ')
+          if email_address == current_user.email
+            result = "#{result} #{SHARED_FOLDERS_MSG["you_are_folder_owner"]}\n"
+          else
+            # is the email_address already in the folder's shares ?
+            if current_user.shared_folders.find_by_share_email_and_folder_id(email_address,self.id)
+              result = "#{result} #{SHARED_FOLDERS_MSG["already_shared_to"]} #{email_address}\n"
+            else
+              shared_folder = current_user.shared_folders.new
+              shared_folder.folder_id=self.id
+              shared_folder.share_email = email_address
+              # We search if the email exist in the user table
+              # if not, we'll have to update the share_user_id field after registration
+              share_user = User.find_by_email(email_address)
+              shared_folder.share_user_id = share_user.id if share_user
+              if shared_folder.save
+                a = "#{SHARED_FOLDERS_MSG["shared_to"]} #{email_address}"
+                result = "#{result} #{a}\n"
+                saved_shares = true
+              else
+                flash[:notice] = "#{result} #{SHARED_FOLDERS_MSG["unable_share_for"]} #{email_address}\n"
+              end
+            end
+          end
+        end
+        self.lists=self.calc_meta
+        unless self.save
+          result = "#{result} impossible de mettre à jour les metadonnées du répertoire !!\n"
+        end
+      end
+      {"message": result,"saved_shares": saved_shares}
+  end
+  
 end

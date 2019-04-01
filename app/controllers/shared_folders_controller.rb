@@ -145,10 +145,10 @@ class SharedFoldersController < ApplicationController
   ##
   # Saves the shared emails in the database<br>
   # you cannot share to yourself a folder you own<br>
-  # the method verify if shared emails are already registered in the database for the specified folder (folder_id)<br>
+  # verify if shared emails are already registered in the database for the specified folder (folder_id)<br>
+  # uses for this the process_share_emails method of the folder model 
   # the sharing activity details are emailed to the admin (cf variable admin_mel as declared in the main section of config.yml)<br>
   def create
-  
     flash[:notice]=""
     saved_shares=""
     emails=params[:shared_folder][:share_email].delete(" ")
@@ -157,59 +157,31 @@ class SharedFoldersController < ApplicationController
       flash[:notice]= SHARED_FOLDERS_MSG["email_needed"]
       redirect_to new_share_on_folder_path(params[:shared_folder][:folder_id])
     else
-      email_addresses = emails.split(",")
-      email_addresses.each do |email_address|
-        email_address=email_address.delete(' ')
-        if email_address == current_user.email
-          flash[:notice] = "#{flash[:notice]} #{SHARED_FOLDERS_MSG["you_are_folder_owner"]}<br>"
-        else
-          # is the email_address already in the folder's shares ?
-          if current_user.shared_folders.find_by_share_email_and_folder_id(email_address,params[:shared_folder][:folder_id])
-            flash[:notice] = "#{flash[:notice]} #{SHARED_FOLDERS_MSG["already_shared_to"]} #{email_address}<br>"
-          else
-            @shared_folder = current_user.shared_folders.new(shared_folder_params)
-            @shared_folder.share_email = email_address
-            # We search if the email exist in the user table
-            # if not, we'll have to update the share_user_id field after registration
-            share_user = User.find_by_email(email_address)
-            @shared_folder.share_user_id = share_user.id if share_user
-            if @shared_folder.save
-              a = "#{SHARED_FOLDERS_MSG["shared_to"]} #{email_address}"
-              flash[:notice] = "#{flash[:notice]} #{a}<br>"
-              saved_shares = "#{saved_shares} #{a}<br>"
-            else
-              flash[:notice] = "#{flash[:notice]} #{SHARED_FOLDERS_MSG["unable_share_for"]} #{email_address}<br>"
-            end
-          end
-        end
-      end
-      # we leave the sharing form (app/views/shared_folders/_form.html.erb)
-      # the id of the folder that we just shared is given by : params[:shared_folders][:folder_id]
       @folder = current_user.folders.find(params[:shared_folder][:folder_id])
-      @folder.lists=@folder.calc_meta
-      unless @folder.save
-        flash[:notice] = "#{flash[:notice]} impossible de mettre à jour les metadonnées du répertoire !!<br>"
-      end
-      if saved_shares != ""
-        if @folder.parent_id
-          redirect_to folder_path(@folder.parent_id)
+      unless @folder
+        result="impossible de continuer : ce répertoire n'existe pas"
+      else 
+        result = @folder.process_share_emails(emails,current_user)
+        flash[:notice]=result[:message].gsub(/\n/,"<br/>")
+        if result[:saved_shares]
+          if @folder.parent_id
+            redirect_to folder_path(@folder.parent_id)
+          else
+            redirect_to root_url
+          end
         else
-          redirect_to root_url
+          redirect_to new_share_on_folder_path(params[:shared_folder][:folder_id])
         end
-      else
-        redirect_to new_share_on_folder_path(params[:shared_folder][:folder_id])
+        # if new shares were successfully saved, then we inform the admin
+        if result[:saved_shares]
+          mel_to_admin = "#{SHARED_FOLDERS_MSG["folder"]} #{params[:shared_folder][:folder_id]}<br>"
+          mel_to_admin = "#{mel_to_admin}<b>[#{@folder.name.html_safe}]</b><br>#{flash[:notice]}"
+          InformAdminJob.perform_now(current_user,mel_to_admin)
+          # alternative not using jobs
+          #UserMailer.inform_admin(current_user,mel_to_admin).deliver_now
+        end
       end
     end
-    
-    # if new shares were successfully saved, then we inform the admin
-    if saved_shares != ""
-      mel_to_admin = "#{SHARED_FOLDERS_MSG["folder"]} #{params[:shared_folder][:folder_id]}<br>"
-      mel_to_admin = "#{mel_to_admin}<b>[#{@folder.name.html_safe}]</b><br>#{saved_shares}"
-      InformAdminJob.perform_now(current_user,mel_to_admin)
-      # alternative not using jobs
-      #UserMailer.inform_admin(current_user,mel_to_admin).deliver_now
-    end
-    
   end
 
   ##
