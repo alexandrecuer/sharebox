@@ -159,7 +159,8 @@ class SharedFoldersController < ApplicationController
     else
       @folder = current_user.folders.find(params[:shared_folder][:folder_id])
       unless @folder
-        result="impossible de continuer : ce répertoire n'existe pas"
+        flash[:notice]="impossible de continuer : ce répertoire n'existe pas"
+        redirect_to root_url
       else 
         result = @folder.process_share_emails(emails,current_user)
         flash[:notice]=result[:message].gsub(/\n/,"<br/>")
