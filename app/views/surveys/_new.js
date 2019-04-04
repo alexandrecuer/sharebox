@@ -114,7 +114,7 @@ $.ajax({
         $.each(result, function(index, array){
             options+="<option value="+array.id+">"+array.name+" (S"+array.id+")</option>";
         });
-        options+="<select>";
+        //options+="<select>";
         $("#s_poll_id").html(options);
         //console.log(options);
     } 
@@ -247,45 +247,5 @@ $.ajax({
 $("#answers").on("click",".btn",function(){
     var id = $(this).val();
     //console.log(id);
-    $.ajax({ url: "/satisfactions/"+id, 
-        dataType: "json", 
-        async: true, 
-        success: function(data) {
-            var out = "";
-            var header = "";
-            out+="<table class=table>";
-            var s=Object.getOwnPropertyNames(data);
-            s.forEach(function(val){
-                if(val==="date" || val==="affaire") {
-                    header+="<b>"+data[val]+"</b><br>";
-                } else {
-                    var numrx=/^[0-9]$/;
-                    var v=String(data[val]);
-                    if (v.match(numrx)) {
-                        var note=parseInt(data[val],10);
-                        if (!note) {
-                            note = 0;
-                        }
-                        var i;
-                        out+="<tr><td colspan=2><div class='row align-items-center justify-content-center'>";
-                        for (i=0;i<note;i++){
-                            out+="<div class='stars'><input type=radio value="+note+" checked='checked'><label class='star-"+note+"'></label></div>";
-                        }
-                        for (i=note;i<4;i++){
-                            out+="<div class='stars'><input type=radio disabled='disabled'><label class='star'></label></div>";
-                        }
-                        out+="<div class='col-6 col-md-4'>"+val+"</div>";
-                        out+="</div></td></tr>";
-                    } else {
-                        out+="<tr><td>"+val+"</td><td>"+data[val]+"</td></tr>";
-                    }
-                }
-            });
-            out+="</table>";
-            $("#mtitle").html(header);
-            $("#modal-content").html(out);
-            $("#AnswerModal").modal("show");
-        }
-    });
-    
+    surveyfeedback(id,"AnswerModal");
 });

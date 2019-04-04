@@ -92,6 +92,7 @@ class SharedFoldersController < ApplicationController
       flash[:notice] = FOLDERS_MSG["inexisting_folder"]
       redirect_to root_url
     end
+    # bof bof un user public peut s'envoyer un fichier
     unless (current_user.is_admin? || current_user.has_shared_access?(@current_folder))
       flash[:notice] = "cette action ne vous est pas autorisée"
       redirect_to root_url
@@ -141,6 +142,35 @@ class SharedFoldersController < ApplicationController
       @current_folder = @to_be_shared_folder.parent
     end
   end
+  
+  ##
+  # get all shares for a given folder
+  def getshares
+    folder_id=params[:folder_id]  
+    shares=SharedFolder.where(folder_id: folder_id)
+    render json: shares
+  end
+  
+  ##
+  # share a folder through an ajax post
+  def share
+    emails=params[:share_email].delete(" ")
+    folder_id=params[:folder_id]
+    result=""
+    if emails == ""
+      result=SHARED_FOLDERS_MSG["email_needed"]
+    else
+      folder = current_user.folders.find_by_id(folder_id)
+      unless folder
+        result="impossible de continuer\n"
+        result="#{result}ce répertoire n'existe pas ou ne vous appartient pas"
+      else
+        processed = folder.process_share_emails(emails,current_user)
+        result=processed[:message]
+      end
+    end
+    render plain: result
+  end
 
   ##
   # Saves the shared emails in the database<br>
@@ -149,17 +179,14 @@ class SharedFoldersController < ApplicationController
   # uses for this the process_share_emails method of the folder model 
   # the sharing activity details are emailed to the admin (cf variable admin_mel as declared in the main section of config.yml)<br>
   def create
-    flash[:notice]=""
-    saved_shares=""
     emails=params[:shared_folder][:share_email].delete(" ")
-
     if emails == ""
       flash[:notice]= SHARED_FOLDERS_MSG["email_needed"]
       redirect_to new_share_on_folder_path(params[:shared_folder][:folder_id])
     else
       @folder = current_user.folders.find(params[:shared_folder][:folder_id])
       unless @folder
-        flash[:notice]="impossible de continuer : ce répertoire n'existe pas"
+        flash[:notice]="impossible de continuer<br>ce répertoire n'existe pas ou ne vous appartient pas"
         redirect_to root_url
       else 
         result = @folder.process_share_emails(emails,current_user)
@@ -183,6 +210,33 @@ class SharedFoldersController < ApplicationController
         end
       end
     end
+  end
+  
+  ##
+  # delete a given share
+  def deleteshare
+    folder = current_user.folders.find_by_id(params[:folder_id])
+    unless folder
+      result = "ce répertoire n'existe pas ou ne vous appartient pas"
+    else
+      id=params[:id]
+      share=SharedFolder.find_by_id(id)
+      unless share
+        result="ce partage n'existe pas"
+      else
+        if share.destroy
+          folder.lists=folder.calc_meta
+          unless folder.save
+            result="impossible de mettre à jour les métadonnées"
+          else
+            result="partage supprimé"
+          end
+        else
+          result="impossible de supprimer le partage"
+        end
+      end
+    end
+    render plain: result
   end
 
   ##

@@ -137,15 +137,20 @@ class SatisfactionsController < ApplicationController
   # Show satisfaction answer given a specific id<br>
   # for admins and users with shared access on the folder related to the satisfaction
   def show 
+    puts("*****#{params}")
     authenticate_user!
     @satisfaction = Satisfaction.find_by_id(params[:id])
     if !@satisfaction
       flash[:notice] = SATISFACTIONS_MSG["inexisting_satisfaction"]
       redirect_to root_url
     else
-      if @satisfaction.folder_id < 0
+      if @satisfaction.folder_id < 0 || params[:json]
         results={}
         results["affaire"]=@satisfaction.case_number
+        if @satisfaction.folder_id > 0
+          user=User.find_by_id(@satisfaction.user_id)
+          results["affaire"]="#{results["affaire"]}<br>Client: #{user.email}"
+        end
         results["date"]=@satisfaction.updated_at
         @poll=Poll.find_by_id(@satisfaction.poll_id)
         open={}
@@ -162,7 +167,11 @@ class SatisfactionsController < ApplicationController
           results[open["open#{j}"]]=@satisfaction["open#{j}"]
         end
         for j in 1..closed.length
-          results[closed["closed#{j}"]]=@satisfaction["closed#{j}"]
+          if @satisfaction["closed#{j}"]
+            results[closed["closed#{j}"]]=@satisfaction["closed#{j}"]
+          else 
+            results[closed["closed#{j}"]]=0
+          end
         end
         render json: results
       else        

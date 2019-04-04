@@ -207,12 +207,15 @@ class Folder < ApplicationRecord
   end
   
   ##
-  # execute all 'folder sharing' operations providing a text list of emails (separator ,) 
+  # execute all 'folder sharing' operations providing a text list of emails (separator ,) <br>
+  # update folder metadata if shares are successfully created
+  # only folder owner can add new shares<br>
+  # if TEAM var exists, could we authorize others users from the team who benefit from a share  ?
   def process_share_emails(emails,current_user)
       result=""
-      saved_shares=""
-      unless emails
-        result="impossible de continuer : vous n'avez pas fourni d'adresses mel"
+      saved_shares=false
+      unless emails && current_user.id == self.user_id
+        result="impossible de continuer<br>vous n'avez pas fourni d'adresses mel ou ce répertoire ne vous appartient pas"
       else
         email_addresses = emails.split(",")
         email_addresses.each do |email_address|

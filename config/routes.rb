@@ -56,5 +56,13 @@ Rails.application.routes.draw do
    post "upload_asset" => "assets#upload_asset", :as => ""
    
    delete "delete_asset/:id" => "assets#delete_asset", :as => ""
+   
+   post "update_folder" => "folders#update_folder", :as => "update_folder"
+   
+   post "share" => "shared_folders#share", :as => "share"
+   
+   get "getshares/:folder_id" => "shared_folders#getshares", :as => "getshares"
+   
+   post "deleteshare/:folder_id/:id" => "shared_folders#deleteshare", :as => "deleteshare"
 
 end
