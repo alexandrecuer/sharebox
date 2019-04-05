@@ -4,7 +4,7 @@ function surveyfeedback(id,modalname)
 {
     var out = "";
     var header = "";
-    $.ajax({ url: "/satisfactions/"+id+"?json=1", 
+    $.ajax({ url: "/satisfactions/json/"+id, 
         dataType: "json", 
         async: true, 
         success: function(data) {

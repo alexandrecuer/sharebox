@@ -56,7 +56,7 @@ class FoldersController < ApplicationController
       sharedfoldersbyothers=SharedFolder.joins(:user).joins(:folder).select("folders.*, users.email as user_name, users.statut as statut").where(share_user_id: current_user.id).order("folders.name ASC")
     end
     #temporary exploitation
-    subfolders.each_with_index do |f,i|
+    subfolders.each do |f|
       a = f.get_meta
       if a["shares"].length > 0
         metas="ce répertoire #{f.name} a des partages #{a['shares']}"

@@ -6,6 +6,7 @@ class SatisfactionsController < ApplicationController
   
   ##
   # render a json view of all satisfactions answers
+  # actually not used by the app
   def index
       authenticate_user!
       satisfactions= Satisfaction.all
@@ -64,6 +65,7 @@ class SatisfactionsController < ApplicationController
   
   ##
   # to retrieve for a given registered user all ids for the satisfaction answers collected out of the folders/assets system
+  # retieve also, if it exists, the case_number field for a nicer html output
   def freelist
       authenticate_user!
       freesats=current_user.satisfactions.where("folder_id < ?",0).map {|x| {id: x.id, case_number: x.case_number}}
@@ -134,6 +136,55 @@ class SatisfactionsController < ApplicationController
   end
   
   ##
+  # render a json output of a given satisfaction
+  def json
+    results={}
+    satisfaction = Satisfaction.find_by_id(params[:id])
+    unless satisfaction
+        results["affaire"]="aucune enquête sous ce numéro"  
+    else
+        if satisfaction.folder_id > 0
+            folder=Folder.find_by_id(satisfaction.folder_id)
+            if folder
+              results["affaire"]=folder.name
+              if folder.case_number
+                results["affaire"]="#{results["affaire"]} (#{folder.case_number})"
+              end
+            end
+            user=User.find_by_id(satisfaction.user_id)
+            if user
+              results["affaire"]="#{results["affaire"]}<br>Client: #{user.email}"
+            end
+        else
+            results["affaire"]=satisfaction.case_number
+        end
+        results["date"]=satisfaction.updated_at
+        poll=Poll.find_by_id(satisfaction.poll_id)
+        open={}
+        closed={}
+        opens=poll.open_names.split(";")
+        closes=poll.closed_names.split(";");
+        opens.each_with_index do |o,i|
+          open["open#{i+1}"]=o.strip
+        end
+        closes.each_with_index do |c,i|
+          closed["closed#{i+1}"]=c.strip
+        end
+        for j in 1..open.length
+          results[open["open#{j}"]]=satisfaction["open#{j}"]
+        end
+        for j in 1..closed.length
+          if satisfaction["closed#{j}"]
+            results[closed["closed#{j}"]]=satisfaction["closed#{j}"]
+          else 
+            results[closed["closed#{j}"]]=0
+          end
+        end
+    end
+    render json: results
+  end
+  
+  ##
   # Show satisfaction answer given a specific id<br>
   # for admins and users with shared access on the folder related to the satisfaction
   def show 
@@ -144,45 +195,13 @@ class SatisfactionsController < ApplicationController
       flash[:notice] = SATISFACTIONS_MSG["inexisting_satisfaction"]
       redirect_to root_url
     else
-      if @satisfaction.folder_id < 0 || params[:json]
-        results={}
-        results["affaire"]=@satisfaction.case_number
-        if @satisfaction.folder_id > 0
-          user=User.find_by_id(@satisfaction.user_id)
-          results["affaire"]="#{results["affaire"]}<br>Client: #{user.email}"
-        end
-        results["date"]=@satisfaction.updated_at
-        @poll=Poll.find_by_id(@satisfaction.poll_id)
-        open={}
-        closed={}
-        opens=@poll.open_names.split(";")
-        closes=@poll.closed_names.split(";");
-        opens.each_with_index do |o,i|
-          open["open#{i+1}"]=o.strip
-        end
-        closes.each_with_index do |c,i|
-          closed["closed#{i+1}"]=c.strip
-        end
-        for j in 1..open.length
-          results[open["open#{j}"]]=@satisfaction["open#{j}"]
-        end
-        for j in 1..closed.length
-          if @satisfaction["closed#{j}"]
-            results[closed["closed#{j}"]]=@satisfaction["closed#{j}"]
-          else 
-            results[closed["closed#{j}"]]=0
-          end
-        end
-        render json: results
-      else        
-        @current_folder = Folder.find_by_id(@satisfaction.folder_id)
-        unless ( current_user.has_shared_access?(@current_folder) || current_user.is_admin? )
-          flash[:notice] = SATISFACTIONS_MSG["access_forbidden"]
-          redirect_to root_url
-        end
-        @poll = Poll.find_by_id(@satisfaction.poll_id)
-        render 'new'
+      @current_folder = Folder.find_by_id(@satisfaction.folder_id)
+      unless ( current_user.has_shared_access?(@current_folder) || current_user.is_admin? )
+        flash[:notice] = SATISFACTIONS_MSG["access_forbidden"]
+        redirect_to root_url
       end
+      @poll = Poll.find_by_id(@satisfaction.poll_id)
+      render 'new'
     end
   end
 
