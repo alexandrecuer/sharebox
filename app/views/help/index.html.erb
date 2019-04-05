@@ -54,7 +54,7 @@ help << a
 if min_satisfaction_id=Satisfaction.where("folder_id <?",0).minimum(:id)
   a={}
   a["controller"]="satisfactions"
-  a["url"]="<a href=satisfactions/#{min_satisfaction_id}>#{root_url}satisfactions/#{min_satisfaction_id}</a>"
+  a["url"]="<a href=satisfactions/json/#{min_satisfaction_id}>#{root_url}satisfactions/json/#{min_satisfaction_id}</a>"
   a["text"]="sortie json de la réponse de satisfaction #{min_satisfaction_id} si elle existe"
   help << a
 end
@@ -93,6 +93,16 @@ a["url"]="<a href=users?melfrag=#{melfrag}>#{root_url}users?melfrag=#{melfrag}</
 a["text"]="sortie json de tous les utilisateurs dans la base dont l'adresse mel contient le fragment #{melfrag}"
 help << a
 
+if min_shared_folder_id=current_user.shared_folders.joins(:folder).select("folders.id as folder_id")[0].folder_id
+  a={}
+  a["controller"]="shared_folders"
+  a["url"]="<a href=getshares/#{min_shared_folder_id}>#{root_url}getshares/#{min_shared_folder_id}</a>"
+  a["text"]="sortie json des partages du répertoire #{min_shared_folder_id}"
+  a["text"]="#{a["text"]} {id, user_id, share_email, share_user_id, folder_id, message, created_at, updated_at}"
+  a["text"]="#{a["text"]}. Message est un champ texte utilisé pour enregistrer le nombre de click sur les documents du répertoire partagé"
+  help << a
+end
+
 a={}
 a["controller"]="shared_folders"
 a["url"]="<a href=shared_folders?update_meta=1>#{root_url}shared_folders?update_meta=1</a>"
@@ -118,8 +128,15 @@ if min_folder_id=current_user.folders.minimum(:id)
   help << a
   a={}
   a["controller"]="folders"
+  a["url"]="<a href=browse?id=#{min_folder_id}>#{root_url}browse?id=#{min_folder_id}</a>"
+  a["text"]="sortie json du répertoire #{min_folder_id} à savoir le contenu de la ligne #{min_folder_id} de la table 'folder'"
+  a["text"]="#{a["text"]} {id, name, parent_id, user_id, created_at, updated_at, poll_id, lists}."
+  a["text"]="#{a["text"]} Le champ lists contient les métadonnées (numéros de partage, numéros de retous satisfactions)"
+  help << a
+  a={}
+  a["controller"]="folders"
   a["url"]="<a href=list?id=#{min_folder_id}>#{root_url}list?id=#{min_folder_id}</a>"
-  a["text"]="sortie json des répertoires et fichiers du répertoire #{min_folder_id} si l'utilisateur y a accès"
+  a["text"]="sortie json contenant en plus des données de la sortie browse, les données relatives aux sous-répertoires/fichiers/partages/retours satisfactions du répertoire #{min_folder_id} si l'utilisateur y a accès"
   help << a
 end
 
@@ -129,8 +146,18 @@ a["url"]="<a href=list>#{root_url}list</a>"
 a["text"]="sortie json des répertoires et fichiers racines de l'utilisateur et des répertoires qui lui sont partagés"
 help << a
 
-%>
+if min_asset_id=current_user.assets.minimum(:id)
+  a={}
+  a["controller"]="assets"
+  a["url"]="<a href=assets/#{min_asset_id}>#{root_url}assets/#{min_asset_id}</a>"
+  a["text"]="sortie json de l'asset #{min_asset_id} si l'utilisateur y a accès"
+  a["text"]="#{a["text"]} {id, user_id, created_at, updated_at, uploaded_file_file_name, uploaded_file_content_type, uploaded_file_file_size, uploaded_file_updated_at, folder_id}"
+  a["text"]="#{a["text"]}. Route pas utilisée dans l'application. La route list est beaucoup plus puissante."
+  help << a
+end
 
+%>
+<%= min_shared_folder_id %>
 <h1>API help</h1>
 <table class=table>
 <thead>
