@@ -1,8 +1,11 @@
 <% if user_signed_in? %>
 
   <%= render 'shared/nav' %>
-  
-  <%= render 'shared/list' %>
+  <% if current_user.is_admin? || current_user.is_private? %>
+    <% controller.redirect_to browse_path %>
+  <% else %>
+    <%= render 'shared/list' %>
+  <% end %>
   
 <% end %>
 

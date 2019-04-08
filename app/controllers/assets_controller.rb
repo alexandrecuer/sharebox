@@ -47,18 +47,28 @@ before_action :authenticate_user!
   
   def upload_asset
       puts("*****#{params}")
+      results={}
       if current_user.is_private? || current_user.is_admin?
-	      @asset = current_user.assets.new(asset_params)
-          if @asset.save
-            result="fichier mis en ligne"
+          unless folder=Folder.find_by_id(params[:asset][:folder_id]) || params[:asset][:folder_id]==nil
+            results["success"]=false
+            results["message"]="impossible de poursuivre - vous essayez de charger un fichier dans un répertoire inexistant"
           else
-            result="échec de la mise en ligne\n"
-            result="#{result}type non autorisé ou taille trop importante" 
+	        asset = current_user.assets.new(asset_params)
+            if asset.save
+              results["success"]=true
+              results["message"]="fichier mis en ligne"
+            else
+              results["success"]=false
+              result="échec de la mise en ligne\n"
+              result="#{result}type non autorisé ou taille trop importante"
+              results["message"]=result
+            end
           end
       else
-          result="vous ne pouvez pas mettre en ligne de fichiers"
+          results["success"]=false
+          results["message"]="vous ne pouvez pas mettre en ligne de fichiers"
       end
-      render plain: result
+      render json: results
   end
   
   ##
@@ -84,15 +94,20 @@ before_action :authenticate_user!
   
   def delete_asset
     puts(params)
+    results={}
     if asset = current_user.assets.find_by_id(params[:id])
       if asset.destroy
-        render plain: "fichier supprimé"
+        results["success"]=true
+        results["message"]="fichier supprimé"
       else
-        render plain: "impossible de supprimer le fichier"
+        results["success"]=false
+        results["message"]="impossible de supprimer le fichier"
       end
     else
-      render plain: "ce fichier n'existe pas ou ne vous appartient pas"
+      results["success"]=false
+      results["message"]= "ce fichier n'existe pas ou ne vous appartient pas"
     end
+    render json: results
   end
   
   ##

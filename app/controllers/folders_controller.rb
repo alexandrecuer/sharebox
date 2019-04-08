@@ -20,40 +20,40 @@ class FoldersController < ApplicationController
   # list?id=1 json output files/subfolders/shares/satisfaction answers of a folder identified by id=1, if shared to the current_user
   # list json output of files/folders of the current_user root plus shared_folders to the current user by others
   def list
-    user_id=current_user.id
     results={}
-    current_folder={}
+    currentfolder={}
     subfolders={}
     assets={}
     sharedfoldersbyothers={}
     currentfoldershares={}
     currentfoldersatis={}
+    currentuser= {id: current_user.id, name: current_user.email, statut: current_user.statut}
     if id=params[:id]
       puts("current folder request")
-      current_folder=Folder.find_by_id(id)
+      currentfolder=Folder.joins(:user).select("folders.*, users.email as user_name, users.statut as user_statut").find_by_id(id)
       puts("current folder request")
-      unless current_folder
-        results= {folder: "inexisting folder"}
+      unless currentfolder
+        currentfolder= {id: nil, name: "inexisting folder"}
       else
-        unless current_user.has_shared_access?(current_folder)
-          results={folder: "insufficient rights to access this folder"}
+        unless current_user.has_shared_access?(currentfolder)
+          currentfolder= {id: nil, name: "insufficient rights to access this folder"}
           puts("******shared access test - FAILURE!!!!!!")
         else
           puts("******shared access test - SUCCESS!!!!!!")
-          results = {currentuser: user_id}
-          subfolders=Folder.joins(:user).where(parent_id: id).select("folders.*, users.email as owner_name, users.id as owner_id, users.statut as owner_statut").order("folders.name ASC")
-          assets=Asset.joins(:user).where(folder_id: id).select("assets.*, users.email as owner_name, users.id as owner_id, users.statut as owner_statut")
-          currentfoldershares=current_folder.shared_folders
-          currentfoldersatis=current_folder.satisfactions
+          subfolders=Folder.joins(:user).where(parent_id: id).select("folders.*, users.email as user_name, users.statut as user_statut").order("folders.name ASC")
+          assets=Asset.joins(:user).where(folder_id: id).select("assets.*, users.email as user_name, users.statut as user_statut")
+          currentfoldershares=currentfolder.shared_folders
+          currentfoldersatis=currentfolder.satisfactions
         end
       end
     else
-      results = {currentuser: user_id}
-      current_folder["name"]="user root";
+      currentfolder["id"]=-1
+      currentfolder["name"]="user root";
       subfolders=current_user.folders.where(parent_id: nil).order("name ASC")
+      # these assets are on root - so they are owned by the user and the joins(:user) is not necessary
       assets=current_user.assets.where(folder_id: nil)
-      #nearly the same as current_user.shared_folders_by_others but with more complet info on the user
-      sharedfoldersbyothers=SharedFolder.joins(:user).joins(:folder).select("folders.*, users.email as user_name, users.statut as statut").where(share_user_id: current_user.id).order("folders.name ASC")
+      #nearly the same as current_user.shared_folders_by_others but with more complete info on the user
+      sharedfoldersbyothers=SharedFolder.joins(:user).joins(:folder).select("folders.*, users.email as user_name, users.statut as user_statut").where(share_user_id: current_user.id).order("folders.name ASC")
     end
     #temporary exploitation
     subfolders.each do |f|
@@ -70,9 +70,10 @@ class FoldersController < ApplicationController
       end
       puts(metas)
     end
+    results.merge!({currentuser: currentuser.as_json})
     results.merge!({currentfoldersatis: currentfoldersatis.as_json})
     results.merge!({currentfoldershares: currentfoldershares.as_json})
-    results.merge!({currentfolder: current_folder.as_json})
+    results.merge!({currentfolder: currentfolder.as_json})
     results.merge!({subfolders: subfolders.as_json})
     results.merge!({assets: assets.as_json})
     results.merge!({sharedfoldersbyothers: sharedfoldersbyothers.as_json})
@@ -100,11 +101,14 @@ class FoldersController < ApplicationController
       if current_user.has_shared_access?(@current_folder)
         # if the user has answered to the poll, we show the details of the answer
         # if we are waiting for the current user to express his satisfaction, we redirect to new satisfaction_on_folder_path(folder)
-        if @satisfaction = current_user.satisfactions.find_by_folder_id(@current_folder.id)
-          redirect_to satisfaction_path(@satisfaction.id)
-        elsif @current_folder.is_polled? && current_user.shared_folders_by_others.include?(@current_folder)
-          puts("we move to #{new_satisfaction_on_folder_path(@current_folder)}")
-          redirect_to new_satisfaction_on_folder_path(@current_folder)
+        unless current_user.belongs_to_team?
+          puts("**************not in team")
+          if @satisfaction = current_user.satisfactions.find_by_folder_id(@current_folder.id)
+            redirect_to satisfaction_path(@satisfaction.id)
+          elsif @current_folder.is_polled? && current_user.shared_folders_by_others.include?(@current_folder)
+            puts("we move to #{new_satisfaction_on_folder_path(@current_folder)}")
+            redirect_to new_satisfaction_on_folder_path(@current_folder)
+          end
         end
       else
         flash[:notice] = FOLDERS_MSG["folder_not_for_yu"]
@@ -173,6 +177,44 @@ class FoldersController < ApplicationController
       end
     end
   end
+  
+  ##
+  # Create a new folder after an ajax call<br>
+  def create_folder
+    results={}
+    unless (current_user.is_admin? || current_user.is_private?)
+      results["success"]=false
+      results["message"]="Vous n'avez pas les droits pour créer des dossiers"
+    else
+      unless params["name"]
+        results["success"]=false
+        results["message"]="Il faut fournir un nom de dossier"
+      else
+        unless folder=Folder.find_by_id(params["parent_id"]) || params["parent_id"]==nil
+          results["success"]=false
+          results["message"]="impossible de poursuivre - vous essayez de créer un dossier dans un répertoire inexistant"
+        else
+          folder = current_user.folders.new
+          folder.name=params["name"]
+          folder.parent_id=params["parent_id"]
+          folder.case_number=params["case_number"]
+          folder.lists=folder.initialize_meta
+          #puts(folder.as_json)
+          #puts(params)
+          if folder.save
+            puts("the newly created id is #{folder.id}")
+            results["success"]=true
+            results["folder_id"]=folder.id
+            results["message"]="succès : dossier #{folder.name} crée"
+          else
+            results["success"]=false
+            results["message"]="échec : impossible de créer le dossier #{folder.name}"
+          end
+        end
+      end
+    end
+    render json: results
+  end
 
   ##
   # Create a new folder<br>
@@ -219,25 +261,36 @@ class FoldersController < ApplicationController
       text="impossible de poursuivre\n"
       text="#{text} ce dossier n'existe pas ou ne vous appartient pas"
       result["message"]=text
+      result["success"]=false
     else
-      folder.name=params[:name]
-      folder.case_number=params[:case_number]
-      folder.poll_id=params[:poll_id]
-      if folder.save
-        majsat=true
-        folder.satisfactions.each do |s|
-          s.case_number = folder.case_number
-          unless s.save
-            majsat=false
-          end
-        end
-        result["message"]="dossier mis à jour"
-        result["lists"]=folder.lists
-        unless majsat
-          result["message"]="#{result['message']}\n attention: champ(s) n°affaire fiche(s) satisfaction associée(s) non mis à jour" 
-        end
+      unless params[:name]!=""
+        puts("$$$$$$$$empty folder name")
+        text="impossible de poursuivre\n"
+        text="#{text} le nom de répertoire proposé est vide"
+        result["message"]=text
+        result["success"]=false
       else
-        result["message"]="impossible de mettre à jour le dossier"
+        folder.name=params[:name]
+        folder.case_number=params[:case_number]
+        folder.poll_id=params[:poll_id]
+        if folder.save
+          majsat=true
+          folder.satisfactions.each do |s|
+            s.case_number = folder.case_number
+            unless s.save
+              majsat=false
+            end
+          end
+          result["success"]=true
+          result["message"]="dossier mis à jour"
+          result["lists"]=folder.lists
+          unless majsat
+            result["message"]="#{result['message']}\n attention: champ(s) n°affaire fiche(s) satisfaction associée(s) non mis à jour" 
+          end
+        else
+          result["message"]="impossible de mettre à jour le dossier"
+          result["success"]=false
+        end
       end
     end
     render json: result
@@ -278,6 +331,28 @@ class FoldersController < ApplicationController
         render 'edit'
       end
     end
+  end
+  
+  ##
+  # delete an existing folder after an ajax call
+  def delete_folder
+    results={}
+    folder = current_user.folders.find_by_id(params[:id])
+    unless folder
+      results["success"]=false
+      results["message"]="dossier inexistant ou ne vous appartenant pas"
+    else
+      parent_id=folder.parent_id
+      if folder.destroy
+        results["success"]=true
+        results["parent_id"]=parent_id
+        results["message"]="dossier supprimé"
+      else
+        results["success"]=false
+        results["message"]="impossible de supprimer le dossier #{folder.name} numéro #{folder.id}"
+      end
+    end
+    render json: results
   end
   
   ##

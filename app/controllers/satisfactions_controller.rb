@@ -114,7 +114,7 @@ class SatisfactionsController < ApplicationController
       flash[:notice] = SATISFACTIONS_MSG["inexisting_folder"]
       redirect_to root_url
     else
-      if current_user.has_ownership?(@current_folder)
+      if current_user.has_ownership?(@current_folder) || current_user.belongs_to_team?
         flash[:notice] = SATISFACTIONS_MSG["folder_owner"]
         redirect_to folder_path(@current_folder)
       end
