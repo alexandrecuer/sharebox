@@ -147,7 +147,7 @@ class SatisfactionsController < ApplicationController
             folder=Folder.find_by_id(satisfaction.folder_id)
             if folder
               results["affaire"]=folder.name
-              if folder.case_number
+              if folder.case_number.length>0
                 results["affaire"]="#{results["affaire"]} (#{folder.case_number})"
               end
             end

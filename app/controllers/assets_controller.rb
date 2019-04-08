@@ -5,6 +5,11 @@ class AssetsController < ApplicationController
 
 before_action :authenticate_user!
   
+  def index
+    assets=Asset.all
+    render json: assets
+  end
+  
   ## 
   # Method used when following the route /assets/assets_id<br>
   # Show the name of the file and its directory (forge/attachments/asset_id/asset_name)<br>
