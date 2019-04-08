@@ -46,8 +46,10 @@ before_action :authenticate_user!
   end
   
   def upload_asset
-      puts("*****#{params}")
       results={}
+      if params[:asset][:folder_id]==""
+        params[:asset][:folder_id]=nil
+      end
       if current_user.is_private? || current_user.is_admin?
           unless Folder.find_by_id(params[:asset][:folder_id]) || params[:asset][:folder_id].nil?
             results["success"]=false
@@ -75,7 +77,6 @@ before_action :authenticate_user!
   # following the call to the new asset method, upload an asset and register it in the database<br>
   # if the asset is a root file, we redirect to root else we redirect to the parent folder
   def create
-      puts("*****#{params}")
 	  @asset = current_user.assets.new(asset_params)
       if @asset.save
         flash[:notice] = ASSETS_MSG["asset_uploaded"]
@@ -93,7 +94,6 @@ before_action :authenticate_user!
   end
   
   def delete_asset
-    puts(params)
     results={}
     if asset = current_user.assets.find_by_id(params[:id])
       if asset.destroy

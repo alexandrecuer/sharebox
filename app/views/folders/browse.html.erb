@@ -166,8 +166,6 @@ function createtabs(folder,shares,satis,currentuser)
     tabs+="<input class=form-control-file type=file id=asset_uploaded_file name=asset[uploaded_file]>";
     if (folder.id>=0) {
         tabs+="<input type=hidden id=asset_folder_id name=asset[folder_id] value="+folder.id+">";
-    } else {
-        tabs+="<input type=hidden id=asset_folder_id name=asset[folder_id]>";
     }
     tabs+="</form>";
     tabs+="<br><button id=create_asset class=btn style=display:none>Charger le fichier</button>";

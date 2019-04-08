@@ -48,7 +48,7 @@ class FoldersController < ApplicationController
       end
     else
       currentfolder["id"]=-1
-      currentfolder["name"]="user root";
+      currentfolder["name"]="racine utilisateur";
       subfolders=current_user.folders.where(parent_id: nil).order("name ASC")
       # these assets are on root - so they are owned by the user and the joins(:user) is not necessary
       assets=current_user.assets.where(folder_id: nil)
@@ -254,7 +254,6 @@ class FoldersController < ApplicationController
   ##
   # update an existing folder after an ajax post
   def update_folder
-    puts("*****#{params}")
     folder = current_user.folders.find_by_id(params[:id])
     result={}
     unless folder
