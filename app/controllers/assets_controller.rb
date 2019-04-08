@@ -49,7 +49,7 @@ before_action :authenticate_user!
       puts("*****#{params}")
       results={}
       if current_user.is_private? || current_user.is_admin?
-          unless folder=Folder.find_by_id(params[:asset][:folder_id]) || params[:asset][:folder_id]==nil
+          unless Folder.find_by_id(params[:asset][:folder_id]) || params[:asset][:folder_id].nil?
             results["success"]=false
             results["message"]="impossible de poursuivre - vous essayez de charger un fichier dans un répertoire inexistant"
           else

@@ -190,7 +190,7 @@ class FoldersController < ApplicationController
         results["success"]=false
         results["message"]="Il faut fournir un nom de dossier"
       else
-        unless folder=Folder.find_by_id(params["parent_id"]) || params["parent_id"]==nil
+        unless Folder.find_by_id(params["parent_id"]) || params["parent_id"].nil?
           results["success"]=false
           results["message"]="impossible de poursuivre - vous essayez de créer un dossier dans un répertoire inexistant"
         else
