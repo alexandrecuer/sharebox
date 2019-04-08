@@ -183,13 +183,15 @@ function createtabs(folder,shares,satis,currentuser)
         
         var options="<br><select class='form-control' id=currentfolder_poll_id>";
         options+="<option value=''>choisissez un sondage</option>";
-        polls.forEach(function(poll){
+        if (polls.length>0) {
+          polls.forEach(function(poll){
             var tag=" "
             if (folder.poll_id === poll.id) {
                tag=" selected";
             }
             options+="<option value="+poll.id+tag+">"+poll.name+" (S"+poll.id+")</option>";
-        });
+          });
+        }
         options+="</select>";
         tabs+=options;
         tabs+="<br><button type=submit class=btn id=currentfolder_modify>Sauvegarder les modifications</button><br><br>";
