@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
   
   helper_method :sort_column, :sort_direction
-
+  
   ## 
   # Admin users can modify other users'status<br>
   # The 3 different status are public, private and admin<br> 

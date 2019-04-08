@@ -63,7 +63,7 @@ Rails.application.routes.draw do
    
    get "getshares/:folder_id" => "shared_folders#getshares", :as => "getshares"
    
-   post "deleteshare/:folder_id/:id" => "shared_folders#deleteshare", :as => "deleteshare"
+   delete "deleteshare/:folder_id/:id" => "shared_folders#deleteshare", :as => "deleteshare"
    
    get "satisfactions/json/:id" => "satisfactions#json", :as => "satisfaction_json"
    

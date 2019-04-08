@@ -187,8 +187,7 @@ class SatisfactionsController < ApplicationController
   ##
   # Show satisfaction answer given a specific id<br>
   # for admins and users with shared access on the folder related to the satisfaction
-  def show 
-    puts("*****#{params}")
+  def show
     authenticate_user!
     @satisfaction = Satisfaction.find_by_id(params[:id])
     if !@satisfaction

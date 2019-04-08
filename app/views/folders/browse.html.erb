@@ -232,6 +232,7 @@ function subfoldersassetslist(data)
     } else {
       title=data.currentfolder.name+"<br>Dossier appartenant à "+data.currentfolder.user_name+"&nbsp;(utilisateur "+data.currentfolder.user_id+")";
     }
+    list+="<div class='table-responsive-sm'>";
     list+="<table class=table><thead><td colspan=2 bgcolor="+lg+"><div id=folder_title>"+title+"</div></td></thead>";
     list+="<tr><td colspan=2>"+hidden+"</td></tr>";
     list+="<tr><td colspan=2 bgcolor="+vlg+">";
@@ -244,6 +245,7 @@ function subfoldersassetslist(data)
         list+=linka(asset,data.currentuser);
     });
     list+="</table>";
+    list+="</div>";
     return list;
 }
 
@@ -512,7 +514,7 @@ $("#folder_view").on("click","#delete_share", function(){
   var share_id = $(this).val();
   var folder_id=$("#currentfolder_id").val();
   $.ajax({
-    type: "POST",
+    type: "delete",
     url: "/deleteshare/"+folder_id+"/"+share_id,
     async: true, 
     success: function(result) { 

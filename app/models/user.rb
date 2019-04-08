@@ -126,13 +126,17 @@ class User < ApplicationRecord
   ##
   # Return true if the user owns the folder
   def has_ownership?(folder)
-    return true if self.folders.include?(folder)
+    # not sure but include? does not burn a SQL request
+    #return true if self.folders.include?(folder)
+    puts("{{{{{{{{{{folder stamped to belong to user #{folder.user_id} and current user is number #{self.id}")
+    return true if folder.user_id==self.id
   end
   
   ##
   # Return true if the user owns the asset
   def has_asset_ownership?(asset)
-    return true if self.assets.include?(asset)
+    #return true if self.assets.include?(asset)
+    return true if asset.user_id==self.id
   end
   
   ##
