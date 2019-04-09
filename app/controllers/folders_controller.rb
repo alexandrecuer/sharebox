@@ -13,7 +13,17 @@ class FoldersController < ApplicationController
       flash[:notice] = FOLDERS_MSG["index_forbidden"]
       redirect_to root_url
     end
-    @parent_folders = Folder.all.where(parent_id: nil)
+  end
+  
+  def check
+    folder=Folder.find_by_id(params[:id])
+    unless folder
+      swarmed="ce dossier n'existe pas"
+      folder={}
+    else
+      swarmed=folder.is_swarmed_to_user?(current_user)
+    end
+    render json: folder.as_json.merge!({"swarmed_to_currentuser": swarmed})
   end
   
   ##

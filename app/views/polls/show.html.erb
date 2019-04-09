@@ -12,12 +12,20 @@ modulo=@poll.closed_names_number%colmax
 @arrayclosed = @poll.get_closed_names
 @arrayopen = @poll.get_open_names
 modaltitle="Synthèse de l'enquête<br>#{@poll.name}".html_safe
-# TODO > code the jointure in rails mode - drop this raw SQL
-nb=SharedFolder.joins("INNER JOIN folders ON folders.id = shared_folders.folder_id WHERE folders.poll_id = #{@poll.id}").count
+# evaluate the number of sent surveys
+# shares to a TEAM email do not count 
+if ENV['TEAM']
+  domain=ENV.fetch('TEAM')
+else
+  domain="cerema.fr"
+end
+nb=SharedFolder.joins(:folder).where("folders.poll_id = ? and shared_folders.share_email not like ?",@poll.id,"%#{domain}%").count
 nb+=Satisfaction.where("folder_id < ? and poll_id= ?", 0, @poll.id).count+Survey.where(poll_id: @poll.id).count
+#store all feedbacks related to the poll
+@satisfactions=Satisfaction.where(poll_id: @poll.id)
 %>
 <b>Enquête <%= @poll.name %></b><br>
-<%= Satisfaction.where(poll_id: @poll.id).length %> retour(s) satisfaction<br>
+<%= @satisfactions.length %> retour(s) satisfaction<br>
 <%= nb %> questionnaire(s) envoyé(s)<br>
 <%= link_to 'Voir la synthèse', "#", :data => {:toggle => "modal", :target => "#ModalSynth"} %><br>
 <%= link_to MAIN["download_csv"], poll_path(@poll, format: "csv") %><br>
@@ -33,7 +41,7 @@ nb+=Satisfaction.where("folder_id < ? and poll_id= ?", 0, @poll.id).count+Survey
         </button>
       </div>
       <div class="modal-body">
-        <% tab = @poll.calc %>
+        <% tab = @poll.calc(@satisfactions) %>
         <div class="table-responsive-sm">
         <table class="table table-striped table-bordered table-hover table-sm">
           <tr>
@@ -60,16 +68,16 @@ nb+=Satisfaction.where("folder_id < ? and poll_id= ?", 0, @poll.id).count+Survey
     </div>
   </div>
 </div>
-<% if Satisfaction.where(poll_id: @poll.id).length > 0 %>
+<% if @satisfactions.length > 0 %>
 <div id="carousel" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
     <%
     # loop on all the satisfactions recorded on the poll
-    Satisfaction.where(poll_id: @poll.id).each_with_index do |s,index| 
+    @satisfactions.each_with_index do |s,index| 
       line1="Retour satisfaction numéro #{s.id}"
       line1="#{line1} #{link_to satisfaction_path(s), method: :delete, data: {confirm: MAIN["are_yu_sure"] } do fa_icon 'times' end}".html_safe
       line2="Enregistré le #{s.created_at}<br>".html_safe
-      if folder=Folder.find_by_id(s.folder_id)
+      if s.folder_id>=0 && folder=Folder.find_by_id(s.folder_id)
         line2="#{line2} par le client #{@hash[s.user_id]}"
         line3="Dossier : #{folder.name}".html_safe
         if folder.case_number != ""

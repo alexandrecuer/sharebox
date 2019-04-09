@@ -6,7 +6,12 @@ class AssetsController < ApplicationController
 before_action :authenticate_user!
   
   def index
-    assets=Asset.all
+    unless params[:folder_id]
+      assets=Asset.all
+    else
+      # cannot use find_by - it returns only one element
+      assets=Asset.where(folder_id: params[:folder_id])
+    end
     render json: assets
   end
   

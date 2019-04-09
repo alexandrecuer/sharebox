@@ -70,5 +70,7 @@ Rails.application.routes.draw do
    post "create_folder" => "folders#create_folder", :as => ""
    
    delete "delete_folder/:id" => "folders#delete_folder", :as => ""
+   
+   get "check/:id" => "folders#check", :as => ""
 
 end

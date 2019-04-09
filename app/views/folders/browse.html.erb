@@ -28,6 +28,15 @@
 <script>
 var lg = "#ececec";
 var vlg = "f6f6f6";
+var achtung = "ATTENTION ACHTUNG PRUDENCIA ВНИМАНИЕ\n";
+achtung +="___________________________________________________________________________";achtung +="\n";
+achtung +="_ooooo__oo____oo____ooo____ooooooo___ooooooo_ooooooo_____oooo____oo_____oo_";achtung +="\n";
+achtung +="oo___oo_oo____oo__oo___oo__oo____oo__oo______oo____oo__oo____oo___oo___oo__";achtung +="\n";
+achtung +="_oo_____oo____oo_oo_____oo_oo____oo__oooo____oooooooo_oo______oo___oo_oo___";achtung +="\n";
+achtung +="___oo___oooooooo_ooooooooo_ooooooo___oo______oo____oo_oo______oo____ooo____";achtung +="\n";
+achtung +="oo___oo_oo____oo_oo_____oo_oo____oo__oo______oo____oo__oo____oo____oo_oo___";achtung +="\n";
+achtung +="_ooooo__oo____oo_oo_____oo_oo_____oo_ooooooo_ooooooo_____oooo_____oo___oo__";achtung +="\n";
+achtung +="___________________________________________________________________________";achtung +="\n";
 
 //fetch the polls and store them in a list
 var polls={};
@@ -517,6 +526,11 @@ $("#folder_view").on("click","#delete_share", function(){
     type: "delete",
     url: "/deleteshare/"+folder_id+"/"+share_id,
     async: true, 
+    beforeSend: function(){
+        var message=achtung+"\nVous êtes sur le point de supprimer un partage\n\n";
+        message+="Etes vous sûr ?";
+        return confirm(message);
+    },
     success: function(result) { 
         alert(result.message);
         if (result.success) {
@@ -578,6 +592,13 @@ $("#folder_view").on("click","#delete_folder",function(){
         type: "DELETE",
         url: "/delete_folder/"+folder_id,
         async: true,
+        beforeSend: function(){
+            var message=achtung+"\nVous êtes sur le point de supprimer un répertoire\n";
+            message+="Tous les objets associés (partages,retours satisfaction,sous-dossiers,fichiers) seront détruits\n";
+            message+="Cette action est irréversible\n\n";
+            message+="Etes vous sûr ?";
+            return confirm(message);
+        },
         success: function(result) {
             alert(result.message);
             if (result.success) {
@@ -640,6 +661,12 @@ $("#folder_view").on("click","#delete_asset",function(){
         type: "DELETE",
         url: "/delete_asset/"+id,
         async: true,
+        beforeSend: function(){
+            var message=achtung+"\nVous êtes sur le point de supprimer un fichier\n";
+            message+="Cette action est irréversible\n\n";
+            message+="Etes vous sûr ?";
+            return confirm(message);
+        },
         success: function(result) {
             alert(result.message);
             if (result.success) {

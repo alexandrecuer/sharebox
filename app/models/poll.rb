@@ -22,10 +22,10 @@ class Poll < ApplicationRecord
     attributes.push("case_number")
 
     for i in 1..self.closed_names_number
-        attributes.push("closed#{i}")
+        attributes.push("closed"+i.to_s)
     end
     for i in 1..self.open_names_number
-        attributes.push("open#{i}")
+        attributes.push("open"+i.to_s)
     end
     attributes
   end
@@ -67,11 +67,13 @@ class Poll < ApplicationRecord
   # Calculates average value for each closed question and for each satisfaction level<br>
   # we have to consider 4 different satisfaction levels plus "left blank" field<br>
   # return a 5 lines table gathering all the results, with one column for each closed question
-  def calc()
+  def calc(satisfactions=nil)
     tab = Array.new(self.closed_names_number){Array.new(5,0)}
     number_of_satisfactions = 0 
-
-    Satisfaction.where(poll_id: self.id).each do |s|
+    unless satisfactions
+      satisfactions=Satisfaction.where(poll_id: self.id)
+    end
+    satisfactions.each do |s|
       for i in 1..self.closed_names_number
         if value = s.public_send("closed#{i}")
           tab[i-1][value] += 1

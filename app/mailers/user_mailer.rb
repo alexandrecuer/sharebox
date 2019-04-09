@@ -29,7 +29,7 @@ class UserMailer < ApplicationMailer
     if @folder.is_polled?
       etitle="Courte enquête de satisfaction"
     end
-    if @shared_files.count>0
+    if @shared_files.length>0
       ftitle="Livrable(s) en ligne"
     end
     title = "#{ftitle} #{etitle}"
@@ -48,7 +48,7 @@ class UserMailer < ApplicationMailer
     #generation of the asset(s) list
     t2="Nous avons comptabilisé "
     t3=" accès fichier(s)"
-    if @shared_files.count == 1
+    if @shared_files.length == 1
       asset = @shared_files[0].uploaded_file_file_name
       if numberofclics
         t1="Vous avez déjà visité ce répertoire contenant le fichier suivant :"
@@ -56,7 +56,7 @@ class UserMailer < ApplicationMailer
       else
         t1="Un livrable vous a été partagé :"
       end
-    elsif @shared_files.count > 1
+    elsif @shared_files.length > 1
       asset = "" 
       @shared_files.each.with_index(1) do |f,index|
         asset += index.to_s+") "+f.uploaded_file_file_name+"<br>"
@@ -65,7 +65,7 @@ class UserMailer < ApplicationMailer
         t1="Vous avez déjà visité ce répertoire contenant les fichiers :"
         t4="#{t2}#{numberofclics.to_s}#{t3}"
       else
-        t1="#{@shared_files.count} livrables vous ont été partagés :"
+        t1="#{@shared_files.length} livrables vous ont été partagés :"
       end
     end
     @assetlist = "#{t1}<br>#{asset}<br>#{t4}<br>"
@@ -75,7 +75,7 @@ class UserMailer < ApplicationMailer
   end
 
   ##
-  # generate email in order to inform a client non registered in Colibri of a survey
+  # generate email in order to alert a non registered client of a survey
   def send_free_survey(id)
     @survey = Survey.find_by_id(id)
     title="[Cerema][courte enquête de satisfaction]#{@survey.description}"
