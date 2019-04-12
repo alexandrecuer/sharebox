@@ -7,6 +7,15 @@ class UsersController < ApplicationController
   
   helper_method :sort_column, :sort_direction
   
+  def become
+    unless current_user.is_admin?
+      render json: {"message": "forbidden access"}
+    else
+      sign_in(:user, User.find(params[:id]))
+      redirect_to root_url # or user_root_url
+    end
+  end
+  
   ## 
   # Admin users can modify other users'status<br>
   # The 3 different status are public, private and admin<br> 

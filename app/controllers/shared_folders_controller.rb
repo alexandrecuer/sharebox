@@ -99,22 +99,63 @@ class SharedFoldersController < ApplicationController
     end
     # Happens only when a mail is sent 
     if params[:share_email]
-      nbfiles_in_folder=@current_folder.assets.count
-      puts("**************#{nbfiles_in_folder} file(s) in the folder #{params[:id]}");
-      unless (nbfiles_in_folder>0 || @current_folder.is_polled?)
-        t1 = "Vous ne pouvez pas envoyer de mel !"
-        t2 = "D'une part, le répertoire partagé est vide"
-        t3 = "D'autre part, le répertoire partagé n'est pas lié à une enquête satisfaction"
-        t4 = "Chargez donc un livrable ou associez au répertoire une enquête satisfaction"
-        flash[:notice] = "#{t1}<br>#{t2}<br>#{t3}<br>#{t4}"
-      else
-        flash[:notice] = "#{SHARED_FOLDERS_MSG["mail_sent_to"]} #{params[:share_email]}"
-        InformUserJob.perform_now(current_user,params[:share_email],params[:id])
-      end
+      result = @current_folder.email_customer(current_user,params[:share_email])
+      flash[:notice]=result["message"].gsub(/\n/,"<br/>")
       redirect_to shared_folder_path(params[:id])
     end
     @shared_folders = @current_folder.shared_folders
     @satisfactions = @current_folder.satisfactions
+  end
+  
+  def contact_customer
+    results={}
+    folder_id=params[:folder_id]
+    customer_email=params[:share_email]
+    current_folder=current_user.folders.find_by_id(folder_id)
+    unless current_folder
+      results["success"]=false
+      result="impossible de continuer\n"
+      results["message"]="#{result}ce répertoire n'existe pas ou ne vous appartient pas"
+    else
+      puts("customer is #{customer_email}")
+      unless /^[^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4}$/.match(customer_email)
+        results["success"]=false
+        result="impossible de continuer\n"
+        results["message"]="#{result}il faut donner une adresse mel valable"
+      else
+        inteam=false
+        if ENV['TEAM']
+          teamdomain=ENV.fetch('TEAM')
+        else
+          teamdomain="cerema.fr"
+        end
+        inteam = customer_email.split("@")[1]==teamdomain
+        if inteam
+          results["success"]=false
+          results["message"]="pas d'envoi de mel client à des membres de l'équipe"
+        else
+          if share=current_user.shared_folders.find_by_share_email(customer_email)
+            if customer=User.find_by_email(customer_email)
+              if satis=Satisfaction.find_by_folder_id_and_user_id(folder_id, customer.id)
+                processed={}
+                processed["success"]=false
+                processed["message"]="ce client a déjà répondu sous le numéro #{satis.id} "
+              else
+                processed = current_folder.email_customer(current_user,customer_email,share,customer)
+              end
+            else
+              processed = current_folder.email_customer(current_user,customer_email,share)
+            end
+            results["success"]=processed["success"]
+            results["message"]=processed["message"]
+          else
+            results["success"]=false
+            results["message"]="vous ne possédez pas de partage pour cette addresse mel sur ce dossier"
+          end
+        end
+      end
+    end
+    render json: results
   end
   
   # This method is only used when MANUALLY following the route /complete_suid<br>

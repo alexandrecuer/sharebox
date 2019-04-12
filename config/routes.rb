@@ -72,5 +72,9 @@ Rails.application.routes.draw do
    delete "delete_folder/:id" => "folders#delete_folder", :as => ""
    
    get "check/:id" => "folders#check", :as => ""
+   
+   get "become/:id" => "users#become", :as => "become"
+   
+   get "contact_customer/:folder_id" => "shared_folders#contact_customer", :as => ""
 
 end

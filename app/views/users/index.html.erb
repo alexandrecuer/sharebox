@@ -20,7 +20,7 @@ Address collecting information related to users activity (shared folders & unreg
   <% @users.each do |u| %>
     <tr>
         <td><%= u.id %></td>
-        <td><%= u.email %></td>
+        <td><%= link_to u.email, become_path(u.id) %></td>
         <td><%= u.has_shared_folders_from_others? %></td>
         <td>
           <%= form_tag(user_path(u), method: "patch") do %>
@@ -33,7 +33,7 @@ Address collecting information related to users activity (shared folders & unreg
   <% end %>
   </table>
 </div>
-<% uncompletedshares=SharedFolder.where("share_user_id IS NULL") %>
+<% uncompletedshares=SharedFolder.where("share_user_id IS ?", nil) %>
 <% if uncompletedshares.length > 0 %>
 <div class="table-responsive-sm">
   <table class="table table-hover">

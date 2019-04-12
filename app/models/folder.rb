@@ -215,7 +215,7 @@ class Folder < ApplicationRecord
       result=""
       saved_shares=false
       unless emails && current_user.id == self.user_id
-        result="impossible de continuer<br>vous n'avez pas fourni d'adresses mel ou ce répertoire ne vous appartient pas"
+        result="impossible de continuer \n vous n'avez pas fourni d'adresses mel ou ce répertoire ne vous appartient pas"
       else
         email_addresses = emails.split(",")
         email_addresses.each do |email_address|
@@ -250,6 +250,33 @@ class Folder < ApplicationRecord
         end
       end
       {"message": result,"saved_shares": saved_shares}
+  end
+  
+  ##
+  # inform the customer by email if files/surveys are waiting for him<br>
+  # customer can be registered in colibri or not
+  def email_customer(current_user,customer_email,share=nil,customer=nil)
+    results={}
+    shared_files=self.assets
+    nb_files=shared_files.length
+    puts("**************#{nb_files} file(s) in the folder #{self.id}");
+    unless (nb_files>0 || self.is_polled?)
+      t1 = "Vous ne pouvez pas envoyer de mel !"
+      t2 = "D'une part, le répertoire partagé est vide"
+      t3 = "D'autre part, le répertoire partagé n'est pas lié à une enquête satisfaction"
+      t4 = "Chargez donc un livrable ou associez au répertoire une enquête satisfaction"
+      results["message"] = "#{t1}\n#{t2}\n#{t3}\n#{t4}"
+      results["success"] = false
+    else
+      if InformUserJob.perform_now(current_user,customer_email,self,shared_files,customer,share)
+        results["message"] = "#{SHARED_FOLDERS_MSG["mail_sent_to"]} #{customer_email}"
+        results["success"] = true
+      else
+        results["message"] = "une erreur est survenue dans l'envoi du mel à #{customer_email}"
+        results["success"] = false
+      end
+    end
+    results
   end
   
 end

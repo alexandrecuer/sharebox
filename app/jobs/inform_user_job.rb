@@ -9,7 +9,7 @@ class InformUserJob < ApplicationJob
   # email can be registered in the application or not<br>
   # if not, the message will include the new registration link<br>
   # the message only concerns a specific folder which actually can be considered as a deliverable terminal<br>
-  def perform(current_user,email,folder_id)
-    UserMailer.inform_user(current_user,email,folder_id).deliver_now
+  def perform(current_user,email,folder,shared_files,customer,share)
+    UserMailer.inform_user(current_user,email,folder,shared_files,customer,share).deliver_now
   end
 end

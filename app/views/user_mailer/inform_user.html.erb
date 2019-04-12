@@ -13,7 +13,7 @@ Ceci est un message de la part de <br>
   <%= @assetlist.html_safe %>
   <% if @folder.is_polled? %>
     <h3>Nous vous remercions de consacrer quelques minutes à notre enquête satisfaction.</h3>
-    Vous trouverez cette enquête dans le site juste au dessous du(es) livrable(s).<br> 
+    Vous trouverez cette enquête dans le site juste au dessous du(es) livrable(s).<br>
     Nos équipes ont besoin de votre retour !<br>
   <% end %>
 <% else %>
@@ -25,11 +25,11 @@ Ceci est un message de la part de <br>
 <% end %>
 <br>
 
-<% if @user %>
+<% if @customer %>
   Pour y accéder, suivez le lien <%= link_to folder_url(@folder.id).to_s, folder_url(@folder.id) %><br><br>
-  Pour mémoire, vous êtes enregistré sur ce site avec le mel <%= @email %><br>
+  Pour mémoire, vous êtes enregistré sur ce site avec le mel <%= @customer_email %><br>
   Si vous avez perdu votre mot de passe, vous pouvez en recréer un nouveau : <%=link_to new_user_password_url.to_s, new_user_password_url %><br>
 <% else %>
   Pour y accéder, il vous suffit de vous inscrire à l'adresse suivante : <%= link_to new_user_registration_url.to_s, new_user_registration_url %><br>
-  Lors de l'inscription, merci d'utiliser le mel <%= @email %><br>
+  Lors de l'inscription, merci d'utiliser le mel <%= @customer_email %><br>
 <% end %>

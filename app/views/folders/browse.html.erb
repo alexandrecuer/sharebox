@@ -29,14 +29,14 @@
 var lg = "#ececec";
 var vlg = "f6f6f6";
 var achtung = "ATTENTION ACHTUNG PRUDENCIA ВНИМАНИЕ\n";
-achtung +="___________________________________________________________________________";achtung +="\n";
-achtung +="_ooooo__oo____oo____ooo____ooooooo___ooooooo_ooooooo_____oooo____oo_____oo_";achtung +="\n";
-achtung +="oo___oo_oo____oo__oo___oo__oo____oo__oo______oo____oo__oo____oo___oo___oo__";achtung +="\n";
-achtung +="_oo_____oo____oo_oo_____oo_oo____oo__oooo____oooooooo_oo______oo___oo_oo___";achtung +="\n";
-achtung +="___oo___oooooooo_ooooooooo_ooooooo___oo______oo____oo_oo______oo____ooo____";achtung +="\n";
-achtung +="oo___oo_oo____oo_oo_____oo_oo____oo__oo______oo____oo__oo____oo____oo_oo___";achtung +="\n";
-achtung +="_ooooo__oo____oo_oo_____oo_oo_____oo_ooooooo_ooooooo_____oooo_____oo___oo__";achtung +="\n";
-achtung +="___________________________________________________________________________";achtung +="\n";
+//achtung +="___________________________________________________________________________";achtung +="\n";
+//achtung +="_ooooo__oo____oo____ooo____ooooooo___ooooooo_ooooooo_____oooo____oo_____oo_";achtung +="\n";
+//achtung +="oo___oo_oo____oo__oo___oo__oo____oo__oo______oo____oo__oo____oo___oo___oo__";achtung +="\n";
+//achtung +="_oo_____oo____oo_oo_____oo_oo____oo__oooo____oooooooo_oo______oo___oo_oo___";achtung +="\n";
+//achtung +="___oo___oooooooo_ooooooooo_ooooooo___oo______oo____oo_oo______oo____ooo____";achtung +="\n";
+//achtung +="oo___oo_oo____oo_oo_____oo_oo____oo__oo______oo____oo__oo____oo____oo_oo___";achtung +="\n";
+//achtung +="_ooooo__oo____oo_oo_____oo_oo_____oo_ooooooo_ooooooo_____oooo_____oo___oo__";achtung +="\n";
+//achtung +="___________________________________________________________________________";achtung +="\n";
 
 //fetch the polls and store them in a list
 var polls={};
@@ -112,20 +112,23 @@ function linkf(folder,currentuser)
 
 function shareslist(shares)
 {
-    var slist="";
+    var slist=[];
     if (shares.length>0) {
-        slist+="<table class='table table-sm'>";
-        slist+="<tr><td colspan=2>Partages</td></tr>";
+        slist.push("<table class='table table-sm'>");
+        slist.push("<tr><td colspan=3>Partages</td></tr>");
         shares.forEach(function(share){
-            slist+="<tr><td>";
-            slist+="<button rel='nofollow' id=delete_share value="+share.id+">Supprimer</button>";
-            slist+="</td><td>";
-            slist+="Partage "+share.id+" - "+share.share_email+" ("+share.share_user_id+")"; 
-            slist+="</td></tr>";
+            slist.push("<tr><td>");
+            slist.push("<button rel='nofollow' id=delete_share value="+share.id+">Supprimer</button>");
+            slist.push("</td><td>");
+            slist.push("Partage "+share.id+" - "+share.share_email+" ("+share.share_user_id+")");
+            slist.push("</td><td>");
+            slist.push("<button id=contact_customer class='send btn-secondary' value="+share.share_email+"><i class='fa fa-envelope fa-1x' ></i></button>");
+            slist.push("</td></tr>");
         });
-        slist+="</table>";
+        slist.push("</table>");
     }
-    return slist;
+    //console.log(slist.join(''));
+    return slist.join('');
 }
 
 //create all the tabs necessary to manage a given folder or root
@@ -426,6 +429,21 @@ $("#folder_view").on("click",".satis", function(){
 //reset input text field for shares
 $("#folder_view").on("click","#reset_shares", function(){
     $("#shared_folder_share_email").val("");
+});
+
+$("#folder_view").on("click","#contact_customer",function(){
+    var email=$(this).val();
+    var folder_id = $("#currentfolder_id").val();
+    $.ajax({
+        type: "GET",
+        url: "/contact_customer/"+folder_id+"?share_email="+email,
+        async: true,
+        success: function(result) {
+            //console.log(result);
+            alert(result.message);
+        }
+      });
+    
 });
 
 //*************************
