@@ -123,7 +123,6 @@ class SharedFoldersController < ApplicationController
         result="impossible de continuer\n"
         results["message"]="#{result}il faut donner une adresse mel valable"
       else
-        inteam=false
         if ENV['TEAM']
           teamdomain=ENV.fetch('TEAM')
         else
