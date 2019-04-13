@@ -119,8 +119,8 @@ class User < ApplicationRecord
     end
     puts("END ---------------- ancestors exploration")
     
-    # CAUTION - normally the following is only used with the old PRIMITIVE style of browsing, ie breadcrumb navigation
-    # it is not used by the new API-based Ajax browsing style
+    # CAUTION - normally the following happens rarely, mostly with the old PRIMITIVE style of browsing, ie breadcrumb navigation
+    # it is not really used by the new API-based Ajax browsing style, except with the go_up button !!
     # if you have swarmed a folder, you need to access to the whole tree of the primo ancestor of the folder 
     # by primo ancestor, we mean the root folder which hosts directly or indirectly the folder 
     # we explore all the subfolders directly or indirectly related to the primo ancestor of the folder
