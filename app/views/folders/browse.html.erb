@@ -354,7 +354,11 @@ function genfolderview(folder_id)
         async: true,
         success: function (data) {
             console.log(data);
-            $("#folder_view").html(subfoldersassetslist(data));
+            if (data.currentfolder.id){
+                $("#folder_view").html(subfoldersassetslist(data));
+            } else {
+                alert(data.currentfolder.name);
+            }
         }
     });
 }
