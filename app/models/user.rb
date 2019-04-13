@@ -82,37 +82,76 @@ class User < ApplicationRecord
   # Return true if user has "shared access" on the folder<br>
   # "shared access" means being owner or being granted of a share<br>
   # if folder is a subfolder of a folder shared to the user, we consider the user has shared access on the subfolder
-  # VERY SQL COSTLY - do not use heavily
+  # QUITE SQL COSTLY - do not use heavily - DO NOT USE IN LOOPS !!!!!!!!!!!!!
   def has_shared_access?(folder)
     puts("shared_access_testing...")
+    
     return true if self.is_admin?
-    return true if self.folders.include?(folder)
-    return true if self.shared_folders_by_others.include?(folder)
-    folder.ancestors.each do |ancestor_folder|
-      return true if self.shared_folders_by_others.include?(ancestor_folder)
-      #********************************************************
-      #experimental 09-09-2018
-      # if a folder has been swarmed in a user's tree, the user has shared access
-      # to verify if the folder has been swarmed to the user, we have to check the ancestors
-      return true if self.folders.include?(ancestor_folder)
+    
+    # is the folder owned by the user ?
+    folders=self.folders
+    return true if folders.include?(folder)
+    oids=[]
+    folders.each do |o|
+      oids.push(o.id)
     end
+    puts("all folder ids owned by the user: #{oids}")
+    
+    # has the folder been shared to the user ?
+    sharedfolders=self.shared_folders_by_others
+    return true if sharedfolders.include?(folder)
+    sids=[]
+    sharedfolders.each do |s|
+      sids.push(s.id)
+    end
+    puts("all folder ids shared to the user: #{sids}")
+    
+    # if the user owns or was shared one of the folder's ancestors, he has shared access on the folder
+    puts("&&&&&&&&&&&&&&&&getting all ancestors active records")
+    ancestors=folder.ancestors
+    puts("BEGIN ---------------- ancestors exploration")
+    ancestors.each do |ancestor_folder|
+      #these two instructions are too costly
+      #return true if sharedfolders.include?(ancestor_folder)
+      #return true if folders.include?(ancestor_folder)
+      return true if sids.include?(ancestor_folder.id)
+      return true if oids.include?(ancestor_folder.id)
+    end
+    puts("END ---------------- ancestors exploration")
+    
+    # CAUTION - normally the following is only used with the old PRIMITIVE style of browsing, ie breadcrumb navigation
+    # it is not used by the new API-based Ajax browsing style
     # if you have swarmed a folder, you need to access to the whole tree of the primo ancestor of the folder 
-    # the purpose is to assure a correct navigation
     # by primo ancestor, we mean the root folder which hosts directly or indirectly the folder 
     # we explore all the subfolders directly or indirectly related to the primo ancestor of the folder
     # if one folder belongs to the user, the user is considered to have a shared access
+    # HEAVY COST HEAVY COST OMG
+    puts("BEGIN ---------------- base searching")
     if folder.is_root?
       base = folder
     else 
-      base = folder.ancestors.reverse[0]
+      base = ancestors.reverse[0]
     end
+    puts("END ---------------- base searching")
+    puts("BEGIN ---------------- tree exploration from main root folder")
     base.get_all_sub_folders.each do |sub|
-        return true if self.folders.include?(sub)
-      end
-    #experimental end
+      return true if self.folders.include?(sub)
+    end
+    
     return false
+    
   end
-
+  
+  ##
+  # super user access on a folder is true if folder is owned or swarmed to the user<br>
+  # a low cost method using the metadatas
+  def has_su_access?(folder)
+    puts("superuser_access_testing...")
+    return true if self.folders.include?(folder)
+    return true if folder.get_meta["swarmed_to"]==self.id
+  end
+  
+  
   ##
   # Return an hash table (key/value) => (id/email) of all users in a single SQL request
   def get_all_emails

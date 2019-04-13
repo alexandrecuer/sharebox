@@ -16,14 +16,22 @@ class FoldersController < ApplicationController
   end
   
   def check
+    results={}
+    folder={}
+    base={}
     folder=Folder.find_by_id(params[:id])
     unless folder
-      swarmed="ce dossier n'existe pas"
-      folder={}
+      su="ce dossier n'existe pas"
     else
-      swarmed=folder.is_swarmed_to_user?(current_user)
+      su=current_user.has_su_access?(folder)
+      puts("BEGIN ---------------- base searching")
+      base=folder.ancestors.reverse[0]
+      puts("END ---------------- base searching")
     end
-    render json: folder.as_json.merge!({"swarmed_to_currentuser": swarmed})
+    results.merge!({"folder": folder.as_json})
+    results.merge!({"base": base.as_json})
+    results.merge!({"su": su})
+    render json: results
   end
   
   ##

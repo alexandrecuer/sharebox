@@ -1,17 +1,17 @@
 <%
-if current_user.is_admin? || current_user.is_private?
-  if @current_folder
-    if current_user.has_ownership?(@current_folder)
-      uploadfile="#{link_to MAIN['upload_file'], new_sub_asset_path(@current_folder), class: 'dropdown-item'}".html_safe
-      createdir="#{link_to MAIN['create_dir'], new_sub_folder_path(@current_folder), class: 'dropdown-item'}".html_safe
-      createdirmodal= "#{link_to MAIN['create_dir'], new_sub_folder_path(@current_folder),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
-    end
-  else
-      uploadfile="#{link_to MAIN['upload_file'], new_asset_path, class: 'dropdown-item'}".html_safe
-      createdir="#{link_to MAIN['create_dir'], new_folder_path, class: 'dropdown-item'}".html_safe
-      createdirmodal= "#{link_to MAIN['create_dir'], new_folder_path,  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
-  end
-end
+#if current_user.is_admin? || current_user.is_private?
+#  if @current_folder
+#    if current_user.has_ownership?(@current_folder)
+#      uploadfile="#{link_to MAIN['upload_file'], new_sub_asset_path(@current_folder), class: 'dropdown-item'}".html_safe
+#      createdir="#{link_to MAIN['create_dir'], new_sub_folder_path(@current_folder), class: 'dropdown-item'}".html_safe
+#      createdirmodal= "#{link_to MAIN['create_dir'], new_sub_folder_path(@current_folder),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
+#    end
+#  else
+#      uploadfile="#{link_to MAIN['upload_file'], new_asset_path, class: 'dropdown-item'}".html_safe
+#      createdir="#{link_to MAIN['create_dir'], new_folder_path, class: 'dropdown-item'}".html_safe
+#      createdirmodal= "#{link_to MAIN['create_dir'], new_folder_path,  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
+#  end
+#end
 
 if current_user.is_admin?
   managefolders="#{link_to MAIN['manage_folders'], folders_path, class: 'dropdown-item'}".html_safe
@@ -26,13 +26,11 @@ if current_user.belongs_to_team?
   Poll.all.each do |poll|
     if current_user.is_admin?
       managepolls="#{managepolls}<td>#{link_to poll.name, edit_poll_path(poll), class: 'dropdown-item'}</td>"
+      managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item', method: :delete, data: {confirm: MAIN['are_yu_sure']} do fa_icon 'times' end}</td>"
     else
       managepolls="#{managepolls}<td><div class='dropdown-item'>#{poll.name}</div></td>"
     end
     managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item' do fa_icon 'eye' end}</td>"
-    if current_user.is_admin?
-      managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item', method: :delete, data: {confirm: MAIN['are_yu_sure']} do fa_icon 'times' end}</td>"
-    end     
     managepolls="#{managepolls}</tr>"
   end
   managepolls="#{managepolls}</table>".html_safe
@@ -55,10 +53,10 @@ end
           <%= current_user.email %>(<%= current_user.statut %>)
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <%= sanitize uploadfile %>
+          <%#= sanitize uploadfile %>
           <%#= createdir %>
-          <%= sanitize createdirmodal  %>
-          <%= sanitize line %>
+          <%#= sanitize createdirmodal  %>
+          <%#= sanitize line %>
           <%= managefolders %>
           <%= sanitize manageusers %>
           <%= sanitize line %>

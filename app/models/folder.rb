@@ -182,7 +182,38 @@ class Folder < ApplicationRecord
       tab << s.id
     end
     meta["satis"]=tab
+    #swarming legacy process
+    if swid=self.legacy
+      meta["swarmed_to"]=swid
+    end
     ActiveSupport::JSON.encode(meta)
+  end
+  
+  ##
+  # return the id of the user being granted the folder as swarmed
+  def legacy
+    owner=User.find_by_id(self.user_id)
+    if self.parent_id
+      parent=Folder.find_by_id(self.parent_id)
+      if swid=parent.get_meta["swarmed_to"]
+        puts("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{ swarmed by legacy #{swid}")
+      else
+        unless parent.user_id == owner.id
+          swid=parent.user_id
+        end
+      end
+      # the following manner is not working : if folder1 belonging to user1 is shared to user2 and user3
+      # user2 creates folder2 and user3 creates folder3 inside folder2
+      # folder3 is swarmed to user2 and not user1
+      #unless parent.user_id == owner.id
+      #  swid=parent.user_id
+      #else
+      #  if swid=parent.get_meta["swarmed_to"]
+      #    puts("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{ swarmed by legacy #{swid}")
+      #  end
+      #end
+    end
+    swid
   end
   
   ##
@@ -191,6 +222,9 @@ class Folder < ApplicationRecord
     meta={}
     meta["shares"]=[]
     meta["satis"]=[]
+    if swid=self.legacy
+      meta["swarmed_to"]=swid
+    end
     ActiveSupport::JSON.encode(meta)
   end
   
