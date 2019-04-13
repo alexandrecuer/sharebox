@@ -17,7 +17,6 @@ class FoldersController < ApplicationController
   
   def check
     results={}
-    folder={}
     base={}
     folder=Folder.find_by_id(params[:id])
     unless folder
