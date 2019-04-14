@@ -137,6 +137,34 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#calc_meta-instance_method" title="#calc_meta (instance method)">#<strong>calc_meta</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>return a list of all metadatas for a given folder id <a
+href=""shares"">list</a> will contain a table with all share ids <a
+href=""satis"">list</a> will contain a table with all satisfaction ids to
+be inserted in the folder &#39;lists&#39; field to decode when reading the
+folder record : ActiveSupport::JSON.decode(folder.lists).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#children_give_to-instance_method" title="#children_give_to (instance method)">#<strong>children_give_to</strong>(i)  &#x21d2; Object </a>
     
 
@@ -162,6 +190,31 @@ subassets, shares, subshares).</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#email_customer-instance_method" title="#email_customer (instance method)">#<strong>email_customer</strong>(current_user, customer_email, share = nil, customer = nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>inform the customer by email if files/surveys are waiting for him<br>
+customer can be registered in colibri or not.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#get_all_sub_folders-instance_method" title="#get_all_sub_folders (instance method)">#<strong>get_all_sub_folders</strong>  &#x21d2; Object </a>
     
 
@@ -178,6 +231,30 @@ subassets, shares, subshares).</p>
   
     <span class="summary_desc"><div class='inline'>
 <p>returns all subfolders related to the folder, directly or indirectly.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_meta-instance_method" title="#get_meta (instance method)">#<strong>get_meta</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>decoding the meta for an interpretation as a json object.</p>
 </div></span>
   
 </li>
@@ -333,6 +410,30 @@ related to the folder.</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#initialize_meta-instance_method" title="#initialize_meta (instance method)">#<strong>initialize_meta</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>return an empty metadata object (for folder creation).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#is_polled%3F-instance_method" title="#is_polled? (instance method)">#<strong>is_polled?</strong>  &#x21d2; Boolean </a>
     
 
@@ -457,6 +558,57 @@ directory belonging to another private user ?.</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#legacy-instance_method" title="#legacy (instance method)">#<strong>legacy</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>return the id of the user being granted the folder as swarmed.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#process_share_emails-instance_method" title="#process_share_emails (instance method)">#<strong>process_share_emails</strong>(emails, current_user)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>execute all &#39;folder sharing&#39; operations providing a text list of
+emails (separator ,) <br> update folder metadata if shares are successfully
+created only folder owner can add new shares<br> if TEAM var exists, could
+we authorize others users from the team who benefit from a share  ?.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#shared%3F-instance_method" title="#shared? (instance method)">#<strong>shared?</strong>  &#x21d2; Boolean </a>
     
 
@@ -496,7 +648,90 @@ directory belonging to another private user ?.</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="children_give_to-instance_method">
+  <h3 class="signature first" id="calc_meta-instance_method">
+  
+    #<strong>calc_meta</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>return a list of all metadatas for a given folder id <a
+href=""shares"">list</a> will contain a table with all share ids <a
+href=""satis"">list</a> will contain a table with all satisfaction ids to
+be inserted in the folder &#39;lists&#39; field to decode when reading the
+folder record : ActiveSupport::JSON.decode(folder.lists)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 169</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_calc_meta'>calc_meta</span>
+  <span class='id identifier rubyid_meta'>meta</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='comment'># all shares ids associated to the folder
+</span>  <span class='id identifier rubyid_shares'>shares</span><span class='op'>=</span><span class='const'>SharedFolder</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>folder_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_tab'>tab</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_shares'>shares</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span>
+    <span class='id identifier rubyid_tab'>tab</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_meta'>meta</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>shares</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>=</span><span class='id identifier rubyid_tab'>tab</span>
+  <span class='comment'># all satisfactions ids associated to the folder
+</span>  <span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='op'>=</span><span class='const'>Satisfaction</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>folder_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_tab'>tab</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span>
+    <span class='id identifier rubyid_tab'>tab</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_meta'>meta</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>satis</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>=</span><span class='id identifier rubyid_tab'>tab</span>
+  <span class='comment'>#swarming legacy process
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_swid'>swid</span><span class='op'>=</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_legacy'>legacy</span>
+    <span class='id identifier rubyid_meta'>meta</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>swarmed_to</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>=</span><span class='id identifier rubyid_swid'>swid</span>
+  <span class='kw'>end</span>
+  <span class='const'>ActiveSupport</span><span class='op'>::</span><span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_encode'>encode</span><span class='lparen'>(</span><span class='id identifier rubyid_meta'>meta</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="children_give_to-instance_method">
   
     #<strong>children_give_to</strong>(i)  &#x21d2; <tt>Object</tt> 
   
@@ -522,17 +757,17 @@ subassets, shares, subshares)</p>
       <pre class="lines">
 
 
-102
-103
-104
-105
-106
-107
 108
-109</pre>
+109
+110
+111
+112
+113
+114
+115</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 102</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 108</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_children_give_to'>children_give_to</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_has_sub_asset_or_share?'>has_sub_asset_or_share?</span>
@@ -541,6 +776,88 @@ subassets, shares, subshares)</p>
       <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="email_customer-instance_method">
+  
+    #<strong>email_customer</strong>(current_user, customer_email, share = nil, customer = nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>inform the customer by email if files/surveys are waiting for him<br>
+customer can be registered in colibri or not</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 292</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_email_customer'>email_customer</span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='comma'>,</span><span class='id identifier rubyid_customer_email'>customer_email</span><span class='comma'>,</span><span class='id identifier rubyid_share'>share</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_customer'>customer</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_results'>results</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_shared_files'>shared_files</span><span class='op'>=</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_assets'>assets</span>
+  <span class='id identifier rubyid_nb_files'>nb_files</span><span class='op'>=</span><span class='id identifier rubyid_shared_files'>shared_files</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+  <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>**************</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_nb_files'>nb_files</span><span class='embexpr_end'>}</span><span class='tstring_content'> file(s) in the folder </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='semicolon'>;</span>
+  <span class='kw'>unless</span> <span class='lparen'>(</span><span class='id identifier rubyid_nb_files'>nb_files</span><span class='op'>&gt;</span><span class='int'>0</span> <span class='op'>||</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_is_polled?'>is_polled?</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_t1'>t1</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Vous ne pouvez pas envoyer de mel !</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_t2'>t2</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D&#39;une part, le répertoire partagé est vide</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_t3'>t3</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D&#39;autre part, le répertoire partagé n&#39;est pas lié à une enquête satisfaction</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_t4'>t4</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Chargez donc un livrable ou associez au répertoire une enquête satisfaction</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_results'>results</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>message</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t1'>t1</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t2'>t2</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t3'>t3</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t4'>t4</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_results'>results</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>success</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>false</span>
+  <span class='kw'>else</span>
+    <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="InformUserJob.html" title="InformUserJob (class)">InformUserJob</a></span></span><span class='period'>.</span><span class='id identifier rubyid_perform_now'>perform_now</span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='comma'>,</span><span class='id identifier rubyid_customer_email'>customer_email</span><span class='comma'>,</span><span class='kw'>self</span><span class='comma'>,</span><span class='id identifier rubyid_shared_files'>shared_files</span><span class='comma'>,</span><span class='id identifier rubyid_customer'>customer</span><span class='comma'>,</span><span class='id identifier rubyid_share'>share</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_results'>results</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>message</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'>SHARED_FOLDERS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mail_sent_to</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_customer_email'>customer_email</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_results'>results</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>success</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>true</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_results'>results</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>message</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>une erreur est survenue dans l&#39;envoi du mel à </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_customer_email'>customer_email</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_results'>results</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>success</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>false</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_results'>results</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -573,18 +890,18 @@ subassets, shares, subshares)</p>
       <pre class="lines">
 
 
-90
-91
-92
-93
-94
-95
 96
 97
-98</pre>
+98
+99
+100
+101
+102
+103
+104</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 90</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_all_sub_folders'>get_all_sub_folders</span>
   <span class='id identifier rubyid_subfolders'>subfolders</span><span class='op'>=</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_children'>children</span>
@@ -594,6 +911,59 @@ subassets, shares, subshares)</p>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_subfolders'>subfolders</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_meta-instance_method">
+  
+    #<strong>get_meta</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>decoding the meta for an interpretation as a json object</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+233
+234
+235
+236
+237
+238
+239
+240
+241</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 233</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_meta'>get_meta</span>
+  <span class='id identifier rubyid_meta'>meta</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_meta'>meta</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>shares</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_meta'>meta</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>satis</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='kw'>if</span> <span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_lists'>lists</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_meta'>meta</span><span class='op'>=</span><span class='const'>ActiveSupport</span><span class='op'>::</span><span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_decode'>decode</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_lists'>lists</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_meta'>meta</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -627,12 +997,6 @@ indirectly<br> works recursively</p>
       <pre class="lines">
 
 
-72
-73
-74
-75
-76
-77
 78
 79
 80
@@ -641,10 +1005,16 @@ indirectly<br> works recursively</p>
 83
 84
 85
-86</pre>
+86
+87
+88
+89
+90
+91
+92</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 72</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 78</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_subs_assets_shares'>get_subs_assets_shares</span>
   <span class='id identifier rubyid_folders'>folders</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>parent_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -705,12 +1075,12 @@ indirectly<br> works recursively</p>
       <pre class="lines">
 
 
-46
-47
-48</pre>
+52
+53
+54</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 46</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_assets?'>has_assets?</span> 
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Asset.html" title="Asset (class)">Asset</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_folder_id'>find_by_folder_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -760,16 +1130,16 @@ folder</p>
       <pre class="lines">
 
 
-36
-37
-38
-39
-40
-41
-42</pre>
+42
+43
+44
+45
+46
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 36</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_satisfaction_answer?'>has_satisfaction_answer?</span>
   <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Satisfaction.html" title="Satisfaction (class)">Satisfaction</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_folder_id'>find_by_folder_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -823,16 +1193,16 @@ related to the folder</p>
       <pre class="lines">
 
 
-52
-53
-54
-55
-56
-57
-58</pre>
+58
+59
+60
+61
+62
+63
+64</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 52</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_sub_asset_or_share?'>has_sub_asset_or_share?</span> 
   <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Asset.html" title="Asset (class)">Asset</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_folder_id'>find_by_folder_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='const'><span class='object_link'><a href="" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_parent_id'>find_by_parent_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='const'><span class='object_link'><a href="SharedFolder.html" title="SharedFolder (class)">SharedFolder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_folder_id'>find_by_folder_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -885,15 +1255,15 @@ related to the folder</p>
       <pre class="lines">
 
 
-133
-134
-135
-136
-137
-138</pre>
+139
+140
+141
+142
+143
+144</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 133</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 139</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_sub_swarmed?'>has_sub_swarmed?</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_all_sub_folders'>get_all_sub_folders</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span>
@@ -945,16 +1315,16 @@ related to the folder</p>
       <pre class="lines">
 
 
-149
-150
-151
-152
-153
-154
-155</pre>
+155
+156
+157
+158
+159
+160
+161</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 149</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 155</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_sub_swarmed_to_user?'>has_sub_swarmed_to_user?</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_has_ownership?'>has_ownership?</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
@@ -962,6 +1332,59 @@ related to the folder</p>
     <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>==</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
   <span class='kw'>end</span>
   <span class='kw'>return</span> <span class='kw'>false</span>  
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="initialize_meta-instance_method">
+  
+    #<strong>initialize_meta</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>return an empty metadata object (for folder creation)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+221
+222
+223
+224
+225
+226
+227
+228
+229</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 221</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize_meta'>initialize_meta</span>
+  <span class='id identifier rubyid_meta'>meta</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_meta'>meta</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>shares</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_meta'>meta</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>satis</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_swid'>swid</span><span class='op'>=</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_legacy'>legacy</span>
+    <span class='id identifier rubyid_meta'>meta</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>swarmed_to</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>=</span><span class='id identifier rubyid_swid'>swid</span>
+  <span class='kw'>end</span>
+  <span class='const'>ActiveSupport</span><span class='op'>::</span><span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_encode'>encode</span><span class='lparen'>(</span><span class='id identifier rubyid_meta'>meta</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1009,13 +1432,25 @@ related to the folder</p>
 
 30
 31
-32</pre>
+32
+33
+34
+35
+36
+37
+38</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 30</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_polled?'>is_polled?</span>
-  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Poll.html" title="Poll (class)">Poll</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_poll_id'>poll_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>!=</span> <span class='int'>0</span>
+  <span class='comment'>#return true if Poll.where(id: self.poll_id).length != 0
+</span>  <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_poll_id'>poll_id</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_result'>result</span>
+    <span class='id identifier rubyid_result'>result</span><span class='op'>=</span><span class='kw'>false</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>folder model - test if folder is polled - result is </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_result'>result</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_result'>result</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1068,12 +1503,12 @@ résultat def get_assets</p>
       <pre class="lines">
 
 
-65
-66
-67</pre>
+71
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 65</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 71</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_root?'>is_root?</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -1123,12 +1558,12 @@ shared_folders table</p>
       <pre class="lines">
 
 
-143
-144
-145</pre>
+149
+150
+151</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 143</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 149</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_shared_to_user?'>is_shared_to_user?</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="SharedFolder.html" title="SharedFolder (class)">SharedFolder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_share_user_id_and_folder_id'>find_by_share_user_id_and_folder_id</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -1178,15 +1613,15 @@ directory belonging to another private user ?</p>
       <pre class="lines">
 
 
-114
-115
-116
-117
-118
-119</pre>
+120
+121
+122
+123
+124
+125</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 114</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 120</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_swarmed?'>is_swarmed?</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_ancestors'>ancestors</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='op'>|</span>
@@ -1238,16 +1673,16 @@ directory belonging to another private user ?</p>
       <pre class="lines">
 
 
-123
-124
-125
-126
-127
-128
-129</pre>
+129
+130
+131
+132
+133
+134
+135</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 123</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 129</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_swarmed_to_user?'>is_swarmed_to_user?</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_has_ownership?'>has_ownership?</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
@@ -1255,6 +1690,207 @@ directory belonging to another private user ?</p>
     <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>==</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
   <span class='kw'>end</span>
   <span class='kw'>return</span> <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="legacy-instance_method">
+  
+    #<strong>legacy</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>return the id of the user being granted the folder as swarmed</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 194</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_legacy'>legacy</span>
+  <span class='id identifier rubyid_owner'>owner</span><span class='op'>=</span><span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span>
+    <span class='id identifier rubyid_parent'>parent</span><span class='op'>=</span><span class='const'>Folder</span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parent_id'>parent_id</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_swid'>swid</span><span class='op'>=</span><span class='id identifier rubyid_parent'>parent</span><span class='period'>.</span><span class='id identifier rubyid_get_meta'>get_meta</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>swarmed_to</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{ swarmed by legacy </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_swid'>swid</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='kw'>unless</span> <span class='id identifier rubyid_parent'>parent</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>==</span> <span class='id identifier rubyid_owner'>owner</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+        <span class='id identifier rubyid_swid'>swid</span><span class='op'>=</span><span class='id identifier rubyid_parent'>parent</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+    <span class='comment'># the following manner is not working : if folder1 belonging to user1 is shared to user2 and user3
+</span>    <span class='comment'># user2 creates folder2 and user3 creates folder3 inside folder2
+</span>    <span class='comment'># folder3 is swarmed to user2 and not user1
+</span>    <span class='comment'>#unless parent.user_id == owner.id
+</span>    <span class='comment'>#  swid=parent.user_id
+</span>    <span class='comment'>#else
+</span>    <span class='comment'>#  if swid=parent.get_meta[&quot;swarmed_to&quot;]
+</span>    <span class='comment'>#    puts(&quot;{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{ swarmed by legacy #{swid}&quot;)
+</span>    <span class='comment'>#  end
+</span>    <span class='comment'>#end
+</span>  <span class='kw'>end</span>
+  <span class='id identifier rubyid_swid'>swid</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="process_share_emails-instance_method">
+  
+    #<strong>process_share_emails</strong>(emails, current_user)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>execute all &#39;folder sharing&#39; operations providing a text list of
+emails (separator ,) <br> update folder metadata if shares are successfully
+created only folder owner can add new shares<br> if TEAM var exists, could
+we authorize others users from the team who benefit from a share  ?</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 248</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_process_share_emails'>process_share_emails</span><span class='lparen'>(</span><span class='id identifier rubyid_emails'>emails</span><span class='comma'>,</span><span class='id identifier rubyid_current_user'>current_user</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_result'>result</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_saved_shares'>saved_shares</span><span class='op'>=</span><span class='kw'>false</span>
+    <span class='kw'>unless</span> <span class='id identifier rubyid_emails'>emails</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>==</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span>
+      <span class='id identifier rubyid_result'>result</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>impossible de continuer \n vous n&#39;avez pas fourni d&#39;adresses mel ou ce répertoire ne vous appartient pas</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_email_addresses'>email_addresses</span> <span class='op'>=</span> <span class='id identifier rubyid_emails'>emails</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>,</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_email_addresses'>email_addresses</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_email_address'>email_address</span><span class='op'>|</span>
+        <span class='id identifier rubyid_email_address'>email_address</span><span class='op'>=</span><span class='id identifier rubyid_email_address'>email_address</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_email_address'>email_address</span> <span class='op'>==</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_email'>email</span>
+          <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_result'>result</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='const'>SHARED_FOLDERS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>you_are_folder_owner</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
+        <span class='kw'>else</span>
+          <span class='comment'># is the email_address already in the folder&#39;s shares ?
+</span>          <span class='kw'>if</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_shared_folders'>shared_folders</span><span class='period'>.</span><span class='id identifier rubyid_find_by_share_email_and_folder_id'>find_by_share_email_and_folder_id</span><span class='lparen'>(</span><span class='id identifier rubyid_email_address'>email_address</span><span class='comma'>,</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_result'>result</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='const'>SHARED_FOLDERS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>already_shared_to</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_email_address'>email_address</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
+          <span class='kw'>else</span>
+            <span class='id identifier rubyid_shared_folder'>shared_folder</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_shared_folders'>shared_folders</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+            <span class='id identifier rubyid_shared_folder'>shared_folder</span><span class='period'>.</span><span class='id identifier rubyid_folder_id'>folder_id</span><span class='op'>=</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+            <span class='id identifier rubyid_shared_folder'>shared_folder</span><span class='period'>.</span><span class='id identifier rubyid_share_email'>share_email</span> <span class='op'>=</span> <span class='id identifier rubyid_email_address'>email_address</span>
+            <span class='comment'># We search if the email exist in the user table
+</span>            <span class='comment'># if not, we&#39;ll have to update the share_user_id field after registration
+</span>            <span class='id identifier rubyid_share_user'>share_user</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="User.html" title="User (class)">User</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_email'>find_by_email</span><span class='lparen'>(</span><span class='id identifier rubyid_email_address'>email_address</span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_shared_folder'>shared_folder</span><span class='period'>.</span><span class='id identifier rubyid_share_user_id'>share_user_id</span> <span class='op'>=</span> <span class='id identifier rubyid_share_user'>share_user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='kw'>if</span> <span class='id identifier rubyid_share_user'>share_user</span>
+            <span class='kw'>if</span> <span class='id identifier rubyid_shared_folder'>shared_folder</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+              <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'>SHARED_FOLDERS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>shared_to</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_email_address'>email_address</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+              <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_result'>result</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_a'>a</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
+              <span class='id identifier rubyid_saved_shares'>saved_shares</span> <span class='op'>=</span> <span class='kw'>true</span>
+            <span class='kw'>else</span>
+              <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_result'>result</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='const'>SHARED_FOLDERS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>unable_share_for</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_email_address'>email_address</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
+            <span class='kw'>end</span>
+          <span class='kw'>end</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+      <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_lists'>lists</span><span class='op'>=</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_calc_meta'>calc_meta</span>
+      <span class='kw'>unless</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+        <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_result'>result</span><span class='embexpr_end'>}</span><span class='tstring_content'> impossible de mettre à jour les metadonnées du répertoire !!\n</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+    <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>message</span><span class='label_end'>&quot;:</span> <span class='id identifier rubyid_result'>result</span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>saved_shares</span><span class='label_end'>&quot;:</span> <span class='id identifier rubyid_saved_shares'>saved_shares</span><span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1320,7 +1956,7 @@ directory belonging to another private user ?</p>
 </div>
 
       <div id="footer">
-  Generated on Sun Mar 10 13:24:56 2019 by
+  Generated on Sun Apr 14 10:40:48 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

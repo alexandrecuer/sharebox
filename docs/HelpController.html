@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Class: SurveyClientJob
+  Class: HelpController
   
     &mdash; Documentation by YARD 0.9.16
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  pathId = "SurveyClientJob";
+  pathId = "HelpController";
   relpath = '';
 </script>
 
@@ -36,10 +36,10 @@
       <div id="header">
         <div id="menu">
   
-    <a href="_index.html">Index (S)</a> &raquo;
+    <a href="_index.html">Index (H)</a> &raquo;
     
     
-    <span class="title">SurveyClientJob</span>
+    <span class="title">HelpController</span>
   
 </div>
 
@@ -59,7 +59,7 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Class: SurveyClientJob
+      <div id="content"><h1>Class: HelpController
   
   
   
@@ -69,16 +69,16 @@
   <dl>
     <dt>Inherits:</dt>
     <dd>
-      <span class="inheritName"><span class='object_link'><a href="ApplicationJob.html" title="ApplicationJob (class)">ApplicationJob</a></span></span>
+      <span class="inheritName"><span class='object_link'><a href="ApplicationController.html" title="ApplicationController (class)">ApplicationController</a></span></span>
       
         <ul class="fullTree">
           <li>Object</li>
           
-            <li class="next">ActiveJob::Base</li>
+            <li class="next">ActionController::Base</li>
           
-            <li class="next"><span class='object_link'><a href="ApplicationJob.html" title="ApplicationJob (class)">ApplicationJob</a></span></li>
+            <li class="next"><span class='object_link'><a href="ApplicationController.html" title="ApplicationController (class)">ApplicationController</a></span></li>
           
-            <li class="next">SurveyClientJob</li>
+            <li class="next">HelpController</li>
           
         </ul>
         <a href="#" class="inheritanceTree">show all</a>
@@ -98,24 +98,12 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>app/jobs/survey_client_job.rb</dd>
+    <dd>app/controllers/help_controller.rb</dd>
   </dl>
   
 </div>
 
-<h2>Overview</h2><div class="docstring">
-  <div class="discussion">
-    
-<p>main class for jobs focusing on mel delivery to public users, on the basis
-of a shared folder</p>
 
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div>
 
 
 
@@ -133,7 +121,7 @@ of a shared folder</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#perform-instance_method" title="#perform (instance method)">#<strong>perform</strong>(survey_id)  &#x21d2; Object </a>
+      <a href="#index-instance_method" title="#index (instance method)">#<strong>index</strong>  &#x21d2; Object </a>
     
 
     
@@ -147,9 +135,7 @@ of a shared folder</p>
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>deliver electronic message from a specific survey<br>.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -171,40 +157,33 @@ of a shared folder</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="perform-instance_method">
+  <h3 class="signature first" id="index-instance_method">
   
-    #<strong>perform</strong>(survey_id)  &#x21d2; <tt>Object</tt> 
-  
-
+    #<strong>index</strong>  &#x21d2; <tt>Object</tt> 
   
 
   
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>deliver electronic message from a specific survey<br></p>
 
-
-  </div>
-</div>
-<div class="tags">
   
-
-</div><table class="source_code">
+</h3><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-9
-10
-11</pre>
+4
+5
+6
+7
+8</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/jobs/survey_client_job.rb', line 9</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/help_controller.rb', line 4</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_perform'>perform</span><span class='lparen'>(</span><span class='id identifier rubyid_survey_id'>survey_id</span><span class='rparen'>)</span>
-  <span class='const'><span class='object_link'><a href="UserMailer.html" title="UserMailer (class)">UserMailer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_send_free_survey'><span class='object_link'><a href="UserMailer.html#send_free_survey-instance_method" title="UserMailer#send_free_survey (method)">send_free_survey</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_survey_id'>survey_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_deliver_now'>deliver_now</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_index'>index</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_is_admin?'>is_admin?</span>
+    <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_root_url'>root_url</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>

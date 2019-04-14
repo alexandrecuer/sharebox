@@ -132,7 +132,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#calc-instance_method" title="#calc (instance method)">#<strong>calc</strong>  &#x21d2; Object </a>
+      <a href="#calc-instance_method" title="#calc (instance method)">#<strong>calc</strong>(satisfactions = nil)  &#x21d2; Object </a>
     
 
     
@@ -151,6 +151,32 @@
 level<br> we have to consider 4 different satisfaction levels plus “left
 blank” field<br> return a 5 lines table gathering all the results, with one
 column for each closed question.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fetch_attributes-instance_method" title="#fetch_attributes (instance method)">#<strong>fetch_attributes</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>generate the attributes to explore a satisfactions active record associated
+to a poll<br> structure is [created_at, case_number/description, all closed
+questions separated by comma, all open questions separated by comma].</p>
 </div></span>
   
 </li>
@@ -271,7 +297,7 @@ column for each closed question.</p>
       <div class="method_details first">
   <h3 class="signature first" id="calc-instance_method">
   
-    #<strong>calc</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>calc</strong>(satisfactions = nil)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -297,14 +323,6 @@ column for each closed question</p>
       <pre class="lines">
 
 
-62
-63
-64
-65
-66
-67
-68
-69
 70
 71
 72
@@ -319,16 +337,28 @@ column for each closed question</p>
 81
 82
 83
-84</pre>
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 70</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_calc'>calc</span><span class='lparen'>(</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_calc'>calc</span><span class='lparen'>(</span><span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_tab'>tab</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_closed_names_number'>closed_names_number</span><span class='rparen'>)</span><span class='lbrace'>{</span><span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='int'>5</span><span class='comma'>,</span><span class='int'>0</span><span class='rparen'>)</span><span class='rbrace'>}</span>
   <span class='id identifier rubyid_number_of_satisfactions'>number_of_satisfactions</span> <span class='op'>=</span> <span class='int'>0</span> 
-
-  <span class='const'><span class='object_link'><a href="Satisfaction.html" title="Satisfaction (class)">Satisfaction</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>poll_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_satisfactions'>satisfactions</span>
+    <span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='op'>=</span><span class='const'>Satisfaction</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>poll_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span>
     <span class='kw'>for</span> <span class='id identifier rubyid_i'>i</span> <span class='kw'>in</span> <span class='int'>1</span><span class='op'>..</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_closed_names_number'>closed_names_number</span>
       <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>closed</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_i'>i</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
         <span class='id identifier rubyid_tab'>tab</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_value'>value</span><span class='rbracket'>]</span> <span class='op'>+=</span> <span class='int'>1</span>
@@ -346,6 +376,69 @@ column for each closed question</p>
   <span class='kw'>end</span>
   <span class='comment'># we return tab
 </span>  <span class='id identifier rubyid_tab'>tab</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="fetch_attributes-instance_method">
+  
+    #<strong>fetch_attributes</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>generate the attributes to explore a satisfactions active record associated
+to a poll<br> structure is [created_at, case_number/description, all closed
+questions separated by comma, all open questions separated by comma]</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_fetch_attributes'>fetch_attributes</span>
+  <span class='id identifier rubyid_attributes'>attributes</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>created_at</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>case_number</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+
+  <span class='kw'>for</span> <span class='id identifier rubyid_i'>i</span> <span class='kw'>in</span> <span class='int'>1</span><span class='op'>..</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_closed_names_number'>closed_names_number</span>
+      <span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>closed</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_i'>i</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>for</span> <span class='id identifier rubyid_i'>i</span> <span class='kw'>in</span> <span class='int'>1</span><span class='op'>..</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_open_names_number'>open_names_number</span>
+      <span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>open</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_i'>i</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_attributes'>attributes</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -378,12 +471,12 @@ column for each closed question</p>
       <pre class="lines">
 
 
-42
-43
-44</pre>
+50
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 42</span>
+      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_closed_names'>get_closed_names</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_closed_names'>closed_names</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -419,12 +512,12 @@ column for each closed question</p>
       <pre class="lines">
 
 
-54
-55
-56</pre>
+62
+63
+64</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 54</span>
+      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 62</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_names'>get_names</span>
   <span class='id identifier rubyid_get_closed_names'>get_closed_names</span> <span class='op'>+</span> <span class='id identifier rubyid_get_open_names'>get_open_names</span>
@@ -460,12 +553,12 @@ column for each closed question</p>
       <pre class="lines">
 
 
-48
-49
-50</pre>
+56
+57
+58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_open_names'>get_open_names</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_open_names'>open_names</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -501,49 +594,31 @@ column for each closed question</p>
       <pre class="lines">
 
 
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
 35
 36
 37
-38</pre>
+38
+39
+40
+41
+42
+43
+44
+45
+46</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'app/models/poll.rb', line 35</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_csv'>to_csv</span><span class='lparen'>(</span><span class='id identifier rubyid_emails'>emails</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_headers'>headers</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_names'>get_names</span><span class='period'>.</span><span class='id identifier rubyid_insert'>insert</span><span class='lparen'>(</span><span class='int'>0</span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Date</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_insert'>insert</span><span class='lparen'>(</span><span class='int'>1</span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Email</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_insert'>insert</span><span class='lparen'>(</span><span class='int'>2</span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>N° affaire</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
-
+  <span class='id identifier rubyid_headers'>headers</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_names'>get_names</span><span class='period'>.</span><span class='id identifier rubyid_insert'>insert</span><span class='lparen'>(</span><span class='int'>0</span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Email</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_insert'>insert</span><span class='lparen'>(</span><span class='int'>1</span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Date</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_insert'>insert</span><span class='lparen'>(</span><span class='int'>2</span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>N° affaire</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_attributes'>attributes</span><span class='op'>=</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_fetch_attributes'>fetch_attributes</span>
+  
   <span class='const'>CSV</span><span class='period'>.</span><span class='id identifier rubyid_generate'>generate</span><span class='lparen'>(</span><span class='label'>headers:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='symbol'>:col_sep</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_csv'>csv</span><span class='op'>|</span>
     <span class='id identifier rubyid_csv'>csv</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_headers'>headers</span>
 
-    <span class='id identifier rubyid_attributes'>attributes</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>created_at</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
-    <span class='id identifier rubyid_attributes1'>attributes1</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>case_number</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
-
-    <span class='kw'>for</span> <span class='id identifier rubyid_i'>i</span> <span class='kw'>in</span> <span class='int'>1</span><span class='op'>..</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_closed_names_number'>closed_names_number</span>
-      <span class='id identifier rubyid_attributes1'>attributes1</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>closed</span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_i'>i</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
-    <span class='kw'>end</span>
-    <span class='kw'>for</span> <span class='id identifier rubyid_i'>i</span> <span class='kw'>in</span> <span class='int'>1</span><span class='op'>..</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_open_names_number'>open_names_number</span>
-      <span class='id identifier rubyid_attributes1'>attributes1</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>open</span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_i'>i</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
-    <span class='kw'>end</span>
-
     <span class='const'><span class='object_link'><a href="Satisfaction.html" title="Satisfaction (class)">Satisfaction</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>poll_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span>
-      <span class='id identifier rubyid_csv'>csv</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_values_at'>values_at</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_attributes'>attributes</span><span class='rparen'>)</span> <span class='op'>+</span> <span class='id identifier rubyid_emails'>emails</span><span class='period'>.</span><span class='id identifier rubyid_values_at'>values_at</span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span> <span class='op'>+</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_values_at'>values_at</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_attributes1'>attributes1</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_csv'>csv</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_emails'>emails</span><span class='period'>.</span><span class='id identifier rubyid_values_at'>values_at</span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span> <span class='op'>+</span> <span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_values_at'>values_at</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_attributes'>attributes</span><span class='rparen'>)</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -557,7 +632,7 @@ column for each closed question</p>
 </div>
 
       <div id="footer">
-  Generated on Sun Mar 10 13:24:55 2019 by
+  Generated on Sun Apr 14 10:40:47 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

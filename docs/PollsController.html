@@ -398,14 +398,6 @@ rejected and the poll creation will fail</p>
       <pre class="lines">
 
 
-90
-91
-92
-93
-94
-95
-96
-97
 98
 99
 100
@@ -419,12 +411,22 @@ rejected and the poll creation will fail</p>
 108
 109
 110
-111</pre>
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 90</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 98</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
+  <span class='id identifier rubyid_check_admin'>check_admin</span>
   <span class='ivar'>@poll</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_polls'>polls</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_poll_params'>poll_params</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='ivar'>@poll</span><span class='period'>.</span><span class='id identifier rubyid_description'>description</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
     <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>POLLS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>missing_required_fields</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
@@ -479,21 +481,23 @@ poll will be deleted cause they all belong to a poll</p>
       <pre class="lines">
 
 
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126</pre>
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 117</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 126</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
+  <span class='id identifier rubyid_check_admin'>check_admin</span>
   <span class='ivar'>@poll</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Poll.html" title="Poll (class)">Poll</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="Folder.html" title="Folder (class)">Folder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>poll_id:</span> <span class='ivar'>@poll</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='op'>|</span>
     <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_poll_id'>poll_id</span> <span class='op'>=</span> <span class='kw'>nil</span>
@@ -541,12 +545,14 @@ description…)<br> This view allows you to edit a poll.</p>
 24
 25
 26
-27</pre>
+27
+28</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 21</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_edit'>edit</span>
+  <span class='id identifier rubyid_check_admin'>check_admin</span>
   <span class='ivar'>@poll</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Poll.html" title="Poll (class)">Poll</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='ivar'>@poll</span>
     <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>POLLS_MSG</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>inexisting_poll</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
@@ -586,14 +592,16 @@ Questions must be separated by “;”</p>
       <pre class="lines">
 
 
-63
-64
-65</pre>
+65
+66
+67
+68</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 63</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 65</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_new'>new</span>
+  <span class='id identifier rubyid_check_admin'>check_admin</span>
   <span class='ivar'>@poll</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_polls'>polls</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -628,9 +636,6 @@ all the datas can be downloaded</p>
       <pre class="lines">
 
 
-70
-71
-72
 73
 74
 75
@@ -642,12 +647,25 @@ all the datas can be downloaded</p>
 81
 82
 83
-84</pre>
+84
+85
+86
+87
+88
+89
+90
+91
+92</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 73</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_show'>show</span>
+  
+  <span class='kw'>unless</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_belongs_to_team?'>belongs_to_team?</span>
+    <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_root_url'>root_url</span>
+  <span class='kw'>end</span>
+  
   <span class='ivar'>@poll</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Poll.html" title="Poll (class)">Poll</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='ivar'>@hash</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_get_all_emails'>get_all_emails</span>
 
@@ -693,7 +711,6 @@ all the datas can be downloaded</p>
       <pre class="lines">
 
 
-32
 33
 34
 35
@@ -718,12 +735,15 @@ all the datas can be downloaded</p>
 54
 55
 56
-57</pre>
+57
+58
+59</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_update'>update</span>
+  <span class='id identifier rubyid_check_admin'>check_admin</span>
   <span class='ivar'>@poll</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Poll.html" title="Poll (class)">Poll</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_array'>array</span> <span class='op'>=</span> <span class='id identifier rubyid_poll_params'>poll_params</span><span class='lbracket'>[</span><span class='symbol'>:closed_names</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='op'>+</span> <span class='id identifier rubyid_poll_params'>poll_params</span><span class='lbracket'>[</span><span class='symbol'>:open_names</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_array'>array</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>!=</span> <span class='id identifier rubyid_array'>array</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
@@ -759,7 +779,7 @@ all the datas can be downloaded</p>
 </div>
 
       <div id="footer">
-  Generated on Sun Mar 10 13:24:56 2019 by
+  Generated on Sun Apr 14 10:40:49 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>
