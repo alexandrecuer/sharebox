@@ -19,27 +19,31 @@ $.ajax({
     async: true, 
     success: function(result) {
         polls=result;
-        console.log(polls);
+        //console.log(polls);
     } 
 });
 
 
 //caution : folder_value is the position in the tree
-function child_meta(folder_value,folder_id)
+function child_meta(folderValue,folderId)
 {
     var regv=/([0-9]+)/;
     var regi=/folder([0-9]+)/;
-    var a = folder_value.match(regv);
-    var f = folder_id.match(regi);
+    var a = folderValue.match(regv);
+    var f = folderId.match(regi);
     //console.log(a);console.log(f);
     if (a && f ) {
-      var position = parseInt(a[0])+1;
-      var parent_id = parseInt(f[1]);
+      var position = parseInt(a[0],10)+1;
+      var parentId = parseInt(f[1],10);
       var tab="";
       for (var i=0;i<position;i++) {
         tab+="&nbsp;&nbsp;";
       }
-      return {parent_id: parent_id, level:position, tab:tab};
+      var results={};
+      results["parent_id"]=parentId;
+      results["level"]=position;
+      results["tab"]=tab;
+      return results
     } else {
       return false;
     }
