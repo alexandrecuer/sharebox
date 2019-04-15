@@ -43,7 +43,7 @@ function child_meta(folderValue,folderId)
       results["parent_id"]=parentId;
       results["level"]=position;
       results["tab"]=tab;
-      return results
+      return results;
     } else {
       return false;
     }
