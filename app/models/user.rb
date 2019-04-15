@@ -149,6 +149,7 @@ class User < ApplicationRecord
     puts("superuser_access_testing...")
     return true if self.folders.include?(folder)
     return true if folder.get_meta["swarmed_to"]==self.id
+    return false
   end
   
   

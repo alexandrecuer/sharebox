@@ -24,7 +24,9 @@ class FoldersController < ApplicationController
     else
       su=current_user.has_su_access?(folder)
       puts("BEGIN ---------------- base searching")
-      base=folder.ancestors.reverse[0]
+      unless base=folder.ancestors.reverse[0]
+        base={"name": "root"}
+      end
       puts("END ---------------- base searching")
     end
     results.merge!({"folder": folder.as_json})
@@ -390,6 +392,7 @@ class FoldersController < ApplicationController
   # changing owner should be understood by fixing a new user_id for the folder and all its related objets (assets, subfolders, subassets, shares)<br>
   # This feature is only for admins<br>
   # it is basically intended for annual archiving purposes but also to architecture collaborative views between private users working together
+  # NOT SECURISED / TO DELETE ASAP
   def moove_folder
   
     params[:id]=params[:id].to_i
@@ -426,7 +429,8 @@ class FoldersController < ApplicationController
         
         # is there an existing destination ?
         destination = Folder.find_by_id(destination_folder_id)
-        if !destination && !destination_folder_id.nil?
+        #if !destination && !destination_folder_id.nil?
+        unless destination || destination_folder_id.nil?
           flash[:notice] = "#{flash[:notice]} #{destination_folder_id} #{FOLDERS_MSG["no_folder_on_that_id"]}<br>"
           movefolder = 0
         end

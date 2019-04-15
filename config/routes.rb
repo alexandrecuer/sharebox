@@ -76,5 +76,9 @@ Rails.application.routes.draw do
    get "become/:id" => "users#become", :as => "become"
    
    get "contact_customer/:folder_id" => "shared_folders#contact_customer", :as => ""
+   
+   get "move/:folder_id/:destination_folder_id" => "admin#move", :as => ""
+   
+   get "change_owner/:folder_id/:user_id" => "admin#change_owner", :as => ""
 
 end

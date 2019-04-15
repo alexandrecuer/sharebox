@@ -80,14 +80,14 @@ class Folder < ApplicationRecord
     assets = Asset.where(folder_id: self.id)
     shared_folders = SharedFolder.where(folder_id: self.id)
     childrens = assets + folders + shared_folders
-
+    puts("BEGIN__________________________________________________RECURSIVE SEARCH")
     folders.each do |c|
       if c.has_sub_asset_or_share?
         childrens += c.get_subs_assets_shares
       end
       puts ("end of search for subfolder "+c.name.to_s+ " number "+c.id.to_s)
     end
-    
+    puts("END____________________________________________________RECURSIVE SEARCH")
     return childrens
   end
   
@@ -190,7 +190,7 @@ class Folder < ApplicationRecord
   end
   
   ##
-  # return the id of the user being granted the folder as swarmed
+  # return the id of the user being granted the folder as swarmed<br>
   def legacy
     owner=User.find_by_id(self.user_id)
     if self.parent_id
@@ -310,6 +310,58 @@ class Folder < ApplicationRecord
         results["success"] = false
       end
     end
+    results
+  end
+  
+  ##
+  # move a folder and all related childs (subs,assets,shares,satisfactions) into another one and/or transfer to another user <br>
+  # quite costly but it is the ony way....
+  def move(destination_folder, destination_user=nil)
+    results={}
+    childs={}
+    unless destination_folder || destination_user
+      results["success"]=false
+      results["message"]="il faut fournir une donnée : un répertoire de destination, un utilisateur qui héritera du répertoire ou les 2"
+    else
+      if destination_folder
+        case destination_folder
+        when 'root'
+          self.parent_id=nil
+        else
+          self.parent_id=destination_folder.id
+        end
+      end
+      if destination_user
+        self.user_id=destination_user.id
+      end
+      self.lists=self.calc_meta
+      if self.save
+        results["success"]=true
+        results["message"]="sauvegarde du répertoire: OK\n"
+        childs=self.get_subs_assets_shares
+        childs.each do |c|
+          if destination_user
+            c.user_id = destination_user.id
+          end
+          #we check if the child is a folder
+          if /lists/.match(c.attributes.keys.to_s)
+            results["message"]="#{results["message"]} NOTA : l'enfant #{c.id} est un répertoire\n"
+            c.lists=c.calc_meta
+          end
+          unless c.save
+            results["success"]=false
+            results["message"]="#{results["message"]} impossible de sauvegarder l'enfant #{c.id}\n"
+          else
+            results["message"]="#{results["message"]} sauvegarde de l'enfant #{c.id}: OK\n"
+          end
+        end
+      else
+        results["success"]=false
+        results["message"]="impossible de sauvegarder le répertoire"
+      end
+    end
+    results.merge!("folder": self.as_json)
+    results.merge!("childs": childs.as_json)
     results
   end
   
