@@ -25,7 +25,7 @@ $.ajax({
 
 
 //caution : folder_value is the position in the tree
-function child_meta(folderValue,folderId)
+function childMeta(folderValue,folderId)
 {
     var regv=/([0-9]+)/;
     var regi=/folder([0-9]+)/;
@@ -680,7 +680,7 @@ $("#folder_view").on("click","#delete_asset",function(){
 //update folder_tree in tree_view while exploring step by step
 $("#tree_view").on("click",".child",function(){
     //var text = $(this).text();
-    var meta = child_meta($(this).attr('value'), $(this).attr('id'));
+    var meta = childMeta($(this).attr('value'), $(this).attr('id'));
     var value = meta.parent_id;
     $(".root").css("background-color","#ffffff");
     $(".child").each(function() {
