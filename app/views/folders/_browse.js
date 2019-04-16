@@ -329,7 +329,7 @@ function genfolderview(folderId)
         dataType: "json",
         async: true,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             if (data.currentfolder.id){
                 $("#folder_view").html(subfoldersassetslist(data));
             } else {
