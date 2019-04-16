@@ -115,7 +115,7 @@ function createtabs(folder,shares,satis,currentuser)
         tabs.push("<li class=nav-item>");
         tabs.push("<button id=go_up class=btn value="+folder.parent_id+"><i class='fa fa-arrow-up fa-1x' style='color:lightgrey'></i></button>");
         tabs.push("</li>");
-        if (currentuser.id==folder.user_id){
+        if (currentuser.id===folder.user_id){
           tabs.push("<li class=nav-item>");
           tabs.push("<a class=nav-link id=manage-tab data-toggle=tab href=#manage_folder role=tab aria-controls=manage_folder>Gérer dossier</a>");
           tabs.push("</li>");
@@ -256,7 +256,7 @@ function icontofolder(lists)
 function fragment(folderId,folderName,folderLists)
 {
     if ($("#tree_view").find("#folder"+folderId).length>0) {
-        var level=$("#tree_view").find("#folder"+folderId).attr('value');
+        var level=$("#tree_view").find("#folder"+folderId).attr("value");
         //console.log("regenerating a fragment on level "+level);
         var tab="";
         for (var i=0;i<level;i++) {
@@ -292,22 +292,22 @@ function genrootview()
         async: true,
         success: function (data) {
             console.log(data);
-            var root_name=data.currentfolder.name;
-            var root_tree = "";
-            root_tree="<div class=root>"+root_name+"</div>";
+            var rootName=data.currentfolder.name;
+            var rootTree = "";
+            rootTree="<div class=root>"+rootName+"</div>";
             data.subfolders.forEach(function(folder){
               var lists=JSON.parse(folder.lists);
-              root_tree+="<div class='child' id=folder"+folder.id+" value=1>&nbsp;&nbsp;|_"+folder.name+icontofolder(lists)+"</div>";
-              root_tree+="<div id=child"+folder.id+"></div>";
+              rootTree+="<div class='child' id=folder"+folder.id+" value=1>&nbsp;&nbsp;|_"+folder.name+icontofolder(lists)+"</div>";
+              rootTree+="<div id=child"+folder.id+"></div>";
             });
-            root_tree+="<div class=shared_root>dossiers partagés</div>";
+            rootTree+="<div class=shared_root>dossiers partagés</div>";
             data.sharedfoldersbyothers.forEach(function(folder){
               var lists=JSON.parse(folder.lists);
-              root_tree+="<div class='child' id=folder"+folder.id+" value=1>&nbsp;&nbsp;|_"+folder.name+icontofolder(lists)+"</div>";
-              root_tree+="<div id=child"+folder.id+"></div>";
+              rootTree+="<div class='child' id=folder"+folder.id+" value=1>&nbsp;&nbsp;|_"+folder.name+icontofolder(lists)+"</div>";
+              rootTree+="<div id=child"+folder.id+"></div>";
             });
-            root_tree+="<br>";
-            $("#tree_view").html(root_tree);
+            rootTree+="<br>";
+            $("#tree_view").html(rootTree);
             $("#folder_view").html(subfoldersassetslist(data));
             $(".root").css("background-color", lg);
         }
@@ -315,12 +315,12 @@ function genrootview()
 }
 
 //interrogate the API and update the folder_view div
-function genfolderview(folder_id)
+function genfolderview(folderId)
 {
     var myurl;
-    console.log("regenerating folder view for folder "+folder_id);
+    //console.log("regenerating folder view for folder "+folderId);
     if (folder_id) {
-        myurl="/list?id="+folder_id;
+        myurl="/list?id="+folderId;
     } else {
         myurl="/list";
     }
@@ -340,11 +340,11 @@ function genfolderview(folder_id)
 }
 
 //interrogate the API and update the sharelist div
-function genshareslist(folder_id)
+function genshareslist(folderId)
 {
     $.ajax({
         type: "GET",
-        url: "/getshares/"+folder_id,
+        url: "/getshares/"+folderId,
         dataType: "json",
         async: true,
         success: function(data) {
@@ -357,7 +357,7 @@ function genshareslist(folder_id)
     });
 }
 
-$("#tree_view").css('border-right', '1px solid lightgrey');
+$("#tree_view").css("border-right", "1px solid lightgrey");
 
 genrootview();
 
@@ -368,9 +368,9 @@ $("#tree_view").on("click",".root",function(){
 
 //oldfashion style navigation
 $("#folder_view").on("click","#go_up",function(){
-    parent_id=parseInt($(this).val());
-    console.log(parent_id);
-    genfolderview(parent_id);
+    var parentId=parseInt($(this).val(),10);
+    //console.log(parentId);
+    genfolderview(parentId);
 });
 
 //user click on a folder icon in folder_view
@@ -401,7 +401,7 @@ $("#folder_view").on("change","#folder_name",function(){
 //the surveyfeedback function is in shared/colibritoolbox.js
 $("#folder_view").on("click",".satis", function(){
     //satis is a div you cannot use val()
-    var id = $(this).attr('value');
+    var id = $(this).attr("value");
     //console.log(id);
     surveyfeedback(id,"AnswerModal");
 });
