@@ -653,8 +653,8 @@ $("#folder_view").on("click","#create_asset",function(){
 //delete an asset
 $("#folder_view").on("click","#delete_asset",function(){
     var id=$(this).val();
-    var currentfolder_id=$("#currentfolder_id").val();
-    console.log("asset number "+id+" in folder "+currentfolder_id+" is going to be deleted"); 
+    var currentfolderId=$("#currentfolder_id").val();
+    //console.log("asset number "+id+" in folder "+currentfolderId+" is going to be deleted"); 
     $.ajax({
         type: "DELETE",
         url: "/delete_asset/"+id,
@@ -668,7 +668,7 @@ $("#folder_view").on("click","#delete_asset",function(){
         success: function(result) {
             alert(result.message);
             if (result.success) {
-                genfolderview(currentfolder_id);
+                genfolderview(currentfolderId);
             }
         },
         error: function(result) {
@@ -680,29 +680,29 @@ $("#folder_view").on("click","#delete_asset",function(){
 //update folder_tree in tree_view while exploring step by step
 $("#tree_view").on("click",".child",function(){
     //var text = $(this).text();
-    var meta = childMeta($(this).attr('value'), $(this).attr('id'));
+    var meta = childMeta($(this).attr("value"), $(this).attr("id"));
     var value = meta.parent_id;
     $(".root").css("background-color","#ffffff");
     $(".child").each(function() {
       $(this).css("background-color","#ffffff");
     });
     $(this).css("background-color",lg);
-    console.log("we are on folder "+value);
-    console.log("corresponding metas are:");
-    console.log(meta);
-    var folder_tree = "";
+    //console.log("we are on folder "+value);
+    //console.log("corresponding metas are:");
+    //console.log(meta);
+    var folderTree = "";
     $.ajax({ 
       url: "/list?id="+value,
       dataType: "json",
       async: true,
       success: function (data) {
-        console.log(data);
+        //console.log(data);
         data.subfolders.forEach(function(folder){
           var lists=JSON.parse(folder.lists);
-          folder_tree+="<div class=child id=folder"+folder.id+" value='"+meta.level+"'>"+meta.tab+"|_"+folder.name+icontofolder(lists)+"</div>";
-          folder_tree+="<div id=child"+folder.id+"></div>";
+          folderTree+="<div class=child id=folder"+folder.id+" value='"+meta.level+"'>"+meta.tab+"|_"+folder.name+icontofolder(lists)+"</div>";
+          folderTree+="<div id=child"+folder.id+"></div>";
         });
-        $("#child"+value).html(folder_tree);
+        $("#child"+value).html(folderTree);
         $("#folder_view").html(subfoldersassetslist(data));    
       }
     });      
