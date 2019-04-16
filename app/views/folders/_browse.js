@@ -291,7 +291,7 @@ function genrootview()
         dataType: "json",
         async: true,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             var rootName=data.currentfolder.name;
             var rootTree = "";
             rootTree="<div class=root>"+rootName+"</div>";
