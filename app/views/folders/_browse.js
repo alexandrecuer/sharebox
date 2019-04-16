@@ -163,8 +163,8 @@ function createtabs(folder,shares,satis,currentuser)
       if (currentuser.id===folder.user_id){
         tabs.push("<div class='tab-pane fade' id=manage_folder role=tabpanel><br>");
         tabs.push("<input type=hidden id=currentfolder_id value="+folder.id+">");
-        tabs.push("<input type=text class=form-control id=currentfolder_name placeholder='nom du répertoire' value="+folder.name+"><br>");
-        tabs.push("<input type=text class=form-control id=currentfolder_case_number placeholder='Numéro affaire' value="+folder.case_number+">");
+        tabs.push("<input type=text class=form-control id=currentfolder_name placeholder='nom du répertoire' value='"+folder.name+"'><br>");
+        tabs.push("<input type=text class=form-control id=currentfolder_case_number placeholder='Numéro affaire' value='"+folder.case_number+"'>");
         
         var options="<br><select class='form-control' id=currentfolder_poll_id>";
         options+="<option value=''>choisissez un sondage</option>";
@@ -213,8 +213,9 @@ function subfoldersassetslist(data)
 {
     var list="";
     var hidden="";
+    var title;
     //when interrogating the API through list on the root, API return current_folder.id =-1
-    if (data.currentuser.id==data.currentfolder.user_id || data.currentfolder.id<0) {
+    if (data.currentuser.id===data.currentfolder.user_id || data.currentfolder.id<0) {
       title=data.currentfolder.name;
     } else {
       title=data.currentfolder.name+"<br>Dossier appartenant à "+data.currentfolder.user_name+"&nbsp;(utilisateur "+data.currentfolder.user_id+")";
@@ -251,32 +252,32 @@ function icontofolder(lists)
 }
 
 //update a fragment in the tree_view if it exists
-//folder_lists is already supposed to be a json object not a string
-function fragment(folder_id,folder_name,folder_lists)
+//folderLists is already supposed to be a json object not a string
+function fragment(folderId,folderName,folderLists)
 {
-    if ($("#tree_view").find("#folder"+folder_id).length>0) {
-        var level=$("#tree_view").find("#folder"+folder_id).attr('value');
+    if ($("#tree_view").find("#folder"+folderId).length>0) {
+        var level=$("#tree_view").find("#folder"+folderId).attr('value');
         //console.log("regenerating a fragment on level "+level);
         var tab="";
         for (var i=0;i<level;i++) {
             tab+="&nbsp;&nbsp;";
         }
-        $("#tree_view").find("#folder"+folder_id).html(tab+"|_"+folder_name+icontofolder(folder_lists));
+        $("#tree_view").find("#folder"+folderId).html(tab+"|_"+folderName+icontofolder(folderLists));
     }
 }
 
 //interrogate the API and regenerate a fragment of the tree_view if it exists
-function genfragment(folder_id)
+function genfragment(folderId)
 {
-    if ($("#tree_view").find("#folder"+folder_id).length>0) {
+    if ($("#tree_view").find("#folder"+folderId).length>0) {
       $.ajax({
         type: "GET",
-        url: "/browse?id="+folder_id,
+        url: "/browse?id="+folderId,
         async: true,
         success: function(result) {
             //console.log(result);
-            lists=JSON.parse(result.lists);
-            fragment(folder_id,result.name,lists);
+            var lists=JSON.parse(result.lists);
+            fragment(folderId,result.name,lists);
         }
       });
     }
