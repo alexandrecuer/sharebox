@@ -53,37 +53,37 @@ function childMeta(folderValue,folderId)
 //these are link, list or tabs functions
 function linka(asset,currentuser)
 {
-    size=Math.round(asset.uploaded_file_file_size/(1024*102.4))/10;
-    var link= "";
-    link+="<tr><td>";
-    link+="<div class='d-flex align-items-center flex-row-reverse bd-highlight mb-3'>";
-    if (currentuser.id==asset.user_id) {
-        link+="<button class='btn btn-outline-danger btn-sm' rel='nofollow' id=delete_asset value="+asset.id+">Supprimer</button>";
+    var size=Math.round(asset.uploaded_file_file_size/(1024*102.4))/10;
+    var link= [];
+    link.push("<tr><td>");
+    link.push("<div class='d-flex align-items-center flex-row-reverse bd-highlight mb-3'>");
+    if (currentuser.id===asset.user_id) {
+        link.push("<button class='btn btn-outline-danger btn-sm' rel='nofollow' id=delete_asset value="+asset.id+">Supprimer</button>");
     } else {
-        link+="("+asset.user_name+")";
+        link.push("("+asset.user_name+")");
     }
-    link+="</div>";
-    link+="</td><td>";
-    link+="<div class=file><a href=/forge/get/"+asset.id+">"+asset.uploaded_file_file_name+"</a><b>&nbsp;["+size+"&nbsp;Mo]</b></div>";
-    link+="</td></tr>";
-    return link;
+    link.push("</div>");
+    link.push("</td><td>");
+    link.push("<div class=file><a href=/forge/get/"+asset.id+">"+asset.uploaded_file_file_name+"</a><b>&nbsp;["+size+"&nbsp;Mo]</b></div>");
+    link.push("</td></tr>");
+    return link.join("");
 }
 
 function linkf(folder,currentuser)
 {
-    var link="";
-    link+="<tr><td>";
-    link+="<div class='d-flex align-items-center flex-row-reverse bd-highlight mb-3'>";
+    var link=[];
+    link.push("<tr><td>");
+    link.push("<div class='d-flex align-items-center flex-row-reverse bd-highlight mb-3'>");
     if (currentuser.id==folder.user_id) {
-        link+="<button class='btn btn-outline-danger btn-sm' rel='nofollow' id=delete_folder value="+folder.id+">Supprimer</button>";
+        link.push("<button class='btn btn-outline-danger btn-sm' rel='nofollow' id=delete_folder value="+folder.id+">Supprimer</button>");
     } else {
-        link+="("+folder.user_name+")";
+        link.push("("+folder.user_name+")");
     }
-    link+="</div>";
-    link+="</td><td>";
-    link+="<div class=folder value="+folder.id+">"+folder.name+"</div>";
-    link+="</td></tr>";
-    return link;
+    link.push("</div>");
+    link.push("</td><td>");
+    link.push("<div class=folder value="+folder.id+">"+folder.name+"</div>");
+    link.push("</td></tr>");
+    return link.join("");
 }    
 
 function shareslist(shares)
@@ -103,75 +103,74 @@ function shareslist(shares)
         });
         slist.push("</table>");
     }
-    //console.log(slist.join(''));
-    return slist.join('');
+    return slist.join("");
 }
 
 //create all the tabs necessary to manage a given folder or root
 function createtabs(folder,shares,satis,currentuser)
 {
-    var tabs="";
-    tabs+="<ul class='nav nav-tabs' id=manage_tabs role=tablist>";
+    var tabs=[];
+    tabs.push("<ul class='nav nav-tabs' id=manage_tabs role=tablist>");
     if (folder.id>=0) {
-        tabs+="<li class=nav-item>";
-        tabs+="<button id=go_up class=btn value="+folder.parent_id+"><i class='fa fa-arrow-up fa-1x' style='color:lightgrey'></i></button>";
-        tabs+="</li>";
+        tabs.push("<li class=nav-item>");
+        tabs.push("<button id=go_up class=btn value="+folder.parent_id+"><i class='fa fa-arrow-up fa-1x' style='color:lightgrey'></i></button>");
+        tabs.push("</li>");
         if (currentuser.id==folder.user_id){
-          tabs+="<li class=nav-item>";
-          tabs+="<a class=nav-link id=manage-tab data-toggle=tab href=#manage_folder role=tab aria-controls=manage_folder>Gérer dossier</a>";
-          tabs+="</li>";
+          tabs.push("<li class=nav-item>");
+          tabs.push("<a class=nav-link id=manage-tab data-toggle=tab href=#manage_folder role=tab aria-controls=manage_folder>Gérer dossier</a>");
+          tabs.push("</li>");
         }
     }
-    tabs+="<li class=nav-item>";
-    tabs+="<a class='nav-link' id=folder-tab data-toggle=tab href=#new_folder role=tab aria-controls=new_folder>Créer sous-dossier</a>";
-    tabs+="</li>";
-    tabs+="<li class=nav-item>";
-    tabs+="<a class=nav-link id=asset-tab data-toggle=tab href=#new_asset role=tab aria-controls=new_asset>Charger un fichier</a>";
-    tabs+="</li>";
+    tabs.push("<li class=nav-item>");
+    tabs.push("<a class='nav-link' id=folder-tab data-toggle=tab href=#new_folder role=tab aria-controls=new_folder>Créer sous-dossier</a>");
+    tabs.push("</li>");
+    tabs.push("<li class=nav-item>");
+    tabs.push("<a class=nav-link id=asset-tab data-toggle=tab href=#new_asset role=tab aria-controls=new_asset>Charger un fichier</a>");
+    tabs.push("</li>");
     if (satis.length>0) {
-        tabs+="<li class=nav-item>";
-        tabs+="<a class=nav-link id=satis-tab data-toggle=tab href=#satisfactions role=tab aria-controls=satisfactions>Retours satisfactions</a>";
-        tabs+="</li>";
+        tabs.push("<li class=nav-item>");
+        tabs.push("<a class=nav-link id=satis-tab data-toggle=tab href=#satisfactions role=tab aria-controls=satisfactions>Retours satisfactions</a>");
+        tabs.push("</li>");
     }
-    tabs+="</ul>";
+    tabs.push("</ul>");
    
-    tabs+="<div class=tab-content id=alltabs>";
+    tabs.push("<div class=tab-content id=alltabs>");
    
     //new subfolder form
-    tabs+="<div class='tab-pane fade' id=new_folder role=tabpanel><br>";
-    tabs+="<input type=text class=form-control id=folder_name placeholder='nom du répertoire'><br>";
-    tabs+="<input type=text class=form-control id=folder_case_number placeholder='N°affaire'>";
+    tabs.push("<div class='tab-pane fade' id=new_folder role=tabpanel><br>");
+    tabs.push("<input type=text class=form-control id=folder_name placeholder='nom du répertoire'><br>");
+    tabs.push("<input type=text class=form-control id=folder_case_number placeholder='N°affaire'>");
     if (folder.id>=0) {
-        tabs+="<input type=hidden class=form-control id=folder_parent_id value="+folder.id+">";
+        tabs.push("<input type=hidden class=form-control id=folder_parent_id value="+folder.id+">");
     }
-    tabs+="<br><button id=create_folder class=btn style=display:none>Créer le répertoire</button>";
-    tabs+="</div>";
+    tabs.push("<br><button id=create_folder class=btn style=display:none>Créer le répertoire</button>");
+    tabs.push("</div>");
    
     //asset form
-    tabs+="<div class='tab-pane fade' id=new_asset role=tabpanel><br>";
-    tabs+="<form method=POST enctype=multipart/form-data id=assetUploadForm>";
+    tabs.push("<div class='tab-pane fade' id=new_asset role=tabpanel><br>");
+    tabs.push("<form method=POST enctype=multipart/form-data id=assetUploadForm>");
     //tabs+="<input type=hidden name='authenticity_token' value=<%= form_authenticity_token %>>";
-    tabs+="<input class=form-control-file type=file id=asset_uploaded_file name=asset[uploaded_file]>";
+    tabs.push("<input class=form-control-file type=file id=asset_uploaded_file name=asset[uploaded_file]>");
     if (folder.id>=0) {
-        tabs+="<input type=hidden id=asset_folder_id name=asset[folder_id] value="+folder.id+">";
+        tabs.push("<input type=hidden id=asset_folder_id name=asset[folder_id] value="+folder.id+">");
     }
-    tabs+="</form>";
-    tabs+="<br><button id=create_asset class=btn style=display:none>Charger le fichier</button>";
-    tabs+="</div>";
+    tabs.push("</form>");
+    tabs.push("<br><button id=create_asset class=btn style=display:none>Charger le fichier</button>");
+    tabs.push("</div>");
    
     // manage folder form
     if (folder.id>=0) {
-      if (currentuser.id==folder.user_id){
-        tabs+="<div class='tab-pane fade' id=manage_folder role=tabpanel><br>";
-        tabs+="<input type=hidden id=currentfolder_id value="+folder.id+">";
-        tabs+='<input type=text class=form-control id=currentfolder_name placeholder="nom du répertoire" value="'+folder.name+'"><br>';
-        tabs+='<input type=text class=form-control id=currentfolder_case_number placeholder="Numéro d\'affaire" value="'+folder.case_number+'">';
+      if (currentuser.id===folder.user_id){
+        tabs.push("<div class='tab-pane fade' id=manage_folder role=tabpanel><br>");
+        tabs.push("<input type=hidden id=currentfolder_id value="+folder.id+">");
+        tabs.push('<input type=text class=form-control id=currentfolder_name placeholder="nom du répertoire" value="'+folder.name+'"><br>');
+        tabs.push('<input type=text class=form-control id=currentfolder_case_number placeholder="Numéro d\'affaire" value="'+folder.case_number+'">');
         
         var options="<br><select class='form-control' id=currentfolder_poll_id>";
         options+="<option value=''>choisissez un sondage</option>";
         if (polls.length>0) {
           polls.forEach(function(poll){
-            var tag=" "
+            var tag=" ";
             if (folder.poll_id === poll.id) {
                tag=" selected";
             }
@@ -179,35 +178,35 @@ function createtabs(folder,shares,satis,currentuser)
           });
         }
         options+="</select>";
-        tabs+=options;
-        tabs+="<br><button type=submit class=btn id=currentfolder_modify>Sauvegarder les modifications</button><br><br>";
+        tabs.push(options);
+        tabs.push("<br><button type=submit class=btn id=currentfolder_modify>Sauvegarder les modifications</button><br><br>");
         
         //manage the shares
-        tabs+="<div id=shareslist>";
-        tabs+=shareslist(shares);
-        tabs+="</div>";
-        tabs+='<input type=text class="form-control" id=shared_folder_share_email placeholder="Si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,">';
-        tabs+='<br><button type=submit class=btn id=add_shares>Ajouter un ou plusieurs partages</button>';
-        tabs+='&nbsp;<button type=reset class=btn id=reset_shares>Effacer saisie</button>';
-        tabs+="</div>";
+        tabs.push("<div id=shareslist>");
+        tabs.push(shareslist(shares));
+        tabs.push("</div>");
+        tabs.push('<input type=text class="form-control" id=shared_folder_share_email placeholder="Si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,">');
+        tabs.push('<br><button type=submit class=btn id=add_shares>Ajouter un ou plusieurs partages</button>');
+        tabs.push('&nbsp;<button type=reset class=btn id=reset_shares>Effacer saisie</button>');
+        tabs.push("</div>");
       }
         
       //view satisfaction answers
       if (satis.length>0) {
-        tabs+="<div class='tab-pane fade' id=satisfactions role=tabpanel>";
-        tabs+="<table class='table table-sm'>";
-        tabs+="<thead><td>Vous avez "+satis.length+" retour(s)</td></thead>";
-        tabs+="<tr><td>";
+        tabs.push("<div class='tab-pane fade' id=satisfactions role=tabpanel>");
+        tabs.push("<table class='table table-sm'>");
+        tabs.push("<thead><td>Vous avez "+satis.length+" retour(s)</td></thead>");
+        tabs.push("<tr><td>");
         satis.forEach(function(sat){
-            tabs+="<div style='width:50px; float:left' class=satis value="+sat.id+">&nbsp;<i class='fa fa-eye fa-2x'></i></div>";
+            tabs.push("<div style='width:50px; float:left' class=satis value="+sat.id+">&nbsp;<i class='fa fa-eye fa-2x'></i></div>");
         });
-        tabs+="</td></tr></table>";
-        tabs+="<div>";
+        tabs.push("</td></tr></table>");
+        tabs.push("<div>");
       }
         
     }
-    tabs+="</div>";
-    return tabs;
+    tabs.push("</div>");
+    return tabs.join("");
 }
 
 function subfoldersassetslist(data)
