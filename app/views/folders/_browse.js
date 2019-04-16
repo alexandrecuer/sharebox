@@ -163,8 +163,8 @@ function createtabs(folder,shares,satis,currentuser)
       if (currentuser.id===folder.user_id){
         tabs.push("<div class='tab-pane fade' id=manage_folder role=tabpanel><br>");
         tabs.push("<input type=hidden id=currentfolder_id value="+folder.id+">");
-        tabs.push('<input type=text class=form-control id=currentfolder_name placeholder="nom du répertoire" value="'+folder.name+'"><br>');
-        tabs.push('<input type=text class=form-control id=currentfolder_case_number placeholder="Numéro d\'affaire" value="'+folder.case_number+'">');
+        tabs.push("<input type=text class=form-control id=currentfolder_name placeholder='nom du répertoire' value="+folder.name+"><br>");
+        tabs.push("<input type=text class=form-control id=currentfolder_case_number placeholder='Numéro affaire' value="+folder.case_number+">");
         
         var options="<br><select class='form-control' id=currentfolder_poll_id>";
         options+="<option value=''>choisissez un sondage</option>";
@@ -185,9 +185,9 @@ function createtabs(folder,shares,satis,currentuser)
         tabs.push("<div id=shareslist>");
         tabs.push(shareslist(shares));
         tabs.push("</div>");
-        tabs.push('<input type=text class="form-control" id=shared_folder_share_email placeholder="Si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,">');
-        tabs.push('<br><button type=submit class=btn id=add_shares>Ajouter un ou plusieurs partages</button>');
-        tabs.push('&nbsp;<button type=reset class=btn id=reset_shares>Effacer saisie</button>');
+        tabs.push("<input type=text class=form-control id=shared_folder_share_email placeholder='Si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,'>");
+        tabs.push("<br><button type=submit class=btn id=add_shares>Ajouter un ou plusieurs partages</button>");
+        tabs.push("&nbsp;<button type=reset class=btn id=reset_shares>Effacer saisie</button>");
         tabs.push("</div>");
       }
         
@@ -450,8 +450,8 @@ $("#folder_view").on("click","#currentfolder_modify", function(){
             }
         },
         error: function(xhr) { 
-            var errorMessage = xhr.status + ': ' + xhr.statusText
-            alert('Erreur - ' + errorMessage);
+            var errorMessage = xhr.status + ": " + xhr.statusText
+            alert("Erreur - " + errorMessage);
         }
     });        
 });
