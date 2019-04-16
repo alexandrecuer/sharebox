@@ -74,7 +74,7 @@ function linkf(folder,currentuser)
     var link=[];
     link.push("<tr><td>");
     link.push("<div class='d-flex align-items-center flex-row-reverse bd-highlight mb-3'>");
-    if (currentuser.id==folder.user_id) {
+    if (currentuser.id===folder.user_id) {
         link.push("<button class='btn btn-outline-danger btn-sm' rel='nofollow' id=delete_folder value="+folder.id+">Supprimer</button>");
     } else {
         link.push("("+folder.user_name+")");
@@ -319,7 +319,7 @@ function genfolderview(folderId)
 {
     var myurl;
     //console.log("regenerating folder view for folder "+folderId);
-    if (folder_id) {
+    if (folderId) {
         myurl="/list?id="+folderId;
     } else {
         myurl="/list";
@@ -375,8 +375,8 @@ $("#folder_view").on("click","#go_up",function(){
 
 //user click on a folder icon in folder_view
 $("#folder_view").on("click",".folder",function(){
-    //console.log($(this).attr('value'));
-    genfolderview($(this).attr('value'));
+    //console.log($(this).attr("value"));
+    genfolderview($(this).attr("value"));
 });
 
 //show submit button to upload a new asset
@@ -413,10 +413,10 @@ $("#folder_view").on("click","#reset_shares", function(){
 
 $("#folder_view").on("click","#contact_customer",function(){
     var email=$(this).val();
-    var folder_id = $("#currentfolder_id").val();
+    var folderId = $("#currentfolder_id").val();
     $.ajax({
         type: "GET",
-        url: "/contact_customer/"+folder_id+"?share_email="+email,
+        url: "/contact_customer/"+folderId+"?share_email="+email,
         async: true,
         success: function(result) {
             //console.log(result);
@@ -451,7 +451,7 @@ $("#folder_view").on("click","#currentfolder_modify", function(){
             }
         },
         error: function(xhr) { 
-            var errorMessage = xhr.status + ": " + xhr.statusText
+            var errorMessage = xhr.status + ": " + xhr.statusText;
             alert("Erreur - " + errorMessage);
         }
     });        
@@ -474,7 +474,7 @@ $("#folder_view").on("input", "#shared_folder_share_email",function(){
                 some.push(r["email"]);
             });
             //console.log(some);
-            $('#shared_folder_share_email').autocomplete({
+            $("#shared_folder_share_email").autocomplete({
                 source: function(request,response) {
                     response($.ui.autocomplete.filter(some,last));
                 },
@@ -499,7 +499,7 @@ $("#folder_view").on("click", "#add_shares", function(){
     var params={};
     params["share_email"]=$("#shared_folder_share_email").val();
     params["folder_id"]=$("#currentfolder_id").val();
-    console.log(params);
+    //console.log(params);
     $.ajax({
         type: "POST",
         url: "/share",
@@ -518,11 +518,11 @@ $("#folder_view").on("click", "#add_shares", function(){
 
 //delete an existing share
 $("#folder_view").on("click","#delete_share", function(){
-  var share_id = $(this).val();
-  var folder_id=$("#currentfolder_id").val();
+  var shareId = $(this).val();
+  var folderId=$("#currentfolder_id").val();
   $.ajax({
     type: "delete",
-    url: "/deleteshare/"+folder_id+"/"+share_id,
+    url: "/deleteshare/"+folderId+"/"+shareId,
     async: true, 
     beforeSend: function(){
         var message=achtung+"\nVous êtes sur le point de supprimer un partage\n\n";
@@ -532,9 +532,9 @@ $("#folder_view").on("click","#delete_share", function(){
     success: function(result) { 
         alert(result.message);
         if (result.success) {
-          console.log("regenerating shares list and fragment if any");
-          genshareslist(folder_id);
-          genfragment(folder_id);
+          //console.log("regenerating shares list and fragment if any");
+          genshareslist(folderId);
+          genfragment(folderId);
         }
     }
   });    
@@ -546,7 +546,7 @@ $("#folder_view").on("click","#create_folder",function(){
     params["name"]=$("#folder_name").val();
     params["case_number"]=$("#folder_case_number").val();
     params["parent_id"]=$("#folder_parent_id").val();
-    console.log(params);
+    //console.log(params);
     $.ajax({
         type: "POST",
         url: "/create_folder",
