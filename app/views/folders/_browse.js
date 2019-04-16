@@ -434,7 +434,7 @@ $("#folder_view").on("click","#currentfolder_modify", function(){
     params["name"]=$("#currentfolder_name").val();
     params["case_number"]=$("#currentfolder_case_number").val();
     params["poll_id"]=$("#currentfolder_poll_id").val();
-    console.log(params);
+    //console.log(params);
     $.ajax({
         type: "POST",
         url: "/update_folder",
@@ -508,7 +508,7 @@ $("#folder_view").on("click", "#add_shares", function(){
         success: function(result) { 
             alert(result.message);
             if (result.success) {
-              console.log("regenerating shares list and fragment if any");
+              //console.log("regenerating shares list and fragment if any");
               genshareslist(params["folder_id"]);
               genfragment(params["folder_id"]);
             }
@@ -560,19 +560,19 @@ $("#folder_view").on("click","#create_folder",function(){
                   genfolderview(params["parent_id"]);
                   //if fragment of parent folder is visible, we have to add a new child corresponding to the new folder
                   if ($("#tree_view").find("#folder"+params["parent_id"]).length>0) {
-                    var level=parseInt($("#tree_view").find("#folder"+params["parent_id"]).attr('value'))+1;
-                    console.log("generating a new fragment on level "+level);
+                    var level=parseInt($("#tree_view").find("#folder"+params["parent_id"]).attr("value"),10)+1;
+                    //console.log("generating a new fragment on level "+level);
                     var tab="";
                     for (var i=0;i<level;i++) {
                       tab+="&nbsp;&nbsp;";
                     }
-                    folder_tree=$("#child"+params["parent_id"]).html();
-                    //console.log(folder_tree);
+                    var folderTree=$("#child"+params["parent_id"]).html();
+                    //console.log(folderTree);
                     //console.log(tab);
-                    folder_tree+="<div class=child id=folder"+result.folder_id+" value='"+level+"'>"+tab+"|_"+params["name"]+"</div>";
-                    folder_tree+="<div id=child"+result.folder_id+"></div>";
-                    //console.log(folder_tree);
-                    $("#child"+params["parent_id"]).html(folder_tree);
+                    folderTree+="<div class=child id=folder"+result.folder_id+" value='"+level+"'>"+tab+"|_"+params["name"]+"</div>";
+                    folderTree+="<div id=child"+result.folder_id+"></div>";
+                    //console.log(folderTree);
+                    $("#child"+params["parent_id"]).html(folderTree);
                   }
                 } else {
                   genrootview();
@@ -584,11 +584,11 @@ $("#folder_view").on("click","#create_folder",function(){
 
 //delete a folder
 $("#folder_view").on("click","#delete_folder",function(){
-    folder_id=$(this).val();
-    console.log(folder_id);
+    var folderId=$(this).val();
+    //console.log(folderId);
     $.ajax({
         type: "DELETE",
-        url: "/delete_folder/"+folder_id,
+        url: "/delete_folder/"+folderId,
         async: true,
         beforeSend: function(){
             var message=achtung+"\nVous êtes sur le point de supprimer un répertoire\n";
@@ -602,9 +602,9 @@ $("#folder_view").on("click","#delete_folder",function(){
             if (result.success) {
                 genfolderview(result.parent_id);
                 //we remove the fragment in case....
-                if ($("#tree_view").find("#folder"+folder_id).length>0) {
-                    $("#folder"+folder_id).remove();
-                    $("#child"+folder_id).remove();
+                if ($("#tree_view").find("#folder"+folderId).length>0) {
+                    $("#folder"+folderId).remove();
+                    $("#child"+folderId).remove();
                 }
             }
         },
@@ -618,9 +618,9 @@ $("#folder_view").on("click","#delete_folder",function(){
 $("#folder_view").on("click","#create_asset",function(){
     //$("#create_asset").replaceWith("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
     $("#create_asset").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
-    file=$("#assetUploadForm")[0];
+    var file=$("#assetUploadForm")[0];
     var datafile = new FormData(file); 
-    var folder_id=$("#folder_parent_id").val();
+    var folderId=$("#folder_parent_id").val();
     
     $.ajax({
         type: "POST",
@@ -631,13 +631,13 @@ $("#folder_view").on("click","#create_asset",function(){
         data: datafile,
         async: true, 
         success: function(result) { 
-            if (folder_id) {
-              alert("répertoire "+folder_id+"\n"+result.message);
+            if (folderId) {
+              alert("répertoire "+folderId+"\n"+result.message);
             } else {
               alert("répertoire racine\n"+result.message);
             }
             if (result.success) {
-              genfolderview(folder_id);
+              genfolderview(folderId);
             } else {
               $("#asset_uploaded_file").val("");
               $("#create_asset").html("Charger le fichier");
