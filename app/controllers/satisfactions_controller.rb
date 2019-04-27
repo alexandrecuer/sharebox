@@ -115,6 +115,8 @@ class SatisfactionsController < ApplicationController
         if poll
           csv = poll.csv(satisfactions)
           send_data csv, filename: "polls-#{Time.zone.today}.csv"
+        else
+          render json: {"message": "pas de sondage sous ce numéro"}
         end
       end
   end

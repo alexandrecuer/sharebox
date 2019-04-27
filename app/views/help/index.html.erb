@@ -48,8 +48,34 @@ help << a
 a={}
 a["controller"]="satisfactions"
 a["url"]="<a href=/satisfactions>#{root_url}satisfactions</a>"
-a["text"]="sortie json de toutes les réponses obtenues, toutes enquêtes confondues"
+a["text"]="sortie json de toutes les réponses obtenues, toutes enquêtes confondues. La sortie intégre des statistiques et les réponses intégrales"
 help << a
+
+if max_poll_id
+  a={}
+  a["controller"]="satisfactions"
+  a["url"]="<a href=/satisfactions?poll_id=#{max_poll_id}>#{root_url}satisfactions?poll_id=#{max_poll_id}</a>"
+  a["text"]="sortie json de toutes les réponses obtenues, pour l'enquête #{max_poll_id}"
+  help << a
+
+  a={}
+  a["controller"]="satisfactions"
+  a["url"]="<a href=/satisfactions?poll_id=#{max_poll_id}&csv=1>#{root_url}satisfactions?poll_id=#{max_poll_id}&csv=1</a>"
+  a["text"]="sortie csv de toutes les réponses obtenues, pour l'enquête #{max_poll_id}"
+  help << a
+
+  a={}
+  a["controller"]="satisfactions"
+  a["url"]="<a href=/satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01>#{root_url}satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01</a>"
+  a["text"]="sortie json de toutes les réponses obtenues, pour l'enquête #{max_poll_id} sur une période temporelle"
+  help << a
+
+  a={}
+  a["controller"]="satisfactions"
+  a["url"]="<a href=/satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01&csv=1>#{root_url}satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01&csv=1</a>"
+  a["text"]="sortie csv de toutes les réponses obtenues, pour l'enquête #{max_poll_id} sur une période temporelle"
+  help << a
+end
 
 if min_satisfaction_id=Satisfaction.where("folder_id <?",0).minimum(:id)
   a={}
