@@ -1,6 +1,6 @@
 //before using this script, you need to define var poll_id
 
-$('.carousel2').carousel();
+$(".carousel2").carousel();
 
 var date = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
@@ -90,11 +90,11 @@ function genStatsModal(s)
 {
   var fields=Object.getOwnPropertyNames(s);
   //console.log(fields);
-  rates=Object.getOwnPropertyNames(s[fields[0]]);
+  var rates=Object.getOwnPropertyNames(s[fields[0]]);
   //console.log(rates);
-  synth=[];
+  var synth=[];
   synth.push("<table class='table table-striped table-bordered table-hover table-sm'><tr><td></td>");
-  for (i=0;i<rates.length;i++){
+  for (var i=0;i<rates.length;i++){
     synth.push("<td>"+rates[i]+"</td>");
   }
   synth.push("</tr>");
@@ -115,8 +115,8 @@ function genStatsModal(s)
 //output a date in human FRENCH format
 function dateFormat(d)
 {
-  var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(d.substr(0, 10)).toLocaleDateString('fr-FR',options);
+  var options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+  return new Date(d.substr(0, 10)).toLocaleDateString("fr-FR",options);
 }
 
 $("#date_fields").on("change", function(){  
@@ -135,7 +135,7 @@ $("#date_fields").on("change", function(){
         async: true,
         success: function(result) {
             //console.log(result);
-            stats=[];
+            var stats=[];
             stats.push("<b>"+result.poll_name+"</b><br>");
             stats.push(result.sent);
             stats.push(" questionnaire(s) envoyé(s)<br>");
@@ -147,7 +147,7 @@ $("#date_fields").on("change", function(){
             if (result.stats){
               if (Object.keys(result.stats).length>0){
                 $("#synth_body").html(genStatsModal(result.stats));
-                title=[];
+                var title=[];
                 title.push("Synthèse de l'enquête<br>");
                 title.push("<u>"+result.poll_name+"</u>");
                 title.push("<br>");
