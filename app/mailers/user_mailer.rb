@@ -96,4 +96,8 @@ class UserMailer < ApplicationMailer
     title="[Cerema][courte enquête de satisfaction]#{@survey.description}"
     mail(to: @survey.client_mel, from: @survey.by, subject: title)
   end
+  
+  def send_feedback
+    
+  end
 end

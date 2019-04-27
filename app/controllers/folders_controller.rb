@@ -293,8 +293,11 @@ class FoldersController < ApplicationController
         folder.poll_id=params[:poll_id]
         if folder.save
           majsat=true
+          # we update the metadatas on satisfaction feedbacks if any
           folder.satisfactions.each do |s|
-            s.case_number = folder.case_number
+            meta=s.calc_meta
+            s.case_number=meta.join("")
+            #s.case_number = folder.case_number
             unless s.save
               majsat=false
             end
@@ -303,7 +306,7 @@ class FoldersController < ApplicationController
           result["message"]="dossier mis à jour"
           result["lists"]=folder.lists
           unless majsat
-            result["message"]="#{result['message']}\n attention: champ(s) n°affaire fiche(s) satisfaction associée(s) non mis à jour" 
+            result["message"]="#{result['message']}\n attention: metachamp(s) n°affaire fiche(s) satisfaction associée(s) non mis à jour" 
           end
         else
           result["message"]="impossible de mettre à jour le dossier"

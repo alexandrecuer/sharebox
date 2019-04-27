@@ -59,14 +59,8 @@
         </div>
     <% end %>
     
-    <% if @current_folder %>
-    <% @satisfaction.folder_id = @current_folder.id %> 
-    <% @satisfaction.poll_id = @current_folder.poll_id %>
-    <% @satisfaction.case_number = @current_folder.case_number %>
     <%= f.hidden_field :folder_id %> 
 	<%= f.hidden_field :poll_id %> 
-	<%= f.hidden_field :case_number %>
-    <% end %>
 
 	<% if @satisfaction.new_record? %>
     	<%= f.submit MAIN["record_satisfaction"], class: 'btn' %>

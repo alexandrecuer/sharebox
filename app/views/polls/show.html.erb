@@ -1,151 +1,32 @@
 <%= render 'shared/nav' %>
+Veuillez définir les dates de début et de fin, ce qui affichera les retours satisfactions dans cette plage pour le sondage sélectionné
+<div class="container-fluid">
+  <div id=date_fields class="row flex-xl-nowrap">
+    <input type=text class=form-control id=time_start placeholder="date de début AAAA-MM-JJ">
+    <input type=text class=form-control id=time_end placeholder="date de fin AAAA-MM-JJ">
+  </div>
+</div>
+<div id=stats></div>
+<div id="carousel2" class="carousel slide" data-ride="carousel">
+  <div id="carousel-inner" class="carousel-inner"></div>
+  <div id="carousel-nav"></div>
+</div>
 
-<script>
-$('.carousel').carousel()
-</script>
-<%
-# colmax represent the max number of elements on a single line
-# change it if you want more or less
-colmax=3
-nlines=@poll.closed_names_number/colmax
-modulo=@poll.closed_names_number%colmax
-@arrayclosed = @poll.get_closed_names
-@arrayopen = @poll.get_open_names
-modaltitle="Synthèse de l'enquête<br>#{@poll.name}".html_safe
-# evaluate the number of sent surveys
-# shares to a TEAM email do not count 
-if ENV['TEAM']
-  domain=ENV.fetch('TEAM')
-else
-  domain="cerema.fr"
-end
-nb=SharedFolder.joins(:folder).where("folders.poll_id = ? and shared_folders.share_email not like ?",@poll.id,"%#{domain}%").count
-nb+=Satisfaction.where("folder_id < ? and poll_id= ?", 0, @poll.id).count+Survey.where(poll_id: @poll.id).count
-#store all feedbacks related to the poll
-@satisfactions=Satisfaction.where(poll_id: @poll.id)
-%>
-<b>Enquête <%= @poll.name %></b><br>
-<%= @satisfactions.length %> retour(s) satisfaction<br>
-<%= nb %> questionnaire(s) envoyé(s)<br>
-<%= link_to 'Voir la synthèse', "#", :data => {:toggle => "modal", :target => "#ModalSynth"} %><br>
-<%= link_to MAIN["download_csv"], poll_path(@poll, format: "csv") %><br>
-
-<!-- Modal -->
-<div class="modal fade bd-example-modal-lg" id="ModalSynth" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-modal-lg" id="synth" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><%= sanitize modaltitle %></h5>
+        <h5 class="modal-title" id="synth_title"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <% tab = @poll.calc(@satisfactions) %>
-        <div class="table-responsive-sm">
-        <table class="table table-striped table-bordered table-hover table-sm">
-          <tr>
-            <td></td>
-            <td><%= MAIN["satisfaction_level_4"] %></td>
-            <td><%= MAIN["satisfaction_level_3"] %></td>
-            <td><%= MAIN["satisfaction_level_2"] %></td>
-            <td><%= MAIN["satisfaction_level_1"] %></td>
-            <td><%= MAIN["blank"] %></td>
-          </tr>
-          <% @arrayclosed.each_with_index do |c,index| %>
-          <tr>
-            <th><%= c %></th>
-            <td><%= tab[index-1][4] %>%</td>
-            <td><%= tab[index-1][3] %>%</td>
-            <td><%= tab[index-1][2] %>%</td>
-            <td><%= tab[index-1][1] %>%</td>
-            <td><%= tab[index-1][0] %>%</td>
-          </tr>
-          <% end %>
-        </table>
-        </div>
-      </div>
+      <div class="modal-body" id="synth_body"></div>
     </div>
   </div>
 </div>
-<% if @satisfactions.length > 0 %>
-<div id="carousel" class="carousel slide" data-ride="carousel">
-  <div class="carousel-inner">
-    <%
-    # loop on all the satisfactions recorded on the poll
-    @satisfactions.each_with_index do |s,index| 
-      line1="Retour satisfaction numéro #{s.id}"
-      line1="#{line1} #{link_to satisfaction_path(s), method: :delete, data: {confirm: MAIN["are_yu_sure"] } do fa_icon 'times' end}".html_safe
-      line2="Enregistré le #{s.created_at}<br>".html_safe
-      if s.folder_id>=0 && folder=Folder.find_by_id(s.folder_id)
-        line2="#{line2} par le client #{@hash[s.user_id]}"
-        line3="Dossier : #{folder.name}".html_safe
-        if folder.case_number != ""
-          line4="(affaire #{folder.case_number})".html_safe
-        end
-      # in order to have a description for satisfactions not linked to a folder 
-      else
-        line4=s.case_number
-      end
-      divclass="carousel-item"
-      divclass="#{divclass} active" if index == 0
-      opentext=""
-      for i in 1..@poll.open_names_number
-        openanswer = s.public_send("open#{i}")
-        if openanswer != ""
-          opentext = "#{opentext}<br><i>#{@arrayopen[i-1]}</i><br>#{openanswer}<br>"
-        end
-      end
-      opentext = opentext.html_safe
-    %>
-      <div class="<%= divclass %>">
-        <table width="60%" align="center">
-          <tr><th><%= line1 %></th></tr>
-          <tr><td><i><%= sanitize line2 %></i></td></tr>
-          <tr><th><%= sanitize line3 %> <%= sanitize line4 %></i></th></tr>
-          <tr>
-            <td>
-            <% for n in 0..nlines-1 %>
-                <% for j in colmax*n+1..colmax*(n+1) %>
-                  <% doabreak=nil %>
-                  <% if s.public_send("closed#{j}") %>
-                    <% doabreak = 1 %>
-                    <% if s.public_send("closed#{j}")==4 %><button type="button" class="btn btn-success btn-sm">
-                    <% elsif s.public_send("closed#{j}")==3 %><button type="button" class="btn btn-info btn-sm">
-                    <% elsif s.public_send("closed#{j}")==2 %><button type="button" class="btn btn-warning btn-sm">
-                    <% elsif s.public_send("closed#{j}")==1 %><button type="button" class="btn btn-danger btn-sm">
-                    <% end %>
-                    <%= @arrayclosed[j-1] %></button>
-                  <% end %>
-                <% end %>
-                <% if doabreak %><br><% end %>
-            <% end %>
-            <% for j in colmax*nlines+1..@poll.closed_names_number %>
-                <% if s.public_send("closed#{j}") %>
-                    <% if s.public_send("closed#{j}")==4 %><button type="button" class="btn btn-success btn-sm">
-                    <% elsif s.public_send("closed#{j}")==3 %><button type="button" class="btn btn-info btn-sm">
-                    <% elsif s.public_send("closed#{j}")==2 %><button type="button" class="btn btn-warning btn-sm">
-                    <% elsif s.public_send("closed#{j}")==1 %><button type="button" class="btn btn-danger btn-sm">
-                    <% end %>
-                    <%= @arrayclosed[j-1] %></button>
-                <% end %>
-            <% end %>
-            </td>
-	      </tr>
-          <tr>
-            <td>
-              <%= sanitize opentext %>
-            </td>
-          </tr>
-        </table>
-      </div>
-    <% end %>
-  </div>
-  <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
-    <i class="fa fa-chevron-left" style="color:black"></i>
-  </a>
-  <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
-    <i class="fa fa-chevron-right" style="color:black"></i>
-  </a>
-</div>
-<% end %>
+
+<script>
+var pollId=<%= @poll.id %>;
+<%= render :partial => 'show.js' %>
+</script>

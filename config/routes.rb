@@ -80,5 +80,9 @@ Rails.application.routes.draw do
    get "move/:folder_id/:destination_folder_id" => "admin#move", :as => ""
    
    get "change_owner/:folder_id/:user_id" => "admin#change_owner", :as => ""
+   
+   get "feedback/:satisfaction_id" => "satisfactions#feedback", :as => ""
+   
+   get "feedback_metas" => "satisfactions#feedback_metas", :as => ""
 
 end

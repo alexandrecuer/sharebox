@@ -14,6 +14,26 @@ class PollsController < ApplicationController
       redirect_to root_url
     end
   end
+  
+  ##
+  # this is just a test of a jointure implementation without logic in the model
+  def index
+    results={}
+    sql = <<-SQL
+      SELECT satisfactions.*,
+      users.email as folder_owner_email, users.statut as folder_owner_statut,
+      folders.name as folder_name, folders.id as folder_fid, folders.user_id as folder_user_id, folders.lists as folder_lists, folders.poll_id as folder_poll_id  
+      FROM satisfactions 
+      INNER JOIN folders 
+      ON folders.id = satisfactions.folder_id 
+      INNER JOIN users 
+      ON users.id = folders.user_id 
+      WHERE (satisfactions.folder_id > 0 and users.email LIKE '%cerema%');
+    SQL
+    mysats=Satisfaction.find_by_sql(sql)
+    results.merge!("mysats": mysats.as_json)
+    render json: results
+  end
 
   ##
   # Show the edit form in order for the admin to update existing polls (title, description...)<br>
@@ -66,6 +86,7 @@ class PollsController < ApplicationController
     check_admin
     @poll = current_user.polls.new
   end
+  
 
   ##
   # Show all satisfaction answers related to the poll<br>

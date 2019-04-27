@@ -161,10 +161,11 @@ class Folder < ApplicationRecord
   end
   
   ##
-  # return a list of all metadatas for a given folder id
-  # list["shares"] will contain a table with all share ids
-  # list["satis"] will contain a table with all satisfaction ids
-  # to be inserted in the folder 'lists' field
+  # return a list of all metadatas for a given folder id<br>
+  # to be inserted in the folder 'lists' field<br>
+  # list["shares"] will contain a table with all share ids<br>
+  # list["satis"] will contain a table with all satisfaction ids<br>
+  # list["swarmed_to"] will contain the id of the user being granted the folder as swarmed<br>
   # to decode when reading the folder record : ActiveSupport::JSON.decode(folder.lists)
   def calc_meta
     meta={}
@@ -191,6 +192,12 @@ class Folder < ApplicationRecord
   
   ##
   # return the id of the user being granted the folder as swarmed<br>
+  # for this legacy process, things *MUST* be done in a specific order<br>
+  # checking if parent.user_id equals to owner.id before analysing the parent meta 'swarmed_to' would NOT be suitable<br>
+  # example : considering a folder1 belonging to user1, shared to user2 and user3<br>
+  # user2 creates folder2 inside folder 1 and user3 creates folder3 inside folder2<br>
+  # if we check the parent first, the legacy process could conclude that folder3 is swarmed to user2<br>
+  # this is not what is expected from the legacy process which has to conclude that folder3 is swarmed to user 1
   def legacy
     owner=User.find_by_id(self.user_id)
     if self.parent_id
@@ -202,16 +209,6 @@ class Folder < ApplicationRecord
           swid=parent.user_id
         end
       end
-      # the following manner is not working : if folder1 belonging to user1 is shared to user2 and user3
-      # user2 creates folder2 and user3 creates folder3 inside folder2
-      # folder3 is swarmed to user2 and not user1
-      #unless parent.user_id == owner.id
-      #  swid=parent.user_id
-      #else
-      #  if swid=parent.get_meta["swarmed_to"]
-      #    puts("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{ swarmed by legacy #{swid}")
-      #  end
-      #end
     end
     swid
   end

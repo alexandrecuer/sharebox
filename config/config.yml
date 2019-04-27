@@ -43,6 +43,7 @@ main:
   satisfaction_level_3: "Satisfait"
   satisfaction_level_2: "Peu satisfait"
   satisfaction_level_1: "Pas satisfait"
+  satisfaction_level_0: "Non renseigné"
   blank: "Non renseigné"
   download_csv: "Télécharger le fichier csv"
   
