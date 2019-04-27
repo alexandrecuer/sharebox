@@ -93,10 +93,38 @@ class UsersController < ApplicationController
       end
       render json: results
     else
-      @users=User.all.order(sort_column + " " + sort_direction)
       if current_user.is_public?
         flash[:notice] = USERS_MSG["user_managing_forbidden"]
         redirect_to root_url
+      else
+        @users=User.all.select("users.*, 'false' as is_sharing, 'false' as has_shares").order(sort_column + " " + sort_direction)
+        #SHARING USERS
+        sql = <<-SQL
+          SELECT distinct users.id 
+          from users 
+          INNER JOIN shared_folders 
+          on users.id = shared_folders.user_id;
+        SQL
+        sharing_users=User.find_by_sql(sql)
+        sharing_users_ids = "#{sharing_users.as_json}"
+        #USERS BEING GRANTED SHARES
+        sql = <<-SQL
+          SELECT distinct users.id 
+          from users 
+          INNER JOIN shared_folders 
+          on users.id = shared_folders.share_user_id;
+        SQL
+        users_with_shares=User.find_by_sql(sql)
+        users_with_shares_ids = "#{users_with_shares.as_json}"
+        #LOOP on USERS ACTIVE RECORDS
+        @users.each do |u|
+          if /#{u.id}/.match(sharing_users_ids)
+            u.is_sharing='true'
+          end
+          if /#{u.id}/.match(users_with_shares_ids)
+            u.has_shares='true'
+          end
+        end
       end
     end
   end

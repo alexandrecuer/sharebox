@@ -8,7 +8,7 @@ Address collecting information related to users activity (shared folders & unreg
 <div class="table-responsive-sm">
   <table class="table table-hover">
     <tr>
-        <th colspan="5"><%= MAIN["users_list"]%>(<%= @users.count%>)</th>
+        <th colspan="5"><%= MAIN["users_list"]%>(<%= @users.length %>)</th>
     </tr>
     <tr>
         <th><%= sortable "id" %></th>
@@ -21,7 +21,7 @@ Address collecting information related to users activity (shared folders & unreg
     <tr>
         <td><%= u.id %></td>
         <td><%= link_to u.email, become_path(u.id) %></td>
-        <td><%= u.has_shared_folders_from_others? %></td>
+        <td><%= u.has_shares %></td>
         <td>
           <%= form_tag(user_path(u), method: "patch") do %>
           <%= select_tag :statut, options_for_select(["public", "private", "admin" ], { selected: u.statut })%>
