@@ -88,16 +88,18 @@ function genFeedbackItem(s)
 //generate the stats as a html table for the modal
 function genStatsModal(s)
 {
+  var i;
   var fields=Object.getOwnPropertyNames(s);
   //console.log(fields);
   var rates=Object.getOwnPropertyNames(s[fields[0]]);
   //console.log(rates);
   var synth=[];
   synth.push("<table class='table table-striped table-bordered table-hover table-sm'><tr><td></td>");
-  for (var i=0;i<rates.length;i++){
+  for (i=0;i<rates.length;i++){
     synth.push("<td>"+rates[i]+"</td>");
   }
   synth.push("</tr>");
+  
   fields.forEach(function(f){
     synth.push("<tr><td>");
     synth.push(f);
@@ -122,11 +124,13 @@ function dateFormat(d)
 $("#date_fields").on("change", function(){  
   var timeStart = $("#time_start").val();
   var timeEnd = $("#time_end").val();
+  var d1;
+  var d2;
   if (timeStart.match(date)) {
-    var d1 = new Date(timeStart);
+    d1 = new Date(timeStart);
   }
   if (timeEnd.match(date)) {
-    var d2 = new Date(timeEnd);
+    d2 = new Date(timeEnd);
   }
   if (d1 < d2){
     $.ajax({
