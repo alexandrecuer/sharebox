@@ -52,18 +52,41 @@ class Poll < ApplicationRecord
   def get_closed_names
     self.closed_names.split(';')
   end
-
+  
   ##
   # Return a table with all open questions
   def get_open_names
     self.open_names.split(';')
   end
-
+  
   ##
   # Return a table with all closed and open questions 
   def get_names
     get_closed_names + get_open_names
   end
+  
+  ##
+  # Return all closed questions in a hash
+  def hash_closed
+    closed=self.closed_names.split(';')
+    hash={}
+    closed.each_with_index do |c,i|
+      hash["closed#{i+1}"]=c.strip
+    end
+    hash
+  end
+
+  ##
+  # Return all open questions in a hash
+  def hash_open
+    opens=self.open_names.split(';')
+    hash={}
+    opens.each_with_index do |o,i|
+      hash["open#{i+1}"]=o.strip
+    end
+    hash
+  end
+
 
   ##
   # Calculates average value for each closed question and for each satisfaction level<br>
@@ -143,12 +166,8 @@ class Poll < ApplicationRecord
       end
     end
     result={}
-    closed={}
-    closes=self.closed_names.split(";")
-    closes.each_with_index do |c,i|
-      closed["closed#{i+1}"]=c.strip
-    end
-    #puts(closed)
+    closed=self.hash_closed
+    puts("stats method poll model working on the following list of closed questions : #{closed}")
     for i in 1..self.closed_names_number
       result[closed["closed#{i}"]]={}
       for y in 0..4
@@ -162,7 +181,7 @@ class Poll < ApplicationRecord
   # Returns, for the active poll, the number of surveys delivered to clients<br>
   # possibility to define a date range
   def count_sent_surveys(time_start=nil, time_end=nil)
-    puts("BEGINççççççççççççççççççç")
+    puts("BEGIN________________________________count_sent_surveys method poll model")
     # shares to a TEAM email do not count 
     if ENV['TEAM']
       domain=ENV.fetch('TEAM')
@@ -178,7 +197,7 @@ class Poll < ApplicationRecord
       if date.match(time_start) && date.match(time_end)
         time_start="#{date.match(time_start)} 00:00:00"
         time_end="#{date.match(time_end)} 00:00:00"
-        puts("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{enumerating all surveys for poll on data range #{time_start} to #{time_end}")
+        puts("*******enumerating all surveys for poll on data range #{time_start} to #{time_end}*******")
         request="folders.poll_id = ? and shared_folders.share_email not like ? and shared_folders.created_at BETWEEN ? and ?"
         nb=SharedFolder.joins(:folder).where(request,self.id,"%#{domain}%", time_start, time_end).count
         request="folder_id < ? and created_at BETWEEN ? and ?"
@@ -187,7 +206,7 @@ class Poll < ApplicationRecord
         nb+=Survey.where(request, self.id, time_start, time_end).count
       end
     end
-    puts("ENDççççççççççççççççççç")
+    puts("END__________________________________count_sent_surveys method poll model")
     nb
   end
   

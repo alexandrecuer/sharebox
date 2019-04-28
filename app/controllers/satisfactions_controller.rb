@@ -79,19 +79,11 @@ class SatisfactionsController < ApplicationController
       # all requests to the database are now done
       # we can process datas - 2 cases - json or csv
       unless params[:csv]
-        open=[]
-        closed=[]
+        open={}
+        closed={}
         polls.each do |p|
-          opens=p.open_names.split(";")
-          closes=p.closed_names.split(";");
-          open[p.id]={}
-          closed[p.id]={}
-          opens.each_with_index do |o,i|
-            open[p.id]["open#{i+1}"]=o.strip
-          end
-          closes.each_with_index do |c,i|
-            closed[p.id]["closed#{i+1}"]=c.strip
-          end  
+          open["#{p.id}"]=p.hash_open
+          closed["#{p.id}"]=p.hash_closed
         end
         results=[]
         satisfactions.each_with_index do |s,i|
@@ -102,11 +94,11 @@ class SatisfactionsController < ApplicationController
           results[i]["folder_id"]=s.folder_id
           results[i]["poll_id"]=s.poll_id
           results[i]["collected_by"]=s.email
-          for j in 1..open[s.poll_id].length
-            results[i][open[s.poll_id]["open#{j}"]]=s["open#{j}"]
+          for j in 1..open["#{s.poll_id}"].length
+            results[i][open["#{s.poll_id}"]["open#{j}"]]=s["open#{j}"]
           end
-          for j in 1..closed[s.poll_id].length
-            results[i][closed[s.poll_id]["closed#{j}"]]=s["closed#{j}"]
+          for j in 1..closed["#{s.poll_id}"].length
+            results[i][closed["#{s.poll_id}"]["closed#{j}"]]=s["closed#{j}"]
           end
         end
         all["satisfactions"]=results
@@ -218,16 +210,8 @@ class SatisfactionsController < ApplicationController
         end
         results["date"]=satisfaction.updated_at
         poll=Poll.find_by_id(satisfaction.poll_id)
-        open={}
-        closed={}
-        opens=poll.open_names.split(";")
-        closes=poll.closed_names.split(";");
-        opens.each_with_index do |o,i|
-          open["open#{i+1}"]=o.strip
-        end
-        closes.each_with_index do |c,i|
-          closed["closed#{i+1}"]=c.strip
-        end
+        open=poll.hash_open
+        closed=poll.hash_closed
         for j in 1..open.length
           results[open["open#{j}"]]=satisfaction["open#{j}"]
         end
@@ -289,43 +273,20 @@ class SatisfactionsController < ApplicationController
               # everything should be fine at this stage - we can fix things
               # folder_id will contain (-1)*client_id
               # user_id will be the user id of the registered user who launched the interaction
-              # @satisfaction.user_id = -survey.user_id
-              # 10/03/2019
               @satisfaction.user_id = survey.user_id
               @satisfaction.folder_id = -client.id
-              if @satisfaction.save
-                survey.token="disabled#{@satisfaction.id}"
-                if survey.destroy
-                  render plain: "merci d'avoir pris quelques minutes pour remplir ce sondage"
-                else
-                  survey.token="disabled#{@satisfaction.id}"
-                  survey.save
-                  render plain: "satisfaction saved but survey not destroyed"
-                end
-              else 
-                render plain: "could not save satisfaction"
-              end                  
+              message=save_free_sat(@satisfaction, survey)
+              render plain: message              
             else
               # client is not in the base
               # we save the client without fixing the organisation - it can be done further in the clients controller if needed
               client=Client.new
               client.mel=survey.client_mel
               if client.save
-                #@satisfaction.user_id = -survey.user_id
-                # 10/03/2019
                 @satisfaction.user_id = survey.user_id
                 @satisfaction.folder_id = -client.id
-                if @satisfaction.save    
-                  if survey.destroy
-                    render plain: "merci d'avoir pris quelques minutes pour remplir ce sondage" 
-                  else
-                    survey.token="disabled#{@satisfaction.id}"
-                    survey.save
-                    render plain: "satisfaction saved but survey not destroyed"
-                  end
-                else
-                  render plain: "could not save satisfaction"
-                end
+                message=save_free_sat(@satisfaction, survey)
+                render plain: message
               else
                 render plain: "could not save new client"
               end
@@ -381,6 +342,23 @@ class SatisfactionsController < ApplicationController
   end
 
   private
+  
+    def save_free_sat(satisfaction, survey)
+      if satisfaction.save
+        survey.token="disabled#{satisfaction.id}"
+        if survey.destroy
+          message="merci d'avoir pris quelques minutes pour remplir ce sondage"
+        else
+          survey.token="disabled#{satisfaction.id}"
+          survey.save
+          message="satisfaction saved but survey not destroyed"
+        end
+      else 
+        message="could not save satisfaction"
+      end
+      message
+    end
+    
     def gentitle(title,client,owner)
       "#{title} - Client: #{client} - Chargé d'affaire: #{owner}"
     end
