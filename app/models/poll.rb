@@ -49,18 +49,21 @@ class Poll < ApplicationRecord
 
   ##
   # Return a table with all closed questions
+  # used in views/satisfactions/_form.html.erb 
   def get_closed_names
     self.closed_names.split(';')
   end
   
   ##
   # Return a table with all open questions
+  # DEPRECATED
   def get_open_names
     self.open_names.split(';')
   end
   
   ##
-  # Return a table with all closed and open questions 
+  # Return a table with all closed and open questions
+  # DEPRECATED
   def get_names
     get_closed_names + get_open_names
   end
