@@ -1,5 +1,15 @@
 ## 
-# manage folder sharing within the sharebox site
+# manage folder sharing within the sharebox site<br>
+# You can have many different folder configurations :<br>
+# - folder with files but without any poll associated > file available type mel<br>
+# - folder with files and with a poll associated > file+satisfaction type mel<br>
+# - folder without files and with a poll associated (TO BAN) > satisfaction type mel<br>
+# - one of the above with satisfaction answer(s) > no email for users who already recorded their satisfaction<br>
+# - folder with or without files, with satisfaction answer(s) and with no poll associated<br>
+# - folder with or without files and with satisfaction answers(s) on a poll which was removed and replaced by another one<br>
+# - folder with or without files and with satisfaction answer(s) on different polls<br>
+# You cannot send email from an empty folder without any poll associated<br>
+# uses the process_share_emails method of the folder model [To create the shares on the basis of a list of emails]
 
 class SharedFoldersController < ApplicationController
 
@@ -76,16 +86,7 @@ class SharedFoldersController < ApplicationController
   # - remove shares one by one, unless a satisfaction answer was recorded on the share<br>
   # - send automatic emails<br>
   # For each share email, the control panel display the number of clicks on the shared assets<br>
-  # The form of the user email can be different depending on the 'shared' folder configuration<br>
-  # You can have many different folder configurations :<br>
-  # - folder with files but without any poll associated > file available type mel<br>
-  # - folder with files and with a poll associated > file+satisfaction type mel<br>
-  # - folder without files and with a poll associated (TO BAN) > satisfaction type mel<br>
-  # - one of the above with satisfaction answer(s) > no email for users who already recorded their satisfaction<br>
-  # - folder with or without files, with satisfaction answer(s) and with no poll associated<br>
-  # - folder with or without files and with satisfaction answers(s) on a poll which was removed and replaced by another one<br>
-  # - folder with or without files and with satisfaction answer(s) on different polls<br>
-  # You cannot send email from an empty folder without any poll associated
+
   def show
     @current_folder = Folder.find_by_id(params[:id])
     unless @current_folder
@@ -107,6 +108,11 @@ class SharedFoldersController < ApplicationController
     @satisfactions = @current_folder.satisfactions
   end
   
+  ##
+  # contact customer and send a 'client' email<br>
+  # uses the email_customer of the folder model<br>
+  # The form of the user can be different depending on the 'shared' folder configuration<br>
+  # please note it is not possible to send a 'client' email to a TEAM member
   def contact_customer
     results={}
     folder_id=params[:folder_id]
