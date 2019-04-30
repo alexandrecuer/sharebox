@@ -1,6 +1,7 @@
 <%= render 'shared/nav' %>
+<select id="s_poll_id" class="form-control"></select><br>
 Veuillez définir les dates de début et de fin, ce qui affichera les retours satisfactions dans cette plage pour le sondage sélectionné
-<div class="container-fluid">
+<div class="container-fluid"> 
   <div id=date_fields class="row flex-xl-nowrap">
     <input type=text class=form-control id=time_start placeholder="date de début AAAA-MM-JJ">
     <input type=text class=form-control id=time_end placeholder="date de fin AAAA-MM-JJ">
@@ -27,6 +28,8 @@ Veuillez définir les dates de début et de fin, ce qui affichera les retours sa
 </div>
 
 <script>
-var pollId=<%= @poll.id %>;
+
+<%= render :partial => 'shared/colibritoolbox.js' %>
 <%= render :partial => 'show.js' %>
+
 </script>

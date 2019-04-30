@@ -10,8 +10,9 @@ var achtung = "ATTENTION ACHTUNG PRUDENCIA ВНИМАНИЕ\n";
 //achtung +="_ooooo__oo____oo_oo_____oo_oo_____oo_ooooooo_ooooooo_____oooo_____oo___oo__";achtung +="\n";
 //achtung +="___________________________________________________________________________";achtung +="\n";
 
-//fetch the polls and store them in a list
 var polls={};
+
+//interrogate the API and store the poll json list in the polls global var
 $.ajax({
     type: "GET",
     url: "/getpolls",
@@ -22,7 +23,6 @@ $.ajax({
         //console.log(polls);
     } 
 });
-
 
 //caution : folder_value is the position in the tree
 function childMeta(folderValue,folderId)
@@ -163,22 +163,10 @@ function createtabs(folder,shares,satis,currentuser)
       if (currentuser.id===folder.user_id){
         tabs.push("<div class='tab-pane fade' id=manage_folder role=tabpanel><br>");
         tabs.push("<input type=hidden id=currentfolder_id value="+folder.id+">");
-        tabs.push("<input type=text class=form-control id=currentfolder_name placeholder='nom du répertoire' value='"+folder.name+"'><br>");
+        tabs.push("<input type=text class=form-control id=currentfolder_name placeholder='nom du répertoire' value='"+folder.name.replace(/'/,"&#039;")+"'><br>");
         tabs.push("<input type=text class=form-control id=currentfolder_case_number placeholder='Numéro affaire' value='"+folder.case_number+"'>");
-        
-        var options="<br><select class='form-control' id=currentfolder_poll_id>";
-        options+="<option value=''>choisissez un sondage</option>";
-        if (polls.length>0) {
-          polls.forEach(function(poll){
-            var tag=" ";
-            if (folder.poll_id === poll.id) {
-               tag=" selected";
-            }
-            options+="<option value="+poll.id+tag+">"+poll.name+" (S"+poll.id+")</option>";
-          });
-        }
-        options+="</select>";
-        tabs.push(options);
+        var options=PollSelect(polls,folder.poll_id,"currentfolder_poll_id");
+        tabs.push("<br>"+options);
         tabs.push("<br><button type=submit class=btn id=currentfolder_modify>Sauvegarder les modifications</button><br><br>");
         
         //manage the shares

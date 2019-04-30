@@ -18,21 +18,27 @@ class PollsController < ApplicationController
   ##
   # this is just a test of a jointure implementation without logic in the model
   def index
-    results={}
-    sql = <<-SQL
-      SELECT satisfactions.*,
-      users.email as folder_owner_email, users.statut as folder_owner_statut,
-      folders.name as folder_name, folders.id as folder_fid, folders.user_id as folder_user_id, folders.lists as folder_lists, folders.poll_id as folder_poll_id  
-      FROM satisfactions 
-      INNER JOIN folders 
-      ON folders.id = satisfactions.folder_id 
-      INNER JOIN users 
-      ON users.id = folders.user_id 
-      WHERE (satisfactions.folder_id > 0 and users.email LIKE '%cerema%');
-    SQL
-    mysats=Satisfaction.find_by_sql(sql)
-    results.merge!("mysats": mysats.as_json)
-    render json: results
+    if params[:request]
+      results={}
+      sql = <<-SQL
+        SELECT satisfactions.*,
+        users.email as folder_owner_email, users.statut as folder_owner_statut,
+        folders.name as folder_name, folders.id as folder_fid, folders.user_id as folder_user_id, folders.lists as folder_lists, folders.poll_id as folder_poll_id  
+        FROM satisfactions 
+        INNER JOIN folders 
+        ON folders.id = satisfactions.folder_id 
+        INNER JOIN users 
+        ON users.id = folders.user_id 
+        WHERE (satisfactions.folder_id > 0 and users.email LIKE '%cerema%');
+      SQL
+      mysats=Satisfaction.find_by_sql(sql)
+      results.merge!("mysats": mysats.as_json)
+      render json: results
+    else
+      unless current_user.belongs_to_team?
+        redirect_to root_url
+      end
+    end
   end
 
   ##
@@ -89,26 +95,15 @@ class PollsController < ApplicationController
   
 
   ##
-  # Show all satisfaction answers related to the poll<br>
-  # A csv file containing all the datas can be downloaded 
+  # not used actually<br>
+  # should be recoded (?) to implement the same result as the route http://localhost:3000/satisfactions?poll_id=5&csv=1
   def show
-    
-    unless current_user.belongs_to_team?
-      redirect_to root_url
-    end
-    
-    @poll = Poll.find_by_id(params[:id])
-    @hash = current_user.get_all_emails
-
-    unless @poll
+    poll = Poll.find_by_id(params[:id])
+    unless poll
       flash[:notice] = POLLS_MSG["inexisting_poll_number"]
+      redirect_to browse_path
+    else
       redirect_to root_url
-    end
-
-    # CSV functionality
-    respond_to do |format|
-      format.html
-      format.csv { send_data @poll.to_csv(@hash), filename: "polls-#{Time.zone.today}.csv" }
     end
   end
 

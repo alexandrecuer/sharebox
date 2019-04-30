@@ -17,23 +17,17 @@ if current_user.is_admin?
   managefolders="#{link_to MAIN['manage_folders'], folders_path, class: 'dropdown-item'}".html_safe
   manageusers="#{link_to MAIN['users_list'], users_path, class: 'dropdown-item'}".html_safe
   newpoll="#{link_to MAIN['new_poll'], new_poll_path, class: 'dropdown-item'}".html_safe
+  managepolls="<table>"
+  Poll.all.each do |poll|
+    managepolls="#{managepolls}<tr><td>#{link_to poll.name, edit_poll_path(poll), class: 'dropdown-item'}</td>"
+    managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item', method: :delete, data: {confirm: MAIN['are_yu_sure']} do fa_icon 'times' end}</td></tr>"
+  end
+  managepolls="#{managepolls}</table>".html_safe
+  line = "<div class='dropdown-divider'></div>".html_safe
 end
 
 if current_user.belongs_to_team?
-  line = "<div class='dropdown-divider'></div>".html_safe
   managefreesurveys = "#{link_to 'enquêtes client sans mise à disposition de livrables', new_survey_path, class: 'dropdown-item'}"
-  managepolls="<table><tr>"
-  Poll.all.each do |poll|
-    if current_user.is_admin?
-      managepolls="#{managepolls}<td>#{link_to poll.name, edit_poll_path(poll), class: 'dropdown-item'}</td>"
-      managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item', method: :delete, data: {confirm: MAIN['are_yu_sure']} do fa_icon 'times' end}</td>"
-    else
-      managepolls="#{managepolls}<td><div class='dropdown-item'>#{poll.name}</div></td>"
-    end
-    managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item' do fa_icon 'eye' end}</td>"
-    managepolls="#{managepolls}</tr>"
-  end
-  managepolls="#{managepolls}</table>".html_safe
 end
 
 # navigation menu
@@ -69,8 +63,12 @@ end
       </li>
     </ul>
   </div>
-  <% if current_user.is_admin? %>
+  
+  <% if current_user.belongs_to_team? %>
+  <%= link_to "Statistiques satisfaction", polls_path %>&nbsp;|&nbsp;
   <%= link_to "Explorateur", browse_path %>&nbsp;|&nbsp;
+  <% end %>
+  <% if current_user.is_admin? %>
   <%= link_to "API help", help_path %>
   <% end %>
 </nav>

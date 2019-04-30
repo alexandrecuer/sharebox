@@ -1,6 +1,6 @@
 //interrogate the API and show a given satisfaction feedback in a specific modal 
 //note the modal must have a header with id=mtitle and a body with id=mcontent
-function surveyfeedback(id,modalname)
+function surveyfeedback(id,modalId)
 {
     var out = "";
     var header = "";
@@ -46,7 +46,31 @@ function surveyfeedback(id,modalname)
             out+="</table>";
             $("#mtitle").html(header);
             $("#mcontent").html(out);
-            $("#"+modalname).modal("show");
+            $("#"+modalId).modal("show");
         }
     });
+}
+
+//generate html output to create a select menu for choosing the active poll
+//used in different views (browse, surveys, polls)
+function PollSelect(polls,selectedPollId,selectId)
+{
+var options=[];
+if (selectId){
+  options.push("<select class='form-control' id="+selectId+">");
+}
+options.push("<option value=''>choisissez un sondage</option>");
+if (polls.length>0) {
+  polls.forEach(function(poll){
+    var tag=" ";
+    if (selectedPollId === poll.id) {
+      tag=" selected";
+      }
+    options.push("<option value="+poll.id+tag+">"+poll.name+" (S"+poll.id+")</option>");
+    });
+  }
+if (selectId){
+  options.push("</select>");
+}
+return options.join("");
 }

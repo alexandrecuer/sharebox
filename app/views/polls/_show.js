@@ -1,4 +1,3 @@
-//before using this script, you need to define var poll_id
 
 $(".carousel2").carousel();
 
@@ -86,7 +85,7 @@ function genFeedbackItem(s)
 }
 
 //generate the stats as a html table for the modal
-function genStatsModal(s)
+function genSynthModal(s)
 {
   var i;
   var fields=Object.getOwnPropertyNames(s);
@@ -121,7 +120,23 @@ function dateFormat(d)
   return new Date(d.substr(0, 10)).toLocaleDateString("fr-FR",options);
 }
 
-$("#date_fields").on("change", function(){  
+//returns a date string as expected in the range (time_start and time_end)
+function Stringify(date) 
+{
+    var d = new Date(date);
+    var month = '' + (d.getMonth() + 1);
+    var day = '' + d.getDate();
+    var year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join("-");
+}
+
+//full output stats generation for a given pollId, ie number of sent surveys, number of feedbacks received, synth modal and carousel
+function StatsForPoll(pollId)
+{
   var timeStart = $("#time_start").val();
   var timeEnd = $("#time_end").val();
   var d1;
@@ -150,7 +165,7 @@ $("#date_fields").on("change", function(){
             $("#stats").html(stats.join(""));
             if (result.stats){
               if (Object.keys(result.stats).length>0){
-                $("#synth_body").html(genStatsModal(result.stats));
+                $("#synth_body").html(genSynthModal(result.stats));
                 var title=[];
                 title.push("Synthèse de l'enquête<br>");
                 title.push("<u>"+result.poll_name+"</u>");
@@ -183,4 +198,42 @@ $("#date_fields").on("change", function(){
         }
     });
   }
+}
+
+var pollId;
+var polls={};
+var now = new Date();
+var sixmbefore=new Date(now.getFullYear(),now.getMonth() - 6,now.getDate());
+
+$("#time_start").val(Stringify(sixmbefore));
+$("#time_end").val(Stringify(now));
+
+$("#s_poll_id").on("change", function(){  
+  pollId=$("#s_poll_id").val();
+  //console.log(pollId);
+  StatsForPoll(pollId);
+});
+
+//interrogate the API and store the poll json list in the polls global var
+//realize the stats initialization with the poll with highest id
+$.ajax({
+    type: "GET",
+    url: "/getpolls",
+    dataType: "json",
+    async: true, 
+    success: function(result) {
+        polls=result;
+        var ids=[];
+        polls.forEach(function(p){
+          ids.push(p.id);
+        });
+        //console.log(...ids);
+        pollId=Math.max(...ids);
+        $("#s_poll_id").html(PollSelect(polls,pollId));
+        StatsForPoll(pollId);
+    } 
+});
+
+$("#date_fields").on("change", function(){  
+  StatsForPoll(pollId);
 });
