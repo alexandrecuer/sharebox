@@ -165,7 +165,7 @@ function createtabs(folder,shares,satis,currentuser)
         tabs.push("<input type=hidden id=currentfolder_id value="+folder.id+">");
         tabs.push("<input type=text class=form-control id=currentfolder_name placeholder='nom du répertoire' value='"+folder.name.replace(/'/,"&#039;")+"'><br>");
         tabs.push("<input type=text class=form-control id=currentfolder_case_number placeholder='Numéro affaire' value='"+folder.case_number+"'>");
-        var options=PollSelect(polls,folder.poll_id,"currentfolder_poll_id");
+        var options=pollSelect(polls,folder.poll_id,"currentfolder_poll_id");
         tabs.push("<br>"+options);
         tabs.push("<br><button type=submit class=btn id=currentfolder_modify>Sauvegarder les modifications</button><br><br>");
         

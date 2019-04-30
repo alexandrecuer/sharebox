@@ -121,21 +121,25 @@ function dateFormat(d)
 }
 
 //returns a date string as expected in the range (time_start and time_end)
-function Stringify(date) 
+function stringify(date) 
 {
     var d = new Date(date);
-    var month = '' + (d.getMonth() + 1);
-    var day = '' + d.getDate();
+    var month = "" + (d.getMonth() + 1);
+    var day = "" + d.getDate();
     var year = d.getFullYear();
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
+    if (month.length < 2) {
+        month = "0" + month;
+    }
+    if (day.length < 2) {
+        day = "0" + day;
+    }
 
     return [year, month, day].join("-");
 }
 
 //full output stats generation for a given pollId, ie number of sent surveys, number of feedbacks received, synth modal and carousel
-function StatsForPoll(pollId)
+function statsForPoll(pollId)
 {
   var timeStart = $("#time_start").val();
   var timeEnd = $("#time_end").val();
@@ -205,13 +209,13 @@ var polls={};
 var now = new Date();
 var sixmbefore=new Date(now.getFullYear(),now.getMonth() - 6,now.getDate());
 
-$("#time_start").val(Stringify(sixmbefore));
-$("#time_end").val(Stringify(now));
+$("#time_start").val(stringify(sixmbefore));
+$("#time_end").val(stringify(now));
 
 $("#s_poll_id").on("change", function(){  
   pollId=$("#s_poll_id").val();
   //console.log(pollId);
-  StatsForPoll(pollId);
+  statsForPoll(pollId);
 });
 
 //interrogate the API and store the poll json list in the polls global var
@@ -229,11 +233,11 @@ $.ajax({
         });
         //console.log(...ids);
         pollId=Math.max(...ids);
-        $("#s_poll_id").html(PollSelect(polls,pollId));
-        StatsForPoll(pollId);
+        $("#s_poll_id").html(pollSelect(polls,pollId));
+        statsForPoll(pollId);
     } 
 });
 
 $("#date_fields").on("change", function(){  
-  StatsForPoll(pollId);
+  statsForPoll(pollId);
 });

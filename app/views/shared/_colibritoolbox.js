@@ -53,7 +53,7 @@ function surveyfeedback(id,modalId)
 
 //generate html output to create a select menu for choosing the active poll
 //used in different views (browse, surveys, polls)
-function PollSelect(polls,selectedPollId,selectId)
+function pollSelect(polls,selectedPollId,selectId)
 {
 var options=[];
 if (selectId){
