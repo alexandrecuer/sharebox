@@ -4,7 +4,7 @@ $(".carousel2").carousel();
 var date = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
 //generate the next and previous buttons to navigate through the carousel
-function genCarNav(carName)
+function carouselnav(carName)
 {
   var nav=[];
   nav.push("<a class='carousel-control-prev' href='#"+carName+"' role='button' data-slide='prev'>");
@@ -17,7 +17,7 @@ function genCarNav(carName)
 }
 
 //generate the satisfaction feedback html output using colored box buttons
-function genFeedbackItem(s)
+function feedbackpostcard(s)
 {
   var satis=[];
   var fields=Object.getOwnPropertyNames(s);
@@ -85,7 +85,7 @@ function genFeedbackItem(s)
 }
 
 //generate the stats as a html table for the modal
-function genSynthModal(s)
+function synthmodal(s)
 {
   var i;
   var fields=Object.getOwnPropertyNames(s);
@@ -114,7 +114,7 @@ function genSynthModal(s)
 }
 
 //output a date in human FRENCH format
-function dateFormat(d)
+function humandate(d)
 {
   var options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
   return new Date(d.substr(0, 10)).toLocaleDateString("fr-FR",options);
@@ -139,7 +139,7 @@ function stringify(date)
 }
 
 //full output stats generation for a given pollId, ie number of sent surveys, number of feedbacks received, synth modal and carousel
-function statsForPoll(pollId)
+function genstatsforpoll(pollId)
 {
   var timeStart = $("#time_start").val();
   var timeEnd = $("#time_end").val();
@@ -169,12 +169,12 @@ function statsForPoll(pollId)
             $("#stats").html(stats.join(""));
             if (result.stats){
               if (Object.keys(result.stats).length>0){
-                $("#synth_body").html(genSynthModal(result.stats));
+                $("#synth_body").html(synthmodal(result.stats));
                 var title=[];
                 title.push("Synthèse de l'enquête<br>");
                 title.push("<u>"+result.poll_name+"</u>");
                 title.push("<br>");
-                title.push("Pour la période du "+dateFormat(result.from)+" au "+dateFormat(result.to));
+                title.push("Pour la période du "+humandate(result.from)+" au "+humandate(result.to));
                 $("#synth_title").html(title.join(""));
               }
             } else {
@@ -190,11 +190,11 @@ function statsForPoll(pollId)
                 } else {
                   out.push("<div class='carousel-item'>");
                 }
-                out.push(genFeedbackItem(s));
+                out.push(feedbackpostcard(s));
                 out.push("</div>");
               });
               $("#carousel-inner").html(out.join(""));
-              $("#carousel-nav").html(genCarNav("carousel2"));
+              $("#carousel-nav").html(carouselnav("carousel2"));
             } else {
               $("#carousel-inner").html("");
               $("#carousel-nav").html("");
@@ -215,7 +215,7 @@ $("#time_end").val(stringify(now));
 $("#s_poll_id").on("change", function(){  
   pollId=$("#s_poll_id").val();
   //console.log(pollId);
-  statsForPoll(pollId);
+  genstatsforpoll(pollId);
 });
 
 //interrogate the API and store the poll json list in the polls global var
@@ -233,11 +233,11 @@ $.ajax({
         });
         //console.log(...ids);
         pollId=Math.max(...ids);
-        $("#s_poll_id").html(pollSelect(polls,pollId));
-        statsForPoll(pollId);
+        $("#s_poll_id").html(pollselect(polls,pollId));
+        genstatsforpoll(pollId);
     } 
 });
 
 $("#date_fields").on("change", function(){  
-  statsForPoll(pollId);
+  genstatsforpoll(pollId);
 });

@@ -1,6 +1,6 @@
 //interrogate the API and show a given satisfaction feedback in a specific modal 
 //note the modal must have a header with id=mtitle and a body with id=mcontent
-function surveyfeedback(id,modalId)
+function genfeedback(id,modalId)
 {
     var out = "";
     var header = "";
@@ -53,7 +53,7 @@ function surveyfeedback(id,modalId)
 
 //generate html output to create a select menu for choosing the active poll
 //used in different views (browse, surveys, polls)
-function pollSelect(polls,selectedPollId,selectId)
+function pollselect(polls,selectedPollId,selectId)
 {
 var options=[];
 if (selectId){

@@ -1,4 +1,4 @@
-function surveylist_update()
+function gensurveylist()
 {
     $.ajax({ url: "/surveys", 
         dataType: "json", 
@@ -27,7 +27,7 @@ function surveylist_update()
     });
 }
 
-function answers_update()
+function genanswerslinks()
 {
     //console.log("triggering a list of answers");
     $.ajax({ url: "/freelist", 
@@ -95,9 +95,9 @@ function validate()
 }
 
 validate();
-surveylist_update();
-answers_update();
-//setInterval(surveylist_update,5000);
+gensurveylist();
+genanswerslinks();
+//setInterval(gensurveylist,5000);
 
 $("#process_options").on("change",".form-control",function(){
     validate();
@@ -141,7 +141,7 @@ $("#create").click(function(){
         async: true, 
         success: function(result) { 
             //console.log(result); 
-            surveylist_update();
+            gensurveylist();
             $("#create").hide();
             $("#s_description").val("");
             $("#s_description").css("background-color","#ffeeee");
@@ -221,13 +221,13 @@ $("#surveylist").on("click",".btn",function(){
         async: false,
         success: function(result) {
             //console.log(result.responseText);
-            //surveylist_update();
+            //gensurveylist();
         },
         error: function(result) {
             alert(result.responseText);
         }
     });
-    surveylist_update();
+    gensurveylist();
 });
 
 $.ajax({ 
@@ -247,5 +247,5 @@ $.ajax({
 $("#answers").on("click",".btn",function(){
     var id = $(this).val();
     //console.log(id);
-    surveyfeedback(id,"AnswerModal");
+    genfeedback(id,"AnswerModal");
 });

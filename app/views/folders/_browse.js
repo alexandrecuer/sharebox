@@ -25,7 +25,7 @@ $.ajax({
 });
 
 //caution : folder_value is the position in the tree
-function childMeta(folderValue,folderId)
+function childmeta(folderValue,folderId)
 {
     var regv=/([0-9]+)/;
     var regi=/folder([0-9]+)/;
@@ -165,7 +165,7 @@ function createtabs(folder,shares,satis,currentuser)
         tabs.push("<input type=hidden id=currentfolder_id value="+folder.id+">");
         tabs.push("<input type=text class=form-control id=currentfolder_name placeholder='nom du répertoire' value='"+folder.name.replace(/'/,"&#039;")+"'><br>");
         tabs.push("<input type=text class=form-control id=currentfolder_case_number placeholder='Numéro affaire' value='"+folder.case_number+"'>");
-        var options=pollSelect(polls,folder.poll_id,"currentfolder_poll_id");
+        var options=pollselect(polls,folder.poll_id,"currentfolder_poll_id");
         tabs.push("<br>"+options);
         tabs.push("<br><button type=submit class=btn id=currentfolder_modify>Sauvegarder les modifications</button><br><br>");
         
@@ -386,12 +386,12 @@ $("#folder_view").on("change","#folder_name",function(){
 });
 
 //show satisfaction feedback
-//the surveyfeedback function is in shared/colibritoolbox.js
+//the genfeedback function is in shared/colibritoolbox.js
 $("#folder_view").on("click",".satis", function(){
     //satis is a div you cannot use val()
     var id = $(this).attr("value");
     //console.log(id);
-    surveyfeedback(id,"AnswerModal");
+    genfeedback(id,"AnswerModal");
 });
 
 //reset input text field for shares
@@ -668,7 +668,7 @@ $("#folder_view").on("click","#delete_asset",function(){
 //update folder_tree in tree_view while exploring step by step
 $("#tree_view").on("click",".child",function(){
     //var text = $(this).text();
-    var meta = childMeta($(this).attr("value"), $(this).attr("id"));
+    var meta = childmeta($(this).attr("value"), $(this).attr("id"));
     var value = meta.parent_id;
     $(".root").css("background-color","#ffffff");
     $(".child").each(function() {
