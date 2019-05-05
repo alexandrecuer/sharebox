@@ -279,7 +279,7 @@ $("#groups").on("input",function(){
           }
         });
       });
-      console.log(result);
+      //console.log(result);
       $("#groups").autocomplete({source: result});
     }
   });
