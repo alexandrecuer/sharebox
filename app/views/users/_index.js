@@ -9,10 +9,10 @@ $(".modifygroups").on("click",function(){
     url: "/define_groups",
     data: params,
     async: true, 
-    success: function(result) { 
+    success(result) { 
       alert(result.message);
     },
-    error: function(xhr) { 
+    error(xhr) { 
       var errorMessage = xhr.status + ": " + xhr.statusText;
       alert("Erreur - " + errorMessage);
     }
@@ -29,7 +29,7 @@ $(".groups").on("input",function(){
     url: "/get_groups?groupsfrag="+frag,
     dataType: "json",
     async: true,
-    success: function(result) {
+    success(result) {
       $("#"+id).autocomplete({source: result});
     }
   });
