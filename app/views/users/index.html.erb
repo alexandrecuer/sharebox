@@ -10,13 +10,14 @@ Address collecting information related to users activity (shared folders & unreg
 <div class="table-responsive-sm">
   <table class="table table-hover">
     <tr>
-        <th colspan="5"><%= MAIN["users_list"]%>(<%= @users.length %>)</th>
+        <th colspan="6"><%= MAIN["users_list"]%>(<%= @users.length %>)</th>
     </tr>
     <tr>
         <th><%= sortable "id" %></th>
         <th><%= sortable "email", MAIN["mail"] %></th>
         <th><%= MAIN["has_shared_folders_from_others?"] %></th>
         <th><%= sortable "statut", MAIN["status"] %></th>
+        <th></th>
         <th></th>
     </tr>
   <% @users.each do |u| %>
