@@ -272,7 +272,7 @@ $("#groups").on("input",function(){
     success: function(result) {
       var some=[];
       result.forEach(function(r){
-        var elements=r.split('/');
+        var elements=r.split("/");
         elements.forEach(function(e){
           if (!result.includes(e)){
               result.push(e);
