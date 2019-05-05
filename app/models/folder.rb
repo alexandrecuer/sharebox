@@ -74,20 +74,25 @@ class Folder < ApplicationRecord
 
   ##
   # Return all subfolders, assets and shares related to the folder, directly or indirectly<br>
-  # works recursively
-  def get_subs_assets_shares
+  # works recursively<br>
+  # analyzing the 'nearest' children first - operate layer by layer, from the nearest layer to the furthest layer
+  def get_subs_assets_shares(i=0)
+    puts("**************************working on folder #{self.name} level #{i}")
     folders = Folder.where(parent_id: self.id)
     assets = Asset.where(folder_id: self.id)
     shared_folders = SharedFolder.where(folder_id: self.id)
     childrens = assets + folders + shared_folders
-    puts("BEGIN__________________________________________________RECURSIVE SEARCH")
+    whitespace=" * "*i
+    puts("#{whitespace}BEGIN level #{i}__________________________________________________RECURSIVE SEARCH")
     folders.each do |c|
       if c.has_sub_asset_or_share?
-        childrens += c.get_subs_assets_shares
+        i+=1
+        childrens += c.get_subs_assets_shares(i)
+        i-=1
       end
       puts ("end of search for subfolder "+c.name.to_s+ " number "+c.id.to_s)
     end
-    puts("END____________________________________________________RECURSIVE SEARCH")
+    puts("#{whitespace}END level #{i}____________________________________________________RECURSIVE SEARCH")
     return childrens
   end
   

@@ -182,8 +182,8 @@ class Poll < ApplicationRecord
   
   ##
   # Returns, for the active poll, the number of surveys delivered to clients<br>
-  # possibility to define a date range
-  def count_sent_surveys(time_start=nil, time_end=nil)
+  # possibility to define a date range and a text indication (groups) to filter on a group of users
+  def count_sent_surveys(time_start=nil, time_end=nil, groups=nil)
     puts("BEGIN________________________________count_sent_surveys method poll model")
     # shares to a TEAM email do not count 
     if ENV['TEAM']
@@ -201,12 +201,21 @@ class Poll < ApplicationRecord
         time_start="#{date.match(time_start)} 00:00:00"
         time_end="#{date.match(time_end)} 00:00:00"
         puts("*******enumerating all surveys for poll on data range #{time_start} to #{time_end}*******")
-        request="folders.poll_id = ? and shared_folders.share_email not like ? and shared_folders.created_at BETWEEN ? and ?"
-        nb=SharedFolder.joins(:folder).where(request,self.id,"%#{domain}%", time_start, time_end).count
-        request="folder_id < ? and created_at BETWEEN ? and ?"
-        nb+=self.satisfactions.where(request, 0, time_start, time_end).count
-        request="poll_id = ? and created_at BETWEEN ? and ?"
-        nb+=Survey.where(request, self.id, time_start, time_end).count
+        unless groups
+          request="folders.poll_id = ? and shared_folders.share_email not like ? and shared_folders.created_at BETWEEN ? and ?"
+          nb=SharedFolder.joins(:folder).where(request,self.id,"%#{domain}%", time_start, time_end).count
+          request="folder_id < ? and created_at BETWEEN ? and ?"
+          nb+=self.satisfactions.where(request, 0, time_start, time_end).count
+          request="poll_id = ? and created_at BETWEEN ? and ?"
+          nb+=Survey.where(request, self.id, time_start, time_end).count
+        else
+          request="folders.poll_id = ? and shared_folders.share_email not like ? and shared_folders.created_at BETWEEN ? and ? and users.groups like ?"
+          nb=SharedFolder.joins(:folder).joins(:user).where(request,self.id,"%#{domain}%", time_start, time_end, "%#{groups}%").count
+          request="folder_id < ? and satisfactions.created_at BETWEEN ? and ? and users.groups like ?"
+          nb+=self.satisfactions.joins(:user).where(request, 0, time_start, time_end, "%#{groups}%").count
+          request="poll_id = ? and surveys.created_at BETWEEN ? and ? and users.groups like ?"
+          nb+=Survey.joins(:user).where(request, self.id, time_start, time_end, "%#{groups}%").count
+        end
       end
     end
     puts("END__________________________________count_sent_surveys method poll model")

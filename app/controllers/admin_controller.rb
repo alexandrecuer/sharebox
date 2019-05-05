@@ -1,11 +1,45 @@
+##
+# The admin controller
+
 class AdminController < ApplicationController
 
   before_action :authenticate_user!, :check_admin
   
+  ##
+  # admin controller main AUTHENTICATION
   def check_admin
     unless current_user.is_admin?
       render json: {"message": "forbidden access"}
     end
+  end
+  
+  ##
+  # allow admins to take the identity of any registered user
+  def become
+    sign_in(:user, User.find(params[:id]))
+    redirect_to root_url # or user_root_url
+  end
+  
+  ##
+  # allows admins to assign users to groups
+  def define_groups
+    results={}
+    unless params[:groups]
+      results["message"]="no information provided"
+    else
+      user=User.find_by_id(params[:id])
+      unless user
+        results["message"]="inexisting user"
+      else
+        user.groups=params[:groups]
+        unless user.save
+          results["message"]="could not save the user"
+        else
+          results["message"]="user #{user.email} number #{user.id}\n groups modified to #{params[:groups]}"
+        end
+      end
+    end
+    render json: results
   end
   
   ##

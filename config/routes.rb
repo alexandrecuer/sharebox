@@ -73,7 +73,7 @@ Rails.application.routes.draw do
    
    get "check/:id" => "folders#check", :as => ""
    
-   get "become/:id" => "users#become", :as => "become"
+   get "become/:id" => "admin#become", :as => "become"
    
    get "contact_customer/:folder_id" => "shared_folders#contact_customer", :as => ""
    
@@ -84,5 +84,9 @@ Rails.application.routes.draw do
    get "feedback/:satisfaction_id" => "satisfactions#feedback", :as => ""
    
    get "feedback_metas" => "satisfactions#feedback_metas", :as => ""
+   
+   post "define_groups" => "admin#define_groups", :as => ""
+   
+   get "get_groups" => "users#get_groups", :as => ""
 
 end

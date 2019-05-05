@@ -33,7 +33,7 @@ class SatisfactionsController < ApplicationController
   end
   
   ##
-  # render a json view of all satisfactions answers
+  # render a json view of satisfactions answers
   # permits to realize date range request on a given poll_id
   def index
       authenticate_user!
@@ -57,14 +57,37 @@ class SatisfactionsController < ApplicationController
               time_start="#{ts} 00:00:00"
               time_end="#{te} 00:00:00"
               puts("searching feedbacks on poll #{poll_id} from #{time_start} to #{time_end}")
-              expression='satisfactions.created_at BETWEEN ? AND ?'
-              satisfactions= poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email").where(expression,time_start,time_end)
+              unless params[:groups]
+                expression='satisfactions.created_at BETWEEN ? AND ?'
+                satisfactions= poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email").where(expression,time_start,time_end)
+              else
+                # we first request satisfactions feedbacks collected in the folders/files system
+                # we have to check groups value for folders owners > INNER JOIN on folders and then on users
+                # not possible to do it with active records as the satisfaction model has been reduced!!
+                sql = <<-SQL
+                  SELECT satisfactions.*,
+                  users.email as email
+                  FROM satisfactions 
+                  INNER JOIN folders 
+                  ON folders.id = satisfactions.folder_id 
+                  INNER JOIN users 
+                  ON users.id = folders.user_id 
+                  WHERE (users.groups LIKE '%#{params[:groups]}%' 
+                  and satisfactions.poll_id=#{params[:poll_id]} 
+                  and satisfactions.created_at BETWEEN '#{time_start}' AND '#{time_end}');
+                SQL
+                satisfactions=Satisfaction.find_by_sql(sql)
+                # we have now to include the satisfactions collected out the folders/files system
+                expression='satisfactions.created_at BETWEEN ? AND ? and satisfactions.folder_id < ? and users.groups LIKE ?'
+                satisfactions+=poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email").where(expression,time_start,time_end,0,"%#{params[:groups]}%")
+                all["groups"]=params[:groups]
+              end
               all["from"]=time_start
               all["to"]=time_end
             end
           end
           unless params[:csv]
-            nb=poll.count_sent_surveys(time_start,time_end)
+            nb=poll.count_sent_surveys(time_start,time_end,params[:groups])
             all["sent"]=nb
             if satisfactions.length>0
               stats=poll.stats(satisfactions)

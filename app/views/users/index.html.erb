@@ -1,5 +1,7 @@
 <%= render 'shared/nav' %>
-
+<% if ENV.fetch('TEAM') %>
+  You are working in TEAM mode - <%= ENV.fetch('TEAM') %><br>
+<% end %>
 Email server : <%= Rails.application.config.action_mailer.smtp_settings[:address] %><br>
 Application Mailer default from : <%= ApplicationMailer.default[:from] %><br>
 Address sending emails to users for password change : <%= Devise.mailer_sender %><br>
@@ -27,6 +29,10 @@ Address collecting information related to users activity (shared folders & unreg
           <%= select_tag :statut, options_for_select(["public", "private", "admin" ], { selected: u.statut })%>
           <%= submit_tag(MAIN["process_to_status_mod"]) %>
           <% end %>
+        </td>
+        <td>
+          <input type=text class=groups id=groups<%= u.id %> placeholder="dir./dpt./grp./unit./?" value=<%= u.groups %> >
+          <button type=submit class=modifygroups value=<%= u.id %>>Modifier groupe</button>
         </td>
         <td><%= link_to "delete", user_path(u), method: :delete, data: {confirm: MAIN["are_yu_sure"] } %></td>
     </tr>
@@ -57,3 +63,7 @@ Address collecting information related to users activity (shared folders & unreg
 </table>
 </div>
 <% end %>
+
+<script>
+<%= render :partial => 'index.js' %>
+</script>

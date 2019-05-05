@@ -18,7 +18,7 @@ class PollsController < ApplicationController
   ##
   # this is just a test of a jointure implementation without logic in the model
   def index
-    if params[:request]
+    if params[:groups]
       results={}
       sql = <<-SQL
         SELECT satisfactions.*,
@@ -29,7 +29,7 @@ class PollsController < ApplicationController
         ON folders.id = satisfactions.folder_id 
         INNER JOIN users 
         ON users.id = folders.user_id 
-        WHERE (satisfactions.folder_id > 0 and users.email LIKE '%cerema%');
+        WHERE (users.groups LIKE '%#{params[:groups]}%');
       SQL
       mysats=Satisfaction.find_by_sql(sql)
       results.merge!("mysats": mysats.as_json)

@@ -15,23 +15,33 @@ class FoldersController < ApplicationController
     end
   end
   
+  ##
+  # check su access - work in progress<br>
+  # 
   def check
     results={}
     base={}
+    children={}
     folder=Folder.find_by_id(params[:id])
     unless folder
       su="ce dossier n'existe pas"
     else
-      su=current_user.has_su_access?(folder)
-      puts("BEGIN ---------------- base searching")
-      unless base=folder.ancestors.reverse[0]
-        base={"name": "root"}
+      unless params[:children]
+        su=current_user.has_su_access?(folder)
+        puts("BEGIN ---------------- base searching")
+        unless base=folder.ancestors.reverse[0]
+          base={"name": "root"}
+        end
+        puts("END ---------------- base searching")
+      else
+        su="test des enfants"
+        children=folder.get_subs_assets_shares
       end
-      puts("END ---------------- base searching")
     end
     results.merge!({"folder": folder.as_json})
     results.merge!({"base": base.as_json})
     results.merge!({"su": su})
+    results.merge!({"children": children.as_json})
     render json: results
   end
   
@@ -99,6 +109,9 @@ class FoldersController < ApplicationController
     render json: results
   end
   
+  ##
+  # render browse.html.rb by default<br>
+  # if given a folder id, render the folder record (if exists) as a json list
   def browse
     if params[:id]
       folder=Folder.find_by_id(params[:id])

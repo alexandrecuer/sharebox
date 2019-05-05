@@ -152,12 +152,26 @@ function genstatsforpoll(pollId)
     d2 = new Date(timeEnd);
   }
   if (d1 < d2){
+    var groups=$("#groups").val();
+    var request;
+    if (groups){
+      request = "/satisfactions?poll_id="+pollId+"&start="+timeStart+"&end="+timeEnd+"&groups="+groups;
+    } else {
+      request = "/satisfactions?poll_id="+pollId+"&start="+timeStart+"&end="+timeEnd;
+    }
+    
     $.ajax({
         type: "GET",
-        url: "/satisfactions?poll_id="+pollId+"&start="+timeStart+"&end="+timeEnd,
+        url: request,
         async: true,
         success: function(result) {
             //console.log(result);
+            var csvlink;
+            if (groups){
+              csvlink="/satisfactions?poll_id="+result.poll_id+"&start="+timeStart+"&end="+timeEnd+"&groups="+groups+"&csv=1";
+            } else {
+              csvlink="/satisfactions?poll_id="+result.poll_id+"&start="+timeStart+"&end="+timeEnd+"&csv=1";
+            }
             var stats=[];
             stats.push("<b>"+result.poll_name+"</b><br>");
             stats.push(result.sent);
@@ -165,7 +179,7 @@ function genstatsforpoll(pollId)
             stats.push(result.satisfactions.length);
             stats.push("  retour(s) satisfaction<br>");
             stats.push("<a data-toggle='modal' data-target='#synth' href='#'>Voir la synthèse</a><br>");
-            stats.push("<a href=/satisfactions?poll_id="+result.poll_id+"&start="+timeStart+"&end="+timeEnd+"&csv=1>Télécharger le fichier csv</a>");
+            stats.push("<a href="+csvlink+">Télécharger le fichier csv</a>");
             $("#stats").html(stats.join(""));
             if (result.stats){
               if (Object.keys(result.stats).length>0){
@@ -240,4 +254,33 @@ $.ajax({
 
 $("#date_fields").on("change", function(){  
   genstatsforpoll(pollId);
+});
+
+$("#groups").on("change", function(){  
+  genstatsforpoll(pollId);
+});
+
+//groups autocompletion
+//different from what is proposed by _index.js in the users control panel
+$("#groups").on("input",function(){
+  var frag=$(this).val();
+  $.ajax({
+    type: "GET",
+    url: "/get_groups?groupsfrag="+frag,
+    dataType: "json",
+    async: true,
+    success: function(result) {
+      var some=[];
+      result.forEach(function(r){
+        var elements=r.split('/');
+        elements.forEach(function(e){
+          if (!result.includes(e)){
+              result.push(e);
+          }
+        });
+      });
+      console.log(result);
+      $("#groups").autocomplete({source: result});
+    }
+  });
 });
