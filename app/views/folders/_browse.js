@@ -18,7 +18,7 @@ $.ajax({
     url: "/getpolls",
     dataType: "json",
     async: true, 
-    success: function(result) {
+    success(result) {
         polls=result;
         //console.log(polls);
     } 
@@ -262,7 +262,7 @@ function genfragment(folderId)
         type: "GET",
         url: "/browse?id="+folderId,
         async: true,
-        success: function(result) {
+        success(result) {
             //console.log(result);
             var lists=JSON.parse(result.lists);
             fragment(folderId,result.name,lists);
@@ -278,7 +278,7 @@ function genrootview()
         url: "/list",
         dataType: "json",
         async: true,
-        success: function (data) {
+        success(data) {
             //console.log(data);
             var rootName=data.currentfolder.name;
             var rootTree = "";
@@ -316,7 +316,7 @@ function genfolderview(folderId)
         url: myurl,
         dataType: "json",
         async: true,
-        success: function (data) {
+        success(data) {
             //console.log(data);
             if (data.currentfolder.id){
                 $("#folder_view").html(subfoldersassetslist(data));
@@ -335,7 +335,7 @@ function genshareslist(folderId)
         url: "/getshares/"+folderId,
         dataType: "json",
         async: true,
-        success: function(data) {
+        success(data) {
             //console.log(data);
             var list=shareslist(data);
             //console.log(list);
@@ -406,7 +406,7 @@ $("#folder_view").on("click","#contact_customer",function(){
         type: "GET",
         url: "/contact_customer/"+folderId+"?share_email="+email,
         async: true,
-        success: function(result) {
+        success(result) {
             //console.log(result);
             alert(result.message);
         }
@@ -428,7 +428,7 @@ $("#folder_view").on("click","#currentfolder_modify", function(){
         url: "/update_folder",
         data: params,
         async: true, 
-        success: function(result) { 
+        success(result) { 
             alert(result.message);
             if (result.success) {
               //we have to update the corresponding line in the tree_view if really browsed
@@ -438,7 +438,7 @@ $("#folder_view").on("click","#currentfolder_modify", function(){
               $("#folder_title").html(params["name"]);
             }
         },
-        error: function(xhr) { 
+        error(xhr) { 
             var errorMessage = xhr.status + ": " + xhr.statusText;
             alert("Erreur - " + errorMessage);
         }
@@ -456,7 +456,7 @@ $("#folder_view").on("input", "#shared_folder_share_email",function(){
         url: "/users?melfrag="+last,
         dataType: "json",
         async: true,
-        success: function(result) {
+        success(result) {
             var some=[];
             result.forEach(function(r){
                 some.push(r["email"]);
@@ -493,7 +493,7 @@ $("#folder_view").on("click", "#add_shares", function(){
         url: "/share",
         data: params,
         async: true, 
-        success: function(result) { 
+        success(result) { 
             alert(result.message);
             if (result.success) {
               //console.log("regenerating shares list and fragment if any");
@@ -512,12 +512,12 @@ $("#folder_view").on("click","#delete_share", function(){
     type: "delete",
     url: "/deleteshare/"+folderId+"/"+shareId,
     async: true, 
-    beforeSend: function(){
+    beforeSend(){
         var message=achtung+"\nVous êtes sur le point de supprimer un partage\n\n";
         message+="Etes vous sûr ?";
         return confirm(message);
     },
-    success: function(result) { 
+    success(result) { 
         alert(result.message);
         if (result.success) {
           //console.log("regenerating shares list and fragment if any");
@@ -540,7 +540,7 @@ $("#folder_view").on("click","#create_folder",function(){
         url: "/create_folder",
         async: true,
         data: params,
-        success: function(result) {
+        success(result) {
             alert(result.message);
             if (result.success) {
                 //2 different cases : root or non root
@@ -578,14 +578,14 @@ $("#folder_view").on("click","#delete_folder",function(){
         type: "DELETE",
         url: "/delete_folder/"+folderId,
         async: true,
-        beforeSend: function(){
+        beforeSend(){
             var message=achtung+"\nVous êtes sur le point de supprimer un répertoire\n";
             message+="Tous les objets associés (partages,retours satisfaction,sous-dossiers,fichiers) seront détruits\n";
             message+="Cette action est irréversible\n\n";
             message+="Etes vous sûr ?";
             return confirm(message);
         },
-        success: function(result) {
+        success(result) {
             alert(result.message);
             if (result.success) {
                 genfolderview(result.parent_id);
@@ -596,7 +596,7 @@ $("#folder_view").on("click","#delete_folder",function(){
                 }
             }
         },
-        error: function(result) {
+        error(result) {
             alert(result);
         }
     });
@@ -618,7 +618,7 @@ $("#folder_view").on("click","#create_asset",function(){
         url: "/upload_asset",
         data: datafile,
         async: true, 
-        success: function(result) { 
+        success(result) { 
             if (folderId) {
               alert("répertoire "+folderId+"\n"+result.message);
             } else {
@@ -632,7 +632,7 @@ $("#folder_view").on("click","#create_asset",function(){
               $("#create_asset").hide();
             }
         },
-        error: function(result) {
+        error(result) {
             alert(result);
         }
     });
@@ -647,19 +647,19 @@ $("#folder_view").on("click","#delete_asset",function(){
         type: "DELETE",
         url: "/delete_asset/"+id,
         async: true,
-        beforeSend: function(){
+        beforeSend(){
             var message=achtung+"\nVous êtes sur le point de supprimer un fichier\n";
             message+="Cette action est irréversible\n\n";
             message+="Etes vous sûr ?";
             return confirm(message);
         },
-        success: function(result) {
+        success(result) {
             alert(result.message);
             if (result.success) {
                 genfolderview(currentfolderId);
             }
         },
-        error: function(result) {
+        error(result) {
             alert(result);
         }
     });
@@ -683,7 +683,7 @@ $("#tree_view").on("click",".child",function(){
       url: "/list?id="+value,
       dataType: "json",
       async: true,
-      success: function (data) {
+      success(data) {
         //console.log(data);
         data.subfolders.forEach(function(folder){
           var lists=JSON.parse(folder.lists);

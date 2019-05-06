@@ -7,7 +7,7 @@ function genfeedback(id,modalId)
     $.ajax({ url: "/satisfactions/json/"+id, 
         dataType: "json", 
         async: true, 
-        success: function(data) {
+        success(data) {
             //console.log(data);
             out+="<table class=table>";
             var s=Object.getOwnPropertyNames(data);
