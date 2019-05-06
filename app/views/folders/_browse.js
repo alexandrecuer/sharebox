@@ -463,10 +463,10 @@ $("#folder_view").on("input", "#shared_folder_share_email",function(){
             });
             //console.log(some);
             $("#shared_folder_share_email").autocomplete({
-                source: function(request,response) {
+                source(request,response) {
                     response($.ui.autocomplete.filter(some,last));
                 },
-                select: function(event,ui) {
+                select(event,ui) {
                     var terms = this.value.split(",");
                     // remove the current input
                     terms.pop();
