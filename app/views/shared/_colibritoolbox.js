@@ -1,7 +1,3 @@
-function resolve(json,val) {
-    return json[val];
-}
-
 //interrogate the API and show a given satisfaction feedback in a specific modal 
 //note the modal must have a header with id=mtitle and a body with id=mcontent
 function genfeedback(id,modalId)
@@ -17,7 +13,7 @@ function genfeedback(id,modalId)
             var s=Object.getOwnPropertyNames(data);
             s.forEach(function(val){
                 if(val==="date" || val==="affaire") {
-                    header+="<b>"+resolve(data,val)+"</b><br>";
+                    header+="<b>"+data[val]+"</b><br>";
                 } else {
                     var numrx=/^[0-9]$/;
                     var v=String(data[val]);
