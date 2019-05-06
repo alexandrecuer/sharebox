@@ -3,7 +3,7 @@ function gensurveylist()
     $.ajax({ url: "/surveys", 
         dataType: "json", 
         async: true, 
-        success: function(data) {
+        success(data) {
             var out = [];
             $.each(data, function(index, array){
                 if (! array.token.includes("disabled")){
@@ -33,7 +33,7 @@ function genanswerslinks()
     $.ajax({ url: "/freelist", 
         dataType: "json", 
         async: true, 
-        success: function(data) {            
+        success(data) {            
             var out = [];
             out.push("<tr><td>");
             var lib;
@@ -109,7 +109,7 @@ $.ajax({
     url: "/getpolls",
     dataType: "json",
     async: true, 
-    success: function(result) {
+    success(result) {
         var options="";
         $.each(result, function(index, array){
             options+="<option value="+array.id+">"+array.name+" (S"+array.id+")</option>";
@@ -139,7 +139,7 @@ $("#create").click(function(){
         url: "/surveys",
         data: params,
         async: true, 
-        success: function(result) { 
+        success(result) { 
             //console.log(result); 
             gensurveylist();
             $("#create").hide();
@@ -164,7 +164,7 @@ $("#s_by").on("input",function(e){
         url: "/users?melfrag="+saisie,
         dataType: "json",
         async: true,
-        success: function(result) {
+        success(result) {
             var some=[];
             result.forEach(function(r){
                 some.push(r["email"]);
@@ -183,7 +183,7 @@ $("#s_client_mel").on("input",function(e){
         url: "/clients?melfrag="+saisie,
         dataType: "json",
         async: true,
-        success: function(result) {
+        success(result) {
             var some=[];
             result.forEach(function(r){
                 some.push(r["email"]);
@@ -201,10 +201,10 @@ $("#surveylist").on("click",".send",function(){
         type: "GET",
         url: "/surveys/"+id+"?email=send",
         async: true,
-        success: function(data) {
+        success(data) {
             alert(data);
         },
-        error: function(data) {
+        error(data) {
             alert(data);
         }
     });
@@ -219,11 +219,11 @@ $("#surveylist").on("click",".btn",function(){
         url: "/surveys/"+id,
         dataType: "json",
         async: false,
-        success: function(result) {
+        success(result) {
             //console.log(result.responseText);
             //gensurveylist();
         },
-        error: function(result) {
+        error(result) {
             alert(result.responseText);
         }
     });
@@ -234,7 +234,7 @@ $.ajax({
     url: "/getpolls?mynums=1",
     dataType: "json",
     async: true,
-    success: function (data) {
+    success(data) {
         var answerstitle = "Les retours";
         data.forEach(function(poll){
             answerstitle+="&nbsp;<a href=/surveys?csv=1&poll_id="+poll+">[CSV_sondage"+poll+"_vos_retours]</a>";
