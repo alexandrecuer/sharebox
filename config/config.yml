@@ -24,7 +24,7 @@ main:
   
   # for views\home\list.html.erb
   users_list: "Liste des utilisateurs"
-  has_shared_folders_from_others?: "bénéficie de dossiers partagés?"
+  shared_folders?: "dossiers partagés?"
   process_to_status_mod: "Modifier le status" 
   
   # for views\polls\_form.html.erb

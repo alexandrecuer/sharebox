@@ -15,7 +15,7 @@ Address collecting information related to users activity (shared folders & unreg
     <tr>
         <th><%= sortable "id" %></th>
         <th><%= sortable "email", MAIN["mail"] %></th>
-        <th><%= MAIN["has_shared_folders_from_others?"] %></th>
+        <th><%= MAIN["shared_folders?"] %></th>
         <th><%= sortable "statut", MAIN["status"] %></th>
         <th></th>
         <th></th>
@@ -24,7 +24,7 @@ Address collecting information related to users activity (shared folders & unreg
     <tr>
         <td><%= u.id %></td>
         <td><%= link_to u.email, become_path(u.id) %></td>
-        <td><%= u.has_shares %></td>
+        <td><%= u.has_shares %>&nbsp;<%= u.is_sharing %></td>
         <td>
           <%= form_tag(user_path(u), method: "patch") do %>
           <%= select_tag :statut, options_for_select(["public", "private", "admin" ], { selected: u.statut })%>

@@ -32,7 +32,7 @@ class UsersController < ApplicationController
           if change_statut == 1
             @user.statut = params[:statut]
             if @user.save
-              flash[:notice] = "#{@user.email} (#{@user.id.to_s}) #{USERS_MSG["new_status"]} #{@user.statut}"
+              flash[:notice] = "#{@user.email} (#{@user.id}) #{USERS_MSG["new_status"]} #{@user.statut}"
             else
               flash[:notice] = USERS_MSG["error_changing_status"]
             end
@@ -88,7 +88,7 @@ class UsersController < ApplicationController
         flash[:notice] = USERS_MSG["user_managing_forbidden"]
         redirect_to root_url
       else
-        @users=User.select("users.*, NULL as is_sharing, NULL as has_shares").order(sort_column + " " + sort_direction)
+        @users=User.order(sort_column + " " + sort_direction)
         #SHARING USERS
         sql = <<-SQL
           SELECT distinct users.id 
@@ -96,8 +96,11 @@ class UsersController < ApplicationController
           INNER JOIN shared_folders 
           on users.id = shared_folders.user_id;
         SQL
-        sharing_users=User.find_by_sql(sql)
-        sharing_users_ids = "#{sharing_users.as_json}"
+        sharing_users=[]
+        User.find_by_sql(sql).each do |u|
+          sharing_users.push(u.id)
+        end
+        puts("sharing users: #{sharing_users}")
         #USERS BEING GRANTED SHARES
         sql = <<-SQL
           SELECT distinct users.id 
@@ -105,15 +108,18 @@ class UsersController < ApplicationController
           INNER JOIN shared_folders 
           on users.id = shared_folders.share_user_id;
         SQL
-        users_with_shares=User.find_by_sql(sql)
-        users_with_shares_ids = "#{users_with_shares.as_json}"
+        users_with_shares=[]
+        User.find_by_sql(sql).each do |u|
+          users_with_shares.push(u.id)
+        end
+        puts("users being granted shares: #{users_with_shares}")
         #LOOP on USERS ACTIVE RECORDS
         @users.each do |u|
-          if /#{u.id}/.match(sharing_users_ids)
-            u.is_sharing='true'
+          if sharing_users.include?(u.id)
+            u.is_sharing='offre'
           end
-          if /#{u.id}/.match(users_with_shares_ids)
-            u.has_shares='true'
+          if users_with_shares.include?(u.id)  
+            u.has_shares='reçoit'
           end
         end
       end
