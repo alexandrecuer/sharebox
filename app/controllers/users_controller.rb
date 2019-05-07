@@ -88,7 +88,7 @@ class UsersController < ApplicationController
         flash[:notice] = USERS_MSG["user_managing_forbidden"]
         redirect_to root_url
       else
-        @users=User.all.select("users.*, 'false' as is_sharing, 'false' as has_shares").order(sort_column + " " + sort_direction)
+        @users=User.select("users.*, NULL as is_sharing, NULL as has_shares").order(sort_column + " " + sort_direction)
         #SHARING USERS
         sql = <<-SQL
           SELECT distinct users.id 
