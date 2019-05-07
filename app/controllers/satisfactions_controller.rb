@@ -17,6 +17,7 @@ class SatisfactionsController < ApplicationController
           log="#{log} -> satisfaction #{sat.id} on folder (#{sat.folder_id}) metadatas are #{sat.case_number}\n"
         end
       else
+        log="updating metadatas on satisfaction records based on the folders'system...\n"
         satisfactions=Satisfaction.where("folder_id > ?",0)
         satisfactions.each do |sat|
           meta=sat.calc_meta
@@ -72,11 +73,12 @@ class SatisfactionsController < ApplicationController
                   ON folders.id = satisfactions.folder_id 
                   INNER JOIN users 
                   ON users.id = folders.user_id 
-                  WHERE (users.groups LIKE '%#{params[:groups]}%' 
-                  and satisfactions.poll_id=#{params[:poll_id]} 
-                  and satisfactions.created_at BETWEEN '#{time_start}' AND '#{time_end}');
+                  WHERE (users.groups LIKE ? 
+                  and satisfactions.poll_id = ? 
+                  and satisfactions.created_at BETWEEN ? AND ?);
                 SQL
-                satisfactions=Satisfaction.find_by_sql(sql)
+                satisfactions = Satisfaction.find_by_sql([sql,"%#{params[:groups]}%",params[:poll_id],time_start,time_end])
+
                 # we have now to include the satisfactions collected out the folders/files system
                 expression='satisfactions.created_at BETWEEN ? AND ? and satisfactions.folder_id < ? and users.groups LIKE ?'
                 satisfactions+=poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email").where(expression,time_start,time_end,0,"%#{params[:groups]}%")

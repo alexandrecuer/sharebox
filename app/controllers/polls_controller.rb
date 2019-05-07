@@ -16,28 +16,10 @@ class PollsController < ApplicationController
   end
   
   ##
-  # this is just a test of a jointure implementation without logic in the model
+  # the index route leads to the satisfactions exploitation main dashboard where everything is done with ajax
   def index
-    if params[:groups]
-      results={}
-      sql = <<-SQL
-        SELECT satisfactions.*,
-        users.email as folder_owner_email, users.statut as folder_owner_statut,
-        folders.name as folder_name, folders.id as folder_fid, folders.user_id as folder_user_id, folders.lists as folder_lists, folders.poll_id as folder_poll_id  
-        FROM satisfactions 
-        INNER JOIN folders 
-        ON folders.id = satisfactions.folder_id 
-        INNER JOIN users 
-        ON users.id = folders.user_id 
-        WHERE (users.groups LIKE '%#{params[:groups]}%');
-      SQL
-      mysats=Satisfaction.find_by_sql(sql)
-      results.merge!("mysats": mysats.as_json)
-      render json: results
-    else
-      unless current_user.belongs_to_team?
-        redirect_to root_url
-      end
+    unless current_user.belongs_to_team?
+      redirect_to root_url
     end
   end
 
