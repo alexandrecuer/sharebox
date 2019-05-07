@@ -17,35 +17,35 @@ class Poll < ApplicationRecord
   # generate the attributes to explore a satisfactions active record associated to a poll<br>
   # structure is [created_at, case_number/description, all closed questions separated by comma, all open questions separated by comma]
   # DEPRECATED
-  def fetch_attributes
-    attributes = []
-    attributes.push("created_at")
-    attributes.push("case_number")
-
-    for i in 1..self.closed_names_number
-        attributes.push("closed#{i}")
-    end
-    for i in 1..self.open_names_number
-        attributes.push("open#{i}")
-    end
-    attributes
-  end
+  #def fetch_attributes
+  #  attributes = []
+  #  attributes.push("created_at")
+  #  attributes.push("case_number")
+  #
+  #  for i in 1..self.closed_names_number
+  #      attributes.push("closed#{i}")
+  #  end
+  #  for i in 1..self.open_names_number
+  #      attributes.push("open#{i}")
+  #  end
+  #  attributes
+  #end
 
   ##
   # generate the csv file containing all the results to the poll
   # DEPRECATED
-  def to_csv(emails)
-    headers = self.get_names.insert(0,'Email').insert(1,'Date').insert(2,'N° affaire')
-    attributes=self.fetch_attributes
-    
-    CSV.generate(headers: true, :col_sep => ';') do |csv|
-      csv << headers
-
-      Satisfaction.where(poll_id: self.id).each do |s|
-        csv << emails.values_at(s.user_id) + s.attributes.values_at(*attributes)
-      end
-    end
-  end
+  #def to_csv(emails)
+  #  headers = self.get_names.insert(0,'Email').insert(1,'Date').insert(2,'N° affaire')
+  #  attributes=self.fetch_attributes
+  #  
+  #  CSV.generate(headers: true, :col_sep => ';') do |csv|
+  #    csv << headers
+  #
+  #    Satisfaction.where(poll_id: self.id).each do |s|
+  #      csv << emails.values_at(s.user_id) + s.attributes.values_at(*attributes)
+  #    end
+  #  end
+  #end
 
   ##
   # Return a table with all closed questions
@@ -56,38 +56,51 @@ class Poll < ApplicationRecord
   
   ##
   # Return a table with all open questions
-  # DEPRECATED
+  # used in views/satisfactions/_form.html.erb
   def get_open_names
     self.open_names.split(';')
   end
   
   ##
   # Return a table with all closed and open questions
-  # DEPRECATED
+  # used by the create method of the poll controller
   def get_names
     get_closed_names + get_open_names
   end
   
   ##
-  # Return all closed questions in a hash
-  def hash_closed
-    closed=self.closed_names.split(';')
+  # return a hash given a keyword and a csv list of properties separated by ;
+  def hash(list,keyword)
+    table=list.split(';')
     hash={}
-    closed.each_with_index do |c,i|
-      hash["closed#{i+1}"]=c.strip
+    table.each_with_index do |t,i|
+      hash["#{keyword}#{i+1}"]=t.strip
     end
     hash
+  end
+  
+  ##
+  # Return all closed questions in a hash
+  def hash_closed
+    hash(self.closed_names,"closed")
+    #closed=self.closed_names.split(';')
+    #hash={}
+    #closed.each_with_index do |c,i|
+    #  hash["closed#{i+1}"]=c.strip
+    #end
+    #hash
   end
 
   ##
   # Return all open questions in a hash
   def hash_open
-    opens=self.open_names.split(';')
-    hash={}
-    opens.each_with_index do |o,i|
-      hash["open#{i+1}"]=o.strip
-    end
-    hash
+    hash(self.open_names,"open")
+    #opens=self.open_names.split(';')
+    #hash={}
+    #opens.each_with_index do |o,i|
+    #  hash["open#{i+1}"]=o.strip
+    #end
+    #hash
   end
 
 
@@ -96,33 +109,33 @@ class Poll < ApplicationRecord
   # we have to consider 4 different satisfaction levels plus "left blank" field<br>
   # return a 5 lines table gathering all the results, with one column for each closed question
   # DEPRECATED
-  def calc(satisfactions=nil)
-    tab = Array.new(self.closed_names_number){Array.new(5,0)}
-    number_of_satisfactions = 0 
-    unless satisfactions
-      satisfactions=Satisfaction.where(poll_id: self.id)
-    end
-    satisfactions.each do |s|
-      for i in 1..self.closed_names_number
-        #if value = s.public_send("closed#{i}")
-        if value = s["closed#{i}"]
-          tab[i-1][value] += 1
-        else
-          tab[i-1][0] += 1
-        end
-      end
-      number_of_satisfactions +=1
-    end
-    #puts("#{number_of_satisfactions} VS #{satisfactions.length}")
-    for i in 0..self.closed_names_number-1
-      for y in 0..4
-        tab[i][y] = ( tab[i][y].to_f / satisfactions.length * 100 ).round(2)
-      end
-    end
-    # we return tab
-    #puts(tab)
-    tab
-  end
+  #def calc(satisfactions=nil)
+  #  tab = Array.new(self.closed_names_number){Array.new(5,0)}
+  #  number_of_satisfactions = 0 
+  #  unless satisfactions
+  #    satisfactions=Satisfaction.where(poll_id: self.id)
+  #  end
+  #  satisfactions.each do |s|
+  #    for i in 1..self.closed_names_number
+  #      #if value = s.public_send("closed#{i}")
+  #      if value = s["closed#{i}"]
+  #        tab[i-1][value] += 1
+  #      else
+  #        tab[i-1][0] += 1
+  #      end
+  #    end
+  #    number_of_satisfactions +=1
+  #  end
+  #  #puts("#{number_of_satisfactions} VS #{satisfactions.length}")
+  #  for i in 0..self.closed_names_number-1
+  #    for y in 0..4
+  #      tab[i][y] = ( tab[i][y].to_f / satisfactions.length * 100 ).round(2)
+  #    end
+  #  end
+  #  # we return tab
+  #  #puts(tab)
+  #  tab
+  #end
   
   ##
   # generate csv file for a list of feedbacks
