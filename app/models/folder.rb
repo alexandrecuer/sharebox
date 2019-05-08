@@ -19,6 +19,8 @@ class Folder < ApplicationRecord
 
   extend ActsAsTree::TreeWalker
   
+  attr_accessor :status
+  
   ##
   # Return true is the folder is shared
   def shared?

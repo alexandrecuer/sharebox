@@ -1,29 +1,30 @@
 <%
 # this file generates the assets and folders list associated to our position in the folders'tree
+# this is not the core of the app and front office and back office are mixed up here 
 # initialization of @assets, @folders and @shared_folders_by_others as empty hashes {}
 @assets={}
 @folders={}
 @shared_folders_by_others={}
 
 # all the ids of the folders owned by the user
-values = "#{current_user.folders.ids}".gsub("[","(").gsub("]",")")
+userfolderids=current_user.folders.ids
 
 if @current_folder
   #04/03/2019 - speeding up things - adding a jointure on the users table and a special select 
   #@assets = @current_folder.assets.order("uploaded_file_file_name desc")
   puts("join on assets !!!")
   @assets=@current_folder.assets.joins(:user).select("assets.*, users.email as owner_mel").order("uploaded_file_file_name desc")
-  @folders = @current_folder.children.joins(:user).order("name asc").select("users.email as owner_mel, folders.*, '?' as status")
+  @folders = @current_folder.children.joins(:user).order("name asc").select("users.email as owner_mel, folders.*")
   # at this stage, we can check if the status folder by checking its user_id and its parent_id
   @folders.each do |f|
     if f.user_id != current_user.id 
-      if /#{f.parent_id}/.match(values)
+      if userfolderids.include?(f.parent_id)
         f.status='swarmed_to_the_current_user'
       else
         f.status='shared_to_the_current_user'
       end
     else
-      if /#{f.parent_id}/.match(values)
+      if userfolderids.include?(f.parent_id)
         f.status='owned'
       else
         f.status='swarmed'
@@ -33,19 +34,27 @@ if @current_folder
 else
   # is_admin? does not use a SQL request
   if current_user.is_admin?
-    @folders=Folder.roots.joins(:user).select("users.email as owner_mel, folders.*, 'owned' as status")
+    @folders=Folder.roots.joins(:user).select("users.email as owner_mel, folders.*")
     @folders.each do |f|
       if f.user_id != current_user.id
         f.status='shared_to_the_current_user'
+      else
+        f.status='owned'
       end
     end   
   else
-    @folders=current_user.folders.roots.joins(:user).select("users.email as owner_mel, folders.*, 'owned' as status").order("name asc")
+    @folders=current_user.folders.roots.joins(:user).select("users.email as owner_mel, folders.*").order("name asc")
+    @folders.each do |f|
+      f.status='owned'
+    end
     # speeding up things : no folder implies no root folder & no root folder implies no folder
     if @folders.length>0
     #if current_user.folders.all.length>0
       # we search for all folders owned by the user and swarmed in other users directories 
-      @swarmed_folders=Folder.joins(:user).where("user_id = #{current_user.id} and parent_id not in #{values}").select("users.email as owner_mel, folders.*, 'swarmed' as status").order("name asc")
+      @swarmed_folders=Folder.joins(:user).where("user_id = ? and parent_id not in (?)",current_user.id,userfolderids).select("users.email as owner_mel, folders.*").order("name asc")
+      @swarmed_folders.each do |sf|
+        sf.status='swarmed'
+      end
       @folders= @swarmed_folders + @folders
     end
   end
@@ -61,7 +70,7 @@ end
 <%# for debugging %>
 <%#= values %>
 <%# if @folders %>
-<%# @folders.as_json.each do |r| %>
+<%# @folders.as_json(methods: "status").each do |r| %>
 <%#= "#{r}<br>".html_safe %>
 <%# end %>
 <%# end %>
@@ -124,28 +133,17 @@ end
         newshare_zone = "#{link_to MAIN['share_folder'], new_share_on_folder_path(f), class: 'btn btn-outline-primary btn-sm'}".html_safe
         manage_zone = "#{link_to MAIN['manage_folder'], edit_folder_path(f), class: 'btn btn-outline-success btn-sm'}".html_safe
         manage_zone_modal= "#{link_to MAIN['manage_folder'], edit_folder_path(f),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'btn btn-outline-success btn-sm'} }".html_safe
-        #speeding up things - no interest to have shared icon and non shared icon as there is specific button to show shares
-        #if f.shared?
-        #  if f.is_swarmed? 
-          #if f.user_id != current_user.id
-        #    start = "<div class='folder_shared_swarmed'>"
-        #  elsif f.has_sub_swarmed?
-        #    start = "<div class='folder_shared_having_sub_swarmed'>"
-        #  else 
-        #    start = "<div class='folder_shared'>" 
-        #  end
-        #else
-          #if f.is_swarmed?
-          # current_user is the folder owner - so we check if he has eventually swarmed the folder to another user
-          if f.status == 'swarmed'
-            start = "<div class='folder_swarmed'>"
-          # 05/03/2019 - remove the elsif but it could be interesting
-          #elsif f.has_sub_swarmed?
-          #  start = "<div class='folder_having_sub_swarmed'>"
-          else 
-            start = "<div class='folder'>" 
-          end
-        #end
+     
+        #if f.is_swarmed?
+        # current_user is the folder owner - so we check if he has eventually swarmed the folder to another user
+        if f.status == 'swarmed'
+          start = "<div class='folder_swarmed'>"
+        # 05/03/2019 - remove the elsif but it could be interesting
+        #elsif f.has_sub_swarmed?
+        # start = "<div class='folder_having_sub_swarmed'>"
+        else 
+          start = "<div class='folder'>" 
+        end
         folderbutton = "#{link_to f.name, folder_path(f), class: 'btn btn-link'}".html_safe
         shares_zone = showshares
         close = "</div>".html_safe
@@ -156,28 +154,15 @@ end
       prenom_nom=f.owner_mel.split('@')[0]
       #prenom_nom=User.find_by_id(f.user_id).email[0..User.find_by_id(f.user_id).email.index('@')-1]
       ownerinfo = "[#{prenom_nom}]".html_safe
-      # speeding up things - no interest to have shared icon and non shared icon as there is specific button to show shares
-      #if f.shared?
-      #  if f.is_shared_to_user?(current_user)
-      #    start = "<div class='folder_shared_by_other'>"
-      #  elsif f.is_swarmed_to_user?(current_user)
-      #    start = "<div class='folder_shared_swarmed_by_other'>"
-      #  elsif f.has_sub_swarmed_to_user?(current_user)
-      #    start = "<div class='folder_shared_owned_by_other_having_sub_swarmed'>"
-      #  else
-      #    start = "<div class='folder_shared_owned_by_other'>"
-      #  end
-      #else
-        #if f.is_swarmed_to_user?(current_user)
-        if f.status=="swarmed_to_the_current_user"
-          start = "<div class='folder_swarmed_by_other'>"
-        # 05/03/2019 - remove the elsif but it could be interesting
-        #elsif f.has_sub_swarmed_to_user?(current_user)
-        #  start = "<div class='folder_owned_by_other_having_sub_swarmed'>"
-        else
-          start = "<div class='folder_owned_by_other'>"
-        end
-      #end
+      #if f.is_swarmed_to_user?(current_user)
+      if f.status=="swarmed_to_the_current_user"
+        start = "<div class='folder_swarmed_by_other'>"
+      # 05/03/2019 - remove the elsif but it could be interesting
+      #elsif f.has_sub_swarmed_to_user?(current_user)
+      # start = "<div class='folder_owned_by_other_having_sub_swarmed'>"
+      else
+        start = "<div class='folder_owned_by_other'>"
+      end
       folderbutton = "#{link_to f.name, folder_path(f), class: 'btn btn-link'}".html_safe
       #if f.is_swarmed_to_user?(current_user) || current_user.is_admin?
       if f.status=="swarmed_to_the_current_user" || current_user.is_admin?

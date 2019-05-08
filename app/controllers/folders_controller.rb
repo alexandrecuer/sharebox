@@ -38,7 +38,10 @@ class FoldersController < ApplicationController
         children=folder.get_subs_assets_shares
       end
     end
-    results.merge!({"folder": folder.as_json})
+    folder.status="to be fixed"
+    puts("********status:#{folder.status}")
+    puts(folder)
+    results.merge!({"folder": folder.as_json(methods: 'status')})
     results.merge!({"base": base.as_json})
     results.merge!({"su": su})
     results.merge!({"children": children.as_json})
@@ -111,12 +114,16 @@ class FoldersController < ApplicationController
   
   ##
   # render browse.html.rb by default<br>
-  # if given a folder id, render the folder record (if exists) as a json list
+  # if given a folder id, render the folder record (if exists) as a json list<br>
+  # can also render the old show.html.erb
   def browse
     if params[:id]
       folder=Folder.find_by_id(params[:id])
       render json: folder
-    end   
+    end  
+    if params[:oldstyle]
+      render 'show'
+    end
   end
   
   ##

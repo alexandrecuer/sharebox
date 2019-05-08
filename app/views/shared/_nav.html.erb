@@ -77,7 +77,7 @@ end
 # bread crumbs navigation if any / fil d'ariane si présent
 if @current_folder
   breadcrumb = "<nav aria-label='breadcrumb'><ol class='breadcrumb'>"
-  breadcrumb = "#{breadcrumb}<li class='breadcrumb-item'>#{link_to MAIN["root"], root_url}</li>"
+  breadcrumb = "#{breadcrumb}<li class='breadcrumb-item'><a href=/browse?oldstyle=1>#{MAIN["root"]}</a></li>"
   @current_folder.ancestors.reverse.each do |folder|
     if current_user.has_shared_access?(folder)
       breadcrumb = "#{breadcrumb}<li class='breadcrumb-item'>#{link_to folder.name, folder_path(folder)}</li>"
