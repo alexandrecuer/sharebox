@@ -35,18 +35,17 @@ end
 
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-  <%= link_to MAIN["site_name"].html_safe, root_url , class: "navbar-brand" %>
-  Powered by&nbsp;<%= link_to "colibri v1.2", "http://github.com/alexandrecuer/sharebox" %>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <%= current_user.email %>(<%= current_user.statut %>)
+  <table cellpadding=6><tr>
+
+  <td>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto"></ul>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <%= image_tag 'colibri.png', size: '40x40' %>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class='dropdown-item'><%= current_user.email %>(<%= current_user.statut %>)</div>
           <%#= sanitize uploadfile %>
           <%#= createdir %>
           <%#= sanitize createdirmodal  %>
@@ -58,19 +57,29 @@ end
           <%= sanitize newpoll %>
           <%= managepolls %>
           <%= sanitize line %>
+          <% if current_user.is_admin? %>
+          <%= link_to "API help", help_path, class: 'dropdown-item' %>
+          <% end %>
           <%= link_to MAIN["disconnect"].html_safe, destroy_user_session_path, :method => :delete, class: "dropdown-item" %>          
         </div>
       </li>
-    </ul>
-  </div>
-  
+    </div>
+  </td>
   <% if current_user.belongs_to_team? %>
-  <%= link_to "Statistiques satisfaction", polls_path %>&nbsp;|&nbsp;
-  <%= link_to "Explorateur", browse_path %>&nbsp;|&nbsp;
+  <td><a href=/><center><i class="fa fa-home fa-2x"></i><div id=browse style="display: block;">Explorateur</div></center></a></td>
+  <td><a href=/polls><center><i class="fa fa-comments fa-2x"></i><div id=polls style="display: block;">Statistiques satisfaction</div></center></a></td>
   <% end %>
-  <% if current_user.is_admin? %>
-  <%= link_to "API help", help_path %>
-  <% end %>
+  </tr></table>
+ <div class="col">
+  <div class="float-right">
+  <div id=name class="navbar-brand"><%= MAIN["site_name"].html_safe%></div>
+  <div id=sources>Powered by <%= link_to "colibri v1.2", "http://github.com/alexandrecuer/sharebox" %></div>
+  </div>
+  </div>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
 </nav>
 
 <%
@@ -109,3 +118,29 @@ end
 
 <div class="modal fade" id="modalassetwin" tabindex="-1" role="dialog" aria-hidden="true">
 </div>
+
+
+<script>
+
+//to make the menu responsive
+function adaptMenu(){
+  if($(window).width()<800){
+    $("#browse").css("display", "none");
+    $("#polls").css("display", "none");
+    $("#sources").css("display", "none");
+    $("#name").css("display", "none");
+  } else {
+    $("#browse").css("display", "block");
+    $("#polls").css("display", "block");
+    $("#sources").css("display", "block");
+    $("#name").css("display", "block");
+  }
+}
+
+adaptMenu();
+
+window.onresize = function(event) {
+  adaptMenu();
+};
+
+</script>

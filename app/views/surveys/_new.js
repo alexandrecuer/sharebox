@@ -20,8 +20,8 @@ function gensurveylist()
                     out.push("</tr>");
                 }                    
             });
-            //console.log(out.join(''));
-            $("#surveylist").html(out);
+            //console.log(out.join(""));
+            $("#surveylist").html(out.join(""));
             
         }
     });
