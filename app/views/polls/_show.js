@@ -1,5 +1,5 @@
 
-$(".carousel2").carousel();
+//$(".carousel2").carousel();
 
 var date = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
@@ -113,30 +113,6 @@ function synthmodal(s)
   return synth.join("");
 }
 
-//output a date in human FRENCH format
-function humandate(d)
-{
-  var options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-  return new Date(d.substr(0, 10)).toLocaleDateString("fr-FR",options);
-}
-
-//returns a date string as expected in the range (time_start and time_end)
-function stringify(date) 
-{
-    var d = new Date(date);
-    var month = "" + (d.getMonth() + 1);
-    var day = "" + d.getDate();
-    var year = d.getFullYear();
-
-    if (month.length < 2) {
-        month = "0" + month;
-    }
-    if (day.length < 2) {
-        day = "0" + day;
-    }
-
-    return [year, month, day].join("-");
-}
 
 //full output stats generation for a given pollId, ie number of sent surveys, number of feedbacks received, synth modal and carousel
 function genstatsforpoll(pollId)
@@ -209,6 +185,8 @@ function genstatsforpoll(pollId)
               });
               $("#carousel-inner").html(out.join(""));
               $("#carousel-nav").html(carouselnav("carousel2"));
+              //test on 10/05/2019
+              $("#carousel2").carousel();
             } else {
               $("#carousel-inner").html("");
               $("#carousel-nav").html("");
@@ -220,11 +198,15 @@ function genstatsforpoll(pollId)
 
 var pollId;
 var polls={};
-var now = new Date();
-var sixmbefore=new Date(now.getFullYear(),now.getMonth() - 6,now.getDate());
+
+var tomorrow= new Date();
+tomorrow.setDate(tomorrow.getDate()+1);
+var sixmbefore = new Date();
+sixmbefore.setMonth(sixmbefore.getMonth() - 6);
+
 
 $("#time_start").val(stringify(sixmbefore));
-$("#time_end").val(stringify(now));
+$("#time_end").val(stringify(tomorrow));
 
 $("#s_poll_id").on("change", function(){  
   pollId=$("#s_poll_id").val();
@@ -256,31 +238,15 @@ $("#date_fields").on("change", function(){
   genstatsforpoll(pollId);
 });
 
-$("#groups").on("change", function(){  
+$("#groups").on("change keypress", function(event){  
+  //var frag=$(this).val();
+  //console.log(event.which+" for the entry "+frag)
   genstatsforpoll(pollId);
 });
 
-//groups autocompletion
-//different from what is proposed by _index.js in the users control panel
+//groups autocompletion with the common function
 $("#groups").on("input",function(){
   var frag=$(this).val();
-  $.ajax({
-    type: "GET",
-    url: "/get_groups?groupsfrag="+frag,
-    dataType: "json",
-    async: true,
-    success: function(result) {
-      var some=[];
-      result.forEach(function(r){
-        var elements=r.split("/");
-        elements.forEach(function(e){
-          if (!result.includes(e)){
-              result.push(e);
-          }
-        });
-      });
-      //console.log(result);
-      $("#groups").autocomplete({source: result});
-    }
-  });
+  //console.log(frag);
+  genGroupsAutocompletion(frag,"groups");
 });

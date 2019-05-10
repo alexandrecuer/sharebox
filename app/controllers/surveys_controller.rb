@@ -35,7 +35,26 @@ class SurveysController < ApplicationController
             render json: {poll: "inexisting poll"}
           end
         else
-          surveys = Survey.all.joins(:user).select("surveys.*, users.email as owner_mel").order("id DESC");
+          tab=[]
+          tab[0]=""
+          if params[:groups]
+            tab[0]="#{tab[0]}users.groups like ?"
+            tab.push("%#{params[:groups]}%")
+          end
+          if params[:time_start] && params[:time_end]
+            tab[0]="#{tab[0]} and surveys.created_at BETWEEN ? AND ?"
+            tab.push(params[:time_start])
+            tab.push(params[:time_end])
+          end
+          # check if the sql 'where' instruction begin by " and " and if yes truncate it
+          if /^\sand\s/.match(tab[0])
+            tab[0].gsub!(/^\sand\s/,"")
+          end
+          if tab[0].length>0
+            surveys = Survey.all.joins(:user).select("surveys.*, users.email as owner_mel").where(tab).order("id DESC")
+          else
+            surveys = Survey.all.joins(:user).select("surveys.*, users.email as owner_mel").order("id DESC")
+          end
           render json: surveys
         end
     end

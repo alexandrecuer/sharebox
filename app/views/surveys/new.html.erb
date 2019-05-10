@@ -12,6 +12,14 @@ Choisissez le sondage à utiliser dans le menu déroulant :
 <div><button id="create" class="btn" style="display:none">Enregistrer</button><br><br></div>
 
 <div class="table-responsive">
+  <h4>Liste des enquêtes envoyées et sans réponse à ce jour</h4>
+  <input type=text class=form-control id=groups placeholder="indiquer votre groupe de travail" value=<%= current_user.groups %>>
+  <div class="container-fluid"> 
+    <div id=date_fields class="row flex-xl-nowrap">
+      <input type=text class=form-control id=time_start placeholder="date de début AAAA-MM-JJ">
+      <input type=text class=form-control id=time_end placeholder="date de fin AAAA-MM-JJ">
+    </div>
+  </div>
   <table class="table">
     <tr>
       <th>Numéro</th>
@@ -19,6 +27,7 @@ Choisissez le sondage à utiliser dans le menu déroulant :
       <th></th>
       <th></th>
     </tr>
+    
     <tbody id="surveylist"></tbody>
   </table>
 </div>

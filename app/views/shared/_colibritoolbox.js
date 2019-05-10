@@ -74,3 +74,55 @@ if (selectId){
 }
 return options.join("");
 }
+
+//output a date in human FRENCH format
+function humandate(d)
+{
+  var options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+  return new Date(d.substr(0, 10)).toLocaleDateString("fr-FR",options);
+}
+
+//returns a date string as expected in the range (time_start and time_end)
+function stringify(date) 
+{
+    var d = new Date(date);
+    var month = "" + (d.getMonth() + 1);
+    
+    var day = "" + d.getDate();
+    var year = d.getFullYear();
+
+    if (month.length < 2) {
+        month = "0" + month;
+    }
+    if (day.length < 2) {
+        day = "0" + day;
+    }
+
+    return [year, month, day].join("-");
+}
+
+//groups autocompletion elaborate process given a text fragment and an inputId field where to autocomplete
+//different from what is realized by _index.js in the users control panel
+function genGroupsAutocompletion(frag,inputId)
+{
+  $.ajax({
+    type: "GET",
+    url: "/get_groups?groupsfrag="+frag,
+    dataType: "json",
+    async: true,
+    success: function(result) {
+      var some=[];
+      result.forEach(function(r){
+        var elements=r.split("/");
+        elements.forEach(function(e){
+          if (!result.includes(e)){
+              result.push(e);
+          }
+        });
+      });
+      //console.log(result);
+      $("#"+inputId).autocomplete({source: result});
+    }
+  });
+}
+//*******************************END******OF******COMMON*****JS*****FUNCTIONS***********************************

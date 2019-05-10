@@ -1,6 +1,30 @@
+//interrogate the API and generate the list of pending surveys for all the registered users or for a specified group
+//possibility to query on a datarange
 function gensurveylist()
 {
-    $.ajax({ url: "/surveys", 
+    var request;
+    var reqend=[];
+    var time_start=$("#time_start").val();
+    var time_end=$("#time_end").val();
+    var groups=$("#groups").val();
+    if (groups) {
+        reqend.push("groups="+groups);
+    }
+    if (time_start) {
+        reqend.push("time_start="+time_start);
+    }
+    if (time_end) {
+        reqend.push("time_end="+time_end);
+    }
+    var end=reqend.join("&");
+    if (end){
+        request="/surveys?"+end;
+    } else {
+        request="/surveys";
+    }
+    //console.log(request);
+    
+    $.ajax({ url: request, 
         dataType: "json", 
         async: true, 
         success(data) {
@@ -54,6 +78,7 @@ function genanswerslinks()
     });
 }
 
+//validate fields when creating a new survey out of the files/folders system
 function validate()
 {
     var valid=true;
@@ -94,6 +119,14 @@ function validate()
     return valid;
 }
 
+var tomorrow= new Date();
+tomorrow.setDate(tomorrow.getDate()+1);
+var sixmbefore = new Date();
+sixmbefore.setMonth(sixmbefore.getMonth() - 6);
+
+$("#time_start").val(stringify(sixmbefore));
+$("#time_end").val(stringify(tomorrow));
+
 validate();
 gensurveylist();
 genanswerslinks();
@@ -101,6 +134,25 @@ genanswerslinks();
 
 $("#process_options").on("change",".form-control",function(){
     validate();
+});
+
+$("#time_start").on("change",function(){
+    gensurveylist();
+});
+
+$("#time_end").on("change",function(){
+    gensurveylist();
+});
+
+$("#groups").on("change",function(){
+    gensurveylist();
+});
+
+//groups autocompletion with the common function
+$("#groups").on("input",function(){
+  var frag=$(this).val();
+  //console.log(frag);
+  genGroupsAutocompletion(frag,"groups");
 });
 
 //building select menu with poll names
@@ -154,44 +206,36 @@ $("#create").click(function(){
   
 });
 
-
-//emails autocompletion
+//basic email autocompletion 
+//designed for user or client models, with an 'email' field
+function genBasicEmailCompletion(saisie,model,inputId)
+{
+    $.ajax({
+        type: "GET",
+        url: "/"+model+"?melfrag="+saisie,
+        dataType: "json",
+        async: true,
+        success(result) {
+            var some=[];
+            result.forEach(function(r){
+                some.push(r["email"]);
+            });
+            $("#"+inputId).autocomplete({source: some});
+        }
+    });
+}
+//email autocompletion on project manager field
 $("#s_by").on("input",function(e){
     var saisie = $(this).val();
     //console.log(saisie);
-    $.ajax({
-        type: "GET",
-        url: "/users?melfrag="+saisie,
-        dataType: "json",
-        async: true,
-        success(result) {
-            var some=[];
-            result.forEach(function(r){
-                some.push(r["email"]);
-            });
-            $("#s_by").autocomplete({source: some});
-            //console.log(result);
-        }      
-    });  
+    genBasicEmailCompletion(saisie,"users","s_by");
 });
 
+//email autocompletion on client field
 $("#s_client_mel").on("input",function(e){
     var saisie = $(this).val();
     //console.log(saisie);
-    $.ajax({
-        type: "GET",
-        url: "/clients?melfrag="+saisie,
-        dataType: "json",
-        async: true,
-        success(result) {
-            var some=[];
-            result.forEach(function(r){
-                some.push(r["email"]);
-            });
-            $("#s_client_mel").autocomplete({source: some});
-            //console.log(result);
-        }     
-    });
+    genBasicEmailCompletion(saisie,"clients","s_client_mel");
 });
 
 $("#surveylist").on("click",".send",function(){
