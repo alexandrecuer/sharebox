@@ -1,5 +1,5 @@
 <%= render 'shared/nav' %>
-<% if ENV.fetch('TEAM') %>
+<% if ENV['TEAM'] %>
   You are working in TEAM mode - <%= ENV.fetch('TEAM') %><br>
 <% end %>
 Email server : <%= Rails.application.config.action_mailer.smtp_settings[:address] %><br>
