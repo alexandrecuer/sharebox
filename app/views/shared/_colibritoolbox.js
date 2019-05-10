@@ -110,7 +110,7 @@ function genGroupsAutocompletion(frag,inputId)
     url: "/get_groups?groupsfrag="+frag,
     dataType: "json",
     async: true,
-    success: function(result) {
+    success(result) {
       var some=[];
       result.forEach(function(r){
         var elements=r.split("/");

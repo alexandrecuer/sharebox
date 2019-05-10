@@ -4,17 +4,17 @@ function gensurveylist()
 {
     var request;
     var reqend=[];
-    var time_start=$("#time_start").val();
-    var time_end=$("#time_end").val();
+    var timeStart=$("#time_start").val();
+    var timeEnd=$("#time_end").val();
     var groups=$("#groups").val();
     if (groups) {
         reqend.push("groups="+groups);
     }
-    if (time_start) {
-        reqend.push("time_start="+time_start);
+    if (timeStart) {
+        reqend.push("time_start="+timeStart);
     }
-    if (time_end) {
-        reqend.push("time_end="+time_end);
+    if (timeEnd) {
+        reqend.push("time_end="+timeEnd);
     }
     var end=reqend.join("&");
     if (end){
