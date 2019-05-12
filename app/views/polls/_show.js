@@ -140,7 +140,7 @@ function genstatsforpoll(pollId)
         type: "GET",
         url: request,
         async: true,
-        success: function(result) {
+        success(result) {
             //console.log(result);
             var csvlink;
             if (groups){
@@ -221,7 +221,7 @@ $.ajax({
     url: "/getpolls",
     dataType: "json",
     async: true, 
-    success: function(result) {
+    success(result) {
         polls=result;
         var ids=[];
         polls.forEach(function(p){
