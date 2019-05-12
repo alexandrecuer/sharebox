@@ -46,9 +46,13 @@ class AdminController < ApplicationController
   # change the folder owner<br>
   # CAUTION !!!! <br>
   # uses the move method of the folder model, which recalculates the metadatas<br>
-  # example : folder1 belonging to user1 contains a swarmed folder2 belonging to user2<br>
+  # example1 : folder1 belonging to user1 contains a swarmed folder2 belonging to user2<br>
   # if we give folder1 to user3, folder2's owner is ALSO changed to user3 !!<br>
-  # it is necessary to recalculate/reset 'swarmed_to' in folder2's metadatas
+  # it is therefore necessary to recalculate/reset 'swarmed_to' in folder2's metadatas<br>
+  # in this process, folder1 moves from user1's root tree to user3's root tree<br>
+  # if folder1 is not a root but a swarmed folder, it stays at the same place in the tree structure but its owner is modified<br>
+  # example2 : folder1 belonging to user1 contains folder2 belonging to user1<br>
+  # if we give folder2 to user2, folder2 becomes swarmed
   def change_owner
     results={}
     folder=Folder.find_by_id(params[:folder_id])
@@ -70,8 +74,10 @@ class AdminController < ApplicationController
   
   ##
   # move a folder to another one or to the root if destination_folder_id is 0<br>
-  # if the derstination folder does not belong to the folder owner, the folder is swarmed<br>
+  # if the destination folder does not belong to the folder owner, the folder is swarmed<br>
   # possible to change the folder owner by adding ?user_id=xx<br>
+  # without id -> moves the folder in the owner's root tree or swarms the folder to another user<br>
+  # in folder controller, have same kind of methods with current_folder.folders.find_by_id.....to combine with drag and drop functionnalities in the browse view
   def move
     results={}
     folder=Folder.find_by_id(params[:folder_id])
@@ -115,4 +121,4 @@ class AdminController < ApplicationController
   end
   
 
-  end
+end
