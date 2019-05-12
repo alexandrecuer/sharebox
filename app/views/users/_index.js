@@ -22,7 +22,7 @@ $.ajax({
       $("#users_summary").html("<h5>[gestion des utilisateurs]["+result.length+"]</h5>");
       tab=[];
       result.forEach(function(u){
-        practises=[];
+        var practises=[];
         if (u.has_shares) { practises.push(u.has_shares) ;}
         if (u.is_sharing) { practises.push(u.is_sharing) ;}
         if (u.groups===null) { u.groups=""; }
