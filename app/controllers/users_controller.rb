@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   # An admin cannot change his own status<br>
   def update
     result={}
-    if !current_user.is_admin?
+    unless current_user.is_admin?
       result["success"]=false
       result["message"]=USERS_MSG["only_for_admin"]
     else
@@ -57,7 +57,7 @@ class UsersController < ApplicationController
   # Delete a specific user<br>
   # only for admins  
   def destroy
-    if !(current_user.is_admin?)
+    unless current_user.is_admin?
         flash[:notice] = USERS_MSG["only_admin_may_delete_user"]
     else
         if current_user.id.to_i == params[:id].to_i
@@ -89,17 +89,33 @@ class UsersController < ApplicationController
   end
   
   ##
-  # 1) permits to search a list of users corresponding to a given mel fragment and render to json
-  # 2) Show a complete view of all users registered<br>
-  #    Only for private and admin users
+  # Search a list of users according to some filtering parameters and render to json<br>
+  # params are melfrag, statut, groups<br>
+  # if param admin is present, calculates also the sharing practises which are not recorded in the database<b>
+  # possible to add a param order (not finalized)
+  # please note in a controller, params always exists - its minimal size is 2 with 2 keys : controller and action<br>
+  # if params has got only two keys, render the users management dashboard
   def index
-    if melfrag=params[:melfrag]
-      allusers = User.where("email LIKE ?", "%#{melfrag}%")
-      results=[]
-      allusers.each do |u|
-        results<< {"email": u.email,"id": u.id}
+    
+    puts ("**********we are in the controller #{params[:controller]}")
+    puts ("**********params has got #{params.keys.length} key(s)")
+    puts ("**********which are : #{params.keys}")
+    
+    #if melfrag=params[:melfrag]
+    if params.keys.length>2
+      #allusers = User.where("email LIKE ?", "%#{melfrag}%")
+      #results=[]
+      #allusers.each do |u|
+      #  results<< {"email": u.email,"id": u.id}
+      #end
+      #render json: results
+      #users=filter(params[:groups],params[:statut],params[:melfrag],params[:order])
+      users=filter(params)
+      if params[:admin]
+        render json: users.as_json(methods: ["is_sharing","has_shares"])
+      else
+        render json: users
       end
-      render json: results
     else
       unless current_user.is_admin?
         flash[:notice] = USERS_MSG["user_managing_forbidden"]
@@ -108,12 +124,6 @@ class UsersController < ApplicationController
     end
   end
   
-  ##
-  # temporary test
-  def show
-    users=filter(params[:groups],params[:statut],params[:melfrag],params[:order])
-    render json: users.as_json(methods: ["is_sharing","has_shares"])
-  end
   
   ##
   # given a word as param, return a list with the closed groups in the database 
@@ -130,10 +140,13 @@ class UsersController < ApplicationController
   ##
   # private functions
   private 
+  
     ##
-    # return a list of users according to some request parameters
-    # a ligth filtering function for users management
-    def filter(groups=nil,statut=nil,melfrag=nil,order=nil)
+    # generate where part of the request
+    def wherestring(params)
+      groups=params[:groups]
+      statut=params[:statut]
+      melfrag=params[:melfrag]
       tab=[]
       request=[]
       tab[0]=""
@@ -160,15 +173,12 @@ class UsersController < ApplicationController
       end
       tab[0]=request.join(" and ")
       puts(tab)
-      unless order
-        order="ID ASC"
-      end        
-      if tab[0].length>0
-        users=User.where(tab).order(order)
-      else
-        users=User.all.order(order)
-      end
-      
+      tab
+    end
+
+    ##
+    # define in the users records, extra fields related to sharing and receiving    
+    def fixpractises(users)
       #SHARING USERS
       sql = <<-SQL
         SELECT distinct users.id 
@@ -203,6 +213,27 @@ class UsersController < ApplicationController
         if users_with_shares.include?(u.id)  
           u.has_shares='reçoit'
         end
+      end
+      users
+    end
+    
+    ##
+    # return a list of users according to some request parameters
+    # a ligth filtering function for users management
+    #def filter(groups=nil,statut=nil,melfrag=nil,order=nil)
+    def filter(params)
+      tab=wherestring(params)
+      order=params[:order]
+      unless order
+        order="ID ASC"
+      end        
+      if tab[0].length>0
+        users=User.where(tab).order(order)
+      else
+        users=User.all.order(order)
+      end
+      if params[:admin]
+        users=fixpractises(users)
       end
       users
     end

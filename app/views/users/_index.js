@@ -2,11 +2,12 @@
 function genUserList(groups,statut,melfrag)
 {
 var tab=[];
-var base="/users/1";
+var base="/users";
 var request;
 if (groups) { tab.push("groups="+groups); }
 if (statut) { tab.push("statut="+statut); }
 if (melfrag) { tab.push("melfrag="+melfrag); }
+tab.push("admin="+1);
 var end=tab.join("&");
 if (end.length>0){
   request=base+"?"+end;
