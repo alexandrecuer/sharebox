@@ -48,33 +48,22 @@ help << a
 a={}
 a["controller"]="satisfactions"
 a["url"]="<a href=/satisfactions>#{root_url}satisfactions</a>"
-a["text"]="sortie json de toutes les réponses obtenues, toutes enquêtes confondues. La sortie intégre des statistiques et les réponses intégrales"
+a["text"]="sortie json de toutes les réponses obtenues, toutes enquêtes confondues."
+a["text"]="#{a["text"]} <br> N'intègre pas de données statistiques - uniquement les réponses intégrales."
 help << a
 
 if max_poll_id
-  a={}
-  a["controller"]="satisfactions"
-  a["url"]="<a href=/satisfactions?poll_id=#{max_poll_id}>#{root_url}satisfactions?poll_id=#{max_poll_id}</a>"
-  a["text"]="sortie json de toutes les réponses obtenues, pour l'enquête #{max_poll_id}"
-  help << a
 
   a={}
   a["controller"]="satisfactions"
-  a["url"]="<a href=/satisfactions?poll_id=#{max_poll_id}&csv=1>#{root_url}satisfactions?poll_id=#{max_poll_id}&csv=1</a>"
-  a["text"]="sortie csv de toutes les réponses obtenues, pour l'enquête #{max_poll_id}"
+  a["url"]="<a href=/satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01&groups=DLCF&csv=1>"
+  a["url"]="#{a["url"]} #{root_url}satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01&groups=DLCF&csv=1</a>"
+  a["text"]="sortie csv de toutes les réponses obtenues, pour l'enquête #{max_poll_id} sur une période temporelle et pour un fragment de groupe donné"
+  a["text"]="#{a["text"]} <br><i>start, end et groups sont optionnels. En cas d'absence, la requête renvoie toutes les réponses de l'enquête</i>"
+  a["text"]="#{a["text"]} <br><b>si csv n'est pas indiqué, renvoie au format json</b>"
+  a["text"]="#{a["text"]} <br>A noter que la sortie json intègre intégre des statistiques et les réponses intégrales"
   help << a
 
-  a={}
-  a["controller"]="satisfactions"
-  a["url"]="<a href=/satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01>#{root_url}satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01</a>"
-  a["text"]="sortie json de toutes les réponses obtenues, pour l'enquête #{max_poll_id} sur une période temporelle"
-  help << a
-
-  a={}
-  a["controller"]="satisfactions"
-  a["url"]="<a href=/satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01&csv=1>#{root_url}satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01&csv=1</a>"
-  a["text"]="sortie csv de toutes les réponses obtenues, pour l'enquête #{max_poll_id} sur une période temporelle"
-  help << a
 end
 
 if min_satisfaction_id=Satisfaction.where("folder_id <?",0).minimum(:id)
@@ -115,8 +104,10 @@ help << a
 a={}
 a["controller"]="users"
 melfrag="a"
-a["url"]="<a href=users?melfrag=#{melfrag}>#{root_url}users?melfrag=#{melfrag}</a>"
-a["text"]="sortie json de tous les utilisateurs dans la base dont l'adresse mel contient le fragment #{melfrag}"
+a["url"]="<a href=users?melfrag=#{melfrag}&groups=DLCF&statut=private&admin=1>#{root_url}users?melfrag=#{melfrag}&groups=DLCF&statut=private&admin=1</a>"
+a["text"]="sortie json de tous les utilisateur avec adresse mel contenant le fragment #{melfrag}, paramètres groups contenant le mot DLCF, et statut private<br>"
+a["text"]="#{a["text"]}<b>Si admin n'est pas indiqué, ne calcule pas les pratiques de partages (reçoit/offre) stockés dans les champs virtuels is_sharing et has_shares</b><br>"
+a["text"]="#{a["text"]}<i>La requête ne s'exécute que si l'on précise au moins un des 4 paramètres (admin, melfrag, statut, groups)</i><br>"
 help << a
 
 if min_shared_folder_id=current_user.shared_folders.joins(:folder).select("folders.id as folder_id")[0].folder_id
@@ -207,7 +198,7 @@ end
     <%= h["url"].html_safe %>
   </td>
   <td>
-    <%= h["text"] %>
+    <%= h["text"].html_safe %>
   </td>
 </tr>
 <% end %>

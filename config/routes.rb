@@ -88,5 +88,7 @@ Rails.application.routes.draw do
    post "define_groups" => "admin#define_groups", :as => ""
    
    get "get_groups" => "users#get_groups", :as => ""
+   
+   get "satisfactions/run/:poll_id" => "satisfactions#run", :as => ""
 
 end

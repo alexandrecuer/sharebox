@@ -4,6 +4,8 @@
 
 class SatisfactionsController < ApplicationController
   
+  DATE_REG_EXP=/([0-9]{4}-[0-9]{2}-[0-9]{2})/
+  
   ##
   # show / update meta datas on satisfactions
   def feedback_metas
@@ -31,6 +33,55 @@ class SatisfactionsController < ApplicationController
       end
     end
     @log=log
+  end
+  
+  ##
+  # run a filter on the results of a specific poll
+  def run
+    authenticate_user!
+    puts(DATE_REG_EXP)
+    polls=[]
+    all={}
+    poll=Poll.find_by_id(params[:poll_id])
+    if poll
+      polls.push(poll)
+      all["poll_id"]=params[:poll_id]
+      all["poll_name"]=poll.name
+      unless params[:groups]
+        tab=prepare(params,poll.closed_names_number,3)
+        satisfactions=Satisfaction.find_by_sql(tab)
+      else
+        tab=prepare(params,poll.closed_names_number,1)
+        satisfactions=Satisfaction.find_by_sql(tab)
+        tab=prepare(params,poll.closed_names_number,2)
+        satisfactions+=Satisfaction.find_by_sql(tab)
+        all["groups"]=params[:groups]
+      end
+      if params[:start] && params[:end]
+        all["from"]=format_date(params[:start])
+        all["to"]=format_date(params[:end])
+      end
+      if params[:ncap]
+        all["ncap"]="tous les feedbacks présentant au moins une note inférieure ou égale à #{params[:ncap]}"
+      end
+      unless params[:csv] || params[:ncap]
+        nb=poll.count_sent_surveys(all["from"],all["to"],params[:groups])
+        all["sent"]=nb
+        if satisfactions.length>0
+          stats=poll.stats(satisfactions)
+          all["stats"]=stats
+        end
+      end
+      unless params[:csv]
+        all["satisfactions"]=arrange(polls,satisfactions)
+        render json: all
+      else
+        csv = poll.csv(satisfactions)
+        send_data csv, filename: "polls-#{Time.zone.today}.csv"
+      end
+    else
+      render json: {"message": "pas de sondage sous ce numéro"}
+    end
   end
   
   ##
@@ -104,29 +155,30 @@ class SatisfactionsController < ApplicationController
       # all requests to the database are now done
       # we can process datas - 2 cases - json or csv
       unless params[:csv]
-        open={}
-        closed={}
-        polls.each do |p|
-          open["#{p.id}"]=p.hash_open
-          closed["#{p.id}"]=p.hash_closed
-        end
-        results=[]
-        satisfactions.each_with_index do |s,i|
-          results[i]={}
-          results[i]["id"]=s.id
-          results[i]["date"]=s.updated_at
-          results[i]["affaire"]=s.case_number
-          results[i]["folder_id"]=s.folder_id
-          results[i]["poll_id"]=s.poll_id
-          results[i]["collected_by"]=s.email
-          for j in 1..open["#{s.poll_id}"].length
-            results[i][open["#{s.poll_id}"]["open#{j}"]]=s["open#{j}"]
-          end
-          for j in 1..closed["#{s.poll_id}"].length
-            results[i][closed["#{s.poll_id}"]["closed#{j}"]]=s["closed#{j}"]
-          end
-        end
-        all["satisfactions"]=results
+        all["satisfactions"]=arrange(polls,satisfactions)
+        #open={}
+        #closed={}
+        #polls.each do |p|
+        #  open["#{p.id}"]=p.hash_open
+        #  closed["#{p.id}"]=p.hash_closed
+        #end
+        #results=[]
+        #satisfactions.each_with_index do |s,i|
+        #  results[i]={}
+        #  results[i]["id"]=s.id
+        #  results[i]["date"]=s.updated_at
+        #  results[i]["affaire"]=s.case_number
+        #  results[i]["folder_id"]=s.folder_id
+        #  results[i]["poll_id"]=s.poll_id
+        #  results[i]["collected_by"]=s.email
+        #  for j in 1..open["#{s.poll_id}"].length
+        #    results[i][open["#{s.poll_id}"]["open#{j}"]]=s["open#{j}"]
+        #  end
+        #  for j in 1..closed["#{s.poll_id}"].length
+        #    results[i][closed["#{s.poll_id}"]["closed#{j}"]]=s["closed#{j}"]
+        #  end
+        #end
+        #all["satisfactions"]=results
         render json: all
       else
         if poll
@@ -368,6 +420,8 @@ class SatisfactionsController < ApplicationController
 
   private
   
+    ##
+    # save a free feedback, ie out of the folders/files system
     def save_free_sat(satisfaction, survey)
       if satisfaction.save
         survey.token="disabled#{satisfaction.id}"
@@ -384,8 +438,104 @@ class SatisfactionsController < ApplicationController
       message
     end
     
+    ##
+    # format the title of the feedback<br>
+    # used during creation process
     def gentitle(title,client,owner)
       "#{title} - Client: #{client} - Chargé d'affaire: #{owner}"
+    end
+    
+    ##
+    # format a basic date AAAA-MM-YY in a SQL way
+    def format_date(t)
+      time=DATE_REG_EXP.match(t)
+      "#{time} 00:00:00"
+    end
+    
+    ##
+    # prepare a SQL request in the satisfactions table<br>
+    # implement a jointure on the users and/or folders table<br>
+    # params must at least include the poll number<br>
+    # possible params are start+end, groups fragment, ncap to track insatisfactions
+    def prepare(params,closed_names_number,request_type_nbr)
+
+      common="SELECT satisfactions.*,users.email as email, users.groups as groups FROM satisfactions"
+      #type 1 gives satisfactions on folder
+      type=[]
+      type[1]=common
+      type[1]="#{type[1]} INNER JOIN folders ON folders.id = satisfactions.folder_id" 
+      type[1]="#{type[1]} INNER JOIN users ON users.id = folders.user_id WHERE "
+      #type 2 gives satisfactions out of the folders/files system
+      type[2]=common 
+      type[2]="#{type[2]} INNER JOIN users ON users.id = satisfactions.user_id WHERE satisfactions.folder_id < 0 and "
+      #type 3 gives all types of feedbacks but you cannot really filter on groups
+      type[3]=common 
+      type[3]="#{type[3]} INNER JOIN users ON users.id = satisfactions.user_id WHERE "
+      
+      request=[]
+      tab=[]
+      tab[0]=type[request_type_nbr]
+      if params[:poll_id]
+        request.push("satisfactions.poll_id = ?")
+        tab.push(params[:poll_id])
+      end
+      if params[:start] && params[:end]
+        if DATE_REG_EXP.match(params[:start]) && DATE_REG_EXP.match(params[:end])
+          time_start=format_date(params[:start])
+          time_end=format_date(params[:end])
+          request.push("(satisfactions.created_at BETWEEN ? AND ?)")
+          tab.push("#{time_start}")
+          tab.push("#{time_end}")
+        end
+      end
+      if params[:groups]
+        unless params[:groups].include?("!")
+          request.push("users.groups like ?")
+          tab.push("%#{params[:groups]}%")
+        else
+          request.push("(users.groups is null or users.groups not like ?)")
+          tab.push("%#{params[:groups].gsub("!","")}%")
+        end
+      end
+      if params[:ncap]
+        ncap=[]
+        for i in (1..closed_names_number)
+          ncap.push("satisfactions.closed#{i} <= ?")
+          tab.push(params[:ncap])
+        end
+        ncapstring=ncap.join(" or ")
+        request.push("(#{ncapstring})")
+      end
+      tab[0]=tab[0]+request.join(" and ")
+      tab
+    end
+    
+    ##
+    # arrange the satisfaction feedbacks in a human way
+    def arrange(polls,satisfactions)
+      open={}
+      closed={}
+      polls.each do |p|
+        open["#{p.id}"]=p.hash_open
+        closed["#{p.id}"]=p.hash_closed
+      end
+      results=[]
+      satisfactions.each_with_index do |s,i|
+        results[i]={}
+        results[i]["id"]=s.id
+        results[i]["date"]=s.updated_at
+        results[i]["affaire"]=s.case_number
+        results[i]["folder_id"]=s.folder_id
+        results[i]["poll_id"]=s.poll_id
+        results[i]["collected_by"]=s.email
+        for j in 1..open["#{s.poll_id}"].length
+          results[i][open["#{s.poll_id}"]["open#{j}"]]=s["open#{j}"]
+        end
+        for j in 1..closed["#{s.poll_id}"].length
+          results[i][closed["#{s.poll_id}"]["closed#{j}"]]=s["closed#{j}"]
+        end
+      end
+      results
     end
   
     def satisfaction_params
