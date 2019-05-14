@@ -44,7 +44,7 @@ $.ajax({
         tab.push("<td>"+u.id+"</td>");
         tab.push("<td><a href=/become/"+u.id+">"+u.email+"</a></td>");
         tab.push("<td>"+practises.join("/")+"</td>");
-        tab.push("<td><select id=statut"+u.id+">"+options+"</select><button id=statutmod value="+u.id+">changer status</button></td>");
+        tab.push("<td><select id=statut"+u.id+">"+options+"</select><button id=statutmod value="+u.id+">FIX</button></td>");
         tab.push("<td>");
         //class is needed for autocompletion
         tab.push("<input type=text class=groups id=groups"+u.id+" placeholder=dir./dpt./grp./unit./? value="+u.groups+">");
