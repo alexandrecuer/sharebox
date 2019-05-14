@@ -112,8 +112,9 @@ a["text"]="sortie json de tous les utilisateur avec adresse mel contenant le fra
 a["text"]="#{a["text"]}<b>Si admin n'est pas indiqué, ne calcule pas les pratiques de partages (reçoit/offre) stockés dans les champs virtuels is_sharing et has_shares</b><br>"
 a["text"]="#{a["text"]}<i>La requête ne s'exécute que si l'on précise au moins un des 4 paramètres (admin, melfrag, statut, groups)</i><br>"
 help << a
-
-if min_shared_folder_id=current_user.shared_folders.joins(:folder).select("folders.id as folder_id")[0].folder_id
+shared=current_user.shared_folders.joins(:folder).select("folders.id as folder_id")
+if shared.length>0
+  min_shared_folder_id=shared[0].folder_id
   a={}
   a["controller"]="shared_folders"
   a["url"]="<a href=getshares/#{min_shared_folder_id}>#{root_url}getshares/#{min_shared_folder_id}</a>"
