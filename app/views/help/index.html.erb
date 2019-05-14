@@ -64,7 +64,7 @@ if max_poll_id
   a["text"]="#{a["text"]} <br><b>si on rajoute email=prenom.nom@cerema.fr on obtient tous les éventuels retours déclarant prenom.nom@cerema.fr comme chargé d'études</b>"
   a["text"]="#{a["text"]} <br><b>si on rajoute csv=1, renvoie au format csv</b>"
   a["text"]="#{a["text"]} <br><font color=red>A noter que seule la sortie json intègre intégre des statistiques et les réponses intégrales</font>"
-  a["text"]="#{a["text"]} <br><i>start, end, groups, ncap, csv sont optionnels. En cas d'absence, la requête renvoie toutes les réponses de l'enquête</i>"
+  a["text"]="#{a["text"]} <br><i>start, end, groups, ncap, email, csv sont optionnels. En cas d'absence, la requête renvoie toutes les réponses de l'enquête</i>"
   help << a
 
 end
@@ -179,6 +179,7 @@ end
 %>
 
 <h1>API help</h1>
+<div class=table-responsive>
 <table class=table>
 <thead>
   <td>
@@ -207,3 +208,4 @@ end
 <% end %>
 
 </table>
+</div>
