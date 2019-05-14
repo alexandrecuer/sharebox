@@ -86,86 +86,14 @@ class SatisfactionsController < ApplicationController
   end
   
   ##
-  # render a json view of satisfactions answers
-  # permits to realize date range request on a given poll_id
+  # render a json view of ALL satisfactions answers
   def index
-      authenticate_user!
-      #satisfactions=[]
-      #polls=[]
-      all={}
-      #if params[:poll_id]
-      #  poll_id=params[:poll_id]
-      #  poll=Poll.find_by_id(poll_id)
-      #  if poll
-      #    polls.push(poll)
-      #    all["poll_id"]=poll_id
-      #    all["poll_name"]=poll.name
-      #    unless params[:start] && params[:end]
-      #      satisfactions= poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email")
-      #    else
-      #      date = /([0-9]{4}-[0-9]{2}-[0-9]{2})/
-      #      if date.match(params[:start]) && date.match(params[:end])
-      #        ts=date.match(params[:start])
-      #        te=date.match(params[:end])
-      #        time_start="#{ts} 00:00:00"
-      #        time_end="#{te} 00:00:00"
-      #        puts("searching feedbacks on poll #{poll_id} from #{time_start} to #{time_end}")
-      #        unless params[:groups]
-      #          expression='satisfactions.created_at BETWEEN ? AND ?'
-      #          satisfactions= poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email").where(expression,time_start,time_end)
-      #        else
-      #          # we first request satisfactions feedbacks collected in the folders/files system
-      #          # we have to check groups value for folders owners > INNER JOIN on folders and then on users
-      #          # not possible to do it with active records as the satisfaction model has been reduced!!
-      #          sql = <<-SQL
-      #            SELECT satisfactions.*,
-      #            users.email as email
-      #            FROM satisfactions 
-      #            INNER JOIN folders 
-      #            ON folders.id = satisfactions.folder_id 
-      #            INNER JOIN users 
-      #            ON users.id = folders.user_id 
-      #            WHERE (users.groups LIKE ? 
-      #            and satisfactions.poll_id = ? 
-      #            and satisfactions.created_at BETWEEN ? AND ?);
-      #          SQL
-      #          satisfactions = Satisfaction.find_by_sql([sql,"%#{params[:groups]}%",params[:poll_id],time_start,time_end])
-      #
-      #          # we have now to include the satisfactions collected out the folders/files system
-      #          expression='satisfactions.created_at BETWEEN ? AND ? and satisfactions.folder_id < ? and users.groups LIKE ?'
-      #          satisfactions+=poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email").where(expression,time_start,time_end,0,"%#{params[:groups]}%")
-      #          all["groups"]=params[:groups]
-      #        end
-      #        all["from"]=time_start
-      #        all["to"]=time_end
-      #      end
-      #    end
-      #    unless params[:csv]
-      #      nb=poll.count_sent_surveys(time_start,time_end,params[:groups])
-      #      all["sent"]=nb
-      #      if satisfactions.length>0
-      #        stats=poll.stats(satisfactions)
-      #        all["stats"]=stats
-      #      end
-      #    end
-      #  end
-      #else
-        satisfactions= Satisfaction.all.joins(:user).select("satisfactions.*,users.email as email")
-        polls= Poll.all
-      #end
-      # all requests to the database are now done
-      # we can process datas - 2 cases - json or csv
-      #unless params[:csv]
-        all["satisfactions"]=arrange(polls,satisfactions)
-        render json: all
-      #else
-      #  if poll
-      #    csv = poll.csv(satisfactions)
-      #    send_data csv, filename: "polls-#{Time.zone.today}.csv"
-      #  else
-      #    render json: {"message": "pas de sondage sous ce numéro"}
-      #  end
-      #end
+    authenticate_user!
+    all={}
+    satisfactions= Satisfaction.all.joins(:user).select("satisfactions.*,users.email as email")
+    polls= Poll.all
+    all["satisfactions"]=arrange(polls,satisfactions)
+    render json: all
   end
   
   ##

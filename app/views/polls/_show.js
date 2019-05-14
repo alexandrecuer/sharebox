@@ -147,80 +147,63 @@ function genstatsforpoll(pollId)
   } else {
     csvlink=request+"?csv=1";
   }
-  //console.log(csvlink);
-  //if (d1 < d2){
-  //  var groups=$("#groups").val();
-  //  var request;
-  //  if (groups){
-  //    request = "/satisfactions?poll_id="+pollId+"&start="+timeStart+"&end="+timeEnd+"&groups="+groups;
-  //  } else {
-  //    request = "/satisfactions?poll_id="+pollId+"&start="+timeStart+"&end="+timeEnd;
-  //  }
     
-    $.ajax({
-        type: "GET",
-        url: request,
-        async: true,
-        success(result) {
-            //console.log(result);
-            //var csvlink;
-            //if (groups){
-            //  csvlink="/satisfactions?poll_id="+result.poll_id+"&start="+timeStart+"&end="+timeEnd+"&groups="+groups+"&csv=1";
-            //} else {
-            //  csvlink="/satisfactions?poll_id="+result.poll_id+"&start="+timeStart+"&end="+timeEnd+"&csv=1";
-            //}
-            var stats=[];
-            stats.push("<b>"+result.poll_name+"</b><br>");
-            stats.push(result.sent);
-            stats.push(" questionnaire(s) envoyé(s)<br>");
-            stats.push(result.satisfactions.length);
-            stats.push("  retour(s) satisfaction<br>");
-            stats.push("<a data-toggle='modal' data-target='#synth' href='#'>Voir la synthèse</a><br>");
-            stats.push("<a href="+csvlink+">Télécharger le fichier csv</a>");
-            $("#stats").html(stats.join(""));
-            if (result.stats){
-              if (Object.keys(result.stats).length>0){
-                $("#synth_body").html(synthmodal(result.stats));
-                var title=[];
-                title.push("Synthèse de l'enquête");
-                title.push("<br><u>"+result.poll_name+"</u>");
-                if (result.from && result.to) {
-                  title.push("<br>Pour la période du "+humandate(result.from)+" au "+humandate(result.to));
-                } else {
-                  title.push("<br>Depuis le lancement de l'enquête");
-                }
-                if (result.groups) {
-                    title.push("<br>Pour le groupe "+result.groups);
-                }
-                $("#synth_title").html(title.join(""));
-              }
+  $.ajax({
+    type: "GET",
+    url: request,
+    async: true,
+    success(result) {
+        var stats=[];
+        stats.push("<b>"+result.poll_name+"</b><br>");
+        stats.push(result.sent);
+        stats.push(" questionnaire(s) envoyé(s)<br>");
+        stats.push(result.satisfactions.length);
+        stats.push("  retour(s) satisfaction<br>");
+        stats.push("<a data-toggle='modal' data-target='#synth' href='#'>Voir la synthèse</a><br>");
+        stats.push("<a href="+csvlink+">Télécharger le fichier csv</a>");
+        $("#stats").html(stats.join(""));
+        if (result.stats){
+          if (Object.keys(result.stats).length>0){
+            $("#synth_body").html(synthmodal(result.stats));
+            var title=[];
+            title.push("Synthèse de l'enquête");
+            title.push("<br><u>"+result.poll_name+"</u>");
+            if (result.from && result.to) {
+              title.push("<br>Pour la période du "+humandate(result.from)+" au "+humandate(result.to));
             } else {
-              $("#synth_title").html("Il n'y a pas de données....");
-              $("#synth_body").html("");
+              title.push("<br>Depuis le lancement de l'enquête");
             }
-            if (result.satisfactions.length>0){
-              var out=[];
-              result.satisfactions.forEach(function(s,i){
-                //generate the carrousel item
-                if (i===0){
-                  out.push("<div class='carousel-item active'>");
-                } else {
-                  out.push("<div class='carousel-item'>");
-                }
-                out.push(feedbackpostcard(s));
-                out.push("</div>");
-              });
-              $("#carousel-inner").html(out.join(""));
-              $("#carousel-nav").html(carouselnav("carousel2"));
-              //test on 10/05/2019
-              $("#carousel2").carousel();
-            } else {
-              $("#carousel-inner").html("");
-              $("#carousel-nav").html("");
+            if (result.groups) {
+              title.push("<br>Pour le groupe "+result.groups);
             }
+            $("#synth_title").html(title.join(""));
+          }
+        } else {
+          $("#synth_title").html("Il n'y a pas de données....");
+          $("#synth_body").html("");
         }
-    });
-  //}
+        if (result.satisfactions.length>0){
+          var out=[];
+          result.satisfactions.forEach(function(s,i){
+            //generate the carrousel item
+            if (i===0){
+              out.push("<div class='carousel-item active'>");
+            } else {
+              out.push("<div class='carousel-item'>");
+            }
+            out.push(feedbackpostcard(s));
+            out.push("</div>");
+          });
+          $("#carousel-inner").html(out.join(""));
+          $("#carousel-nav").html(carouselnav("carousel2"));
+          //test on 10/05/2019
+          $("#carousel2").carousel();
+        } else {
+          $("#carousel-inner").html("");
+          $("#carousel-nav").html("");
+        }
+    }
+  });
 }
 
 var pollId;
