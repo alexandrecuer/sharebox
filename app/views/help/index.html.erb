@@ -56,12 +56,14 @@ if max_poll_id
 
   a={}
   a["controller"]="satisfactions"
-  a["url"]="<a href=/satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01&groups=DLCF&csv=1>"
-  a["url"]="#{a["url"]} #{root_url}satisfactions?poll_id=#{max_poll_id}&start=2018-01-01&end=2019-06-01&groups=DLCF&csv=1</a>"
-  a["text"]="sortie csv de toutes les réponses obtenues, pour l'enquête #{max_poll_id} sur une période temporelle et pour un fragment de groupe donné"
-  a["text"]="#{a["text"]} <br><i>start, end et groups sont optionnels. En cas d'absence, la requête renvoie toutes les réponses de l'enquête</i>"
-  a["text"]="#{a["text"]} <br><b>si csv n'est pas indiqué, renvoie au format json</b>"
-  a["text"]="#{a["text"]} <br>A noter que la sortie json intègre intégre des statistiques et les réponses intégrales"
+  a["url"]="<a href=/satisfactions/run/#{max_poll_id}?start=2018-01-01&end=2019-06-01&groups=DLCF&>"
+  a["url"]="#{a["url"]} #{root_url}satisfactions/run/#{max_poll_id}?start=2018-01-01&end=2019-06-01&groups=DLCF</a>"
+  a["text"]="sortie json de toutes les réponses obtenues, pour l'enquête #{max_poll_id} sur une période temporelle et pour un fragment de groupe donné"
+  a["text"]="#{a["text"]} <br><b>si on rajoute ncap=2, on obtient toutes les insatisfactions de type 2</b>"
+  a["text"]="#{a["text"]} <br><b>à savoir les retours avec au moins une réponse à une question fermée inférieure ou égale à 2 (2=peu satisfait)</b>"
+  a["text"]="#{a["text"]} <br><b>si on rajoute csv=1, renvoie au format csv</b>"
+  a["text"]="#{a["text"]} <br><font color=red>A noter que seule la sortie json intègre intégre des statistiques et les réponses intégrales</font>"
+  a["text"]="#{a["text"]} <br><i>start, end, groups, ncap, csv sont optionnels. En cas d'absence, la requête renvoie toutes les réponses de l'enquête</i>"
   help << a
 
 end

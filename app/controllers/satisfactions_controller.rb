@@ -65,7 +65,8 @@ class SatisfactionsController < ApplicationController
         all["ncap"]="tous les feedbacks présentant au moins une note inférieure ou égale à #{params[:ncap]}"
       end
       unless params[:csv] || params[:ncap]
-        nb=poll.count_sent_surveys(all["from"],all["to"],params[:groups])
+        puts("**************parameters for count_sent_surveys (poll model) [#{all["from"]},#{all["to"]},#{all["groups"]}]")
+        nb=poll.count_sent_surveys(all["from"],all["to"],all["groups"])
         all["sent"]=nb
         if satisfactions.length>0
           stats=poll.stats(satisfactions)
@@ -92,102 +93,79 @@ class SatisfactionsController < ApplicationController
       satisfactions=[]
       polls=[]
       all={}
-      if params[:poll_id]
-        poll_id=params[:poll_id]
-        poll=Poll.find_by_id(poll_id)
-        if poll
-          polls.push(poll)
-          all["poll_id"]=poll_id
-          all["poll_name"]=poll.name
-          unless params[:start] && params[:end]
-            satisfactions= poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email")
-          else
-            date = /([0-9]{4}-[0-9]{2}-[0-9]{2})/
-            if date.match(params[:start]) && date.match(params[:end])
-              ts=date.match(params[:start])
-              te=date.match(params[:end])
-              time_start="#{ts} 00:00:00"
-              time_end="#{te} 00:00:00"
-              puts("searching feedbacks on poll #{poll_id} from #{time_start} to #{time_end}")
-              unless params[:groups]
-                expression='satisfactions.created_at BETWEEN ? AND ?'
-                satisfactions= poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email").where(expression,time_start,time_end)
-              else
-                # we first request satisfactions feedbacks collected in the folders/files system
-                # we have to check groups value for folders owners > INNER JOIN on folders and then on users
-                # not possible to do it with active records as the satisfaction model has been reduced!!
-                sql = <<-SQL
-                  SELECT satisfactions.*,
-                  users.email as email
-                  FROM satisfactions 
-                  INNER JOIN folders 
-                  ON folders.id = satisfactions.folder_id 
-                  INNER JOIN users 
-                  ON users.id = folders.user_id 
-                  WHERE (users.groups LIKE ? 
-                  and satisfactions.poll_id = ? 
-                  and satisfactions.created_at BETWEEN ? AND ?);
-                SQL
-                satisfactions = Satisfaction.find_by_sql([sql,"%#{params[:groups]}%",params[:poll_id],time_start,time_end])
-
-                # we have now to include the satisfactions collected out the folders/files system
-                expression='satisfactions.created_at BETWEEN ? AND ? and satisfactions.folder_id < ? and users.groups LIKE ?'
-                satisfactions+=poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email").where(expression,time_start,time_end,0,"%#{params[:groups]}%")
-                all["groups"]=params[:groups]
-              end
-              all["from"]=time_start
-              all["to"]=time_end
-            end
-          end
-          unless params[:csv]
-            nb=poll.count_sent_surveys(time_start,time_end,params[:groups])
-            all["sent"]=nb
-            if satisfactions.length>0
-              stats=poll.stats(satisfactions)
-              all["stats"]=stats
-            end
-          end
-        end
-      else
+      #if params[:poll_id]
+      #  poll_id=params[:poll_id]
+      #  poll=Poll.find_by_id(poll_id)
+      #  if poll
+      #    polls.push(poll)
+      #    all["poll_id"]=poll_id
+      #    all["poll_name"]=poll.name
+      #    unless params[:start] && params[:end]
+      #      satisfactions= poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email")
+      #    else
+      #      date = /([0-9]{4}-[0-9]{2}-[0-9]{2})/
+      #      if date.match(params[:start]) && date.match(params[:end])
+      #        ts=date.match(params[:start])
+      #        te=date.match(params[:end])
+      #        time_start="#{ts} 00:00:00"
+      #        time_end="#{te} 00:00:00"
+      #        puts("searching feedbacks on poll #{poll_id} from #{time_start} to #{time_end}")
+      #        unless params[:groups]
+      #          expression='satisfactions.created_at BETWEEN ? AND ?'
+      #          satisfactions= poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email").where(expression,time_start,time_end)
+      #        else
+      #          # we first request satisfactions feedbacks collected in the folders/files system
+      #          # we have to check groups value for folders owners > INNER JOIN on folders and then on users
+      #          # not possible to do it with active records as the satisfaction model has been reduced!!
+      #          sql = <<-SQL
+      #            SELECT satisfactions.*,
+      #            users.email as email
+      #            FROM satisfactions 
+      #            INNER JOIN folders 
+      #            ON folders.id = satisfactions.folder_id 
+      #            INNER JOIN users 
+      #            ON users.id = folders.user_id 
+      #            WHERE (users.groups LIKE ? 
+      #            and satisfactions.poll_id = ? 
+      #            and satisfactions.created_at BETWEEN ? AND ?);
+      #          SQL
+      #          satisfactions = Satisfaction.find_by_sql([sql,"%#{params[:groups]}%",params[:poll_id],time_start,time_end])
+      #
+      #          # we have now to include the satisfactions collected out the folders/files system
+      #          expression='satisfactions.created_at BETWEEN ? AND ? and satisfactions.folder_id < ? and users.groups LIKE ?'
+      #          satisfactions+=poll.satisfactions.joins(:user).select("satisfactions.*,users.email as email").where(expression,time_start,time_end,0,"%#{params[:groups]}%")
+      #          all["groups"]=params[:groups]
+      #        end
+      #        all["from"]=time_start
+      #        all["to"]=time_end
+      #      end
+      #    end
+      #    unless params[:csv]
+      #      nb=poll.count_sent_surveys(time_start,time_end,params[:groups])
+      #      all["sent"]=nb
+      #      if satisfactions.length>0
+      #        stats=poll.stats(satisfactions)
+      #        all["stats"]=stats
+      #      end
+      #    end
+      #  end
+      #else
         satisfactions= Satisfaction.all.joins(:user).select("satisfactions.*,users.email as email")
         polls= Poll.all
-      end
+      #end
       # all requests to the database are now done
       # we can process datas - 2 cases - json or csv
-      unless params[:csv]
+      #unless params[:csv]
         all["satisfactions"]=arrange(polls,satisfactions)
-        #open={}
-        #closed={}
-        #polls.each do |p|
-        #  open["#{p.id}"]=p.hash_open
-        #  closed["#{p.id}"]=p.hash_closed
-        #end
-        #results=[]
-        #satisfactions.each_with_index do |s,i|
-        #  results[i]={}
-        #  results[i]["id"]=s.id
-        #  results[i]["date"]=s.updated_at
-        #  results[i]["affaire"]=s.case_number
-        #  results[i]["folder_id"]=s.folder_id
-        #  results[i]["poll_id"]=s.poll_id
-        #  results[i]["collected_by"]=s.email
-        #  for j in 1..open["#{s.poll_id}"].length
-        #    results[i][open["#{s.poll_id}"]["open#{j}"]]=s["open#{j}"]
-        #  end
-        #  for j in 1..closed["#{s.poll_id}"].length
-        #    results[i][closed["#{s.poll_id}"]["closed#{j}"]]=s["closed#{j}"]
-        #  end
-        #end
-        #all["satisfactions"]=results
         render json: all
-      else
-        if poll
-          csv = poll.csv(satisfactions)
-          send_data csv, filename: "polls-#{Time.zone.today}.csv"
-        else
-          render json: {"message": "pas de sondage sous ce numéro"}
-        end
-      end
+      #else
+      #  if poll
+      #    csv = poll.csv(satisfactions)
+      #    send_data csv, filename: "polls-#{Time.zone.today}.csv"
+      #  else
+      #    render json: {"message": "pas de sondage sous ce numéro"}
+      #  end
+      #end
   end
   
   ##
@@ -479,7 +457,8 @@ class SatisfactionsController < ApplicationController
         request.push("satisfactions.poll_id = ?")
         tab.push(params[:poll_id])
       end
-      if params[:start] && params[:end]
+      #if params[:start] && params[:end]
+      puts("------SQL preparation function------------we have the following date range [#{params[:start]} ; #{params[:end]}]")
         if DATE_REG_EXP.match(params[:start]) && DATE_REG_EXP.match(params[:end])
           time_start=format_date(params[:start])
           time_end=format_date(params[:end])
@@ -487,7 +466,7 @@ class SatisfactionsController < ApplicationController
           tab.push("#{time_start}")
           tab.push("#{time_end}")
         end
-      end
+      #end
       if params[:groups]
         unless params[:groups].include?("!")
           request.push("users.groups like ?")

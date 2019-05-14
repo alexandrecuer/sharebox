@@ -117,6 +117,7 @@ function synthmodal(s)
 //full output stats generation for a given pollId, ie number of sent surveys, number of feedbacks received, synth modal and carousel
 function genstatsforpoll(pollId)
 {
+  var groups=$("#groups").val();
   var timeStart = $("#time_start").val();
   var timeEnd = $("#time_end").val();
   var d1;
@@ -127,14 +128,34 @@ function genstatsforpoll(pollId)
   if (timeEnd.match(date)) {
     d2 = new Date(timeEnd);
   }
-  if (d1 < d2){
-    var groups=$("#groups").val();
-    var request;
-    if (groups){
-      request = "/satisfactions?poll_id="+pollId+"&start="+timeStart+"&end="+timeEnd+"&groups="+groups;
-    } else {
-      request = "/satisfactions?poll_id="+pollId+"&start="+timeStart+"&end="+timeEnd;
-    }
+  var tab=[];
+  var base="/satisfactions/run/"+pollId;
+  var request;
+  if (groups) { tab.push("groups="+groups); }
+  if (d1 < d2) { tab.push("start="+timeStart+"&end="+timeEnd); }
+  var end=tab.join("&");
+  if (end.length>0){
+    request=base+"?"+end;
+  } else {
+    request=base;
+  }
+  //console.log(request);
+  var csvlink;
+  //console.log(request.indexOf("?"));
+  if (request.indexOf("?") > 0){
+    csvlink=request+"&csv=1";
+  } else {
+    csvlink=request+"?csv=1";
+  }
+  //console.log(csvlink);
+  //if (d1 < d2){
+  //  var groups=$("#groups").val();
+  //  var request;
+  //  if (groups){
+  //    request = "/satisfactions?poll_id="+pollId+"&start="+timeStart+"&end="+timeEnd+"&groups="+groups;
+  //  } else {
+  //    request = "/satisfactions?poll_id="+pollId+"&start="+timeStart+"&end="+timeEnd;
+  //  }
     
     $.ajax({
         type: "GET",
@@ -142,12 +163,12 @@ function genstatsforpoll(pollId)
         async: true,
         success(result) {
             //console.log(result);
-            var csvlink;
-            if (groups){
-              csvlink="/satisfactions?poll_id="+result.poll_id+"&start="+timeStart+"&end="+timeEnd+"&groups="+groups+"&csv=1";
-            } else {
-              csvlink="/satisfactions?poll_id="+result.poll_id+"&start="+timeStart+"&end="+timeEnd+"&csv=1";
-            }
+            //var csvlink;
+            //if (groups){
+            //  csvlink="/satisfactions?poll_id="+result.poll_id+"&start="+timeStart+"&end="+timeEnd+"&groups="+groups+"&csv=1";
+            //} else {
+            //  csvlink="/satisfactions?poll_id="+result.poll_id+"&start="+timeStart+"&end="+timeEnd+"&csv=1";
+            //}
             var stats=[];
             stats.push("<b>"+result.poll_name+"</b><br>");
             stats.push(result.sent);
@@ -161,10 +182,16 @@ function genstatsforpoll(pollId)
               if (Object.keys(result.stats).length>0){
                 $("#synth_body").html(synthmodal(result.stats));
                 var title=[];
-                title.push("Synthèse de l'enquête<br>");
-                title.push("<u>"+result.poll_name+"</u>");
-                title.push("<br>");
-                title.push("Pour la période du "+humandate(result.from)+" au "+humandate(result.to));
+                title.push("Synthèse de l'enquête");
+                title.push("<br><u>"+result.poll_name+"</u>");
+                if (result.from && result.to) {
+                  title.push("<br>Pour la période du "+humandate(result.from)+" au "+humandate(result.to));
+                } else {
+                  title.push("<br>Depuis le lancement de l'enquête");
+                }
+                if (result.groups) {
+                    title.push("<br>Pour le groupe "+result.groups);
+                }
                 $("#synth_title").html(title.join(""));
               }
             } else {
@@ -193,7 +220,7 @@ function genstatsforpoll(pollId)
             }
         }
     });
-  }
+  //}
 }
 
 var pollId;
@@ -207,12 +234,6 @@ sixmbefore.setMonth(sixmbefore.getMonth() - 6);
 
 $("#time_start").val(stringify(sixmbefore));
 $("#time_end").val(stringify(tomorrow));
-
-$("#s_poll_id").on("change", function(){  
-  pollId=$("#s_poll_id").val();
-  //console.log(pollId);
-  genstatsforpoll(pollId);
-});
 
 //interrogate the API and store the poll json list in the polls global var
 //realize the stats initialization with the poll with highest id
@@ -234,11 +255,18 @@ $.ajax({
     } 
 });
 
+$("#s_poll_id").on("change", function(){  
+  pollId=$("#s_poll_id").val();
+  //console.log(pollId);
+  genstatsforpoll(pollId);
+});
+
 $("#date_fields").on("change", function(){  
   genstatsforpoll(pollId);
 });
 
-$("#groups").on("change keypress", function(event){  
+//use keypress?
+$("#groups").on("change", function(event){  
   //var frag=$(this).val();
   //console.log(event.which+" for the entry "+frag)
   genstatsforpoll(pollId);
