@@ -64,16 +64,20 @@ class SatisfactionsController < ApplicationController
       if params[:ncap]
         all["ncap"]="tous les feedbacks présentant au moins une note inférieure ou égale à #{params[:ncap]}"
       end
-      unless params[:csv] || params[:ncap]
+      if params[:email]
+        all["email"]="les retours satisfaction du chargé d'affaires #{params[:email]}"
+      end
+      # evaluation of sent surveys only if user did not ask for csv export, ncap exploitation or filtering on a specific email
+      unless params[:csv] || params[:ncap] || params[:email]
         puts("**************parameters for count_sent_surveys (poll model) [#{all["from"]},#{all["to"]},#{all["groups"]}]")
         nb=poll.count_sent_surveys(all["from"],all["to"],all["groups"])
         all["sent"]=nb
+      end
+      unless params[:csv]
         if satisfactions.length>0
           stats=poll.stats(satisfactions)
           all["stats"]=stats
         end
-      end
-      unless params[:csv]
         all["satisfactions"]=arrange(polls,satisfactions)
         render json: all
       else
@@ -362,7 +366,7 @@ class SatisfactionsController < ApplicationController
     # prepare a SQL request in the satisfactions table<br>
     # implement a jointure on the users and/or folders table<br>
     # params must at least include the poll number<br>
-    # possible params are start+end, groups fragment, ncap to track insatisfactions
+    # possible params are start+end, groups fragment, ncap to track insatisfactions, email
     def prepare(params,closed_names_number,request_type_nbr)
 
       common="SELECT satisfactions.*,users.email as email, users.groups as groups FROM satisfactions"
@@ -412,6 +416,10 @@ class SatisfactionsController < ApplicationController
         end
         ncapstring=ncap.join(" or ")
         request.push("(#{ncapstring})")
+      end
+      if params[:email]
+        request.push("satisfactions.case_number like ?")
+        tab.push("%Chargé d'affaire: #{params[:email]}%")
       end
       tab[0]=tab[0]+request.join(" and ")
       tab

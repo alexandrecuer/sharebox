@@ -61,6 +61,7 @@ if max_poll_id
   a["text"]="sortie json de toutes les réponses obtenues, pour l'enquête #{max_poll_id} sur une période temporelle et pour un fragment de groupe donné"
   a["text"]="#{a["text"]} <br><b>si on rajoute ncap=2, on obtient toutes les insatisfactions de type 2</b>"
   a["text"]="#{a["text"]} <br><b>à savoir les retours avec au moins une réponse à une question fermée inférieure ou égale à 2 (2=peu satisfait)</b>"
+  a["text"]="#{a["text"]} <br><b>si on rajoute email=prenom.nom@cerema.fr on obtient tous les éventuels retours déclarant prenom.nom@cerema.fr comme chargé d'études</b>"
   a["text"]="#{a["text"]} <br><b>si on rajoute csv=1, renvoie au format csv</b>"
   a["text"]="#{a["text"]} <br><font color=red>A noter que seule la sortie json intègre intégre des statistiques et les réponses intégrales</font>"
   a["text"]="#{a["text"]} <br><i>start, end, groups, ncap, csv sont optionnels. En cas d'absence, la requête renvoie toutes les réponses de l'enquête</i>"
