@@ -238,12 +238,21 @@ class Poll < ApplicationRecord
       sur_req.push(time_end)
     end
     if groups
-      sf_expr.push("users.groups like ?")
-      sf_req.push("%#{groups}%")
-      sat_expr.push("users.groups like ?")
-      sat_req.push("%#{groups}%")
-      sur_expr.push("users.groups like ?")
-      sur_req.push("%#{groups}%")
+      unless groups.include?("!")
+        sf_expr.push("users.groups like ?")
+        sf_req.push("%#{groups}%")
+        sat_expr.push("users.groups like ?")
+        sat_req.push("%#{groups}%")
+        sur_expr.push("users.groups like ?")
+        sur_req.push("%#{groups}%")
+      else
+        sf_expr.push("(users.groups is null or users.groups not like ?)")
+        sf_req.push("%#{groups.gsub("!","")}%")
+        sat_expr.push("(users.groups is null or users.groups not like ?)")
+        sat_req.push("%#{groups.gsub("!","")}%")
+        sur_expr.push("(users.groups is null or users.groups not like ?)")
+        sur_req.push("%#{groups.gsub("!","")}%")
+      end
     end
     sf_req[0]=sf_expr.join(" and ")
     sat_req[0]=sat_expr.join(" and ")
