@@ -18,7 +18,7 @@ class PollsController < ApplicationController
   ##
   # the index route leads to the satisfactions exploitation main dashboard where everything is done with ajax
   def index
-    unless current_user.belongs_to_team?
+    unless current_user.belongs_to_team? || current_user.is_admin?
       redirect_to root_url
     end
   end
@@ -78,7 +78,7 @@ class PollsController < ApplicationController
 
   ##
   # not used actually<br>
-  # should be recoded (?) to implement the same result as the route http://localhost:3000/satisfactions?poll_id=5&csv=1
+  # should be recoded (?) to implement the same result as the route http://localhost:3000/satisfactions/run/poll_id?blabla
   def show
     poll = Poll.find_by_id(params[:id])
     unless poll

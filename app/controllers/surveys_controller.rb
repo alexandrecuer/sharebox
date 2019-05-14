@@ -5,10 +5,10 @@ class SurveysController < ApplicationController
     before_action :inteam
 
     ##
-    # check if user is an affiliated team member from the domain component of its email address
+    # check if user is admin or is an affiliated team member from the domain component of its email address
     def inteam
         authenticate_user!
-        unless current_user.belongs_to_team?
+        unless current_user.belongs_to_team? || current_user.is_admin?
           redirect_to root_url
         end
     end
