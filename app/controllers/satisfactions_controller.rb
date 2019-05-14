@@ -38,8 +38,8 @@ class SatisfactionsController < ApplicationController
   ##
   # run a filter on the results of a specific poll
   def run
-    authenticate_user!
-    puts(DATE_REG_EXP)
+    #authenticate_user!
+    #puts(DATE_REG_EXP)
     polls=[]
     all={}
     poll=Poll.find_by_id(params[:poll_id])
