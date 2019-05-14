@@ -90,8 +90,8 @@ class SatisfactionsController < ApplicationController
   # permits to realize date range request on a given poll_id
   def index
       authenticate_user!
-      satisfactions=[]
-      polls=[]
+      #satisfactions=[]
+      #polls=[]
       all={}
       #if params[:poll_id]
       #  poll_id=params[:poll_id]
