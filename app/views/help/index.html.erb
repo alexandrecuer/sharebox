@@ -177,6 +177,30 @@ if min_asset_id=current_user.assets.minimum(:id)
   help << a
 end
 
+a={}
+a["controller"]=""
+a["url"]="<a href=browse>#{root_url}browse</a>"
+a["text"]="lien vers le dashboard explorateur"
+help << a
+
+a={}
+a["controller"]=""
+a["url"]="<a href=browse?oldstyle=1>#{root_url}browse?oldstyle=1</a>"
+a["text"]="lien vers l'explorateur html basique"
+help << a
+
+a={}
+a["controller"]=""
+a["url"]="<a href=polls>#{root_url}polls</a>"
+a["text"]="lien vers le dashboard d'exploitation statitique des retours satisfaction"
+help << a
+
+a={}
+a["controller"]=""
+a["url"]="<a href=surveys/new>#{root_url}surveys/new</a>"
+a["text"]="lien vers le dashboard permettant de lancer des enquêtes satisfaction sans mise à disposition de livrable(s) numérique(s)"
+help << a
+
 %>
 
 <h1>API help</h1>
