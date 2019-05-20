@@ -31,6 +31,15 @@ function gensurveylist()
             var out = [];
             $.each(data, function(index, array){
                 if (! array.token.includes("disabled")){
+                    var metas=jQuery.parseJSON(array.metas);
+                    var color="red";
+                    var tracking;
+                    if (metas) {
+                      if (metas.sent) {
+                          color="green";
+                          tracking=metas.sent-1;
+                      }
+                    }
                     out.push("<tr>");
                     out.push("<td><a href=/surveys/"+array.id+"/md5/"+array.token+">"+array.id+"</a><br>S"+array.poll_id+"</td>");
                     var temp="<div style='width:250px; float:left'><b>Description</b><br>"+array.description+"</div>";
@@ -38,8 +47,12 @@ function gensurveylist()
                     temp+="<div style='width:200px; float:left'><b>Client</b><br>"+array.client_mel+"</div>";
                     temp+="<div style='width:200px; float:left'><b>Propriétaire</b><br>"+array.owner_mel+"("+array.user_id+")</div>";
                     temp+="<div style='width:150px; float:left'><b>Date</b><br>"+array.updated_at.split("T")[0]+"</div>";
+                    if (tracking){
+                      var label = (tracking===1) ? "1 relance effectuée" : "déjà "+tracking+" relances ;-(";
+                      temp+="<div style='width:100px; float:left; color:green; background-color:#cff6c0'><b>"+label+"</b></div>";
+                    }
                     out.push("<td>"+temp+"</td>");
-                    out.push("<td><div style='margin-top: 50%; transform: translateY(-50%);'><button class='send btn-secondary' value="+array.id+"><i class='fa fa-envelope fa-2x' ></i></button></div></td>");
+                    out.push("<td><div style='margin-top: 50%; transform: translateY(-50%);'><button class='send btn-secondary' value="+array.id+" style='background-color:"+color+"'><i class='fa fa-envelope fa-2x' ></i></button></div></td>");
                     out.push("<td><button class='btn' id='deletesurvey"+array.id+"' value="+array.id+">supprimer</button></td>");
                     out.push("</tr>");
                 }                    
@@ -247,6 +260,7 @@ $("#surveylist").on("click",".send",function(){
         async: true,
         success(data) {
             alert(data);
+            gensurveylist();
         },
         error(data) {
             alert(data);

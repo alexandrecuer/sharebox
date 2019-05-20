@@ -17,6 +17,13 @@ if max_poll_id=Poll.all.maximum(:id)
   a["url"]="<a href=surveys?csv=1&poll_id=#{max_poll_id}&all=1>#{root_url}surveys?csv=1&poll_id=#{max_poll_id}&all=1</a>"
   a["text"]="export csv de toutes les réponses récoltées pour le sondage #{max_poll_id} sur des enquêtes non associées à un livrable"
   help << a
+  a={}
+  a["controller"]="surveys"
+  a["url"]="<a href=/surveys/#{max_poll_id}/fill_empty_metas>#{root_url}surveys/#{max_poll_id}/fill_empty_metas</a>"
+  a["text"]="procédure permettant aux versions de Colibri n'utilisant pas les métadonnées sur le modèle survey de se mettre à jour<br>"
+  a["text"]="#{a["text"]} Scanne les enquêtes non associées à un livrable pour le sondage #{max_poll_id }, ne modifie que celles ne disposant pas de métadonnées !!<br>"
+  a["text"]="#{a["text"]} Ces enquêtes seront considérées comme ayant été envoyées une fois"
+  help << a
 end
 
 if min_survey_id=Survey.all.minimum(:id)
@@ -43,7 +50,6 @@ a["controller"]="surveys"
 a["url"]="<a href=/getpolls?mynums=1>#{root_url}getpolls?mynums=1</a>"
 a["text"]="Liste des numéros de sondages sur lesquels l'utilisateur connecté a reçu des réponses après avoir déclenché des enquêtes non associées à un livrable"
 help << a
-
 
 a={}
 a["controller"]="satisfactions"

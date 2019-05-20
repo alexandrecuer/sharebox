@@ -90,5 +90,7 @@ Rails.application.routes.draw do
    get "get_groups" => "users#get_groups", :as => ""
    
    get "satisfactions/run/:poll_id" => "satisfactions#run", :as => ""
+   
+   get "surveys/:poll_id/fill_empty_metas" => "surveys#fill_empty_metas", :as => ""
 
 end

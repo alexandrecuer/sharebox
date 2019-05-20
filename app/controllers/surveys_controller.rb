@@ -60,6 +60,19 @@ class SurveysController < ApplicationController
     end
     
     ##
+    # 
+    def fill_empty_metas
+      if params[:poll_id]
+        poll=Poll.find_by_id(params[:poll_id])
+        unless poll
+          @log="aucun sondage sous ce numéro"
+        else
+          @log=poll.consider_all_pending_surveys_sent_once
+        end
+      end
+    end
+    
+    ##
     # should be in the controller polls - but controller polls is only accessible to admin and should be redesigned<br>
     # if route is /getpolls return all the polls in the colibri<br>
     # if route is /getpolls?mynums=1 return poll numbers containing satisfactions answers out of the folders/assets system for the current_user
@@ -81,7 +94,12 @@ class SurveysController < ApplicationController
         if survey
           if params[:email]=="send"
             if SurveyClientJob.perform_now(params[:id])
-              render plain: "Le lien vers l'enquête a été envoyé par mel à #{survey.client_mel}"
+              message="Le lien vers l'enquête a été envoyé par mel à #{survey.client_mel}"
+              if survey.update_metas
+                render plain: message
+              else
+                render plain: "#{message}\n Mais le compteur de relance n'a pas été mis à jour"
+              end
             else
               render plain: "Erreur : le lien vers l'enquête n'a pas pu être envoyé par mel à #{survey.client_mel}"
             end

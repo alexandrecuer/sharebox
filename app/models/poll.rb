@@ -83,24 +83,12 @@ class Poll < ApplicationRecord
   # Return all closed questions in a hash
   def hash_closed
     hash(self.closed_names,"closed")
-    #closed=self.closed_names.split(';')
-    #hash={}
-    #closed.each_with_index do |c,i|
-    #  hash["closed#{i+1}"]=c.strip
-    #end
-    #hash
   end
 
   ##
   # Return all open questions in a hash
   def hash_open
     hash(self.open_names,"open")
-    #opens=self.open_names.split(';')
-    #hash={}
-    #opens.each_with_index do |o,i|
-    #  hash["open#{i+1}"]=o.strip
-    #end
-    #hash
   end
 
 
@@ -295,5 +283,27 @@ class Poll < ApplicationRecord
     nb
   end
   
+  ##
+  # consider all surveys to have been sent once<br>
+  # Use this method after upgrading old colibri versions (without customer email tracking)
+  def consider_all_pending_surveys_sent_once
+    log="going to fix all pending surveys without metadatas so that they can be considered to have been sent once...\n"
+    metas={}
+    metas["sent"]=1
+    surveys=Survey.where(poll_id: self.id)
+    surveys.each do |s|
+      unless s.metas
+        s.metas=ActiveSupport::JSON.encode(metas)
+        unless s.save
+          log="#{log} -> survey #{s.id} updating metadatas failed\n"
+        else
+          log="#{log} -> survey #{s.id} metadatas correctly fixed to #{metas} \n"
+        end
+      else
+        log="#{log} -> survey #{s.id} has already some metadatas: #{s.metas} \n"
+      end
+    end
+    log
+  end  
   
 end
