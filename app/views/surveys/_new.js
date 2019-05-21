@@ -46,7 +46,7 @@ function gensurveylist()
                     temp+="<div style='width:200px; float:left'><b>Chargé d'affaire</b><br>"+array.by+"</div>";
                     temp+="<div style='width:200px; float:left'><b>Client</b><br>"+array.client_mel+"</div>";
                     temp+="<div style='width:200px; float:left'><b>Propriétaire</b><br>"+array.owner_mel+"("+array.user_id+")</div>";
-                    temp+="<div style='width:150px; float:left'><b>Date</b><br>"+array.updated_at.split("T")[0]+"</div>";
+                    temp+="<div style='width:150px; float:left'><b>Date</b><br>création: "+array.created_at.split("T")[0]+"<br>modification: "+array.updated_at.split("T")[0]+"</div>";
                     if (tracking){
                       var label = (tracking===1) ? "1 relance effectuée" : "déjà "+tracking+" relances ;-(";
                       temp+="<div style='width:100px; float:left; color:green; background-color:#cff6c0'><b>"+label+"</b></div>";
