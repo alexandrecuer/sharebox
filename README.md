@@ -27,8 +27,11 @@ Uses the following gems :
 * [devise](https://github.com/plataformatec/devise) for user authentification
 * [passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html) as the application server (in standalone mode)
 * [aws-sdk](https://github.com/aws/aws-sdk-ruby) for storage on S3
-* [bootstrap](https://github.com/twbs/bootstrap-rubygem) as the frontoffice framework
-* [font-awesome](https://github.com/bokmann/font-awesome-rails) for icons and cosmectic details
+
+frontoffice :
+* [bootstrap](https://github.com/twbs/bootstrap-rubygem)
+* [font-awesome](https://github.com/bokmann/font-awesome-rails) icons and cosmectic details
+* [jquery rails](https://github.com/rails/jquery-rails)
 
 ## Will have to switch from paperclip to [ActiveStorage](http://guides.rubyonrails.org/active_storage_overview.html) as paperclip is now deprecated
 
