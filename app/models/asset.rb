@@ -7,9 +7,7 @@ class Asset < ApplicationRecord
 
   # this is the new active storage configuration
   if Rails.application.config.paperclip==0
-    #if Rails.application.config.local_storage==1
-      has_one_attached :uploaded_file
-    #end
+    has_one_attached :uploaded_file
   end
 
   # this was the old paperclip configuration
