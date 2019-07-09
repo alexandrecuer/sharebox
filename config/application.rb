@@ -2,6 +2,7 @@ require_relative 'boot'
 
 require 'rails/all'
 require 'csv'
+require "active_storage/engine"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -17,7 +18,7 @@ module Sharebox
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.i18n.default_locale = :fr
-    
+
     config.action_mailer.asset_host = "http://"+ENV.fetch('DOMAIN')
   end
 end

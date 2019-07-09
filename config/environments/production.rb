@@ -88,19 +88,19 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  
+
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-  
+
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
-  
+
   config.action_mailer.default_url_options = { host: ENV.fetch('DOMAIN') }
-  
+
   config.action_mailer.delivery_method = :smtp
-  
+
   config.action_mailer.smtp_settings = {
     address:                 ENV.fetch('SMTP_ADDRESS'),
     port:                    ENV.fetch('SMTP_PORT'),
@@ -109,10 +109,11 @@ Rails.application.configure do
     password:                ENV.fetch('GMAIL_PASSWORD'),
     authentication:          :plain,
     enable_starttls_auto:    true
-  } 
-  
+  }
+
+  # paperclip conf
   config.local_storage=0
-  
+
   if (config.local_storage==0)
     config.paperclip_defaults = {
       storage: :s3,
@@ -124,6 +125,17 @@ Rails.application.configure do
           s3_host_name: ENV.fetch('AWS_HOST_NAME'),
       }
     }
+  end
+
+  # active storage conf : store files locally or not
+  config.active_storage.service = :amazon
+  
+  #config.paperclip=0
+  # activate paperclip or active storage
+  if ENV['PAPERCLIP']
+    config.paperclip=ENV.fetch('PAPERCLIP').to_i
+  else
+    config.paperclip=1
   end
   
 end

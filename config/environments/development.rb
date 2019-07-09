@@ -53,9 +53,9 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.action_mailer.default_url_options = { host: ENV.fetch('DOMAIN'), port: 3000 }
-  
+
   config.action_mailer.delivery_method = :smtp
-  
+
   config.action_mailer.smtp_settings = {
     address:                ENV.fetch('SMTP_ADDRESS'),
     port:                   ENV.fetch('SMTP_PORT'),
@@ -64,13 +64,17 @@ Rails.application.configure do
     password:               ENV.fetch('GMAIL_PASSWORD'),
     authentication:         :plain,
     enable_starttls_auto:   true
-  } 
+  }
+  
+  # windows users only
   # error with ENV variables starting by / addition of an 21 char prefix : C:/RailsInstaller/Git'
   # we remove this prefix
   #AWS_SAK = ENV.fetch('AWS_SECRET_ACCESS_KEY')[21,ENV.fetch('AWS_SECRET_ACCESS_KEY').length-21]
   #ERRATUM : when using a .env file and node foreman, the problem disappears
-  config.local_storage=1
   
+  # paperclip conf
+  config.local_storage=1
+
   if (config.local_storage==0)
     config.paperclip_defaults = {
       storage: :s3,
@@ -84,4 +88,15 @@ Rails.application.configure do
     }
   end
 
+  # active storage conf : store files locally or not
+  # Store files locally for devlopment
+  config.active_storage.service = :local
+  
+  # activate paperclip or active storage
+  if ENV['PAPERCLIP']
+    config.paperclip=ENV.fetch('PAPERCLIP').to_i
+  else
+    config.paperclip=1
+  end
+  
 end
