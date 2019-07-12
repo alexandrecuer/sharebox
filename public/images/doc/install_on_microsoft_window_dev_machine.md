@@ -113,3 +113,12 @@ On Windows, this second option may permit to override specific problems related 
 ```
 $ nf -p 3000 start -s -j Procfile_dev
 ```
+
+### Use Amazon S3
+You may encounter difficulties due to some SSL defaults on your development machine.
+
+To override, create a file /config/initializers/paperclip.rb with the following command
+```
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+```
+Caution : only for a development purpose; not suitable for a production server !
