@@ -39,7 +39,8 @@ frontoffice :
 
 ## Environmental variables
 The application uses several variables, which you have to fix in the environment
-<table><tr><td valign=top>For S3 storage
+
+For S3 storage 
 <table>
     <tr>
         <td><sub>S3_BUCKET_NAME</sub></td>
@@ -64,7 +65,8 @@ The application uses several variables, which you have to fix in the environment
         <td><sub>AWS_SECRET_ACCESS_KEY</sub></td>
     </tr>
 </table>
-</td><td valign=top>For Mail delivery
+
+For Mail delivery
 <table>
     <tr>
         <td><sub>GMAIL_USERNAME</sub></td>
@@ -93,7 +95,7 @@ The application uses several variables, which you have to fix in the environment
       <td><sub>In development mode :<br><sub>localhost</sub><br>For a production server :<br><sub>ip address or domain name of the server</sub></sub></td>
     </tr>
 </table>
-</td></tr></table>
+
 
 ## File storage
 
@@ -101,35 +103,21 @@ Document storage is configured for :
 - Amazon S3 in production mode 
 - local file system in development mode. In that case, the aws-sdk gem is not used.
 
-Switching between S3 mode and local storage mode can be done by modifying the value of config.local_storage 
-- in /config/environments/development.rb 
-- and in /config/environments/production.rb
+Switching between S3 mode and local storage mode can be done by modifying : 
+- /config/environments/development.rb 
+- /config/environments/production.rb
 
-with config.local_storage = 1, local storage will be activated<br>
-with config.local_storage = 0, all files will go in the defined S3 bucket
+### if using paperclip :
+<table>
+<tr><td>config.local_storage = 1</td><td> local storage will be activated</td></tr>
+<tr><td>config.local_storage = 0</td><td>all files will go in the S3 bucket</td></tr>
+</table>
 
 <table>
   <tr>
     <td></td>
     <td valign=top>S3 storage</td>
     <td valign=top>local storage</td>
-  </tr>
-  <tr>
-    <td>\config\environments\developpment.rb</td>
-    <td width=50%><sub>
-      config.paperclip_defaults = {<br>
-        storage: :s3,<br>
-        s3_credentials: {<br>
-          bucket: ENV.fetch('S3_BUCKET_NAME'),<br>
-          access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),<br>
-          secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),<br>
-          s3_region: ENV.fetch('AWS_REGION'),<br>
-          s3_host_name: ENV.fetch('AWS_HOST_NAME'),<br>
-        }<br>
-      }
-      </sub>
-    </td>
-    <td></td>
   </tr>
   <tr>
     <td>\app\models\asset.rb</td>
@@ -158,6 +146,28 @@ with config.local_storage = 0, all files will go in the defined S3 bucket
     </td>
   </tr>
 </table>
+
+### if using active_storage :
+<table>
+<tr><td>config.active_storage.service = :local</td><td> local storage will be activated</td></tr>
+<tr><td>config.active_storage.service = :amazon</td><td> local storage will go in the S3 bucket</td></tr>
+</table>
+
+<table>
+  <tr>
+      <td></td>
+      <td valign=top>S3 storage</td>
+      <td valign=top>local storage</td>
+  </tr>
+  <tr>
+      <td>\app\models\asset.rb</td>
+      <td colspan=2>has_one_attached :uploaded_file</td>
+  </tr>
+  <tr>
+      <td>\app\controllers\assets_controller.rb</td>
+      <td colspan=2>redirect_to asset.uploaded_file.service_url</td>
+  </tr>
+ </table>
 
 # Deployment to Heroku through GitHub integration
 This application has been designed for an automatic deployment from github to the heroku cloud
