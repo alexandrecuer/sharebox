@@ -37,107 +37,7 @@ frontoffice :
 
 <img src=public/images/doc/colibri_front.png>
 
-# Deployment to Heroku through GitHub integration
-This application has been designed for an automatic deployment from github to the heroku cloud
-You will need a S3 bucket as Heroku has an ephemeral file system
-Here are the main steps :
-- Fork and customize the repository to your needs
-- Create a new Heroku app and link it to the GitHub repository previously forked
-- Fill all the eleven needed config variables (AWS_ACCESS_KEY_ID, AWS_HOST_NAME, AWS_REGION, AWS_SECRET_ACCESS_KEY, AWS_URL, DOMAIN, GMAIL_PASSWORD, GMAIL_USERNAME, S3_BUCKET_NAME, SMTP_ADDRESS, SMTP_PORT plus an extra one: TEAM)
-- Proceed to a manual deploy
-
-To customize the application to your needs, check the following files 
-- config/config.yml (site_name and admin_mel)
-- config/initializers/devise.rb (config.mailer_sender)
-
-admin_mel will receive activity notifications : new shares, pending users. Pending users are unregistered users benefiting from at least one shared access to a folder
-
-config.mailer_sender will be the sending email as far as authentification issues are considered (eg password changes)
-
-You can find the two site’s logos in the /app/assets/images directory
-
-Please note that the first user to register in the system will be given admin rights !!
-
-for more details : [deploy on heroku in images](/public/images/doc/deploy_on_heroku.pdf)
-
-# Installation on a Microsoft Window development machine
-## Requirements
-Window All-In-One rails installer [Ruby on Rails](http://railsinstaller.org/en) >= 5.1.4 + NodeJS
-
-[ImageMagick](http://www.imagemagick.org) for documents processing
-
-Gem file is configured to use postgreSQL, so please install PGQSL window binary
-[EDB POSTGRES](https://www.enterprisedb.com/)
-
-If you want to use another DBMS, you will have to change the gem file
-
-### Rails
-
-After having run RailsInstaller, launch a git bash, verify ruby version ``ruby -v``, install Rails ``gem install rails`` and verify the version :
-```
-$ rails -v
-Rails 5.1.5
-```
-Check you can create a new application named blog ``rails new blog``
-
-The system will create the app files and launch the command ``bundle install`` to fetch some gems
-
-Launch the server with the command ``rails server``. The server should be up on port 3000. Browse the adress http://localhost:3000 in Mozilla.
-
-### ImageMagick
-
-For a more detailed procedure, check https://github.com/thoughtbot/paperclip#requirements
-
-ImageMagick uses two utilities file.exe and convert.exe
-
-You will have to install file.exe from [gnuwin32](http://gnuwin32.sourceforge.net/packages/file.htm)
-
-When you install ImageMagick, don't forget to include the required legacy utilities among which you will find convert.exe
-
-<img src=public/images/doc/imagemagick.png height=300>
-
-Modify the system and user paths so that they begin with something like C:\Program Files\ImageMagick-7.0.6-Q16\ and C:\Program Files (x86)\GnuWin32.
-
-On windows 10, from the control panel :
-``
-Security and System > System > Advanced System Parameters > Environment Variables
-``
-
-Please note Window has got its own convert utility. Paperclip will not work with the Window convert.exe. ImageMagick's convert.exe should come first
-```
-$ where convert
-c:\Program Files\ImageMagick-7.0.6-Q16\convert.exe
-c:\Windows\System32\convert.exe
-```
-Check if everything is OK in the rails git bash :
-```
-$ which file
-/c/Program Files (x86)/GnuWin32/bin/file
-$ which convert
-/c/Program Files/ImageMagick-7.0.6-Q16/convert
-```
-
-### NodeJS
-
-Install [NodeJS](https://nodejs.org/en/download/)
-
-## Installation
-Clone/Unzip the repository into your local rails directory, for example C:/Sites/. 
-Open the resulting app directory in a git bash 
-```
-$ cd /c/Sites/sharebox
-```
-Install the required gems ``$ bundle install`` or ``$ bundle update``
-
-Please note that the bcrypt gem needed for devise may malfunction.
-To correct, you have to reinstall manually
-```
-$ gem uninstall bcrypt
-$ gem uninstall bcrypt-ruby
-$ gem install bcrypt --platform=ruby
-```
-
-### Setting environmental variables
+## Environmental variables
 The application uses several variables, which you have to fix in the environment
 <table><tr><td valign=top>For S3 storage
 <table>
@@ -194,43 +94,6 @@ The application uses several variables, which you have to fix in the environment
     </tr>
 </table>
 </td></tr></table>
-        
-##### First option
-Edit the set_env_var.bat file, fill it with your personal credentials and run this bat file from the main DOS shell. It will fix the environment details in all subsequent shells such as git bash or window power shell. You can start the server from a git bash with the classic method :
-```
-$ rails server
-```
-
-##### Second option 
-On Windows, this second option may permit to override specific problems related to environment variables beginning with /. Edit the .env file and fill it with your personal credentials. Install [node-foreman](https://github.com/strongloop/node-foreman) and start the server from a git bash with the following command :
-```
-$ nf -p 3000 start -s -j Procfile_dev
-```
-
-### Database configuration
-Modify the \config\environments\database.yml with your database credentials. 
-Generally, the postgreSQL Window installer creates a user "postgres" for which you were asked a password during the installation process. 
-```
-default: &default
-  adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: postgres
-  password: your_pass
-  host: localhost
-```
-
-Create the database and the tables
-```
-$ rake db:create
-$ rails db:migrate
-```
-To create the database structure and the tables, you don't have to run all the migrations from scratch :
-```
-$ rails db:schema:load
-```
 
 ## File storage
 
@@ -296,14 +159,29 @@ with config.local_storage = 0, all files will go in the defined S3 bucket
   </tr>
 </table>
 
-### Use Amazon S3
-You may encounter difficulties due to some SSL defaults on your development machine.
+# Deployment to Heroku through GitHub integration
+This application has been designed for an automatic deployment from github to the heroku cloud
+You will need a S3 bucket as Heroku has an ephemeral file system
+Here are the main steps :
+- Fork and customize the repository to your needs
+- Create a new Heroku app and link it to the GitHub repository previously forked
+- Fill all the eleven needed config variables (AWS_ACCESS_KEY_ID, AWS_HOST_NAME, AWS_REGION, AWS_SECRET_ACCESS_KEY, AWS_URL, DOMAIN, GMAIL_PASSWORD, GMAIL_USERNAME, S3_BUCKET_NAME, SMTP_ADDRESS, SMTP_PORT plus an extra one: TEAM)
+- Proceed to a manual deploy
 
-To override, create a file /config/initializers/paperclip.rb with the following command
-```
-OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-```
-Caution : only for a development purpose; not suitable for a production server !
+To customize the application to your needs, check the following files 
+- config/config.yml (site_name and admin_mel)
+- config/initializers/devise.rb (config.mailer_sender)
+
+admin_mel will receive activity notifications : new shares, pending users. Pending users are unregistered users benefiting from at least one shared access to a folder
+
+config.mailer_sender will be the sending email as far as authentification issues are considered (eg password changes)
+
+You can find the two site’s logos in the /app/assets/images directory
+
+Please note that the first user to register in the system will be given admin rights !!
+
+for more details : [deploy on heroku in images](/public/images/doc/deploy_on_heroku.pdf)
+
 
 # Installation on Heroku (for production) from a development server
 If you don't want to use the github integration method, an alternative option is possible
