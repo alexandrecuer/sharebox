@@ -77,6 +77,20 @@ $ gem install bcrypt --platform=ruby
 ```
 ## database
 
+Modify the \config\environments\database.yml with your database credentials. 
+Generally, the postgreSQL Window installer creates a user "postgres" for which you were asked a password during the installation process. 
+```
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: postgres
+  password: your_pass
+  host: localhost
+```
+
 Create the database and the tables
 ```
 $ rake db:create
