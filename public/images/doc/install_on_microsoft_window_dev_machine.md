@@ -33,7 +33,7 @@ You will have to install file.exe from [gnuwin32](http://gnuwin32.sourceforge.ne
 
 When you install ImageMagick, don't forget to include the required legacy utilities among which you will find convert.exe
 
-<img src=doc/imagemagick.png height=300>
+<img src=imagemagick.png height=300>
 
 Modify the system and user paths so that they begin with something like C:\Program Files\ImageMagick-7.0.6-Q16\ and C:\Program Files (x86)\GnuWin32.
 
