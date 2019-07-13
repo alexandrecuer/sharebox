@@ -24,7 +24,7 @@ check : https://github.com/alexandrecuer/colibriScripts
 </b>
 
 Uses the following gems :
-* 
+
 * [devise](https://github.com/plataformatec/devise) for user authentification
 * [passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html) as the application server (in standalone mode)
 * [aws-sdk](https://github.com/aws/aws-sdk-ruby) for storage on S3
@@ -69,34 +69,33 @@ Switching between S3 mode and local storage mode can be done by modifying :
 
 ### if using paperclip :
 
-you have to modify the value of config.local_storage in the corresponding config/environments/*.rb file(s)
+you have to modify the value of **config.local_storage** in the corresponding config/environments/*.rb file(s)
 
-- config.local_storage = 1 : local storage will be activated
-- config.local_storage = 0 : all files will go in the S3 bucket
+- config.local_storage = 1 > local storage will be activated
+- config.local_storage = 0 > all files will go in the S3 bucket
 
 paperclip files will be stored in the 'forge' directory : (rails_root or S3 bucket)/forge/attachments/:id/:filename
 
 ### if using active_storage :
-<table>
-<tr><td>config.active_storage.service = :local or :local_production</td><td> local storage will be activated</td></tr>
-<tr><td>config.active_storage.service = :amazon</td><td> local storage will go in the S3 bucket</td></tr>
-</table>
 
-<table>
-  <tr>
-      <td></td>
-      <td valign=top>S3 storage</td>
-      <td valign=top>local storage</td>
-  </tr>
-  <tr>
-      <td></td>
-      <td colspan=2>has_one_attached :uploaded_file</td>
-  </tr>
-  <tr>
-      <td></td>
-      <td colspan=2>redirect_to asset.uploaded_file.service_url</td>
-  </tr>
- </table>
+you have to modify the value of **config.active_storage.service** in the corresponding config/environments/*.rb file(s)
+
+- config.active_storage.service = :local or :local_production > local storage will be activated
+- config.active_storage.service = :amazon > all files will go in the S3 bucket
+
+let's take the case of a file with an active_storage_blobs.key value equal to xMRXuT6nqpoiConJFQJFt6c9 :
+- if local storage is activated, the file will be stored as rails_root/(storage or production_storage)/xM/RX/xMRXuT6nqpoiConJFQJFt6c9
+- if S3 storage is activated, the file will be stored directly at the root of the bucket :  S3 bucket/xMRXuT6nqpoiConJFQJFt6c9
+
+in local storage, if you delete the file the folders xM/RX will remain on disk
+
+in lib/tasks, you can find a rake utility to clean the storage or production_storage folder
+
+just launch :
+```
+bundle exec rake storage:clean_storage['storage']
+bundle exec rake storage:clean_storage['storage_production']
+```
 
 ##  S3 storage environmental variables
 
