@@ -61,6 +61,12 @@ Switching between S3 mode and local storage mode can be done by modifying :
 - /config/environments/development.rb 
 - /config/environments/production.rb
 
+corresponding model and controller can be found there :
+- [app/models/asset.rb](app/models/asset.rb)
+- [app/controllers/assets_controller.rb](app/controllers/assets_controller.rb) - see the get_file private method
+
+to open a file, follow the route /forge/get/:id
+
 ### if using paperclip :
 
 you have to modify the value of config.local_storage in the corresponding config/environments/*.rb file(s)
@@ -68,40 +74,11 @@ you have to modify the value of config.local_storage in the corresponding config
 - config.local_storage = 1 : local storage will be activated
 - config.local_storage = 0 : all files will go in the S3 bucket
 
-<table>
-  <tr>
-    <td></td>
-    <td valign=top>S3 storage</td>
-    <td valign=top>local storage</td>
-  </tr>
-  <tr>
-    <td>\app\models\asset.rb</td>
-    <td width=50%>
-      has_attached_file :uploaded_file,<br>
-      url: ENV.fetch('AWS_URL'),<br>
-      path: '/forge/attachments/:id/:filename',<br>
-      s3_permissions: :private
-    </td>
-    <td width=50%>
-      has_attached_file :uploaded_file,<br>
-      url: '/forge/get/:id/:filename',<br>      
-      path: ':rails_root/forge/attachments/:id/:filename'<br>
-      </td>
-  </tr>
-  <tr>
-    <td>\app\controllers\assets_controller.rb</td>
-    <td>
-      redirect_to asset.uploaded_file.expiring_url(10)
-    </td>
-    <td>
-      send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-    </td>
-  </tr>
-</table>
+paperclip files will be stored in the 'forge' directory : (rails_root or S3 bucket)/forge/attachments/:id/:filename
 
 ### if using active_storage :
 <table>
-<tr><td>config.active_storage.service = :local</td><td> local storage will be activated</td></tr>
+<tr><td>config.active_storage.service = :local or :local_production</td><td> local storage will be activated</td></tr>
 <tr><td>config.active_storage.service = :amazon</td><td> local storage will go in the S3 bucket</td></tr>
 </table>
 
@@ -112,11 +89,11 @@ you have to modify the value of config.local_storage in the corresponding config
       <td valign=top>local storage</td>
   </tr>
   <tr>
-      <td>\app\models\asset.rb</td>
+      <td></td>
       <td colspan=2>has_one_attached :uploaded_file</td>
   </tr>
   <tr>
-      <td>\app\controllers\assets_controller.rb</td>
+      <td></td>
       <td colspan=2>redirect_to asset.uploaded_file.service_url</td>
   </tr>
  </table>
