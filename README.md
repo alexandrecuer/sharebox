@@ -167,20 +167,28 @@ paperclip files will be stored in the 'forge' directory : (rails_root or S3 buck
 
 5 different user profiles are available :
 
-### profile 0 - external user
+profile 0 : external user
+--
 customer who is not registered in the tool and who has received a token by email to answer a satisfaction survey not related to a deliverable
-### profile 1 - standard public user
+
+profile 1 : standard public user
+--
 customer who wants to access a deliverable and to complete an associated satisfaction survey, if any
-### profile 2 - team member
+
+profile 2 : team member
+--
 public user with address type "first_name.name@team_domain"
 
 team member who wants to send customer satisfaction surveys without making deliverables available on the cloud
 
 initialize TEAM config var with your domain name to make this work - otherwise there will be no difference between profile 1 and profile 2
 
-### profile 3 - private user
+profile 3 : private user
+--
 full team member who dematerializes his productions - private users can swarm one or more of their **root** directories in other private users'folders - this constitutes a primitive kind of collaborative work
-### profile 4 - admin
+
+profile 4 : admin
+--
 all powers - access to all directories and assets, surveys management, ability to modify directories (moving and changing ownership)
 
 # Deployment to Heroku through GitHub integration
