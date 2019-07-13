@@ -186,7 +186,9 @@ Initialize TEAM with your domain name - otherwise there will be no difference be
 
 profile 3 : private user
 --
-full team member who dematerializes his productions - private users can create directories in other private users'folders, if they received shared access from the owner - this constitutes a primitive kind of collaborative work
+full team member who dematerializes his productions
+
+Private users can create directories and upload files in folders they don't own, if they have received shared access - this constitutes a primitive kind of collaborative work
 
 profile 4 : admin
 --
