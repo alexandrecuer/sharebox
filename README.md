@@ -62,10 +62,11 @@ Switching between S3 mode and local storage mode can be done by modifying :
 - /config/environments/production.rb
 
 ### if using paperclip :
-<table>
-<tr><td>config.local_storage = 1</td><td> local storage will be activated</td></tr>
-<tr><td>config.local_storage = 0</td><td>all files will go in the S3 bucket</td></tr>
-</table>
+
+you have to modify the value of config.local_storage in the corresponding config/environments/*.rb file(s)
+
+- config.local_storage = 1 : local storage will be activated
+- config.local_storage = 0 : all files will go in the S3 bucket
 
 <table>
   <tr>
