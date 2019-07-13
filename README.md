@@ -57,15 +57,15 @@ Document storage is configured for :
 - Amazon S3 in production mode 
 - local file system in development mode. In that case, the aws-sdk gem is not used.
 
-Switching between S3 mode and local storage mode can be done by modifying : 
-- /config/environments/development.rb 
-- /config/environments/production.rb
-
 corresponding model and controller can be found there :
 - [app/models/asset.rb](app/models/asset.rb)
 - [app/controllers/assets_controller.rb](app/controllers/assets_controller.rb) - see the get_file private method
 
 to open a file, follow the route /forge/get/:id
+
+Switching between S3 mode and local storage mode can be done by modifying : 
+- /config/environments/development.rb 
+- /config/environments/production.rb
 
 ### if using paperclip :
 
