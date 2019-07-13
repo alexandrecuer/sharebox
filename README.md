@@ -96,6 +96,7 @@ just launch :
 bundle exec rake storage:clean_storage['storage']
 bundle exec rake storage:clean_storage['storage_production']
 ```
+empty folders will be deleted
 
 ##  S3 storage environmental variables
 
