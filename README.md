@@ -165,7 +165,7 @@ paperclip files will be stored in the 'forge' directory : (rails_root or S3 buck
 
 # User management
 
-5 different user profiles are available :
+5 different user profiles are available
 
 profile 0 : external user
 --
@@ -181,7 +181,10 @@ public user with address type "first_name.name@team_domain"
 
 team member who wants to send customer satisfaction surveys without making deliverables available on the cloud
 
-initialize TEAM config var with your domain name to make this work - otherwise there will be no difference between profile 1 and profile 2
+a specific environmental variable TEAM permits to active the profile 2 
+<table><tr><td>TEAM</td><td>cerema.fr</td></tr></table>
+
+Initialize TEAM with your domain name - otherwise there will be no difference between profile 1 and profile 2
 
 profile 3 : private user
 --
