@@ -177,7 +177,7 @@ customer who wants to access a deliverable and to complete an associated satisfa
 
 profile 2 : team member
 --
-team members can only send customer satisfaction surveys *without* making deliverables available on the cloud
+team members can only send customer satisfaction surveys **without** making deliverables available on the cloud
 
 a specific environmental variable TEAM permits to active the profile 2 
 <table><tr><td>TEAM</td><td>cerema.fr</td></tr></table>
@@ -186,7 +186,7 @@ Initialize TEAM with your domain name - otherwise there will be no difference be
 
 profile 3 : private user
 --
-full team member who dematerializes his productions - private users can swarm one or more of their **root** directories in other private users'folders - this constitutes a primitive kind of collaborative work
+full team member who dematerializes his productions - private users can create directories in other private users'folders, if they received shared access from the owner - this constitutes a primitive kind of collaborative work
 
 profile 4 : admin
 --
