@@ -177,9 +177,7 @@ customer who wants to access a deliverable and to complete an associated satisfa
 
 profile 2 : team member
 --
-public user with address type "first_name.name@team_domain"
-
-team member who wants to send customer satisfaction surveys without making deliverables available on the cloud
+team members can only send customer satisfaction surveys *without* making deliverables available on the cloud
 
 a specific environmental variable TEAM permits to active the profile 2 
 <table><tr><td>TEAM</td><td>cerema.fr</td></tr></table>
