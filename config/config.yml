@@ -5,6 +5,7 @@ main:
   mail: "addresse email"
   user_id: "ID de l'utilisateur "
   status: "status"
+  paperclip: 1
   
   # for views\assets\_form.html.erb
   upload: "Lancer le téléchargement"
