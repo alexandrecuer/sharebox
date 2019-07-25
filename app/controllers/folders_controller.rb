@@ -24,7 +24,8 @@ class FoldersController < ApplicationController
     children={}
     folder=Folder.find_by_id(params[:id])
     unless folder
-      su="ce dossier n'existe pas"
+      su=t("sb.folders_msg.inexisting_folder")
+      results.merge!({"su": su})
     else
       unless params[:children]
         su=current_user.has_su_access?(folder)
@@ -37,14 +38,14 @@ class FoldersController < ApplicationController
         su="test des enfants"
         children=folder.get_subs_assets_shares
       end
+      folder.status="to be fixed"
+      puts("********status:#{folder.status}")
+      puts(folder)
+      results.merge!({"folder": folder.as_json(methods: 'status')})
+      results.merge!({"base": base.as_json})
+      results.merge!({"su": su})
+      results.merge!({"children": children.as_json})
     end
-    folder.status="to be fixed"
-    puts("********status:#{folder.status}")
-    puts(folder)
-    results.merge!({"folder": folder.as_json(methods: 'status')})
-    results.merge!({"base": base.as_json})
-    results.merge!({"su": su})
-    results.merge!({"children": children.as_json})
     render json: results
   end
   
