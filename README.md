@@ -24,7 +24,7 @@ check : https://github.com/alexandrecuer/colibriScripts
 </b>
 
 Uses the following gems :
-* 
+
 * [devise](https://github.com/plataformatec/devise) for user authentification
 * [passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html) as the application server (in standalone mode)
 * [aws-sdk](https://github.com/aws/aws-sdk-ruby) for storage on S3
@@ -57,68 +57,46 @@ Document storage is configured for :
 - Amazon S3 in production mode 
 - local file system in development mode. In that case, the aws-sdk gem is not used.
 
+corresponding model and controller can be found there :
+- [app/models/asset.rb](app/models/asset.rb)
+- [app/controllers/assets_controller.rb](app/controllers/assets_controller.rb) - see the get_file private method
+
+to open a file, follow the route /forge/get/:id
+
 Switching between S3 mode and local storage mode can be done by modifying : 
 - /config/environments/development.rb 
 - /config/environments/production.rb
 
 ### if using paperclip :
-<table>
-<tr><td>config.local_storage = 1</td><td> local storage will be activated</td></tr>
-<tr><td>config.local_storage = 0</td><td>all files will go in the S3 bucket</td></tr>
-</table>
 
-<table>
-  <tr>
-    <td></td>
-    <td valign=top>S3 storage</td>
-    <td valign=top>local storage</td>
-  </tr>
-  <tr>
-    <td>\app\models\asset.rb</td>
-    <td width=50%>
-      has_attached_file :uploaded_file,<br>
-      url: ENV.fetch('AWS_URL'),<br>
-      path: '/forge/attachments/:id/:filename',<br>
-      s3_permissions: :private
-    </td>
-    <td width=50%>
-      has_attached_file :uploaded_file,<br>
-      url: '/forge/get/:id/:filename',<br>      
-      path: ':rails_root/forge/attachments/:id/:filename'<br>
-      </td>
-  </tr>
-  <tr>
-    <td>\app\controllers\assets_controller.rb</td>
-    <td>
-      redirect_to asset.uploaded_file.expiring_url(10)
-    </td>
-    <td>
-      send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-    </td>
-  </tr>
-</table>
+you have to modify the value of **config.local_storage** in the corresponding config/environments/*.rb file(s)
+
+- config.local_storage = 1 > local storage will be activated
+- config.local_storage = 0 > all files will go in the S3 bucket
+
+paperclip files will be stored in the 'forge' directory : (rails_root or S3 bucket)/forge/attachments/:id/:filename
 
 ### if using active_storage :
-<table>
-<tr><td>config.active_storage.service = :local</td><td> local storage will be activated</td></tr>
-<tr><td>config.active_storage.service = :amazon</td><td> local storage will go in the S3 bucket</td></tr>
-</table>
 
-<table>
-  <tr>
-      <td></td>
-      <td valign=top>S3 storage</td>
-      <td valign=top>local storage</td>
-  </tr>
-  <tr>
-      <td>\app\models\asset.rb</td>
-      <td colspan=2>has_one_attached :uploaded_file</td>
-  </tr>
-  <tr>
-      <td>\app\controllers\assets_controller.rb</td>
-      <td colspan=2>redirect_to asset.uploaded_file.service_url</td>
-  </tr>
- </table>
+you have to modify the value of **config.active_storage.service** in the corresponding config/environments/*.rb file(s)
+
+- config.active_storage.service = :local or :local_production > local storage will be activated
+- config.active_storage.service = :amazon > all files will go in the S3 bucket
+
+let's take the case of a file with an active_storage_blobs.key value equal to xMRXuT6nqpoiConJFQJFt6c9 :
+- if local storage is activated, the file will be stored as rails_root/(storage or production_storage)/xM/RX/xMRXuT6nqpoiConJFQJFt6c9
+- if S3 storage is activated, the file will be stored directly at the root of the bucket :  S3 bucket/xMRXuT6nqpoiConJFQJFt6c9
+
+in local storage, if you delete the file the folders xM/RX will remain on disk
+
+in lib/tasks, you can find a rake utility to clean the storage or production_storage folder
+
+just launch :
+```
+bundle exec rake storage:clean_storage['storage']
+bundle exec rake storage:clean_storage['storage_production']
+```
+empty folders will be deleted
 
 ##  S3 storage environmental variables
 
@@ -187,15 +165,34 @@ Switching between S3 mode and local storage mode can be done by modifying :
 
 # User management
 
-4 different user profiles are available :
+5 different user profiles are available
 
-| | |
--- | -- 
-external user|customer who is not registered in the tool and who has received a token by email to answer a satisfaction survey not related to a deliverable
-standard public user|customer who wants to access a deliverable and to complete an associated satisfaction survey, if any
-public user with address type "first_name.name@team_domain"|team member who wants to send customer satisfaction surveys without making deliverables available on the cloud - initialize TEAM config var with your domain name to make this work - otherwise there will be no difference between profile 1 and profile 2
-private user|full team member who dematerializes his productions - private users can swarm one or more of their **root** directories in other private users'folders - this constitutes a primitive kind of collaborative work
-admin|all powers - access to all directories and assets, surveys management, ability to modify directories (moving and changing ownership)
+profile 0 : external user
+--
+customer who is not registered in the tool and who has received a token by email to answer a satisfaction survey not related to a deliverable
+
+profile 1 : standard public user
+--
+customer who wants to access a deliverable and to complete an associated satisfaction survey, if any
+
+profile 2 : team member
+--
+team members can only send customer satisfaction surveys **without** making deliverables available on the cloud
+
+a specific environmental variable TEAM permits to active the profile 2 
+<table><tr><td>TEAM</td><td>cerema.fr</td></tr></table>
+
+Initialize TEAM with your domain name - otherwise there will be no difference between profile 1 and profile 2
+
+profile 3 : private user
+--
+full team member who dematerializes his productions
+
+Private users can create directories and upload files in folders they don't own, if they have received shared access - this constitutes a primitive kind of collaborative work
+
+profile 4 : admin
+--
+all powers - access to all directories and assets, surveys management, ability to modify directories (moving and changing ownership)
 
 # Deployment to Heroku through GitHub integration
 This application has been designed for an automatic deployment from github to the heroku cloud
