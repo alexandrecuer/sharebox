@@ -137,8 +137,8 @@ class Poll < ApplicationRecord
       c << headers
       satisfactions.each do |a|
         casenum = /[a-zA-Z][0-9]{1,2}[a-zA-Z]{1,2}[0-9]{1,4}/.match(a.case_number)
-        client = /Client: ([^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4})/.match(a.case_number)[1].to_s
-        w=/Chargé d'affaire: ([^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4})/.match(a.case_number)[1].to_s
+        client = /Client: (([^\W])([a-zA-Z0-9_\-]+)*(\.[a-zA-Z0-9_\-]+)*\@([a-zA-Z0-9_\-]+)(\.[a-zA-Z0-9_\-]+)*\.([a-zA-Z]{2,4}))/.match(a.case_number)[1].to_s
+        w=/Chargé d'affaire: (([^\W])([a-zA-Z0-9_\-]+)*(\.[a-zA-Z0-9_\-]+)*\@([a-zA-Z0-9_\-]+)(\.[a-zA-Z0-9_\-]+)*\.([a-zA-Z]{2,4}))/.match(a.case_number)[1].to_s
         closed=[]
         for i in (1..self.closed_names_number.to_i)
           closed << a["closed#{i}"]
