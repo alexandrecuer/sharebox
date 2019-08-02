@@ -59,7 +59,7 @@ var options=[];
 if (selectId){
   options.push("<select class='form-control' id="+selectId+">");
 }
-options.push("<option value=''>choisissez un sondage</option>");
+options.push("<option value=''>"+sb["choose_poll"]+"</option>");
 if (polls.length>0) {
   polls.forEach(function(poll){
     var tag=" ";
@@ -79,7 +79,7 @@ return options.join("");
 function humandate(d)
 {
   var options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-  return new Date(d.substr(0, 10)).toLocaleDateString("fr-FR",options);
+  return new Date(d.substr(0, 10)).toLocaleDateString(sb["lang"],options);
 }
 
 //returns a date string as expected in the range (time_start and time_end)

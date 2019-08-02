@@ -10,7 +10,7 @@ class PollsController < ApplicationController
   # All the views and features related to polls are destinated only for admins
   def check_admin
     unless current_user.is_admin?
-      flash[:notice] = POLLS_MSG["admin_rights_missing"]
+      flash[:notice] = t('sb.no_permission')
       redirect_to root_url
     end
   end
@@ -30,7 +30,7 @@ class PollsController < ApplicationController
     check_admin
     @poll = Poll.find_by_id(params[:id])
     unless @poll
-      flash[:notice] = POLLS_MSG["inexisting_poll"]
+      flash[:notice] = t('sb.inexisting')
       redirect_to root_url
     end
   end
@@ -43,23 +43,23 @@ class PollsController < ApplicationController
     @poll = Poll.find_by_id(params[:id])
     array = poll_params[:closed_names].split(";") + poll_params[:open_names].split(";")
     if array.uniq.count != array.size
-      flash[:notice] = POLLS_MSG["same_questions"]
+      flash[:notice] = t('sb.same_questions')
     elsif params[:poll][:description] == ""
-      flash[:notice] = POLLS_MSG["missing_required_fields"]
+      flash[:notice] = t('sb.missing_required_fields')
     elsif params[:poll][:name] == ""
-      flash[:notice] = POLLS_MSG["missing_required_fields"]
+      flash[:notice] = t('sb.missing_required_fields')
     elsif params[:poll][:open_names] == "" && params[:poll][:closed_names] == ""
-      flash[:notice] = POLLS_MSG["missing_required_fields"]
+      flash[:notice] = t('sb.missing_required_fields')
     else
       params[:poll][:closed_names].strip!
       params[:poll][:open_names].strip!
       params[:poll][:closed_names_number]=params[:poll][:closed_names].split(";").length
       params[:poll][:open_names_number]=params[:poll][:open_names].split(";").length
-      flash[:notice]= "#{params[:poll][:closed_names_number]} question(s) fermée(s) #{params[:poll][:open_names_number]} question(s) ouverte(s)"
+      flash[:notice]= "#{params[:poll][:closed_names_number]} #{t('sb.closed_questions')} #{params[:poll][:open_names_number]} #{t('sb.open_questions')}"
       if @poll.update(poll_params)
-        flash[:notice] = "#{flash[:notice]} - #{POLLS_MSG["poll_updated"]}"
+        flash[:notice] = "#{flash[:notice]} - #{t('sb.updated')}"
       else
-        flash[:notice] = "#{flash[:notice]} - mise à jour non effectuée"
+        flash[:notice] = "#{flash[:notice]} - #{t('sb.not_updated')}"
       end
     end
     #redirect_to root_url
@@ -82,7 +82,7 @@ class PollsController < ApplicationController
   def show
     poll = Poll.find_by_id(params[:id])
     unless poll
-      flash[:notice] = POLLS_MSG["inexisting_poll_number"]
+      flash[:notice] = t('sb.inexisting')
       redirect_to browse_path
     else
       redirect_to root_url
@@ -97,20 +97,20 @@ class PollsController < ApplicationController
     check_admin
     @poll = current_user.polls.new(poll_params)
     if @poll.description == ""
-      flash[:notice] = POLLS_MSG["missing_required_fields"]
+      flash[:notice] = t('sb.missing_required_fields')
     elsif @poll.name == ""
-      flash[:notice] = POLLS_MSG["missing_required_fields"]
+      flash[:notice] = t('sb.missing_required_fields')
     elsif @poll.open_names == "" && @poll.closed_names == ""
-      flash[:notice] = POLLS_MSG["missing_required_fields"]
+      flash[:notice] = t('sb.missing_required_fields')
     else
       @poll.closed_names_number=@poll.closed_names.split(";").length
       @poll.open_names_number=@poll.open_names.split(";").length
       array = @poll.get_names
       if array.uniq.count != array.size
-        flash[:notice] = POLLS_MSG["same_questions"]
+        flash[:notice] = t('sb.same_questions')
       else
         @poll.save
-        flash[:notice] = POLLS_MSG["poll_created"]
+        flash[:notice] = t('sb.created')
       end
     end
     render 'new'
@@ -129,7 +129,7 @@ class PollsController < ApplicationController
       f.save
     end
     @poll.destroy
-    flash[:notice] = POLLS_MSG["poll_destroyed"]
+    flash[:notice] = t('sb.deleted')
     redirect_to root_url
   end
 

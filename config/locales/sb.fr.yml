@@ -1,155 +1,183 @@
 fr:
   sb:
-    main:
-      site_name: "Le cloud des rapports / Cerema Centre Est"
-      admin_mel: "alexandre.cuer@cerema.fr"
-      are_yu_sure: "Etes vous sûr ?"
-      mail: "addresse email"
-      user_id: "ID de l'utilisateur "
-      status: "status"
-  
-      # for views\assets\_form.html.erb
-      upload: "Lancer le téléchargement"
-  
-      # for views\folders\_form.html.erb
-      dir_name: "Nom du répertoire "
-      case_number: "N° d'affaire "
-      no_poll: "Associer un sondage"
-      create_folder: "Créer le répertoire"
-      update_folder: "Modifier le répertoire"
-      
-      # for views\folders\index.html.erb
-      folder_move: "Déplacement de répertoire"
-      folder_id_to_move: "ID du répertoire à déplacer"
-      destination_folder_id: "ID du répertoire de destination (0 pour envoyer à la racine)"
-      validate_move: "procéder au déplacement"
-        
-      # for views\home\list.html.erb
-      users_list: "Liste des utilisateurs"
-      shared_folders?: "dossiers partagés?"
-      process_to_status_mod: "Modifier le status" 
-      
-      # for views\polls\_form.html.erb
-      poll_title: "Titre du formulaire"
-      poll_description: "Description du formulaire"
-      enter_closed_questions: "Questions fermées séparées par un point virgule"
-      enter_open_questions: "Questions ouvertes séparées par un point virgule"
-      create_poll: "Créer le sondage"
-      update_poll: "Modifier le sondage"
-      
-      # for views\polls\show.html.erb
-      # uses mail - cf list.html.erb
-      date: "Date"
-      case_or_product: "Dossier - (N° d'affaire)"
-      satisfaction_level_4: "Très satisfait" 
-      satisfaction_level_3: "Satisfait"
-      satisfaction_level_2: "Peu satisfait"
-      satisfaction_level_1: "Pas satisfait"
-      satisfaction_level_0: "Non renseigné"
-      blank: "Non renseigné"
-      download_csv: "Télécharger le fichier csv"
-      
-      # for views\satisfaction\_form.html.erb
-      message_for_private_and_admin_after_record: "Données de satisfaction enregistrées par l'utilisateur "
-      message_user_after_record: "Merci d'avoir répondu à notre enquête<br>Vous avez validé votre saisie le " 
-      record_satisfaction: "Enregistrer votre satisfaction"
-  
-      # for views\shared\_list.html.erb
-      asset_or_folder_name: "Nom"
-      asset_or_folder_last_update: "Dernière modif."
-      asset_or_folder_length: "Taille"
-      owner: "Propriétaire: "
-      delete_folder: "Supprimer"
-      share_folder: "Partager"
-      manage_folder: "Gérer"
-      see_shares: "[Voir les partages]"
-      see_answers: "[Voir les réponses]"
-      delete_asset: "Supprimer"
-       
-      # for views\shared\_nav.html.erb
-      disconnect: "se déconnecter"
-      upload_file: "charger un document"
-      create_dir: "créer un répertoire"
-      users_list: "[Gestion des utilisateurs]"
-      manage_polls: "[Gestion des sondages]"
-      new_poll: "créer un nouveau sondage"
-      manage_folders: "[Gestion des dossiers]"
-      root: "racine"
-      
-      # for views\shared_folders\_form.html.erb
-      delete_share: "Supprimer le(s) partage(s) sélectionné(s)"
-      
-      # for views\shared_folders\show.html.erb
-      share_label: "Si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,"
-      share: "partager"
-      reset: "Tout effacer"
-      
-    folders_msg:
-      index_forbidden: "Vous n'avez pas accès à cette page"
-      folder_not_for_yu: "Ce répertoire ne vous appartient pas, ne vous est pas destiné !"
-      inexisting_folder: "Ce répertoire n'existe pas !"
-      no_folder_creation: "Vous ne pouvez pas créer de dossier"
-      no_subfolder_out_of_yur_folder: "Vous ne pouvez créer de sous répertoire que dans les répertoires vous appartenant"
-      no_subfolder_in_inexisting_folder: "Vous ne pouvez pas créer de sous répertoire dans un répertoire qui n'existe pas"
-      inexisting_folder_cannot_be_modified: "Vous ne pouvez pas apporter de modifications à un répertoire qui n'existe pas"
-      not_admin_nor_owner: "Vous n'êtes pas propriétaire ou administrateur"
-      case_number_used: "Ce numéro d'affaire existe déjà"
-      folder_destroyed: "Suppression réussie !"
-      no_folder_on_that_id: " ne correspond à aucun répertoire existant"
-      not_a_proper_new_folder_route: "new what? new_folder? new_file?"
-      
-    users_msg:
-      only_for_admin: "Seul les admins peuvent changer le status des utilisateurs"
-      error_changing_status: "Erreur lors du changement de status"
-      new_status: "a désormais le status"
-      own_status_nor_superadmin_cannot_be_changed: "Vous ne pouvez pas changer votre propre status ou celui du super administrateur"
-      inexisting_user: "Vous ne pouvez pas changer le status d'un utilisateur inexistant"
-      invalid_status: "Statut invalide"
-      user_managing_forbidden: "Les utilisateurs publics ne peuvent ni visualiser ni gérer les autres utilisateurs"
-      only_admin_may_delete_user: "Vous devez être administrateur pour supprimer un utilisateur"
-      yu_cannot_delete_yur_own_account: "Vous ne pouvez supprimer votre propre compte"
-      user: "utilisateur"
-      deleted: "supprimé"
-      user_not_deleted: "Echec de la suppression"
-      
-    assets_msg: 
-      rights_missing: "Vous ne pouvez pas mettre en ligne de fichier"
-      not_yur_folder: "Vous ne pouvez mettre en ligne de fichier que dans les répertoires vous appartenant"
-      inexisting_folder: "Vous ne pouvez pas mettre en ligne de fichier dans un répertoire qui n'existe pas"
-      asset_uploaded: "Mise en ligne réussie!"
-      asset_destroyed: "Suppression réussie!"
-      asset_not_for_yu: "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
-      inexisting_asset: "Ce fichier n'existe pas !"
-      
-    polls_msg:
-      admin_rights_missing: "Vous n'avez pas les droits administrateurs"
-      inexisting_poll: "Vous ne pouvez pas apporter de modifications à un sondage qui n'existe pas"
-      same_questions: "Un sondage ne peut contenir des questions identiques"
-      poll_updated: "Modification(s) du sondage sauvegardée(s)"
-      inexisting_poll_number: "Ce numéro de sondage n'existe pas"
-      missing_required_fields: "Il manque des champs obligatoires dans le formulaire"
-      poll_created: "Nouveau formulaire crée avec succès"
-      poll_destroyed: "Suppression du formulaire réussie"
-      
-    satisfactions_msg:
-      inexisting_folder: "Vous ne pouvez pas participer à un sondage sur un répertoire qui n'existe pas"
-      folder_owner: "Vous ne pouvez pas participer à un sondage sur un répertoire dont vous êtes le propriétaire"
-      unshared_folder: "Vous ne pouvez pas participer à un sondage sur un répertoire qui ne vous est pas partagé"
-      unpolled_folder: "Aucune enquête en cours sur ce dossier"
-      already_answered: "Vous avez déjà répondu à une enquête sur ce répertoire"
-      inexisting_satisfaction: "Aucune enquête sous ce numéro"
-      access_forbidden: "Vous ne pouvez accéder aux statistiques n'étant ni admin ni propriétaire ni autorisé sur ce dossier"
-      satisfaction_created: "Vos réponses ont été enregistrées, merci !"
-      satisfaction_error: "Error creating satisfaction."
+    site_name: "Le cloud des rapports / Cerema Centre Est"
+    admin_mel: "alexandre.cuer@cerema.fr"
+    are_yu_sure: "Etes vous sûr ?"
+    mail: "addresse email"
+    user_id: "ID de l'utilisateur "
+    status: "status"
+    root: "racine utilisateur"
+    shared: "dossiers partagés"
+    no_permission: "Vous n'avez pas les droits suffisants"
+    inexisting: "L'objet auquel vous voulez accéder n'existe pas"
+    no_name_given: "Il faut fournir un nom"
+    success: "succès"
+    failure: "echec"
+    created: "création effectuée"
+    not_created: "création non effectuée"
+    updated: "mise à jour réussie"
+    not_updated: "mise à jour non effectuée"
+    stop: "impossible de poursuivre"
+    maybe: "peut-être que"
+    deleted: "suppression réussie"
+    not_deleted: "suppression non effectuée"
+    object_owner_changed: "changement de propriétaire pour l'objet"
+    children_owner_changed: "changement de propriétaire pour les enfants"
+    missing_required_fields: "Il manque des champs obligatoires dans le formulaire"
+    client: "client"
+    project: "affaire"
+    project_manager: "chargé d'affaire"
+    collected_by: "récolté par"
+    date: "Date réception"
+    description: "Description"
+    
+    name: "Nom"
+    last_update: "Dernière modif."
+    length: "Taille"
+    owner: "Propriétaire"
+    delete: "Supprimer"
+    share: "Partager"
+    manage: "Gérer"
+    see_shares: "[Voir les partages]"
+    see_answers: "[Voir les réponses]"
 
-    shared_folders_msg:
-      mail_sent_to: "Vous venez d'envoyer un email à l'adresse : "
-      inexisting_folder: "Vous ne pouvez pas partager un répertoire qui n'existe pas ou ne vous appartient pas"
-      email_needed: "Il faut indiquer une adresse mel"
-      you_are_folder_owner: "Vous êtes propriétaire - pas besoin de vous partager ce répertoire"
-      already_shared_to: "Partage déjà opérationnel pour l'adresse "
-      unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse "
-      shared_to: "Partage effectué pour l'adresse "
-      folder: "Répertoire "
-      no_share_selected: "Aucun partage sélectionné"
-      shares_destroyed: "Partage(s) supprimé(s)"
+    # folder specific
+    folder: "répertoire"
+    folder_not_for_yu: "Ce répertoire ne vous appartient pas, ne vous est pas destiné !"
+    inexisting_folder: "Ce répertoire n'existe pas !"
+    no_folder_creation: "Vous ne pouvez pas créer de dossier - demandez à un administrateur de vous attribuer un profil privé"
+    no_subfolder_out_of_yur_folder: "Vous ne pouvez créer de sous répertoire que dans les répertoires vous appartenant"
+    no_subfolder_in_inexisting_folder: "Vous ne pouvez pas créer de sous répertoire dans un répertoire qui n'existe pas"
+    case_number_used: "Ce numéro d'affaire existe déjà"
+    give_folder_id: "Préciser le numéro du répertoire"
+    no_folder_on_that_id: "aucun répertoire existant sous le numéro"
+    not_a_proper_new_folder_route: "new what? new_folder? new_file?"
+    folder_belongs_to_user: "le répertoire appartient déjà à l'utilisateur"
+    folder_already_in_place: "le répertoire est déjà là où vous voulez l'envoyer"
+    folder_moved: "répertoire déplacé"
+    
+    # user specific
+    no_user_on_that_id: "aucun utilisateur existant sous le numéro"
+    define_lang: "définir le langage de l'application (en/fr)...."
+    
+    # for views\shared\_nav.html.erb
+    disconnect: "se déconnecter"
+    upload_file: "charger un document"
+    create_dir: "créer un répertoire"
+    users_list: "[Gestion des utilisateurs]"
+    manage_polls: "[Gestion des sondages]"
+    new_poll: "créer un nouveau sondage"
+    manage_folders: "[Gestion des dossiers]"
+    explorer: "Explorateur"
+    sat_stats: "statistiques satisfaction"
+    
+    # for polls
+    poll_title: "Titre du formulaire"
+    poll_description: "Description du formulaire"
+    closed_questions: "question(s) fermée(s)"
+    open_questions: "question(s) ouverte(s)"
+    separator: "séparées par un point virgule"
+    create_poll: "Créer le sondage"
+    update_poll: "Modifier le sondage"
+    choose_poll: "choisissez un sondage"
+    nb_sent_surveys: "questionnaire(s) envoyé(s)"
+    nb_feedbacks: "retour(s) satisfaction"
+    poll_summary: "Synthèse de l'enquête"
+    check_summary: "Voir la synthèse"
+    period: "Pour la période"
+    from: "du"
+    to: "au"
+    from_poll_start: "Depuis le lancement de l'enquête"
+    no_data: "Il n'y a pas de données...."
+    for_group: "Pour le groupe"
+    download_csv: "Télécharger le fichier csv"
+    begin: "date de début AAAA-MM-JJ"
+    end: "date de fin AAAA-MM-JJ"
+    sat_stats_message: "Veuillez définir les dates de début et de fin, ce qui affichera les retours satisfactions dans cette plage pour le sondage sélectionné"
+    fill_workgroup: "indiquer votre groupe de travail"
+    feedback_number: "Retour satisfaction numéro"
+    recorded_on: "Enregistré le"
+    same_questions: "Un sondage ne peut contenir des questions identiques"  
+    case_or_product: "Dossier - (N° d'affaire)"
+    satisfaction_level_4: "Très satisfait" 
+    satisfaction_level_3: "Satisfait"
+    satisfaction_level_2: "Peu satisfait"
+    satisfaction_level_1: "Pas satisfait"
+    satisfaction_level_0: "Non renseigné"
+    blank: "Non renseigné"
+  
+    # for views\assets\_form.html.erb
+    upload: "Lancer le téléchargement"
+  
+    # for views\folders\_form.html.erb
+    dir_name: "Nom du répertoire "
+    case_number: "N° d'affaire "
+    no_poll: "Associer un sondage"
+    create_folder: "Créer le répertoire"
+    update_folder: "Modifier le répertoire"
+      
+    # for views\folders\index.html.erb
+    folder_move: "Déplacement de répertoire"
+    folder_id_to_move: "ID du répertoire à déplacer"
+    destination_folder_id: "ID du répertoire de destination (0 pour envoyer à la racine)"
+    validate_move: "procéder au déplacement"
+      
+    # for views\satisfaction\_form.html.erb
+    message_for_private_and_admin_after_record: "Données de satisfaction enregistrées par l'utilisateur "
+    message_user_after_record: "Merci d'avoir répondu à notre enquête<br>Vous avez validé votre saisie le " 
+    record_satisfaction: "Enregistrer votre satisfaction"
+     
+    # for views\shared_folders\_form.html.erb
+    delete_share: "Supprimer le(s) partage(s) sélectionné(s)"
+      
+    # for views\shared_folders\show.html.erb
+    share_label: "Si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,"
+    share: "partager"
+    reset: "Tout effacer"
+      
+    #users_msg:
+    only_for_admin: "Seul les admins peuvent changer le status des utilisateurs"
+    error_changing_status: "Erreur lors du changement de status"
+    new_status: "a désormais le status"
+    own_status_nor_superadmin_cannot_be_changed: "Vous ne pouvez pas changer votre propre status ou celui du super administrateur"
+    inexisting_user: "Vous ne pouvez pas changer le status d'un utilisateur inexistant"
+    invalid_status: "Statut invalide"
+    user_managing_forbidden: "Les utilisateurs publics ne peuvent ni visualiser ni gérer les autres utilisateurs"
+    only_admin_may_delete_user: "Vous devez être administrateur pour supprimer un utilisateur"
+    yu_cannot_delete_yur_own_account: "Vous ne pouvez supprimer votre propre compte"
+    user: "utilisateur"
+    deleted: "supprimé"
+    user_not_deleted: "Echec de la suppression"
+      
+    #assets_msg: 
+    rights_missing: "Vous ne pouvez pas mettre en ligne de fichier"
+    not_yur_folder: "Vous ne pouvez mettre en ligne de fichier que dans les répertoires vous appartenant"
+    inexisting_folder: "Vous ne pouvez pas mettre en ligne de fichier dans un répertoire qui n'existe pas"
+    asset_uploaded: "Mise en ligne réussie!"
+    asset_destroyed: "Suppression réussie!"
+    asset_not_for_yu: "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
+    inexisting_asset: "Ce fichier n'existe pas !"
+      
+    #satisfactions_msg:
+    metas_not_recorded: "attention: metachamp(s) n°affaire fiche(s) satisfaction non mis à jour"
+    inexisting_folder: "Vous ne pouvez pas participer à un sondage sur un répertoire qui n'existe pas"
+    folder_owner: "Vous ne pouvez pas participer à un sondage sur un répertoire dont vous êtes le propriétaire"
+    unshared_folder: "Vous ne pouvez pas participer à un sondage sur un répertoire qui ne vous est pas partagé"
+    unpolled_folder: "Aucune enquête en cours sur ce dossier"
+    already_answered: "Vous avez déjà répondu à une enquête sur ce répertoire"
+    inexisting_satisfaction: "Aucune enquête sous ce numéro"
+    access_forbidden: "Vous ne pouvez accéder aux statistiques n'étant ni admin ni propriétaire ni autorisé sur ce dossier"
+    satisfaction_created: "Vos réponses ont été enregistrées, merci !"
+    satisfaction_error: "Error creating satisfaction."
+    
+    #shared_folders_msg:
+    mail_sent_to: "Vous venez d'envoyer un email à l'adresse : "
+    inexisting_folder: "Vous ne pouvez pas partager un répertoire qui n'existe pas ou ne vous appartient pas"
+    email_needed: "Il faut indiquer une adresse mel"
+    you_are_folder_owner: "Vous êtes propriétaire - pas besoin de vous partager ce répertoire"
+    already_shared_to: "Partage déjà opérationnel pour l'adresse "
+    unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse "
+    shared_to: "Partage effectué pour l'adresse "
+    folder: "Répertoire "
+    no_share_selected: "Aucun partage sélectionné"
+    shares_destroyed: "Partage(s) supprimé(s)"

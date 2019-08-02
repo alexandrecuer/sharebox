@@ -1,6 +1,7 @@
 <%
 # this file generates the assets and folders list associated to our position in the folders'tree
 # this is not the core of the app and front office and back office are mixed up here 
+# this is therefore a very bad practice but provided fun for me :-)
 # initialization of @assets, @folders and @shared_folders_by_others as empty hashes {}
 @assets={}
 @folders={}
@@ -83,9 +84,9 @@ end
     <thead>
         <tr>
 	      <th></th>
-          <th><%= MAIN["asset_or_folder_name"] %></th>
-          <th><%= MAIN["asset_or_folder_last_update"] %></th>
-          <th><%= MAIN["asset_or_folder_length"] %></th>
+          <th><%= t('sb.name') %></th>
+          <th><%= t('sb.last_update') %></th>
+          <th><%= t('sb.length') %></th>
         </tr>
     </thead>
     <tbody>
@@ -119,20 +120,20 @@ end
     puts ("*****************************************")
     if meta["shares"].length > 0 && meta["satis"].length == 0
     #if f.shared? && !f.has_satisfaction_answer?
-      showshares = " #{link_to MAIN['see_shares'], shared_folder_path(f), class: 'btn btn-outline-warning btn-sm'}".html_safe
+      showshares = " #{link_to t('sb.see_shares'), shared_folder_path(f), class: 'btn btn-outline-warning btn-sm'}".html_safe
     elsif meta["satis"].length > 0
     #elsif f.has_satisfaction_answer?
-      showshares = " #{link_to MAIN['see_answers'], shared_folder_path(f), class: 'btn btn-outline-warning btn-sm'}".html_safe
+      showshares = " #{link_to t('sb.see_answers'), shared_folder_path(f), class: 'btn btn-outline-warning btn-sm'}".html_safe
     end
     # owner case
     # speeding up things 
     if f.user_id == current_user.id
     #if current_user.has_ownership?(f)
-        delete_zone = "#{link_to MAIN['delete_folder'], folder_path(f), method: :delete, data: {confirm: MAIN['are_yu_sure']}, class: 'btn btn-outline-danger btn-sm'}"
+        delete_zone = "#{link_to t('sb.delete'), folder_path(f), method: :delete, data: {confirm: t('sb.are_yu_sure')}, class: 'btn btn-outline-danger btn-sm'}"
         delete_zone = "#{delete_zone}".html_safe
-        newshare_zone = "#{link_to MAIN['share_folder'], new_share_on_folder_path(f), class: 'btn btn-outline-primary btn-sm'}".html_safe
-        manage_zone = "#{link_to MAIN['manage_folder'], edit_folder_path(f), class: 'btn btn-outline-success btn-sm'}".html_safe
-        manage_zone_modal= "#{link_to MAIN['manage_folder'], edit_folder_path(f),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'btn btn-outline-success btn-sm'} }".html_safe
+        newshare_zone = "#{link_to t('sb.share'), new_share_on_folder_path(f), class: 'btn btn-outline-primary btn-sm'}".html_safe
+        manage_zone = "#{link_to t('sb.manage'), edit_folder_path(f), class: 'btn btn-outline-success btn-sm'}".html_safe
+        manage_zone_modal= "#{link_to t('sb.manage'), edit_folder_path(f),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'btn btn-outline-success btn-sm'} }".html_safe
      
         #if f.is_swarmed?
         # current_user is the folder owner - so we check if he has eventually swarmed the folder to another user
@@ -204,7 +205,7 @@ end
     # speeding up things - has_asset_ownership is consuming a SQL request
     #if current_user.has_asset_ownership?(f)
     if f.user_id == current_user.id
-      deletefile_zone = "#{link_to MAIN['delete_asset'], asset_path(f), method: :delete, data: {confirm: MAIN['are_yu_sure'] }, class: 'btn btn-outline-danger btn-sm'}".html_safe
+      deletefile_zone = "#{link_to t('sb.delete'), asset_path(f), method: :delete, data: {confirm: t('sb.are_yu_sure') }, class: 'btn btn-outline-danger btn-sm'}".html_safe
       filestart = "<div class='file'>".html_safe
     else
       # speeding up things - 04/03/2019

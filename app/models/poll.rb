@@ -12,40 +12,6 @@ class Poll < ApplicationRecord
   has_many :satisfactions, :dependent=> :destroy
   
   has_many :surveys, :dependent=> :destroy
-  
-  ##
-  # generate the attributes to explore a satisfactions active record associated to a poll<br>
-  # structure is [created_at, case_number/description, all closed questions separated by comma, all open questions separated by comma]
-  # DEPRECATED
-  #def fetch_attributes
-  #  attributes = []
-  #  attributes.push("created_at")
-  #  attributes.push("case_number")
-  #
-  #  for i in 1..self.closed_names_number
-  #      attributes.push("closed#{i}")
-  #  end
-  #  for i in 1..self.open_names_number
-  #      attributes.push("open#{i}")
-  #  end
-  #  attributes
-  #end
-
-  ##
-  # generate the csv file containing all the results to the poll
-  # DEPRECATED
-  #def to_csv(emails)
-  #  headers = self.get_names.insert(0,'Email').insert(1,'Date').insert(2,'N° affaire')
-  #  attributes=self.fetch_attributes
-  #  
-  #  CSV.generate(headers: true, :col_sep => ';') do |csv|
-  #    csv << headers
-  #
-  #    Satisfaction.where(poll_id: self.id).each do |s|
-  #      csv << emails.values_at(s.user_id) + s.attributes.values_at(*attributes)
-  #    end
-  #  end
-  #end
 
   ##
   # Return a table with all closed questions
@@ -91,40 +57,6 @@ class Poll < ApplicationRecord
     hash(self.open_names,"open")
   end
 
-
-  ##
-  # Calculates average value for each closed question and for each satisfaction level<br>
-  # we have to consider 4 different satisfaction levels plus "left blank" field<br>
-  # return a 5 lines table gathering all the results, with one column for each closed question
-  # DEPRECATED
-  #def calc(satisfactions=nil)
-  #  tab = Array.new(self.closed_names_number){Array.new(5,0)}
-  #  number_of_satisfactions = 0 
-  #  unless satisfactions
-  #    satisfactions=Satisfaction.where(poll_id: self.id)
-  #  end
-  #  satisfactions.each do |s|
-  #    for i in 1..self.closed_names_number
-  #      #if value = s.public_send("closed#{i}")
-  #      if value = s["closed#{i}"]
-  #        tab[i-1][value] += 1
-  #      else
-  #        tab[i-1][0] += 1
-  #      end
-  #    end
-  #    number_of_satisfactions +=1
-  #  end
-  #  #puts("#{number_of_satisfactions} VS #{satisfactions.length}")
-  #  for i in 0..self.closed_names_number-1
-  #    for y in 0..4
-  #      tab[i][y] = ( tab[i][y].to_f / satisfactions.length * 100 ).round(2)
-  #    end
-  #  end
-  #  # we return tab
-  #  #puts(tab)
-  #  tab
-  #end
-  
   ##
   # generate csv file for a list of feedbacks
   # please note the satisfactions active records must be done with a jointure on the user table to get the email of the user owner
@@ -132,7 +64,7 @@ class Poll < ApplicationRecord
     unless satisfactions
       satisfactions = self.satisfactions.joins(:user).select("satisfactions.*,users.email as email")
     end
-    headers = ['id','Affaire','client','chargé d\'affaire','récolté par','Date réception','Description']+self.get_names
+    headers = ['id',I18n.t('sb.project'),I18n.t('sb.client'),I18n.t('sb.project_manager'),I18n.t('sb.collected_by'),I18n.t('sb.date'),I18n.t('sb.description')]+self.get_names
     csv = CSV.generate(headers: true, :col_sep => ';') do |c|
       c << headers
       satisfactions.each do |a|
@@ -175,7 +107,8 @@ class Poll < ApplicationRecord
     for i in 1..self.closed_names_number
       result[closed["closed#{i}"]]={}
       for y in 0..4
-        result[closed["closed#{i}"]][MAIN["satisfaction_level_#{y}"]] = ( tab[i-1][y].to_f / satisfactions.length * 100 ).round(2)
+        level=I18n.t("sb.satisfaction_level_#{y}")
+        result[closed["closed#{i}"]][level] = ( tab[i-1][y].to_f / satisfactions.length * 100 ).round(2)
       end
     end
     result
