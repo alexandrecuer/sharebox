@@ -6,7 +6,7 @@
     <thead>
       <tr>
         <th></th>
-        <th>Liste des partages et/ou réponses</th>
+        <th><%= t('sb.shares_feedbacks') %></th>
         <th></th>
       </tr>
     </thead>
@@ -46,7 +46,7 @@
           <% end %>
         </td>
         <td class="align-middle">
-          Partage <%= f.id %> - <%= f.share_email %> (<%= id %>-<%= status %>) <%= noc_message %>
+          <%= t('sb.share_number') %>&nbsp;<%= f.id %> - <%= f.share_email %> (<%= id %>-<%= status %>) <%= noc_message %>
         </td>
         <td class="align-middle">
           <% if user && has_answered %>
@@ -66,7 +66,7 @@
   </table>
   
   <% if missing_answer == 1 %>
-    <%= submit_tag MAIN["delete_share"], class: 'btn' %>
+    <%= submit_tag t('sb.delete_share'), class: 'btn' %>
   <% end %>
 
   <% end %>
@@ -77,8 +77,8 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
-              Fiche de satisfaction <%= s.id %><br>
-              Dossier <%= @current_folder.name%>
+              <%= t('sb.feedback_number') %>&nbsp<%= s.id %><br>
+              <%= t('sb.folder') %>&nbsp;<%= @current_folder.name%>
               <% if @current_folder.case_number != "" %>
                 <%= @current_folder.case_number %>
               <% end %>

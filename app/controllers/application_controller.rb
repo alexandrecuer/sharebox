@@ -24,6 +24,10 @@ class ApplicationController < ActionController::Base
         puts("******************************#{I18n.locale}")
       end
     end
+    if params["locale"]
+      puts("a specific locale has been specified in the url")
+      I18n.locale=params[:locale]
+    end
   end
   
 end

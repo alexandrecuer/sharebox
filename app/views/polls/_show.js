@@ -155,9 +155,9 @@ function genstatsforpoll(pollId)
         var stats=[];
         stats.push("<b>"+result.poll_name+"</b><br>");
         stats.push(result.sent);
-        stats.push(" "+sb["nb_sent_surveys"]+"<br>");
+        stats.push(" "+sb["sent_surveys"]+"<br>");
         stats.push(result.satisfactions.length);
-        stats.push("  "+sb["nb_feedbacks"]+"<br>");
+        stats.push("  "+sb["feedbacks"]+"<br>");
         stats.push("<a data-toggle='modal' data-target='#synth' href='#'>"+sb["check_summary"]+"</a><br>");
         stats.push("<a href="+csvlink+">"+sb["download_csv"]+"</a>");
         $("#stats").html(stats.join(""));

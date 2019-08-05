@@ -1,7 +1,17 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-    <%= link_to MAIN["site_name"].html_safe, root_url , class: "navbar-brand" %>
+    <%= link_to t('sb.site_name').html_safe, root_url , class: "navbar-brand" %>
     <img src=https://www.cerema.fr/themes/custom/uas_base/images/logo-seul.svg width=60>
 </nav>
+
+<script>
+var legend=[];
+var out="<table class='table table-sm' >";
+out+="<thead><tr><td colspan=2><%= t('sb.legend') %> : </td></tr>"
+legend[4]="<%= t('sb.satisfaction_level_4') %>";
+legend[3]="<%= t('sb.satisfaction_level_3') %>";
+legend[2]="<%= t('sb.satisfaction_level_2') %>";
+legend[1]="<%= t('sb.satisfaction_level_1') %>";
+</script>
 
 <%
 if @survey
@@ -12,25 +22,17 @@ if @survey
 end
 %>
 <% if @survey %>
-<h3>Bonjour <%=client_username[0].titleize %></h3>
-<h3>Nous venons de terminer une prestation à votre bénéfice</h3>
+<h3><%= t('hello') %> <%=client_username[0].titleize %></h3>
+<h3><%= t('sb.survey_intro') %></h3>
 <h4><%= @survey.description %></h4>
-<h5>sous le pilotage du chargé d'affaire :  <%= mail_to @survey.by, by_username[0].titleize %></h5><br>
+<h5><%= t('sb.project_manager') %> :  <%= mail_to @survey.by, by_username[0].titleize %></h5><br>
 <% end %>
 
 <%= render 'form' %>
 
 <script>
-var legend=[];
-var out="<table class='table table-sm' >";
-out+="<thead><tr><td colspan=2>Légende : </td></tr>"
 var i;
 var j;
-legend[4]="très satisfaisant";
-legend[3]="satisfaisant";
-legend[2]="peu satisfaisant";
-legend[1]="pas satisfaisant";
-
 for (i=4;i>=1;i--){
     out+="<tr style='background-color: #eee;'><td><div class='row align-items-center justify-content-center'>";
     for (j=1;j<=i;j++){

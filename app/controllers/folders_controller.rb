@@ -151,11 +151,11 @@ class FoldersController < ApplicationController
           end
         end
       else
-        flash[:notice] = t('sb.folder_not_for_yu')
+        flash[:notice] = "#{flash[:notice]} -> #{t('sb.folder_not_for_yu')}"
         redirect_to root_url
       end
     else
-      flash[:notice] = t('sb.inexisting_folder')
+      flash[:notice] = "#{flash[:notice]} -> #{t('sb.inexisting_folder')}"
       redirect_to root_url
     end
   end
@@ -328,7 +328,7 @@ class FoldersController < ApplicationController
           result["message"]=t('sb.updated')
           result["lists"]=folder.lists
           unless majsat
-            result["message"]="#{result['message']}\n #{t('sb.satisfactions_msg.metas_not_recorded')}" 
+            result["message"]="#{result['message']}\n #{t('sb.sat_metas_not_recorded')}" 
           end
         else
           result["message"]=t('sb.not_updated')

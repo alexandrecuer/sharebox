@@ -1,4 +1,6 @@
 <script>
+//this makes the locale available in the ajax frontoffice
+//not perfect but seems better than a synchronous ajax call
 var sb={};
 <%
 lang=I18n.locale
@@ -43,7 +45,7 @@ if current_user.is_admin?
 end
 
 if current_user.belongs_to_team?
-  managefreesurveys = "#{link_to 'enquêtes client sans mise à disposition de livrables', new_survey_path, class: 'dropdown-item'}"
+  managefreesurveys = "#{link_to t('sb.free_survey'), new_survey_path, class: 'dropdown-item'}"
 end
 
 # navigation menu

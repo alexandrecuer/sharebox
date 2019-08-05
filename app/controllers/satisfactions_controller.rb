@@ -8,9 +8,10 @@ class SatisfactionsController < ApplicationController
   
   ##
   # show / update meta datas on satisfactions
+  # to upgrade from deprecated versions of colibri (v0 or v1)
   def feedback_metas
     unless current_user.is_admin?
-      log="vous n'avez pas les droits suffisants"
+      log="you do not have the permission to update satisfactions metadatas"
     else
       unless params[:update]
         log="checking metadatas on satisfaction records based on the folders'system...\n"
@@ -37,6 +38,7 @@ class SatisfactionsController < ApplicationController
   
   ##
   # run a filter on the results of a specific poll
+  # route is  /satisfactions/run/:poll_id
   def run
     #authenticate_user!
     #puts(DATE_REG_EXP)
@@ -62,10 +64,10 @@ class SatisfactionsController < ApplicationController
         all["to"]=format_date(params[:end])
       end
       if params[:ncap]
-        all["ncap"]="tous les feedbacks présentant au moins une note inférieure ou égale à #{params[:ncap]}"
+        all["ncap"]="#{t('sb.ncap')} #{params[:ncap]}"
       end
       if params[:email]
-        all["email"]="les retours satisfaction du chargé d'affaires #{params[:email]}"
+        all["email"]="#{t('sb.project_manager_feedbacks')} #{params[:email]}"
       end
       # evaluation of sent surveys only if user did not ask for csv export, ncap exploitation or filtering on a specific email
       unless params[:csv] || params[:ncap] || params[:email]
@@ -85,7 +87,7 @@ class SatisfactionsController < ApplicationController
         send_data csv, filename: "polls-#{Time.zone.today}.csv"
       end
     else
-      render json: {"message": "pas de sondage sous ce numéro"}
+      render json: {"message": "#{t('sb.inexisting')} - #{t('sb.poll')} #{t('sb.id')} #{params[:poll_id]}"}
     end
   end
   
@@ -121,10 +123,10 @@ class SatisfactionsController < ApplicationController
       @satisfaction=Satisfaction.new
       @survey=Survey.find_by_id(params[:id])
       if !@survey
-        render plain: "Nothing here"
+        render plain: "#{t('sb.inexisting')} \n #{t('sb.survey')} #{t('sb.id')} #{params[:id]}"
       else
         if @survey.token != params[:md5]
-          render plain: "This survey is not for you!"
+          render plain: t('sb.incorrect_md5_token')
         else
           @poll=Poll.find_by_id(@survey.poll_id)
           @satisfaction.folder_id=-@survey.id
@@ -145,24 +147,24 @@ class SatisfactionsController < ApplicationController
     authenticate_user!
     @current_folder = Folder.find_by_id(params[:id])
     if !@current_folder
-      flash[:notice] = SATISFACTIONS_MSG["inexisting_folder"]
+      flash[:notice] = t('sb.inexisting_folder')
       redirect_to root_url
     else
       if current_user.has_ownership?(@current_folder) || current_user.belongs_to_team?
-        flash[:notice] = SATISFACTIONS_MSG["folder_owner"]
-        redirect_to folder_path(@current_folder)
+        flash[:notice] = t('sb.team_member_or_folder_owner')
+        redirect_to folder_path(@current_folder) and return
       end
       unless current_user.has_shared_access?(@current_folder)
-        flash[:notice] = SATISFACTIONS_MSG["unshared_folder"]
-        redirect_to root_url
+        flash[:notice] = t('sb.unshared_folder')
+        redirect_to root_url and return
       end
       unless @current_folder.is_polled?
-        flash[:notice] = SATISFACTIONS_MSG["unpolled_folder"]
-        redirect_to folder_path(@current_folder)
+        flash[:notice] = t('sb.unpolled_folder')
+        redirect_to folder_path(@current_folder) and return
       end
       if current_user.has_completed_satisfaction?(@current_folder)
-        flash[:notice] = SATISFACTIONS_MSG["already_answered"]
-        redirect_to folder_path(@current_folder)
+        flash[:notice] = t('sb.already_answered')
+        redirect_to folder_path(@current_folder) and return
       end
       @satisfaction = Satisfaction.new
       @satisfaction.folder_id = @current_folder.id 
@@ -178,7 +180,7 @@ class SatisfactionsController < ApplicationController
     results={}
     satisfaction = Satisfaction.find_by_id(params[:id])
     unless satisfaction
-        results["affaire"]="aucune enquête sous ce numéro"  
+        results["affaire"]=t('sb.inexisting_satisfaction')  
     else
         if satisfaction.folder_id > 0
             folder=Folder.find_by_id(satisfaction.folder_id)
@@ -220,13 +222,13 @@ class SatisfactionsController < ApplicationController
     authenticate_user!
     @satisfaction = Satisfaction.find_by_id(params[:id])
     if !@satisfaction
-      flash[:notice] = SATISFACTIONS_MSG["inexisting_satisfaction"]
+      flash[:notice] = t('sb.inexisting_satisfaction')
       redirect_to root_url
     else
       @current_folder = Folder.find_by_id(@satisfaction.folder_id)
       unless ( current_user.has_shared_access?(@current_folder) || current_user.is_admin? )
-        flash[:notice] = SATISFACTIONS_MSG["access_forbidden"]
-        redirect_to root_url
+        flash[:notice] = t('sb.no_permission')
+        redirect_to root_url and return
       end
       @poll = Poll.find_by_id(@satisfaction.poll_id)
       render 'new'
@@ -244,14 +246,14 @@ class SatisfactionsController < ApplicationController
       @satisfaction = Satisfaction.new(satisfaction_params)
       survey=Survey.find_by_id(@satisfaction.folder_id.abs)
       if !survey
-        render plain: "inexisting survey"
+        render plain: "#{t('sb.inexisting')} \n #{t('sb.survey')} #{t('sb.id')} #{@satisfaction.folder_id.abs}"
       else
         poll=Poll.find_by_id(params[:satisfaction][:poll_id])
         if !poll
-          render plain: "inexisting poll"
+          render plain: "#{t('sb.inexisting')} \n #{t('sb.poll')} #{t('sb.id')} #{params[:satisfaction][:poll_id]}" 
         else
           if poll.id != survey.poll_id
-            render plain: "mismatch : poll ids have been altered"
+            render plain: t('sb.mismatch_poll_ids')
           else
             client_mel=survey.client_mel
             @satisfaction.case_number= gentitle(survey.description,survey.client_mel,survey.by)
@@ -275,7 +277,7 @@ class SatisfactionsController < ApplicationController
                 message=save_free_sat(@satisfaction, survey)
                 render plain: message
               else
-                render plain: "could not save new client"
+                render plain: t('sb.new_client_not_saved')
               end
             end
           end
@@ -289,14 +291,14 @@ class SatisfactionsController < ApplicationController
       meta=@satisfaction.calc_meta(@current_folder,@current_user)
       @satisfaction.case_number = meta.join("")
       if @satisfaction.save
-        flash[:notice] = SATISFACTIONS_MSG["satisfaction_created"]
+        flash[:notice] = t('sb.user_thank_for_feedback')
         @poll = Poll.all.find_by_id(@satisfaction.poll_id)
         @current_folder.lists=@current_folder.calc_meta
         unless @current_folder.save
-          flash[:notice] = "#{flash[:notice]} impossible de mettre à jour les metadonnées du répertoire !!<br>"
+          flash[:notice] = "#{flash[:notice]} #{t('sb.folder_metas_not_recorded')}<br>"
         end
       else
-        flash[:notice] = SATISFACTIONS_MSG["satisfaction_error"]
+        flash[:notice] =t('sb.satisfaction_error')
       end
       render 'new'
     end
@@ -311,18 +313,18 @@ class SatisfactionsController < ApplicationController
     folder_id=@satisfaction.folder_id
     @poll = Poll.find_by_id(@satisfaction.poll_id)
     unless current_user.is_admin?
-      flash[:notice] = "vous n'avez pas les droits nécessaires"
+      flash[:notice] = t('sb.no_permission')
     else
       if @satisfaction.destroy
-        flash[:notice] = "fiche satisfaction supprimée"
+        flash[:notice] = t('sb.deleted')
         if folder = Folder.find_by_id(folder_id)
           folder.lists=folder.calc_meta
           unless folder.save
-            flash[:notice] = "#{flash[:notice]} impossible de mettre à jour les metadonnées du répertoire !!<br>"
+            flash[:notice] = "#{flash[:notice]} #{t('sb.folder_metas_not_recorded')}<br>"
           end
         end
       else
-        flash[:notice] = "impossible de supprimer la fiche"
+        flash[:notice] = t('sb.not_deleted')
       end
     end
     redirect_to poll_path(@poll)

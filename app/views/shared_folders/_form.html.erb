@@ -27,9 +27,9 @@ $(function(){
 
 <% if @to_be_shared_folder %>
     <%= form_for @shared_folder, url: shared_folders_path do |f| %>
-        <%= f.text_field :share_email, data: { autocomplete_source: User.all.map(&:email) }, placeholder: MAIN["share_label"], class: 'form-control' %>
-        <%= f.submit MAIN["share"].to_s+"'"+@to_be_shared_folder.name+"'", class: 'btn' %>
-        <%= f.button MAIN["reset"], type: 'reset', class: 'btn' %>
+        <%= f.text_field :share_email, data: { autocomplete_source: User.all.map(&:email) }, placeholder: t('sb.share_label'), class: 'form-control' %>
+        <%= f.submit t('sb.share').to_s+" '"+@to_be_shared_folder.name+"'", class: 'btn' %>
+        <%= f.button t('sb.reset'), type: 'reset', class: 'btn' %>
         <%= f.hidden_field :folder_id %>     
         <br><br>
     <% end %>

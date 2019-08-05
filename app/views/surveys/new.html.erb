@@ -1,29 +1,29 @@
 <%= render 'shared/nav' %>
 
-<h2>Envoi enquête(s) satisfaction sans mise à disposition de livrables sur Colibri</h2>
+<h2><%= t('sb.free_survey') %></h2>
 
 <div id="process_options">
-<input type="text" id="s_description" placeholder="description avec mention numéro affaire sigma si enquête sur affaire" name="s[description]" class="form-control" ><br>
-<input type="text" id="s_client_mel" placeholder="email du client" name="s[client_mel]" class="form-control" ><br>
-<input type="text" id="s_by" placeholder="email du chargé d'affaire" name="s[by]" class="form-control" ><br>
-Choisissez le sondage à utiliser dans le menu déroulant :
+<input type="text" id="s_description" placeholder="<%= t('sb.project_description') %>" name="s[description]" class="form-control" ><br>
+<input type="text" id="s_client_mel" placeholder="<%= t('sb.client_email') %>" name="s[client_mel]" class="form-control" ><br>
+<input type="text" id="s_by" placeholder="<%= t('sb.project_manager_email') %>" name="s[by]" class="form-control" ><br>
+<%= t('sb.choose_poll') %> :
 <select id="s_poll_id" name="s[poll_id]" class="form-control"></select><br>
 </div>
-<div><button id="create" class="btn" style="display:none">Enregistrer</button><br><br></div>
+<div><button id="create" class="btn" style="display:none"><%= t('sb.save') %></button><br><br></div>
 
 <div class="table-responsive">
-  <h4>Liste des enquêtes envoyées et sans réponse à ce jour</h4>
-  <input type=text class=form-control id=groups placeholder="indiquer votre groupe de travail" value=<%= current_user.groups %>>
+  <h4><%= t('sb.pending_survey') %></h4>
+  <input type=text class=form-control id=groups placeholder="<%= t('sb.fill_workgroup') %>" value=<%= current_user.groups %>>
   <div class="container-fluid"> 
     <div id=date_fields class="row flex-xl-nowrap">
-      <input type=text class=form-control id=time_start placeholder="date de début AAAA-MM-JJ">
-      <input type=text class=form-control id=time_end placeholder="date de fin AAAA-MM-JJ">
+      <input type=text class=form-control id=time_start placeholder="<%= t('sb.begin') %>">
+      <input type=text class=form-control id=time_end placeholder="<%= t('sb.end') %>">
     </div>
   </div>
   <table class="table">
     <tr>
-      <th>Numéro</th>
-      <th>Détails</th>
+      <th><%= t('sb.id') %></th>
+      <th><%= t('sb.details') %></th>
       <th></th>
       <th></th>
     </tr>
@@ -34,7 +34,7 @@ Choisissez le sondage à utiliser dans le menu déroulant :
 <div class="table-responsive">
   <table class="table">
     <tr>
-      <th id="titleandcsv">Tous vos retours</th>
+      <th id="titleandcsv"><%= t('sb.feedbacks') %></th>
     </tr>
     <tbody id="answers"></tbody>
   </table>

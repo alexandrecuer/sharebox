@@ -7,11 +7,11 @@
     <% else %>
         <% if current_user.is_private? || current_user.is_admin? %>
             <p>
-            <%= MAIN["message_for_private_and_admin_after_record"] %>
+            <%= t('sb.feedback_datas_from') %>&nbsp;
             <% if @satisfaction.user_id >0 %><%= User.find_by_id(@satisfaction.user_id).email %> - <% end %>
             <%= @satisfaction.created_at %></p>
         <% else %>
-            <p><%= MAIN["message_user_after_record"].html_safe %><%= @satisfaction.created_at %><br><br></p>
+            <p><%= t('sb.user_thank_for_feedback') %><br><%= t('sb.you_validated_on') %>&nbsp;<%= @satisfaction.created_at %><br><br></p>
         <% end %>
     <% end %>
 
@@ -58,12 +58,11 @@
             </div>
         </div>
     <% end %>
-    
     <%= f.hidden_field :folder_id %> 
-	<%= f.hidden_field :poll_id %> 
+	<%= f.hidden_field :poll_id %>  
 
 	<% if @satisfaction.new_record? %>
-    	<%= f.submit MAIN["record_satisfaction"], class: 'btn' %>
+    	<%= f.submit t('sb.record_satisfaction'), class: 'btn' %>
     <% end %>
     <br><br>
 <% end %>
