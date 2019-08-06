@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+ #scope "(:locale)", locale: /fr|en/ do
   resources :assets
   resources :folders
   resources :shared_folders
@@ -92,5 +93,8 @@ Rails.application.routes.draw do
    get "satisfactions/run/:poll_id" => "satisfactions#run", :as => ""
    
    get "surveys/:poll_id/fill_empty_metas" => "surveys#fill_empty_metas", :as => ""
+   
+   get "i18n" => "help#i18n", :as => "i18n"
+ #end
 
 end
