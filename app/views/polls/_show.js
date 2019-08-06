@@ -1,6 +1,5 @@
 
 //$(".carousel2").carousel();
-
 var date = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
 //generate the next and previous buttons to navigate through the carousel
@@ -23,7 +22,7 @@ function feedbackpostcard(s)
   var fields=Object.getOwnPropertyNames(s);
   satis.push("<table width=60% align=center>");
   //to improve - the user experience with this kind of delete button is bad
-  var del="<a data-confirm='Etes vous sûr ?' rel='nofollow' data-method='delete' href=/satisfactions/"+s["id"]+"><i class='fa fa-times'></i></a>";
+  var del="<a data-confirm='"+sb["are_yu_sure"]+"' rel='nofollow' data-method='delete' href=/satisfactions/"+s["id"]+"><i class='fa fa-times'></i></a>";
   var closed=[];
   var open=[];
   var j=0;
@@ -31,14 +30,14 @@ function feedbackpostcard(s)
   fields.forEach(function(val){
     switch(val){
       case "id":
-        satis.push("<tr><th>Retour satisfaction numéro "+s[val]+del+"</th></tr>");
+        satis.push("<tr><th>"+sb["feedback_number"]+" "+s[val]+del+"</th></tr>");
         break;
       case "affaire":
         satis.push("<tr><th>"+s[val]+"</th></tr>");
         break;
       case "date":
         var when=new Date(s[val]);
-        satis.push("<tr><td><i>Enregistré le "+when.toLocaleDateString()+"</i></td></tr>");
+        satis.push("<tr><td><i>"+sb["recorded_on"]+" "+when.toLocaleDateString()+"</i></td></tr>");
         break;
       case "collected_by":
         break;
@@ -156,30 +155,30 @@ function genstatsforpoll(pollId)
         var stats=[];
         stats.push("<b>"+result.poll_name+"</b><br>");
         stats.push(result.sent);
-        stats.push(" questionnaire(s) envoyé(s)<br>");
+        stats.push(" "+sb["sent_surveys"]+"<br>");
         stats.push(result.satisfactions.length);
-        stats.push("  retour(s) satisfaction<br>");
-        stats.push("<a data-toggle='modal' data-target='#synth' href='#'>Voir la synthèse</a><br>");
-        stats.push("<a href="+csvlink+">Télécharger le fichier csv</a>");
+        stats.push("  "+sb["feedbacks"]+"<br>");
+        stats.push("<a data-toggle='modal' data-target='#synth' href='#'>"+sb["check_summary"]+"</a><br>");
+        stats.push("<a href="+csvlink+">"+sb["download_csv"]+"</a>");
         $("#stats").html(stats.join(""));
         if (result.stats){
           if (Object.keys(result.stats).length>0){
             $("#synth_body").html(synthmodal(result.stats));
             var title=[];
-            title.push("Synthèse de l'enquête");
+            title.push(sb["poll_summary"]);
             title.push("<br><u>"+result.poll_name+"</u>");
             if (result.from && result.to) {
-              title.push("<br>Pour la période du "+humandate(result.from)+" au "+humandate(result.to));
+              title.push("<br>"+sb["period"]+" "+sb["from"]+" "+humandate(result.from)+" "+sb["to"]+" "+humandate(result.to));
             } else {
-              title.push("<br>Depuis le lancement de l'enquête");
+              title.push("<br>"+sb["from_poll_start"]);
             }
             if (result.groups) {
-              title.push("<br>Pour le groupe "+result.groups);
+              title.push("<br>"+sb["for_group"]+" "+result.groups);
             }
             $("#synth_title").html(title.join(""));
           }
         } else {
-          $("#synth_title").html("Il n'y a pas de données....");
+          $("#synth_title").html(sb["no_data" ]);
           $("#synth_body").html("");
         }
         if (result.satisfactions.length>0){

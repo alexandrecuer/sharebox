@@ -1,3 +1,5 @@
+conf:
+  version: 1.4beta
 main:
   site_name: "Le cloud des rapports / Cerema Centre Est"
   admin_mel: "alexandre.cuer@cerema.fr"

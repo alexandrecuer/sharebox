@@ -1,33 +1,51 @@
+<script>
+//this makes the locale available in the ajax frontoffice
+//not perfect but seems better than a synchronous ajax call
+var sb={};
+<%
+lang=I18n.locale
+filepath="#{Rails.root}/config/locales/sb.#{lang}.yml"
+conf = YAML.load_file(filepath)["#{lang}"]["sb"]
+%>
+sb.length=<%= conf.length %>;
+<%
+conf.keys.each do |k| %>
+  sb["<%= k %>"]="<%= conf[k].to_s.html_safe %>";  
+<% end %>
+sb["lang"]="<%= lang %>-<%= lang.upcase %>";
+//console.log(sb);
+</script>
+
 <%
 #if current_user.is_admin? || current_user.is_private?
 #  if @current_folder
 #    if current_user.has_ownership?(@current_folder)
-#      uploadfile="#{link_to MAIN['upload_file'], new_sub_asset_path(@current_folder), class: 'dropdown-item'}".html_safe
-#      createdir="#{link_to MAIN['create_dir'], new_sub_folder_path(@current_folder), class: 'dropdown-item'}".html_safe
-#      createdirmodal= "#{link_to MAIN['create_dir'], new_sub_folder_path(@current_folder),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
+#      uploadfile="#{link_to t('sb.upload_file'), new_sub_asset_path(@current_folder), class: 'dropdown-item'}".html_safe
+#      createdir="#{link_to t('sb.create_dir'), new_sub_folder_path(@current_folder), class: 'dropdown-item'}".html_safe
+#      createdirmodal= "#{link_to t('sb.create_dir'), new_sub_folder_path(@current_folder),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
 #    end
 #  else
-#      uploadfile="#{link_to MAIN['upload_file'], new_asset_path, class: 'dropdown-item'}".html_safe
-#      createdir="#{link_to MAIN['create_dir'], new_folder_path, class: 'dropdown-item'}".html_safe
-#      createdirmodal= "#{link_to MAIN['create_dir'], new_folder_path,  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
+#      uploadfile="#{link_to t('sb.upload_file'), new_asset_path, class: 'dropdown-item'}".html_safe
+#      createdir="#{link_to t('sb.create_dir'), new_folder_path, class: 'dropdown-item'}".html_safe
+#      createdirmodal= "#{link_to t('sb.create_dir'), new_folder_path,  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
 #  end
 #end
 
 if current_user.is_admin?
-  managefolders="#{link_to MAIN['manage_folders'], folders_path, class: 'dropdown-item'}".html_safe
-  manageusers="#{link_to MAIN['users_list'], users_path, class: 'dropdown-item'}".html_safe
-  newpoll="#{link_to MAIN['new_poll'], new_poll_path, class: 'dropdown-item'}".html_safe
+  managefolders="#{link_to t('sb.manage_folders'), folders_path, class: 'dropdown-item'}".html_safe
+  manageusers="#{link_to t('sb.users_list'), users_path, class: 'dropdown-item'}".html_safe
+  newpoll="#{link_to t('sb.new_poll'), new_poll_path, class: 'dropdown-item'}".html_safe
   managepolls="<table>"
   Poll.all.each do |poll|
     managepolls="#{managepolls}<tr><td>#{link_to poll.name, edit_poll_path(poll), class: 'dropdown-item'}</td>"
-    managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item', method: :delete, data: {confirm: MAIN['are_yu_sure']} do fa_icon 'times' end}</td></tr>"
+    managepolls="#{managepolls}<td>#{link_to poll_path(poll), class: 'dropdown-item', method: :delete, data: {confirm: t('sb.are_yu_sure')} do fa_icon 'times' end}</td></tr>"
   end
   managepolls="#{managepolls}</table>".html_safe
   line = "<div class='dropdown-divider'></div>".html_safe
 end
 
 if current_user.belongs_to_team?
-  managefreesurveys = "#{link_to 'enquêtes client sans mise à disposition de livrables', new_survey_path, class: 'dropdown-item'}"
+  managefreesurveys = "#{link_to t('sb.free_survey'), new_survey_path, class: 'dropdown-item'}"
 end
 
 # navigation menu
@@ -60,21 +78,21 @@ end
           <% if current_user.is_admin? %>
           <%= link_to "API help", help_path, class: 'dropdown-item' %>
           <% end %>
-          <%= link_to MAIN["disconnect"].html_safe, destroy_user_session_path, :method => :delete, class: "dropdown-item" %>          
+          <%= link_to t('sb.disconnect').html_safe, destroy_user_session_path, :method => :delete, class: "dropdown-item" %>          
         </div>
       </li>
     </div>
   </td>
   <% if current_user.belongs_to_team? %>
-  <td><a href=/><center><i class="fa fa-home fa-2x"></i><div id=browse style="display: block;">Explorateur</div></center></a></td>
-  <td><a href=/polls><center><i class="fa fa-thermometer-quarter fa-2x"></i><div id=polls style="display: block;">Statistiques satisfaction</div></center></a></td>
+  <td><a href=/><center><i class="fa fa-home fa-2x"></i><div id=browse style="display: block;"><%= t('sb.explorer') %></div></center></a></td>
+  <td><a href=<%= polls_path %>><center><i class="fa fa-thermometer-quarter fa-2x"></i><div id=polls style="display: block;"><%= t('sb.sat_stats') %></div></center></a></td>
   <%# comments %>
   <% end %>
   </tr></table>
  <div class="col">
   <div class="float-right">
-  <div id=name class="navbar-brand"><%= MAIN["site_name"].html_safe%></div>
-  <div id=sources>Powered by <%= link_to "colibri v1.3", "http://github.com/alexandrecuer/sharebox" %></div>
+  <div id=name class="navbar-brand"><%= t('sb.site_name').html_safe%></div>
+  <div id=sources>Powered by <%= link_to "colibri v#{CONF["version"]}", "http://github.com/alexandrecuer/sharebox" %></div>
   </div>
   </div>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +105,7 @@ end
 # bread crumbs navigation if any / fil d'ariane si présent
 if @current_folder
   breadcrumb = "<nav aria-label='breadcrumb'><ol class='breadcrumb'>"
-  breadcrumb = "#{breadcrumb}<li class='breadcrumb-item'><a href=/browse?oldstyle=1>#{MAIN["root"]}</a></li>"
+  breadcrumb = "#{breadcrumb}<li class='breadcrumb-item'><a href=/browse?oldstyle=1>#{t('sb.root')}</a></li>"
   @current_folder.ancestors.reverse.each do |folder|
     if current_user.has_shared_access?(folder)
       breadcrumb = "#{breadcrumb}<li class='breadcrumb-item'>#{link_to folder.name, folder_path(folder)}</li>"

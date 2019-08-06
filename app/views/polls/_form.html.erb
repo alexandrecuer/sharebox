@@ -1,23 +1,23 @@
 <%
 if @poll.new_record?
-  label = MAIN["create_poll"]
+  label = t("sb.create_poll")
 else
-  label = MAIN["update_poll"]
+  label = t("sb.update_poll")
 end
 %>
 
 <%= form_for @poll do |poll| %>
 
-    <p><%= MAIN["poll_title"] %></p>
+    <p><%= t("sb.poll_title") %></p>
     <%= poll.text_area(:name, class: "form-control") %><br>
 
-    <p><%= MAIN["poll_description"] %></p>
+    <p><%= t("sb.poll_description") %></p>
     <%= poll.text_area(:description, class: "form-control") %><br>
 
-    <p><%= MAIN["enter_closed_questions"] %></p>
+    <p><%= t("sb.closed_questions") %>&nbsp;<%= t("sb.separator") %></p>
     <%= poll.text_area(:closed_names, class: "form-control") %><br>
 
-    <p><%= MAIN["enter_open_questions"] %></p>
+    <p><%= t("sb.open_questions") %>&nbsp;<%= t("sb.separator") %></p>
     <%= poll.text_area(:open_names, class: "form-control") %><br>
 
     <%= poll.submit label, class: 'btn' %>

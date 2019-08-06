@@ -1,12 +1,12 @@
 <%= render 'shared/nav' %>
 
-<input type=text class=form-control id=groups placeholder="indiquer votre groupe de travail" value=<%= current_user.groups %>>
+<input type=text class=form-control id=groups placeholder='<%= t("sb.fill_workgroup") %>' value=<%= current_user.groups %>>
 <select id="s_poll_id" class="form-control"></select><br>
-Veuillez définir les dates de début et de fin, ce qui affichera les retours satisfactions dans cette plage pour le sondage sélectionné
+<%= t('sb.sat_stats_message') %>
 <div class="container-fluid"> 
   <div id=date_fields class="row flex-xl-nowrap">
-    <input type=text class=form-control id=time_start placeholder="date de début AAAA-MM-JJ">
-    <input type=text class=form-control id=time_end placeholder="date de fin AAAA-MM-JJ">
+    <input type=text class=form-control id=time_start placeholder='<%= t("sb.begin") %>'>
+    <input type=text class=form-control id=time_end placeholder='<%= t("sb.end") %>'>
   </div>
 </div>
 <div id=stats></div>

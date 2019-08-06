@@ -10,7 +10,7 @@ class FoldersController < ApplicationController
   # Only for admin users
   def index 
     unless current_user.is_admin?
-      flash[:notice] = FOLDERS_MSG["index_forbidden"]
+      flash[:notice] = t('sb.no_permission')
       redirect_to root_url
     end
   end
@@ -24,7 +24,7 @@ class FoldersController < ApplicationController
     children={}
     folder=Folder.find_by_id(params[:id])
     unless folder
-      su=t("sb.folders_msg.inexisting_folder")
+      su=t('sb.inexisting_folder')
       results.merge!({"su": su})
     else
       unless params[:children]
@@ -68,10 +68,10 @@ class FoldersController < ApplicationController
       currentfolder=Folder.joins(:user).select("folders.*, users.email as user_name, users.statut as user_statut").find_by_id(id)
       puts("current folder request")
       unless currentfolder
-        currentfolder= {id: nil, name: "inexisting folder"}
+        currentfolder= {id: nil, name: t('sb.inexisting_folder')}
       else
         unless current_user.has_shared_access?(currentfolder)
-          currentfolder= {id: nil, name: "insufficient rights to access this folder"}
+          currentfolder= {id: nil, name: t('sb.no_permission')}
           puts("******shared access test - FAILURE!!!!!!")
         else
           puts("******shared access test - SUCCESS!!!!!!")
@@ -91,7 +91,7 @@ class FoldersController < ApplicationController
       end
     else
       currentfolder["id"]=-1
-      currentfolder["name"]="racine utilisateur";
+      currentfolder["name"]=t('sb.root')
       subfolders=current_user.folders.where(parent_id: nil).order("name ASC")
       # these assets are on root - so they are owned by the user and the joins(:user) is not necessary
       if Rails.application.config.paperclip == 1
@@ -171,11 +171,11 @@ class FoldersController < ApplicationController
           end
         end
       else
-        flash[:notice] = FOLDERS_MSG["folder_not_for_yu"]
+        flash[:notice] = "#{flash[:notice]} -> #{t('sb.folder_not_for_yu')}"
         redirect_to root_url
       end
     else
-      flash[:notice] = FOLDERS_MSG["inexisting_folder"]
+      flash[:notice] = "#{flash[:notice]} -> #{t('sb.inexisting_folder')}"
       redirect_to root_url
     end
   end
@@ -188,7 +188,7 @@ class FoldersController < ApplicationController
   # 2) if current user has ownership, then we fetch parent_id, in order to fill the parent_id field hidden in the form
   def new
     unless (current_user.is_admin? || current_user.is_private?)
-      flash[:notice] = FOLDERS_MSG["no_folder_creation"]
+      flash[:notice] = t('sb.no_folder_creation')
       redirect_to root_url
     end
     @folder = current_user.folders.new
@@ -197,12 +197,12 @@ class FoldersController < ApplicationController
       @current_folder = Folder.find_by_id(params[:folder_id])
       if @current_folder
         unless current_user.has_ownership?(@current_folder)
-          flash[:notice] = FOLDERS_MSG["no_subfolder_out_of_yur_folder"]
+          flash[:notice] = t('sb.no_subfolder_out_of_yur_folder')
           redirect_to root_url
         end
         @folder.parent_id = @current_folder.id
       else
-        flash[:notice] = FOLDERS_MSG["no_subfolder_in_inexisting_folder"]
+        flash[:notice] = t('sb.no_subfolder_in_inexisting_folder')
         redirect_to root_url
       end
     end
@@ -220,11 +220,11 @@ class FoldersController < ApplicationController
   def edit 
     @folder = Folder.find_by_id(params[:id])
     if !@folder
-      flash[:notice] = FOLDERS_MSG["inexisting_folder_cannot_be_modified"]
+      flash[:notice] = t('sb.inexisting')
       redirect_to root_url
     else
       if !(current_user.has_ownership?(@folder) || current_user.is_admin?)
-        flash[:notice] = FOLDERS_MSG["not_admin_nor_owner"]
+        flash[:notice] = t('sb.no_permission')
         if current_user.has_shared_access?(@folder)
           redirect_to folder_path(@folder)
         else
@@ -244,15 +244,15 @@ class FoldersController < ApplicationController
     results={}
     unless (current_user.is_admin? || current_user.is_private?)
       results["success"]=false
-      results["message"]="Vous n'avez pas les droits pour créer des dossiers"
+      results["message"]=t('sb.no_folder_creation')
     else
       unless params["name"]
         results["success"]=false
-        results["message"]="Il faut fournir un nom de dossier"
+        results["message"]=t('sb.no_name_given')
       else
         unless Folder.find_by_id(params["parent_id"]) || params["parent_id"].nil?
           results["success"]=false
-          results["message"]="impossible de poursuivre - vous essayez de créer un dossier dans un répertoire inexistant"
+          results["message"]=t('sb.no_subfolder_in_inexisting_folder')
         else
           folder = current_user.folders.new
           folder.name=params["name"]
@@ -265,10 +265,10 @@ class FoldersController < ApplicationController
             puts("the newly created id is #{folder.id}")
             results["success"]=true
             results["folder_id"]=folder.id
-            results["message"]="succès : dossier #{folder.name} crée"
+            results["message"]="#{t('sb.success')} : #{t('sb.folder')} #{folder.name} - #{t('sb.created')}"
           else
             results["success"]=false
-            results["message"]="échec : impossible de créer le dossier #{folder.name}"
+            results["message"]="#{t('sb.failure')} : #{t('sb.folder')} #{folder.name} - #{t('sb.not_created')}"
           end
         end
       end
@@ -286,7 +286,7 @@ class FoldersController < ApplicationController
     @folder = current_user.folders.new(folder_params)
     #if ( Folder.where(case_number: @folder.case_number).length > 0 && @folder.case_number != "" ) 
     if ( Folder.find_by_case_number(@folder.case_number) && @folder.case_number != "" ) 
-      flash[:notice] = FOLDERS_MSG["case_number_used"]
+      flash[:notice] = t('sb.case_number_used')
       if @folder.parent_id
         redirect_to folder_path(@folder.parent_id)
       else
@@ -317,15 +317,16 @@ class FoldersController < ApplicationController
     folder = current_user.folders.find_by_id(params[:id])
     result={}
     unless folder
-      text="impossible de poursuivre\n"
-      text="#{text} ce dossier n'existe pas ou ne vous appartient pas"
+      text="#{t('sb.stop')} : \n"
+      text="#{text} - #{t('sb.folder_not_for_yu')}\n"
+      text="#{text} - #{t('sb.inexisting_folder')}\n"
       result["message"]=text
       result["success"]=false
     else
       unless params[:name]!=""
         puts("$$$$$$$$empty folder name")
-        text="impossible de poursuivre\n"
-        text="#{text} le nom de répertoire proposé est vide"
+        text="#{t('sb.stop')} : \n"
+        text="#{text} #{t('sb.no_name_given')}"
         result["message"]=text
         result["success"]=false
       else
@@ -344,13 +345,13 @@ class FoldersController < ApplicationController
             end
           end
           result["success"]=true
-          result["message"]="dossier mis à jour"
+          result["message"]=t('sb.updated')
           result["lists"]=folder.lists
           unless majsat
-            result["message"]="#{result['message']}\n attention: metachamp(s) n°affaire fiche(s) satisfaction associée(s) non mis à jour" 
+            result["message"]="#{result['message']}\n #{t('sb.sat_metas_not_recorded')}" 
           end
         else
-          result["message"]="impossible de mettre à jour le dossier"
+          result["message"]=t('sb.not_updated')
           result["success"]=false
         end
       end
@@ -367,7 +368,7 @@ class FoldersController < ApplicationController
     # we can get the existing case number via @folder.case_number
     # we can get the new case number via 'folder_params[:case_number]'
     if ( Folder.find_by_case_number(folder_params[:case_number]) && folder_params[:case_number] != "" && folder_params[:case_number] != @folder.case_number)
-      flash[:notice] = FOLDERS_MSG["case_number_used"]
+      flash[:notice] = t('sb.case_number_used')
       if @folder.parent_id
         redirect_to folder_path(@folder.parent_id)
       else
@@ -402,16 +403,23 @@ class FoldersController < ApplicationController
     folder = current_user.folders.find_by_id(params[:id])
     unless folder
       results["success"]=false
-      results["message"]="dossier inexistant ou ne vous appartenant pas"
+      text="#{t('sb.stop')} - #{t('sb.maybe')} : \n"
+      text="#{text} - #{t('sb.folder_not_for_yu')}\n"
+      text="#{text} - #{t('sb.inexisting_folder')}\n"
+      results["message"]=text
     else
       parent_id=folder.parent_id
       if folder.destroy
         results["success"]=true
         results["parent_id"]=parent_id
-        results["message"]="dossier supprimé"
+        text="#{t('sb.folder')} #{folder.name} id #{folder.id} \n"
+        text="#{text} #{t('sb.deleted')}"
+        results["message"]=text
       else
         results["success"]=false
-        results["message"]="impossible de supprimer le dossier #{folder.name} numéro #{folder.id}"
+        text="#{t('sb.folder')} #{folder.name} id #{folder.id} \n"
+        text="#{text} #{t('sb.not_deleted')}"
+        results["message"]=text
       end
     end
     render json: results
@@ -423,7 +431,7 @@ class FoldersController < ApplicationController
     @folder = current_user.folders.find(params[:id])
     activefolder=@folder.parent_id
     @folder.destroy
-    flash[:notice] = FOLDERS_MSG["folder_destroyed"]
+    flash[:notice] = t('sb.deleted')
     if activefolder
       redirect_to folder_path(@folder.parent_id)
     else
@@ -441,13 +449,13 @@ class FoldersController < ApplicationController
   
     params[:id]=params[:id].to_i
     if params[:id]==0
-      flash[:notice]="Préciser le numéro du répertoire à déplacer"
+      flash[:notice]=t('sb.give_folder_id')
       redirect_to folders_path
     else
       folder_to_moove = Folder.find_by_id(params[:id])
       # we first check is the folder to move exists
       if !folder_to_moove
-        flash[:notice] = "#{params[:id].to_i} #{FOLDERS_MSG["no_folder_on_that_id"]}<br>"
+        flash[:notice] = "#{t('sb.no_folder_on_that_id')} #{params[:id]}<br>"
         redirect_to folders_path
       else
         # changeowner = 0 we do not have to fix a new user_id
@@ -462,7 +470,7 @@ class FoldersController < ApplicationController
           destination_folder_id=params[:parent_id].to_s[0..position-1].to_i
           destination_user_id=params[:parent_id].to_s[position+1..-1].to_i
           unless User.find_by_id(destination_user_id)
-            flash[:notice]="#{flash[:notice]} Pas d'utilisateur ayant #{destination_user_id} comme id<br>"
+            flash[:notice]="#{flash[:notice]} #{t('sb.no_user_on_that_id')} #{destination_user_id}<br>"
             changeowner = 0
           end
         # case 2 : we do not mention any new destination_user_id
@@ -475,7 +483,7 @@ class FoldersController < ApplicationController
         destination = Folder.find_by_id(destination_folder_id)
         #if !destination && !destination_folder_id.nil?
         unless destination || destination_folder_id.nil?
-          flash[:notice] = "#{flash[:notice]} #{destination_folder_id} #{FOLDERS_MSG["no_folder_on_that_id"]}<br>"
+          flash[:notice] = "#{flash[:notice]} #{t('sb.no_folder_on_that_id')} #{destination_folder_id}<br>"
           movefolder = 0
         end
         
@@ -489,29 +497,29 @@ class FoldersController < ApplicationController
         
         # is the proposed 'new owner' already the owner of the folder_to_moove ?
         if destination_user_id == folder_to_moove.user_id
-          flash[:notice]="#{flash[:notice]} le répertoire appartient déjà à l'utilisateur #{destination_user_id}<br>"
+          flash[:notice]="#{flash[:notice]} #{t('sb.folder_belongs_to_user')} #{destination_user_id}<br>"
           changeowner = 0
         end
         
         # is the folder_to_moove already in the proposed destination folder ?
         if folder_to_moove.parent_id == destination_folder_id
-          flash[:notice] = "#{flash[:notice]} le répertoire est déjà là où vous voulez l'envoyer<br>"
+          flash[:notice] = "#{flash[:notice]} #{t('sb.folder_already_in_place')}<br>"
           movefolder = 0
         end
         
         # we realize a move
         if movefolder == 1
           folder_to_moove.parent_id = destination_folder_id
-          flash[:notice]="#{flash[:notice]} ACTION : répertoire déplacé<br>" if folder_to_moove.save
+          flash[:notice]="#{flash[:notice]} ACTION : #{t('sb.folder_moved')}<br>" if folder_to_moove.save
         end
         
         # we change the owner
         if changeowner == 1
           if destination_user_id
             folder_to_moove.user_id = destination_user_id
-            flash[:notice]="#{flash[:notice]} ACTION : changement de propriétaire pour l'objet<br>" if folder_to_moove.save
+            flash[:notice]="#{flash[:notice]} ACTION : #{t('sb.object_owner_changed')}<br>" if folder_to_moove.save
             if folder_to_moove.children_give_to(destination_user_id)
-              flash[:notice]="#{flash[:notice]} ACTION : changement de propriétaire pour les enfants<br>"
+              flash[:notice]="#{flash[:notice]} ACTION : #{t('sb.children_owner_changed')}<br>"
             end
           end
         end
@@ -525,7 +533,7 @@ class FoldersController < ApplicationController
   # Manage the route /folders/:folder_id/new<br>
   # If a user try to use such a route, an error message will be returned 
   def error
-    flash[:notice]= FOLDERS_MSG["not_a_proper_new_folder_route"]
+    flash[:notice]= t('sb.not_a_proper_new_folder_route')
     redirect_to folder_path(params[:folder_id])
   end
 

@@ -1,7 +1,17 @@
-MAIN = YAML.load_file("#{Rails.root}/config/config.yml")["main"]
-FOLDERS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["folders_msg"]
-USERS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["users_msg"]
-ASSETS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["assets_msg"]
-POLLS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["polls_msg"]
-SATISFACTIONS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["satisfactions_msg"]
-SHARED_FOLDERS_MSG = YAML.load_file("#{Rails.root}/config/config.yml")["shared_folders_msg"]
+config_path="#{Rails.root}/config/config.yml"
+MAIN = YAML.load_file("#{config_path}")["main"]
+FOLDERS_MSG = YAML.load_file("#{config_path}")["folders_msg"]
+USERS_MSG = YAML.load_file("#{config_path}")["users_msg"]
+ASSETS_MSG = YAML.load_file("#{config_path}")["assets_msg"]
+POLLS_MSG = YAML.load_file("#{config_path}")["polls_msg"]
+SATISFACTIONS_MSG = YAML.load_file("#{config_path}")["satisfactions_msg"]
+SHARED_FOLDERS_MSG = YAML.load_file("#{config_path}")["shared_folders_msg"]
+CONF=YAML.load_file(config_path)["conf"]
+message="COLIBRI VERSION GOING TO RUN is #{CONF["version"]}"
+#light blue : 36
+#pink: 35
+#blue : 34
+#yellow : 33
+#green : 32
+#red : 31
+puts("\e[#{33}m#{message}\e[0m")

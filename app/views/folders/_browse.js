@@ -288,16 +288,25 @@ function genrootview()
               rootTree+="<div class='child' id=folder"+folder.id+" value=1>&nbsp;&nbsp;|_"+folder.name+icontofolder(lists)+"</div>";
               rootTree+="<div id=child"+folder.id+"></div>";
             });
-            rootTree+="<div class=shared_root>dossiers partagés</div>";
-            data.sharedfoldersbyothers.forEach(function(folder){
-              var lists=JSON.parse(folder.lists);
-              rootTree+="<div class='child' id=folder"+folder.id+" value=1>&nbsp;&nbsp;|_"+folder.name+icontofolder(lists)+"</div>";
-              rootTree+="<div id=child"+folder.id+"></div>";
+            $.ajax({
+                url: "/i18n?field=shared",
+                dataType: "json",
+                async: true,
+                success(d){
+                  //console.log(d);
+                  rootTree+="<div class=shared_root>"+d.result+"</div>";
+                  data.sharedfoldersbyothers.forEach(function(folder){
+                    var lists=JSON.parse(folder.lists);
+                    rootTree+="<div class='child' id=folder"+folder.id+" value=1>&nbsp;&nbsp;|_"+folder.name+icontofolder(lists)+"</div>";
+                    rootTree+="<div id=child"+folder.id+"></div>";
+                 });
+                 rootTree+="<br>";
+                 $("#tree_view").html(rootTree);
+                 $("#folder_view").html(subfoldersassetslist(data));
+                 $(".root").css("background-color", lg);
+                }
             });
-            rootTree+="<br>";
-            $("#tree_view").html(rootTree);
-            $("#folder_view").html(subfoldersassetslist(data));
-            $(".root").css("background-color", lg);
+            
         }
     });
 }

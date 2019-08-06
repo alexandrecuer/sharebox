@@ -124,6 +124,26 @@ class UsersController < ApplicationController
     end
   end
   
+  ##
+  # user's preference dashboard<br>
+  # permits to set the locale
+  # work in progress
+  def show
+    unless current_user.id.to_i == params[:id].to_i
+      flash[:notice]=t('sb.no_permission')
+      message="___________________________________________#{params[:id]} vs #{current_user.id}"
+      puts("\e[#{31}m#{message}\e[0m")
+      redirect_to root_url
+    else
+      if params[:lang]
+        current_user.lang=params[:lang]
+        current_user.save
+        redirect_to user_path(current_user.id)
+      end
+    end
+    @lang=current_user.lang
+  end
+  
   
   ##
   # given a word as param, return a list with the closed groups in the database 
