@@ -1,3 +1,9 @@
+/*global sb*/
+/*global stringify*/
+/*global genfeedback*/
+/*global genGroupsAutocompletion*/
+/*eslint no-undef: "error"*/
+
 //interrogate the API and generate the list of pending surveys for all the registered users or for a specified group
 //possibility to query on a datarange
 function gensurveylist()
