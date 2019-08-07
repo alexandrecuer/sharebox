@@ -2,6 +2,7 @@ var lg = "#ececec";
 var vlg = "f6f6f6";
 var achtung = "ATTENTION ACHTUNG PRUDENCIA ВНИМАНИЕ\n";
 /*global sb*/
+/*global pollselect*/
 /*eslint no-undef: "error"*/
 var polls={};
 
