@@ -1,13 +1,19 @@
 fr:
   sb:
     site_name: "Le cloud des rapports / Cerema Centre Est"
-    admin_mel: "alexandre.cuer@cerema.fr"
     are_yu_sure: "Etes vous sûr ?"
+    no_way_back: "Cette action est irréversible"
+    # devise login box customization
     mail: "addresse email"
     password: "mot de passe"
     regen_password: "Recréer un nouveau mot de passe"
     password_min_length: "caractères minimum" 
     password_confirmation: "confirmer votre mot de passe"
+    login: "se connecter"
+    signup: "Créer un compte"
+    passwordlost: "Mot de passe oublié?"
+    remember_me: "se souvenir de moi?"
+    #********************************
     user_id: "ID de l'utilisateur "
     status: "status"
     root: "racine utilisateur"
@@ -17,15 +23,21 @@ fr:
     id: "numéro/id"
     no_name_given: "Il faut fournir un nom"
     success: "succès"
-    failure: "echec"
+    failure: "échec"
+    create: "créer"
     created: "création effectuée"
     not_created: "création non effectuée"
+    update: "modifier"
+    save_mod: "sauvegarder les modifications"
     updated: "mise à jour réussie"
     not_updated: "mise à jour non effectuée"
-    stop: "impossible de poursuivre"
-    maybe: "peut-être que"
+    delete: "Supprimer"
     deleted: "suppression réussie"
     not_deleted: "suppression non effectuée"
+    save: "enregistrer"
+    reset: "effacer saisie"
+    stop: "impossible de poursuivre"
+    maybe: "peut-être que"
     object_owner_changed: "changement de propriétaire pour l'objet"
     children_owner_changed: "changement de propriétaire pour les enfants"
     missing_required_fields: "Il manque des champs obligatoires dans le formulaire"
@@ -38,9 +50,8 @@ fr:
     collected_by: "récolté par"
     date: "Date"
     description: "Description"
-    reset: "Tout effacer"
     details: "Détails"
-    save: "Enregistrer"
+    you_have: "Vous avez"
     yours: "vos"
     all: "tous"
     
@@ -48,17 +59,25 @@ fr:
     last_update: "Dernière modif."
     length: "Taille"
     owner: "Propriétaire"
-    delete: "Supprimer"
-    share: "Partager"
-    share_number: "Partage numéro"
     manage: "Gérer"
+    share_label: "si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,"
+    add_one_or_more_shares: "Ajouter un ou plusieurs partages"
+    share: "Partager"
+    shares: "Partage(s) en vigueur"
+    share_number: "Partage numéro"
+    going_to_delete_share: "Vous êtes sur le point de supprimer un partage"
     see_shares: "[Voir les partages]"
     see_answers: "[Voir les réponses]"
     shares_feedbacks: "Liste des partages et/ou réponses"
     delete_share: "Supprimer le(s) partage(s) sélectionné(s)"
+    upload: "charger"
+    file: "fichier"
+    root_file: "document racine"
+    going_to_delete_file: "Vous êtes sur le point de supprimer un fichier"
 
     # folder specific
     folder: "répertoire"
+    root_folder: "répertoire racine"
     folder_not_for_yu: "Ce répertoire ne vous appartient pas, ne vous est pas destiné !"
     inexisting_folder: "Ce répertoire n'existe pas !"
     no_folder_creation: "Vous ne pouvez pas créer de dossier - demandez à un administrateur de vous attribuer un profil privé"
@@ -72,15 +91,16 @@ fr:
     folder_already_in_place: "le répertoire est déjà là où vous voulez l'envoyer"
     folder_moved: "répertoire déplacé"
     folder_metas_not_recorded: "impossible de mettre à jour les metadonnées du répertoire !!"
+    going_to_delete_folder: "Vous êtes sur le point de supprimer un répertoire"
+    all_children_are_to_be_deleted: "Tous les objets associés (partages,retours satisfaction,sous-dossiers,fichiers) seront détruits"
     
     # user specific
+    user: "utilisateur"
     no_user_on_that_id: "aucun utilisateur existant sous le numéro"
     define_lang: "définir le langage de l'application (en/fr)...."
     
     # for views\shared\_nav.html.erb
     disconnect: "se déconnecter"
-    upload_file: "charger un document"
-    create_dir: "créer un répertoire"
     users_list: "[Gestion des utilisateurs]"
     manage_polls: "[Gestion des sondages]"
     new_poll: "créer un nouveau sondage"
@@ -88,10 +108,6 @@ fr:
     explorer: "Explorateur"
     sat_stats: "statistiques satisfaction"
     free_survey: "Enquêtes client sans mise à disposition de livrable(s)"
-    login: "se connecter"
-    signup: "Créer un compte"
-    passwordlost: "Mot de passe oublié?"
-    remember_me: "se souvenir de moi"
     
     # for polls
     poll: "Sondage"
@@ -121,7 +137,6 @@ fr:
     feedback_number: "Retour satisfaction numéro"
     recorded_on: "Enregistré le"
     same_questions: "Un sondage ne peut contenir des questions identiques"  
-    case_or_product: "Dossier - (N° d'affaire)"
     satisfaction_level_4: "Très satisfait" 
     satisfaction_level_3: "Satisfait"
     satisfaction_level_2: "Peu satisfait"
@@ -152,19 +167,14 @@ fr:
     one_reminder: "1 relance effectuée"
     many_reminders: "relances déjà ;-("
     new_client_not_saved: "impossible de sauvegarder le nouveau client"
-
-    # for sharing 
-    share_label: "Si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,"
-  
-    # for views\assets\_form.html.erb
-    upload: "Lancer le téléchargement"
+    md5_disabled: "l'enquête a été désactivée"
   
     # for views\folders\_form.html.erb
-    dir_name: "Nom du répertoire "
-    case_number: "N° d'affaire "
-    no_poll: "Associer un sondage"
-    create_folder: "Créer le répertoire"
-    update_folder: "Modifier le répertoire"
+    folder_name: "nom du répertoire/dossier/projet"
+    case_number: "n° d'affaire"
+    subfolder: "sous-répertoire"
+    no_swarming: "racine (pas d'essaimage)"
+    swarming_facilities: "possibilités pour essaimer ce dossier"   
       
     # for views\folders\index.html.erb
     folder_move: "Déplacement de répertoire"
@@ -182,15 +192,10 @@ fr:
     user_managing_forbidden: "Les utilisateurs publics ne peuvent ni visualiser ni gérer les autres utilisateurs"
     only_admin_may_delete_user: "Vous devez être administrateur pour supprimer un utilisateur"
     yu_cannot_delete_yur_own_account: "Vous ne pouvez supprimer votre propre compte"
-    user: "utilisateur"
-    deleted: "supprimé"
-    user_not_deleted: "Echec de la suppression"
       
     #assets_msg: 
     rights_missing: "Vous ne pouvez pas mettre en ligne de fichier"
     not_yur_folder: "Vous ne pouvez mettre en ligne de fichier que dans les répertoires vous appartenant"
-    asset_uploaded: "Mise en ligne réussie!"
-    asset_destroyed: "Suppression réussie!"
     asset_not_for_yu: "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
     inexisting_asset: "Ce fichier n'existe pas !"
     
@@ -201,6 +206,5 @@ fr:
     already_shared_to: "Partage déjà opérationnel pour l'adresse "
     unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse "
     shared_to: "Partage effectué pour l'adresse "
-    folder: "Répertoire "
     no_share_selected: "Aucun partage sélectionné"
     shares_destroyed: "Partage(s) supprimé(s)"

@@ -223,10 +223,10 @@ class SharedFoldersController < ApplicationController
 
   ##
   # Saves the shared emails in the database<br>
-  # you cannot share to yourself a folder you own<br>
+  # you cannot share with yourself a folder you own<br>
   # verify if shared emails are already registered in the database for the specified folder (folder_id)<br>
   # uses for this the process_share_emails method of the folder model 
-  # the sharing activity details are emailed to the admin (cf variable admin_mel as declared in the main section of config.yml)<br>
+  # the sharing activity details are emailed to the admin (cf variable admin_mel as declared in config.yml)<br>
   def create
     emails=params[:shared_folder][:share_email].delete(" ")
     if emails == ""

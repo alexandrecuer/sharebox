@@ -1,5 +1,5 @@
 <%= image_tag 'logo.jpg', size: '100x100' %><br>
-<h1>Cerema Centre-Est</h1><br>
+<h1><%= t('sb.site_name') %></h1><br>
 <br><br>
 
 <%
@@ -9,13 +9,13 @@ by_username=@survey.by.to_s.split("@");
 by_username[0].sub!("."," ")
 %>
 
-<h3>Bonjour <%=client_username[0].titleize %></h3>
-<h3>Nous venons de terminer une prestation à votre bénéfice</h3>
+<h3><%= t('hello') %> <%=client_username[0].titleize %></h3>
+<h3><%= t('sb.survey_intro') %></h3>
 <h4><%= @survey.description %></h4>
-<h5>sous le pilotage du chargé d'affaire : <%= by_username[0].titleize %></h5>
+<h5><%= t('sb.project_manager') %> : <%= by_username[0].titleize %></h5>
 
-<h3>Merci de remplir le questionnaire de satisfaction, ça ne vous prendra que quelques minutes.</h3>
-Vous trouverez cette enquête à l'adresse suivante : <br>
+<h3><%= t('mel.text_free_survey') %></h3>
+<%= t('mel.link_to_free_survey') %> : <br>
 <%= link_to new_satisfaction_no_folder_url(@survey.id,@survey.token).to_s, new_satisfaction_no_folder_url(@survey.id,@survey.token) %>
 <br>
-Nos équipes ont besoin de votre retour !
+<%= t('mel.we_wait_for_your_feedback') %>

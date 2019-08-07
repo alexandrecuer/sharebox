@@ -4,9 +4,9 @@
 # if there is a folder_id, we are in a subdir, otherwise folder_id is nil
 if @asset.folder_id
   folder=Folder.find_by_id(@asset.folder_id)
-  title="Chargement d'un document au sein du répertoire #{folder.name} (numéro #{folder.id})".html_safe
+  title="#{t('sb.upload')} #{t('sb.file')} -> #{t('sb.folder')} #{folder.name} (#{t('sb.id')} #{folder.id})".html_safe
 else
-  title="Chargement d'un document racine"
+  title="#{t('sb.upload')} #{t('sb.root_file')}"
 end
 
 %>

@@ -132,7 +132,7 @@ class UsersController < ApplicationController
     unless current_user.id.to_i == params[:id].to_i
       flash[:notice]=t('sb.no_permission')
       message="___________________________________________#{params[:id]} vs #{current_user.id}"
-      puts("\e[#{31}m#{message}\e[0m")
+      puts("\e[31m#{message}\e[0m")
       redirect_to root_url
     else
       if params[:lang]

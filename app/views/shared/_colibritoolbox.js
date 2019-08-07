@@ -1,3 +1,6 @@
+/*global sb*/
+/*eslint no-undef: "error"*/
+
 //interrogate the API and show a given satisfaction feedback in a specific modal 
 //note the modal must have a header with id=mtitle and a body with id=mcontent
 function genfeedback(id,modalId)
