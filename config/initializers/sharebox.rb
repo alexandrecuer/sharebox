@@ -14,4 +14,6 @@ message="COLIBRI VERSION GOING TO RUN is #{CONF["version"]}"
 #yellow : 33
 #green : 32
 #red : 31
-puts("\e[#{33}m#{message}\e[0m")
+#color_code=33
+#puts("\e[#{color_code}m#{message}\e[0m")
+puts("\e[33m#{message}\e[0m")
