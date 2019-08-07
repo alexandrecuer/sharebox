@@ -3,6 +3,7 @@ var vlg = "f6f6f6";
 var achtung = "ATTENTION ACHTUNG PRUDENCIA ВНИМАНИЕ\n";
 /*global sb*/
 /*global pollselect*/
+/*global genfeedback*/
 /*eslint no-undef: "error"*/
 var polls={};
 
