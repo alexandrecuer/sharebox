@@ -1,3 +1,9 @@
+/*global sb*/
+/*global humandate*/
+/*global stringify*/
+/*global pollselect*/
+/*global genGroupsAutocompletion*/
+/*eslint no-undef: "error"*/
 
 //$(".carousel2").carousel();
 var date = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
