@@ -1,15 +1,8 @@
 var lg = "#ececec";
 var vlg = "f6f6f6";
 var achtung = "ATTENTION ACHTUNG PRUDENCIA ВНИМАНИЕ\n";
-//achtung +="___________________________________________________________________________";achtung +="\n";
-//achtung +="_ooooo__oo____oo____ooo____ooooooo___ooooooo_ooooooo_____oooo____oo_____oo_";achtung +="\n";
-//achtung +="oo___oo_oo____oo__oo___oo__oo____oo__oo______oo____oo__oo____oo___oo___oo__";achtung +="\n";
-//achtung +="_oo_____oo____oo_oo_____oo_oo____oo__oooo____oooooooo_oo______oo___oo_oo___";achtung +="\n";
-//achtung +="___oo___oooooooo_ooooooooo_ooooooo___oo______oo____oo_oo______oo____ooo____";achtung +="\n";
-//achtung +="oo___oo_oo____oo_oo_____oo_oo____oo__oo______oo____oo__oo____oo____oo_oo___";achtung +="\n";
-//achtung +="_ooooo__oo____oo_oo_____oo_oo_____oo_ooooooo_ooooooo_____oooo_____oo___oo__";achtung +="\n";
-//achtung +="___________________________________________________________________________";achtung +="\n";
-
+/*global sb*/
+/*eslint no-undef: "error"*/
 var polls={};
 
 //interrogate the API and store the poll json list in the polls global var
@@ -23,6 +16,12 @@ $.ajax({
         //console.log(polls);
     } 
 });
+
+//basic text format
+function f(text)
+{
+    return text.replace(/'/,"&#039;");
+}
 
 //caution : folder_value is the position in the tree
 function childmeta(folderValue,folderId)
@@ -58,7 +57,7 @@ function linka(asset,currentuser)
     link.push("<tr><td>");
     link.push("<div class='d-flex align-items-center flex-row-reverse bd-highlight mb-3'>");
     if (currentuser.id===asset.user_id) {
-        link.push("<button class='btn btn-outline-danger btn-sm' rel='nofollow' id=delete_asset value="+asset.id+">Supprimer</button>");
+        link.push("<button class='btn btn-outline-danger btn-sm' rel='nofollow' id=delete_asset value="+asset.id+">"+sb["delete"]+"</button>");
     } else {
         link.push("("+asset.user_name+")");
     }
@@ -75,7 +74,7 @@ function linkf(folder,currentuser)
     link.push("<tr><td>");
     link.push("<div class='d-flex align-items-center flex-row-reverse bd-highlight mb-3'>");
     if (currentuser.id===folder.user_id) {
-        link.push("<button class='btn btn-outline-danger btn-sm' rel='nofollow' id=delete_folder value="+folder.id+">Supprimer</button>");
+        link.push("<button class='btn btn-outline-danger btn-sm' rel='nofollow' id=delete_folder value="+folder.id+">"+sb["delete"]+"</button>");
     } else {
         link.push("("+folder.user_name+")");
     }
@@ -91,12 +90,12 @@ function shareslist(shares)
     var slist=[];
     if (shares.length>0) {
         slist.push("<table class='table table-sm'>");
-        slist.push("<tr><td colspan=3>Partages</td></tr>");
+        slist.push("<tr><td colspan=3>"+sb["shares"]+"</td></tr>");
         shares.forEach(function(share){
             slist.push("<tr><td>");
-            slist.push("<button rel='nofollow' id=delete_share value="+share.id+">Supprimer</button>");
+            slist.push("<button rel='nofollow' id=delete_share value="+share.id+">"+sb["delete"]+"</button>");
             slist.push("</td><td>");
-            slist.push("Partage "+share.id+" - "+share.share_email+" ("+share.share_user_id+")");
+            slist.push(sb["share_number"]+" "+share.id+" - "+share.share_email+" ("+share.share_user_id+")");
             slist.push("</td><td>");
             slist.push("<button id=contact_customer class='send btn-secondary' value="+share.share_email+"><i class='fa fa-envelope fa-1x' ></i></button>");
             slist.push("</td></tr>");
@@ -117,19 +116,19 @@ function createtabs(folder,shares,satis,currentuser)
         tabs.push("</li>");
         if (currentuser.id===folder.user_id){
           tabs.push("<li class=nav-item>");
-          tabs.push("<a class=nav-link id=manage-tab data-toggle=tab href=#manage_folder role=tab aria-controls=manage_folder>Gérer dossier</a>");
+          tabs.push("<a class=nav-link id=manage-tab data-toggle=tab href=#manage_folder role=tab aria-controls=manage_folder>"+sb["manage"]+" "+sb["folder"]+"</a>");
           tabs.push("</li>");
         }
     }
     tabs.push("<li class=nav-item>");
-    tabs.push("<a class='nav-link' id=folder-tab data-toggle=tab href=#new_folder role=tab aria-controls=new_folder>Créer sous-dossier</a>");
+    tabs.push("<a class='nav-link' id=folder-tab data-toggle=tab href=#new_folder role=tab aria-controls=new_folder>"+sb["create"]+" "+sb["subfolder"]+"</a>");
     tabs.push("</li>");
     tabs.push("<li class=nav-item>");
-    tabs.push("<a class=nav-link id=asset-tab data-toggle=tab href=#new_asset role=tab aria-controls=new_asset>Charger un fichier</a>");
+    tabs.push("<a class=nav-link id=asset-tab data-toggle=tab href=#new_asset role=tab aria-controls=new_asset>"+sb["upload"]+" "+sb["file"]+"</a>");
     tabs.push("</li>");
     if (satis.length>0) {
         tabs.push("<li class=nav-item>");
-        tabs.push("<a class=nav-link id=satis-tab data-toggle=tab href=#satisfactions role=tab aria-controls=satisfactions>Retours satisfactions</a>");
+        tabs.push("<a class=nav-link id=satis-tab data-toggle=tab href=#satisfactions role=tab aria-controls=satisfactions>"+sb["feedbacks"]+"</a>");
         tabs.push("</li>");
     }
     tabs.push("</ul>");
@@ -138,12 +137,12 @@ function createtabs(folder,shares,satis,currentuser)
    
     //new subfolder form
     tabs.push("<div class='tab-pane fade' id=new_folder role=tabpanel><br>");
-    tabs.push("<input type=text class=form-control id=folder_name placeholder='nom du répertoire'><br>");
-    tabs.push("<input type=text class=form-control id=folder_case_number placeholder='N°affaire'>");
+    tabs.push("<input type=text class=form-control id=folder_name placeholder='"+sb["folder_name"]+"'><br>");
+    tabs.push("<input type=text class=form-control id=folder_case_number placeholder='"+f(sb["case_number"])+"'>");
     if (folder.id>=0) {
         tabs.push("<input type=hidden class=form-control id=folder_parent_id value="+folder.id+">");
     }
-    tabs.push("<br><button id=create_folder class=btn style=display:none>Créer le répertoire</button>");
+    tabs.push("<br><button id=create_folder class=btn style=display:none>"+sb["create"]+"</button>");
     tabs.push("</div>");
    
     //asset form
@@ -155,7 +154,7 @@ function createtabs(folder,shares,satis,currentuser)
         tabs.push("<input type=hidden id=asset_folder_id name=asset[folder_id] value="+folder.id+">");
     }
     tabs.push("</form>");
-    tabs.push("<br><button id=create_asset class=btn style=display:none>Charger le fichier</button>");
+    tabs.push("<br><button id=create_asset class=btn style=display:none>"+sb["upload"]+" "+sb["file"]+"</button>");
     tabs.push("</div>");
    
     // manage folder form
@@ -163,19 +162,19 @@ function createtabs(folder,shares,satis,currentuser)
       if (currentuser.id===folder.user_id){
         tabs.push("<div class='tab-pane fade' id=manage_folder role=tabpanel><br>");
         tabs.push("<input type=hidden id=currentfolder_id value="+folder.id+">");
-        tabs.push("<input type=text class=form-control id=currentfolder_name placeholder='nom du répertoire' value='"+folder.name.replace(/'/,"&#039;")+"'><br>");
-        tabs.push("<input type=text class=form-control id=currentfolder_case_number placeholder='Numéro affaire' value='"+folder.case_number+"'>");
+        tabs.push("<input type=text class=form-control id=currentfolder_name placeholder='"+sb["folder_name"]+"' value='"+f(folder.name)+"'><br>");
+        tabs.push("<input type=text class=form-control id=currentfolder_case_number placeholder='"+f(sb["case_number"])+"' value='"+folder.case_number+"'>");
         var options=pollselect(polls,folder.poll_id,"currentfolder_poll_id");
         tabs.push("<br>"+options);
-        tabs.push("<br><button type=submit class=btn id=currentfolder_modify>Sauvegarder les modifications</button><br><br>");
+        tabs.push("<br><button type=submit class=btn id=currentfolder_modify>"+sb["save_mod"]+"</button><br><br>");
         
         //manage the shares
         tabs.push("<div id=shareslist>");
         tabs.push(shareslist(shares));
         tabs.push("</div>");
-        tabs.push("<input type=text class=form-control id=shared_folder_share_email placeholder='Si partage vers plusieurs adresses, utilisez la virgule comme séparateur ,'>");
-        tabs.push("<br><button type=submit class=btn id=add_shares>Ajouter un ou plusieurs partages</button>");
-        tabs.push("&nbsp;<button type=reset class=btn id=reset_shares>Effacer saisie</button>");
+        tabs.push("<input type=text class=form-control id=shared_folder_share_email placeholder='"+sb["share_label"]+"'>");
+        tabs.push("<br><button type=submit class=btn id=add_shares>"+sb["add_one_or_more_shares"]+"</button>");
+        tabs.push("&nbsp;<button type=reset class=btn id=reset_shares>"+sb["reset"]+"</button>");
         tabs.push("</div>");
       }
         
@@ -183,7 +182,7 @@ function createtabs(folder,shares,satis,currentuser)
       if (satis.length>0) {
         tabs.push("<div class='tab-pane fade' id=satisfactions role=tabpanel>");
         tabs.push("<table class='table table-sm'>");
-        tabs.push("<thead><td>Vous avez "+satis.length+" retour(s)</td></thead>");
+        tabs.push("<thead><td>"+sb["you_have"]+" "+satis.length+" "+sb["feedbacks"]+"</td></thead>");
         tabs.push("<tr><td>");
         satis.forEach(function(sat){
             tabs.push("<div style='width:50px; float:left' class=satis value="+sat.id+">&nbsp;<i class='fa fa-eye fa-2x'></i></div>");
@@ -206,7 +205,7 @@ function subfoldersassetslist(data)
     if (data.currentuser.id===data.currentfolder.user_id || data.currentfolder.id<0) {
       title=data.currentfolder.name;
     } else {
-      title=data.currentfolder.name+"<br>Dossier appartenant à "+data.currentfolder.user_name+"&nbsp;(utilisateur "+data.currentfolder.user_id+")";
+      title=data.currentfolder.name+"<br>"+sb["owner"]+" : "+data.currentfolder.user_name+"&nbsp;("+sb["user"]+" "+sb["id"]+" "+data.currentfolder.user_id+")";
     }
     list+="<div class='table-responsive-sm'>";
     list+="<table class=table><thead><td colspan=2 bgcolor="+lg+"><div id=folder_title>"+title+"</div></td></thead>";
@@ -408,6 +407,7 @@ $("#folder_view").on("click","#reset_shares", function(){
     $("#shared_folder_share_email").val("");
 });
 
+//contact a customer
 $("#folder_view").on("click","#contact_customer",function(){
     var email=$(this).val();
     var folderId = $("#currentfolder_id").val();
@@ -418,6 +418,10 @@ $("#folder_view").on("click","#contact_customer",function(){
         success(result) {
             //console.log(result);
             alert(result.message);
+        },
+        error(xhr) { 
+            var errorMessage = xhr.status + ": " + xhr.statusText;
+            alert(sb["failure"]+" - " + errorMessage);
         }
       });
     
@@ -449,7 +453,7 @@ $("#folder_view").on("click","#currentfolder_modify", function(){
         },
         error(xhr) { 
             var errorMessage = xhr.status + ": " + xhr.statusText;
-            alert("Erreur - " + errorMessage);
+            alert(sb["failure"]+" - " + errorMessage);
         }
     });        
 });
@@ -522,8 +526,8 @@ $("#folder_view").on("click","#delete_share", function(){
     url: "/deleteshare/"+folderId+"/"+shareId,
     async: true, 
     beforeSend(){
-        var message=achtung+"\nVous êtes sur le point de supprimer un partage\n\n";
-        message+="Etes vous sûr ?";
+        var message=achtung+"\n"+sb["going_to_delete_share"]+"\n\n";
+        message+=sb["are_yu_sure"];
         return confirm(message);
     },
     success(result) { 
@@ -588,10 +592,10 @@ $("#folder_view").on("click","#delete_folder",function(){
         url: "/delete_folder/"+folderId,
         async: true,
         beforeSend(){
-            var message=achtung+"\nVous êtes sur le point de supprimer un répertoire\n";
-            message+="Tous les objets associés (partages,retours satisfaction,sous-dossiers,fichiers) seront détruits\n";
-            message+="Cette action est irréversible\n\n";
-            message+="Etes vous sûr ?";
+            var message=achtung+"\n"+sb["going_to_delete_folder"]+"\n";
+            message+=sb["all_children_are_to_be_deleted"]+"\n";
+            message+=sb["no_way_back"]+"\n\n";
+            message+=sb["are_yu_sure"];
             return confirm(message);
         },
         success(result) {
@@ -629,15 +633,15 @@ $("#folder_view").on("click","#create_asset",function(){
         async: true, 
         success(result) { 
             if (folderId) {
-              alert("répertoire "+folderId+"\n"+result.message);
+              alert(sb["folder"]+" "+folderId+"\n"+result.message);
             } else {
-              alert("répertoire racine\n"+result.message);
+              alert(sb["root_folder"]+"\n"+result.message);
             }
             if (result.success) {
               genfolderview(folderId);
             } else {
               $("#asset_uploaded_file").val("");
-              $("#create_asset").html("Charger le fichier");
+              $("#create_asset").html(sb["upload"]);
               $("#create_asset").hide();
             }
         },
@@ -657,9 +661,9 @@ $("#folder_view").on("click","#delete_asset",function(){
         url: "/delete_asset/"+id,
         async: true,
         beforeSend(){
-            var message=achtung+"\nVous êtes sur le point de supprimer un fichier\n";
-            message+="Cette action est irréversible\n\n";
-            message+="Etes vous sûr ?";
+            var message=achtung+"\n"+sb["going_to_delete_file"]+"\n";
+            message+=sb["no_way_back"]+"\n\n";
+            message+=sb["are_yu_sure"];
             return confirm(message);
         },
         success(result) {

@@ -14,7 +14,7 @@
 
   <p>
     <%= f.file_field :uploaded_file %>
-    <%= f.submit MAIN["upload"] %>
+    <%= f.submit "#{t('sb.upload')} #{t('sb.file')}" %>
   </p>
 
   <%= f.hidden_field :folder_id %>

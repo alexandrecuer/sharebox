@@ -17,19 +17,6 @@ sb["lang"]="<%= lang %>-<%= lang.upcase %>";
 </script>
 
 <%
-#if current_user.is_admin? || current_user.is_private?
-#  if @current_folder
-#    if current_user.has_ownership?(@current_folder)
-#      uploadfile="#{link_to t('sb.upload_file'), new_sub_asset_path(@current_folder), class: 'dropdown-item'}".html_safe
-#      createdir="#{link_to t('sb.create_dir'), new_sub_folder_path(@current_folder), class: 'dropdown-item'}".html_safe
-#      createdirmodal= "#{link_to t('sb.create_dir'), new_sub_folder_path(@current_folder),  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
-#    end
-#  else
-#      uploadfile="#{link_to t('sb.upload_file'), new_asset_path, class: 'dropdown-item'}".html_safe
-#      createdir="#{link_to t('sb.create_dir'), new_folder_path, class: 'dropdown-item'}".html_safe
-#      createdirmodal= "#{link_to t('sb.create_dir'), new_folder_path,  {:remote => true, 'data-toggle' =>  'modal', 'data-target' => '#modalfolderwin', class: 'dropdown-item'} }".html_safe
-#  end
-#end
 
 if current_user.is_admin?
   managefolders="#{link_to t('sb.manage_folders'), folders_path, class: 'dropdown-item'}".html_safe
@@ -64,10 +51,6 @@ end
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <div class='dropdown-item'><%= current_user.email %>(<%= current_user.statut %>)</div>
-          <%#= sanitize uploadfile %>
-          <%#= createdir %>
-          <%#= sanitize createdirmodal  %>
-          <%#= sanitize line %>
           <%= managefolders %>
           <%= sanitize manageusers %>
           <%= sanitize line %>

@@ -11,7 +11,7 @@
 <% 
 if !@folder.parent_id || @folder.is_swarmed?
   swarming_array=[]
-  swarming_array[0]=["racine (pas d'essaimage)",nil]
+  swarming_array[0]=[t('sb.no_swarming'),nil]
   i=1
   selection=Folder.joins(:user).where.not(user_id: current_user.id).select("folders.*, users.email as email")
   selection.walk_tree do |folder, level|
@@ -27,16 +27,16 @@ end
 <%= form_for @folder do |f| %>
 
     <div class="form-group">
-      <%= f.text_field :name, placeholder: MAIN["dir_name"], class: 'form-control' %>
+      <%= f.text_field :name, placeholder: t('sb.folder_name'), class: 'form-control' %>
     </div>
     
     <div class="form-group">
-	  <%= f.text_field :case_number, placeholder: MAIN["case_number"], class: 'form-control' %>
+	  <%= f.text_field :case_number, placeholder: t('sb.case_number'), class: 'form-control' %>
     </div>
 
     <% if selection %>
         <div class="form-group">
-        <%=  i-1 %> possiblités pour essaimer ce dossier<br>
+        <%=  i-1 %>&nbsp;<%= t('sb.swarming_facilities') %><br>
         <%= f.select(:parent_id, options_for_select(swarming_array, { selected: @folder.parent_id}), {}, {class: 'form-control'}) %>
         </div>
     <% elsif @folder.parent_id %>
@@ -46,7 +46,7 @@ end
     <% if @folder.shared? %>
       <div class="form-group">
     	<% polls_array = Poll.all.map { |poll| [poll.name, poll.id] } %>
-    	<% polls_array = [[MAIN["no_poll"],""]] + polls_array %>
+    	<% polls_array = [[t('sb.choose_poll'),""]] + polls_array %>
 
     	<%#= f.collection_select(:poll_id, Poll.all, :id, :name) %>
     	<%= f.select(:poll_id, options_for_select(polls_array, { selected: @folder.poll_id }), {}, {class: 'form-control'}) %>    
@@ -54,9 +54,9 @@ end
     <% end %>
 
     <% if @folder.new_record? %>
-        <%= f.submit MAIN["create_folder"], class: 'btn' %>
+        <%= f.submit t('sb.create'), class: 'btn' %>
     <% else %>
-        <%= f.submit MAIN["update_folder"], class: 'btn' %>
+        <%= f.submit t('sb.update'), class: 'btn' %>
     <% end %>
 
 <% end %>

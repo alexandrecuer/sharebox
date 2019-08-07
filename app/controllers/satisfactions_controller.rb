@@ -338,14 +338,14 @@ class SatisfactionsController < ApplicationController
       if satisfaction.save
         survey.token="disabled#{satisfaction.id}"
         if survey.destroy
-          message="merci d'avoir pris quelques minutes pour remplir ce sondage"
+          message=t('sb.user_thank_for_feedback')
         else
-          survey.token="disabled#{satisfaction.id}"
+          #survey.token="disabled#{satisfaction.id}"
           survey.save
-          message="satisfaction saved but survey not destroyed"
+          message="#{t('sb.user_thank_for_feedback')} #{t('sb.fmd5_disabled')}"
         end
       else 
-        message="could not save satisfaction"
+        message=t('sb.satisfaction_error')
       end
       message
     end

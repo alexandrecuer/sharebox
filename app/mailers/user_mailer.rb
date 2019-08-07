@@ -4,14 +4,14 @@
 
 class UserMailer < ApplicationMailer
 
-  default from: MAIN["admin_mel"]
+  default from: CONF["admin_mel"]
   
   ##
   # inform admin when a share is created and of all users registration till all pending share emails did not register 
   def inform_admin(current_user,text)
     @user = current_user
     @text = text
-    mail(to: MAIN["admin_mel"], subject: 'Activity report') 
+    mail(to: CONF["admin_mel"], subject: 'Activity report') 
   end
 
   ##
@@ -44,10 +44,10 @@ class UserMailer < ApplicationMailer
     # email title generation
     # the shared_folders controller forbids all mel from a (shared) folder without files and not linked to a poll
     if @folder.is_polled?
-      etitle="Courte enquête de satisfaction"
+      etitle=t('mel.satisfaction_survey')
     end
     if @shared_files.length>0
-      ftitle="Livrable(s) en ligne"
+      ftitle=t('mel.online_deliverable')
     end
     title = "#{ftitle} #{etitle}"
     
@@ -60,15 +60,15 @@ class UserMailer < ApplicationMailer
     
     #_______________________________
     #generation of the asset(s) list
-    t2="Nous avons comptabilisé "
-    t3=" accès fichier(s)"
+    t2="#{t('mel.we_count')} "
+    t3=" #{t('mel.file_clics')}"
     if @shared_files.length == 1
       asset = @shared_files[0].uploaded_file_file_name
       if numberofclics
-        t1="Vous avez déjà visité ce répertoire contenant le fichier suivant :"
+        t1="#{t('mel.one_file_folder_visited')} :"
         t4="#{t2}#{numberofclics}#{t3}"
       else
-        t1="Un livrable vous a été partagé :"
+        t1="#{t('mel.one_file_shared')} :"
       end
     elsif @shared_files.length > 1
       asset = "" 
@@ -77,10 +77,10 @@ class UserMailer < ApplicationMailer
         asset += "#{index}) #{f.uploaded_file_file_name}<br>"
       end
       if numberofclics
-        t1="Vous avez déjà visité ce répertoire contenant les fichiers :"
+        t1="#{t('mel.many_files_folder_visited')} :"
         t4="#{t2}#{numberofclics}#{t3}"
       else
-        t1="#{@shared_files.length} livrables vous ont été partagés :"
+        t1="#{@shared_files.length} #{t('mel.many_files_shared')} :"
       end
     end
     @assetlist = "#{t1}<br>#{asset}<br>#{t4}<br>"
@@ -93,11 +93,8 @@ class UserMailer < ApplicationMailer
   # generate email in order to alert a non registered client of a survey
   def send_free_survey(id)
     @survey = Survey.find_by_id(id)
-    title="[Cerema][courte enquête de satisfaction]#{@survey.description}"
+    title="[#{CONF["company"]}][#{t('mel.satisfaction_survey')}]#{@survey.description}"
     mail(to: @survey.client_mel, from: @survey.by, subject: title)
   end
   
-  def send_feedback
-    
-  end
 end
