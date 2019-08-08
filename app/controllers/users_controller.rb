@@ -6,51 +6,21 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
   
   ## 
-  # Admin users can modify other users'status<br>
-  # The 3 different status are public, private and admin<br> 
-  # The first user registered on the application is considered like a super admin, his status is timeless and cannot be changed<br>
-  # An admin cannot change his own status<br>
+  # update current user preferences : lang and groups
   def update
-    result={}
-    unless current_user.is_admin?
-      result["success"]=false
-      result["message"]=USERS_MSG["only_for_admin"]
+    unless current_user.id == params[:id].to_i
+      flash[:notice] = t('sb.no_permission')
+      message="___________________________________________#{params[:id]} vs #{current_user.id}"
+      puts("\e[31m#{message}\e[0m")
+      redirect_to root_url
     else
-      primo_id = User.where(statut: "admin").order("id asc").ids[0]
-      valid_statuts = ["admin","private","public"]
-      if valid_statuts.include?(params[:statut])
-        @user = User.find_by_id(params[:id])
-        if @user
-          change_statut = 0
-          if @current_user != @user
-            change_statut = 1
-          end
-          if @user.id == primo_id
-            change_statut = 0
-          end
-          if change_statut == 1
-            @user.statut = params[:statut]
-            if @user.save
-              result["success"]=true
-              result["message"] = "#{@user.email} (#{@user.id}) #{USERS_MSG["new_status"]} #{@user.statut}"
-            else
-              result["success"]=false
-              result["message"] = USERS_MSG["error_changing_status"]
-            end
-          else
-            result["success"]=false
-            result["message"] = USERS_MSG["own_status_nor_superadmin_cannot_be_changed"]
-          end
-        else
-          result["success"]=false
-          result["message"] = USERS_MSG["inexisting_user"]
-        end
+      if current_user.update(params.require(:user).permit(:lang,:groups))
+        flash[:notice]=t('sb.updated')
       else
-        result["success"]=false
-        result["message"] = USERS_MSG["invalid_status"]
+        flash[:notice]=t('sb.not_updated')
       end
     end
-    render json: result
+    redirect_to user_path(params[:id])
   end
   
   ##
@@ -58,11 +28,11 @@ class UsersController < ApplicationController
   # only for admins  
   def destroy
     unless current_user.is_admin?
-        flash[:notice] = USERS_MSG["only_admin_may_delete_user"]
+        flash[:notice] = t('sb.only_admin_may_delete_user')
     else
         if current_user.id.to_i == params[:id].to_i
             # devise can do it but we do not integrate this feature
-            flash[:notice] = USERS_MSG["yu_cannot_delete_yur_own_account"]
+            flash[:notice] = t('sb.yu_cannot_delete_yur_own_account')
         else
             @user = User.find(params[:id])
             sharedto=@user.shared_folders_by_others
@@ -73,15 +43,17 @@ class UsersController < ApplicationController
                 stf.lists=stf.calc_meta
                 puts("****************new meta for folder #{stf.name} are #{stf.lists}")
                 unless stf.save
-                  report="#{report}Ies meta données du répertoire #{stf.name} partagé à l'utilisateur supprimé n'ont pas été mises à jour\n"
-                  report="#{report}Il faut lancer la mise à jour manuellement\n"
+                  report="#{report} #{t('sb.folder_metas')} #{stf.name} #{t('sb.shared_to_the_deleted_user')}\n"
+                  report="#{report} #{t('sb.not_updated')}\n"
+                  report="#{report} #{t('sb.please_ask_admin_to_update_manually')}\n"
                 else
-                  report=report="#{report}Mise à jour des meta données du répertoire #{stf.name} partagé à l'utilisateur supprimé - OK\n"
+                  report="#{report} #{t('sb.folder_metas')} #{stf.name} #{t('sb.shared_to_the_deleted_user')}\n"
+                  report="#{report} #{t('sb.updated')}\n"
                 end
               end
-              flash[:notice]="#{USERS_MSG["user"]} #{params[:id]} #{USERS_MSG["deleted"]}...#{report}"
+              flash[:notice]="#{t('sb.user')} #{params[:id]} #{t('sb.deleted')}...#{report}"
             else 
-              flash[:notice]=USERS_MSG["user_not_deleted"]
+              flash[:notice]="#{t('sb.user')} #{params[:id]} #{t('sb.not_deleted')}"
             end
         end
     end
@@ -96,10 +68,10 @@ class UsersController < ApplicationController
   # please note in a controller, params always exists - its minimal size is 2 with 2 keys : controller and action<br>
   # if params has got only two keys, render the users management dashboard
   def index
-    
-    puts ("**********we are in the controller #{params[:controller]}")
-    puts ("**********params has got #{params.keys.length} key(s)")
-    puts ("**********which are : #{params.keys}")
+    color_code="33"
+    puts ("\e[#{color_code}m**********we are in the controller #{params[:controller]}\e[0m")
+    puts ("\e[#{color_code}m**********params has got #{params.keys.length} key(s)\e[0m")
+    puts ("\e[#{color_code}m**********which are : #{params.keys}\e[0m")
     
     #if melfrag=params[:melfrag]
     if params.keys.length>2
@@ -118,7 +90,7 @@ class UsersController < ApplicationController
       end
     else
       unless current_user.is_admin?
-        flash[:notice] = USERS_MSG["user_managing_forbidden"]
+        flash[:notice] = t('sb.no_permission')
         redirect_to root_url
       end
     end
@@ -126,22 +98,9 @@ class UsersController < ApplicationController
   
   ##
   # user's preference dashboard<br>
-  # permits to set the locale
-  # work in progress
+  # permits to set the locale and the groups
   def show
-    unless current_user.id.to_i == params[:id].to_i
-      flash[:notice]=t('sb.no_permission')
-      message="___________________________________________#{params[:id]} vs #{current_user.id}"
-      puts("\e[31m#{message}\e[0m")
-      redirect_to root_url
-    else
-      if params[:lang]
-        current_user.lang=params[:lang]
-        current_user.save
-        redirect_to user_path(current_user.id)
-      end
-    end
-    @lang=current_user.lang
+    @user=current_user
   end
   
   
@@ -150,7 +109,7 @@ class UsersController < ApplicationController
   def get_groups
     results={}
     unless params[:groupsfrag]
-      results["message"]="please provide a text"
+      results["message"]=t('sb.no_input')
     else
       results=User.where("groups LIKE ?","%#{params[:groupsfrag]}%").distinct.pluck(:groups)
     end
@@ -228,10 +187,10 @@ class UsersController < ApplicationController
       #LOOP on USERS ACTIVE RECORDS
       users.each do |u|
         if sharing_users.include?(u.id)
-          u.is_sharing='offre'
+          u.is_sharing=t('sb.is_sharing')
         end
         if users_with_shares.include?(u.id)  
-          u.has_shares='reçoit'
+          u.has_shares=t('sb.has_shares')
         end
       end
       users

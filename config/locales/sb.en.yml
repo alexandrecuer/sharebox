@@ -22,6 +22,7 @@ en:
     inexisting: "inexisting object"
     id: "number/id"
     no_name_given: "please give a name"
+    no_input: "please provide an input"
     success: "success"
     failure: "failure"
     create: "create" 
@@ -31,6 +32,7 @@ en:
     save_mod: "save changes"
     updated: "updated"
     not_updated: "could not update"
+    please_ask_admin_to_update_manually: "please ask an admin to update manually"
     delete: "Delete"
     deleted: "deleted"
     not_deleted: "unable to remove this element"
@@ -90,14 +92,26 @@ en:
     folder_belongs_to_user: "folder already belongs to the user"
     folder_already_in_place: "folder is already where you want to move it"
     folder_moved: "folder moved successfully"
-    folder_metas_not_recorded: "unable to record the directory metadatas !!"
+    folder_metas: "metadatas for folder"
     going_to_delete_folder: "You are about to delete a folder"
     all_children_are_to_be_deleted: "All so-called children objects (shares, feedbacks, subfolders, files) will be destroyed"
     
     # user specific
     user: "user"
+    is_sharing: "offers"
+    has_shares: "receives"
+    groups: "group/company"
     no_user_on_that_id: "no user associated to that id"
     define_lang: "please define application language (en/fr)...."
+    pref: "preferences"
+    error_changing_statut: "Error while trying to change user status"
+    new_statut: "status is now"
+    own_statut_nor_superadmin_cannot_be_changed: "You cannot change your own status neither the status of the primo administrator"
+    inexisting_user: "You cannot change the status of a inexisting user"
+    invalid_statut: "invalid status"
+    only_admin_may_delete_user: "only an administrator can delete a user"
+    yu_cannot_delete_yur_own_account: "You cannot delete your own account"
+    shared_to_the_deleted_user: "shared to the deleted user"
     
     # for views\shared\_nav.html.erb
     disconnect: "logout"
@@ -175,3 +189,7 @@ en:
     subfolder: "subfolder"
     no_swarming: "root (no swarming)"
     swarming_facilities: "swarming destination(s)"
+    
+    # for views\folders\index.html.erb
+    folder_to_move: "folder to move"
+    destination_folder: "destination folder"

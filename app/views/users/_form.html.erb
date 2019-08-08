@@ -1,0 +1,13 @@
+<%= form_for @user do |user| %>
+
+    <h2><%= t("sb.pref") %></h2> 
+    <h4><u><%= t("sb.user") %> <%= t("sb.id") %> <%= @user.id %></u></h4><br>
+    
+    <p><%= t("sb.define_lang") %></p>
+    <%= user.text_field(:lang, placeholder: t("sb.define_lang"), class: "form-control") %><br>
+    <p><%= t("sb.fill_workgroup") %></p>
+    <%= user.text_field(:groups, class: "form-control") %><br>
+
+    <%= user.submit t("sb.save"), class: 'btn' %>
+
+<% end %>

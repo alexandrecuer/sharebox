@@ -94,7 +94,11 @@ Rails.application.routes.draw do
    
    get "surveys/:poll_id/fill_empty_metas" => "surveys#fill_empty_metas", :as => ""
    
+   get "admin/env" => "admin#get_env", :as => ""
+   
    get "i18n" => "help#i18n", :as => "i18n"
+   
+   patch "admin/statut/:id" => "admin#change_user_statut", :as => ""
  #end
 
 end
