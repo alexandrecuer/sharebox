@@ -1,3 +1,7 @@
+/*global sb*/
+/*global genGroupsAutocompletion*/
+/*eslint no-undef: "error"*/
+
 //generate the users list according to some filtering parameters
 function genUserList(groups,statut,melfrag)
 {
@@ -20,7 +24,7 @@ $.ajax({
     dataType: "json",
     async: true,
     success(result) {
-      $("#users_summary").html("<h5>[gestion des utilisateurs]["+result.length+"]</h5>");
+      $("#users_summary").html("<h5>"+sb["users_list"]+"["+result.length+"]</h5>");
       tab=[];
       result.forEach(function(u){
         var practises=[];
@@ -48,9 +52,9 @@ $.ajax({
         tab.push("<td>");
         //class is needed for autocompletion
         tab.push("<input type=text class=groups id=groups"+u.id+" placeholder=dir./dpt./grp./unit./? value="+u.groups+">");
-        tab.push("<button id=modifygroups type=submit value="+u.id+">Modifier groupe</button>");
+        tab.push("<button id=modifygroups type=submit value="+u.id+">"+sb["update"]+" "+sb["groups"]+"</button>");
         tab.push("</td>");
-        tab.push("<td><a data-confirm='Etes vous sûr?' rel=nofollow data-method=delete href=/users/"+u.id+">Supprimer</a></td>"); 
+        tab.push("<td><a data-confirm='"+sb["are_yu_sure"]+"' rel=nofollow data-method=delete href=/users/"+u.id+">"+sb["delete"]+"</a></td>"); 
         tab.push("</tr>");
       });
       $("#users_list").html(tab.join(""));
@@ -87,7 +91,7 @@ $("#users_list").on("click","#statutmod",function(){
   //console.log(params["id"]+" wants to become "+params["statut"]);
   $.ajax({
     type: "PATCH",
-    url: "/users/"+params["id"],
+    url: "/admin/statut/"+params["id"],
     data: params,
     dataType: "json",
     async: true,
@@ -96,7 +100,7 @@ $("#users_list").on("click","#statutmod",function(){
     },
     error(xhr) { 
       var errorMessage = xhr.status + ": " + xhr.statusText;
-      alert("Erreur - " + errorMessage);
+      alert(sb["failure"]+" - " + errorMessage);
     }
   });
 });
@@ -117,7 +121,7 @@ $("#users_list").on("click","#modifygroups",function(){
     },
     error(xhr) { 
       var errorMessage = xhr.status + ": " + xhr.statusText;
-      alert("Erreur - " + errorMessage);
+      alert(sb["failure"]+" - " + errorMessage);
     }
   });
 });

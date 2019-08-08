@@ -295,7 +295,8 @@ class SatisfactionsController < ApplicationController
         @poll = Poll.all.find_by_id(@satisfaction.poll_id)
         @current_folder.lists=@current_folder.calc_meta
         unless @current_folder.save
-          flash[:notice] = "#{flash[:notice]} #{t('sb.folder_metas_not_recorded')}<br>"
+          flash[:notice] = "#{flash[:notice]} #{t('sb.folder_metas')} #{@current_folder.name} - #{t('sb.id')} #{@current_folder.id}<br>"
+          flash[:notice] = "#{flash[:notice]} #{t('sb.not_updated')}"
         end
       else
         flash[:notice] =t('sb.satisfaction_error')

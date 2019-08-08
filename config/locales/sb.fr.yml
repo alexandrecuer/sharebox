@@ -22,6 +22,7 @@ fr:
     inexisting: "L'objet auquel vous voulez accéder n'existe pas"
     id: "numéro/id"
     no_name_given: "Il faut fournir un nom"
+    no_input: "vous n'avez rien saisi !"
     success: "succès"
     failure: "échec"
     create: "créer"
@@ -31,6 +32,7 @@ fr:
     save_mod: "sauvegarder les modifications"
     updated: "mise à jour réussie"
     not_updated: "mise à jour non effectuée"
+    please_ask_admin_to_update_manually: "demander à un administrateur de lancer la mise à jour manuellement"
     delete: "Supprimer"
     deleted: "suppression réussie"
     not_deleted: "suppression non effectuée"
@@ -90,14 +92,26 @@ fr:
     folder_belongs_to_user: "le répertoire appartient déjà à l'utilisateur"
     folder_already_in_place: "le répertoire est déjà là où vous voulez l'envoyer"
     folder_moved: "répertoire déplacé"
-    folder_metas_not_recorded: "impossible de mettre à jour les metadonnées du répertoire !!"
+    folder_metas: "metadonnées du répertoire"
     going_to_delete_folder: "Vous êtes sur le point de supprimer un répertoire"
     all_children_are_to_be_deleted: "Tous les objets associés (partages,retours satisfaction,sous-dossiers,fichiers) seront détruits"
     
     # user specific
     user: "utilisateur"
+    is_sharing: "offre"
+    has_shares: "reçoit"
+    groups: "groupe/entité"
     no_user_on_that_id: "aucun utilisateur existant sous le numéro"
     define_lang: "définir le langage de l'application (en/fr)...."
+    pref: "préférences"
+    error_changing_statut: "Erreur lors du changement de status"
+    new_statut: "a désormais le status"
+    own_statut_nor_superadmin_cannot_be_changed: "Vous ne pouvez pas changer votre propre status ou celui du super administrateur"
+    inexisting_user: "Vous ne pouvez pas changer le status d'un utilisateur inexistant"
+    invalid_statut: "status invalide"
+    only_admin_may_delete_user: "Vous devez être administrateur pour supprimer un utilisateur"
+    yu_cannot_delete_yur_own_account: "Vous ne pouvez pas supprimer votre propre compte"
+    shared_to_the_deleted_user: "partagé à l'utilisateur supprimé"
     
     # for views\shared\_nav.html.erb
     disconnect: "se déconnecter"
@@ -177,22 +191,13 @@ fr:
     swarming_facilities: "possibilités pour essaimer ce dossier"   
       
     # for views\folders\index.html.erb
+    folder_to_move: "répertoire à déplacer"
+    destination_folder: "répertoire de destination"
     folder_move: "Déplacement de répertoire"
     folder_id_to_move: "ID du répertoire à déplacer"
     destination_folder_id: "ID du répertoire de destination (0 pour envoyer à la racine)"
     validate_move: "procéder au déplacement"
-      
-    #users_msg:
-    only_for_admin: "Seul les admins peuvent changer le status des utilisateurs"
-    error_changing_status: "Erreur lors du changement de status"
-    new_status: "a désormais le status"
-    own_status_nor_superadmin_cannot_be_changed: "Vous ne pouvez pas changer votre propre status ou celui du super administrateur"
-    inexisting_user: "Vous ne pouvez pas changer le status d'un utilisateur inexistant"
-    invalid_status: "Statut invalide"
-    user_managing_forbidden: "Les utilisateurs publics ne peuvent ni visualiser ni gérer les autres utilisateurs"
-    only_admin_may_delete_user: "Vous devez être administrateur pour supprimer un utilisateur"
-    yu_cannot_delete_yur_own_account: "Vous ne pouvez supprimer votre propre compte"
-      
+
     #assets_msg: 
     rights_missing: "Vous ne pouvez pas mettre en ligne de fichier"
     not_yur_folder: "Vous ne pouvez mettre en ligne de fichier que dans les répertoires vous appartenant"

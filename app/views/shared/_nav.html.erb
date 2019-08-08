@@ -69,6 +69,7 @@ end
   <% if current_user.belongs_to_team? %>
   <td><a href=/><center><i class="fa fa-home fa-2x"></i><div id=browse style="display: block;"><%= t('sb.explorer') %></div></center></a></td>
   <td><a href=<%= polls_path %>><center><i class="fa fa-thermometer-quarter fa-2x"></i><div id=polls style="display: block;"><%= t('sb.sat_stats') %></div></center></a></td>
+  <td><a href=<%= user_path(current_user.id) %>><center><i class="fa fa-user fa-2x"></i><div id=pref style="display: block;"><%= t('sb.pref') %></div></center></a></td>
   <%# comments %>
   <% end %>
   </tr></table>
@@ -129,11 +130,13 @@ function adaptMenu(){
   if($(window).width()<800){
     $("#browse").css("display", "none");
     $("#polls").css("display", "none");
+    $("#pref").css("display", "none");
     $("#sources").css("display", "none");
     $("#name").css("display", "none");
   } else {
     $("#browse").css("display", "block");
     $("#polls").css("display", "block");
+    $("#pref").css("display", "block");
     $("#sources").css("display", "block");
     $("#name").css("display", "block");
   }

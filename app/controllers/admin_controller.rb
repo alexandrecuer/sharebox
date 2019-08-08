@@ -9,7 +9,7 @@ class AdminController < ApplicationController
   # admin controller main AUTHENTICATION
   def check_admin
     unless current_user.is_admin?
-      render json: {"message": "forbidden access"}
+      render json: {"message": t('sb.no_permission')}
     end
   end
   
@@ -21,21 +21,69 @@ class AdminController < ApplicationController
   end
   
   ##
+  # Admin users can modify other users'status<br>
+  # The 3 different status are public, private and admin<br> 
+  # The first user registered on the application is considered like a super admin, his status is timeless and cannot be changed<br>
+  # An admin cannot change his own status<br>
+  def change_user_statut
+    result={}
+    unless current_user.is_admin?
+      result["success"]=false
+      result["message"]=t('sb.no_permission')
+    else
+      primo_id = User.where(statut: "admin").order("id asc").ids[0]
+      valid_statuts = ["admin","private","public"]
+      if valid_statuts.include?(params[:statut])
+        @user = User.find_by_id(params[:id])
+        if @user
+          change_statut = 0
+          if @current_user != @user
+            change_statut = 1
+          end
+          if @user.id == primo_id
+            change_statut = 0
+          end
+          if change_statut == 1
+            @user.statut = params[:statut]
+            if @user.save
+              result["success"]=true
+              result["message"] = "#{@user.email} (#{@user.id}) #{t('sb.new_statut')} #{@user.statut}"
+            else
+              result["success"]=false
+              result["message"] = t('sb.error_changing_statut')
+            end
+          else
+            result["success"]=false
+            result["message"] = t('sb.own_statut_nor_superadmin_cannot_be_changed')
+          end
+        else
+          result["success"]=false
+          result["message"] = t('sb.inexisting_user')
+        end
+      else
+        result["success"]=false
+        result["message"] = t('sb.invalid_status')
+      end
+    end
+    render json: result
+  end
+  
+  ##
   # allows admins to assign users to groups
   def define_groups
     results={}
-    unless params[:groups]
-      results["message"]="no information provided"
+    unless params[:groups] && params[:groups] != ""
+      results["message"]=t('sb.no_input')
     else
       user=User.find_by_id(params[:id])
       unless user
-        results["message"]="inexisting user"
+        results["message"]=t('sb.inexisting_user')
       else
         user.groups=params[:groups]
         unless user.save
-          results["message"]="could not save the user"
+          results["message"]="#{t('sb.user')} #{user.email} #{t('sb.id')} #{user.id}\n #{t('sb.notupdated')}"
         else
-          results["message"]="user #{user.email} number #{user.id}\n groups modified to #{params[:groups]}"
+          results["message"]="#{t('sb.user')} #{user.email} #{t('sb.id')} #{user.id}\n #{t('sb.updated')}"
         end
       end
     end
@@ -58,12 +106,12 @@ class AdminController < ApplicationController
     folder=Folder.find_by_id(params[:folder_id])
     unless folder
       results["success"]=false
-      results["message"]="le répertoire dont vous voulez changer le propriétaire n'existe pas"
+      results["message"]="#{t('sb.inexisting')}\n #{t('sb.folder')} #{params[:folder_id]}"
     else
       destination_user=User.find_by_id(params[:user_id])
       unless destination_user
         results["success"]=false
-        results["message"]="l'utilisateur de destination n'existe pas"
+        results["message"]="#{t('sb.inexisting')}\n #{t('sb.user')} #{params[:user_id]}"
       else
         results=folder.move(nil,destination_user)
         folder.user_id=destination_user.id
@@ -83,13 +131,13 @@ class AdminController < ApplicationController
     folder=Folder.find_by_id(params[:folder_id])
     unless folder
       results["success"]=false
-      results["message"]="le répertoire que vous voulez déplacer n'existe pas"
+      results["message"]="#{t('sb.inexisting')}\n #{t('sb.folder_to_move')} #{params[:folder_id]}"
     else
       if params[:user_id]
         destination_user=User.find_by_id(params[:user_id])
         unless destination_user
           results["success"]=false
-          results["message"]="l'utilisateur de destination n'existe pas"
+          results["message"]="#{t('sb.inexisting')}\n #{t('sb.user')} #{params[:user_id]}"
         else
           if params[:destination_folder_id].to_i==0
             results=folder.move('root',destination_user)
@@ -97,7 +145,7 @@ class AdminController < ApplicationController
             destination_folder=Folder.find_by_id(params[:destination_folder_id])
             unless destination_folder
               results["success"]=false
-              results["message"]="le répertoire de destination n'existe pas"
+              results["message"]="#{t('sb.inexisting')}\n #{t('sb.destination_folder')} #{params[:destination_folder_id]}"
             else
               results=folder.move(destination_folder,destination_user)
             end
@@ -110,7 +158,7 @@ class AdminController < ApplicationController
           destination_folder=Folder.find_by_id(params[:destination_folder_id])
           unless destination_folder
             results["success"]=false
-            results["message"]="le répertoire de destination n'existe pas"
+            results["message"]="#{t('sb.inexisting')}\n #{t('sb.destination_folder')} #{params[:destination_folder_id]}"
           else
             results=folder.move(destination_folder)
           end
@@ -118,6 +166,42 @@ class AdminController < ApplicationController
       end
     end
     render json: results
+  end
+  
+  def get_env
+    #####
+    # this is a YAML file creation
+    #entries = File.read("#{Rails.root}/.env")
+    #message = "OK"
+    #entries = YAML.load_file("#{Rails.root}/config/config.yml")["main"]
+    #File.open("#{Rails.root}/config/test.yml","w") do |out|
+    #  if out.write ("main:\n")
+    #    entries.keys.each do |k|
+    #      if !out.write("  #{k}: \"#{entries[k]}\"\n")
+    #        message = "error in writing to the disk"
+    #      end
+    #    end
+    #  else
+    #    message = "error in writing to the disk"
+    #  end
+    #end
+    #render plain: message
+    
+    # this is an attempt to manage an env file form the browser
+    #ax={}
+    #entries = File.read(".env").gsub("\r\n","\n").split("\n")
+    #entries.each do |line|
+    #  if line =~ /\A([A-Za-z_0-9]*)=(.*)\z/
+    #    key=$1
+    #    case val = $2
+    #       when /\A'(.*)'\z/ then ax[key] = $1
+    #       when /\A"(.*)"\z/ then ax[key] = $1.gsub('\n', "\n").gsub(/\\(.)/, '\1')
+    #       else ax[key] = val
+    #    end
+    #  end
+    #end
+    #render json: ax
+    
   end
   
 
