@@ -19,8 +19,9 @@
     end
     # we browse all the shares created on the folder
     @shared_folders.each do |f|
-      user = User.find_by_email(f.share_email)
-      if user
+      if f.share_user_id
+        puts("share_user_id #{f.share_user_id} is not null")
+        user = User.find_by_id(f.share_user_id)
         id = user.id
         status = user.statut
         has_answered=false
@@ -33,6 +34,8 @@
           numberofclics=f.message.to_i/2
           noc_message="("+numberofclics.to_s+" clic".pluralize(numberofclics)+")"      
         end
+      else
+        puts("share_user_id is null for share #{f.id} - #{f.share_email}")
       end
       
     %>
