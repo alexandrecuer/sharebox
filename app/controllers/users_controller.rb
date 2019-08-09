@@ -15,6 +15,7 @@ class UsersController < ApplicationController
       redirect_to root_url
     else
       if current_user.update(params.require(:user).permit(:lang,:groups))
+        I18n.locale=params[:user][:lang]
         flash[:notice]=t('sb.updated')
       else
         flash[:notice]=t('sb.not_updated')
