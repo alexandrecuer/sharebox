@@ -24,7 +24,7 @@ class SharedFolder < ApplicationRecord
   # the system uses the method fetch_user_id_associated_to_email after the user's registration<br>
   # and fills the share_user_id field in the table shared_folders
   def fetch_user_id_associated_to_email
-    return User.where(email: self.share_email).ids[0]
+    return User.where(email: self.share_email.downcase).ids[0]
   end
   
 end

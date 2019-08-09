@@ -21,7 +21,7 @@ class SharedFoldersController < ApplicationController
   # ?update_meta=1 update metadatas for all folders
   def index
     unless current_user.is_admin?
-      log="vous n'avez pas les droits suffisants"
+      log=t('sb.no_permission')
     else
       if params[:update_meta]
         all_saved=true
