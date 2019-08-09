@@ -51,7 +51,7 @@ $.ajax({
         tab.push("<td><select id=statut"+u.id+">"+options+"</select><button id=statutmod value="+u.id+">FIX</button></td>");
         tab.push("<td>");
         //class is needed for autocompletion
-        tab.push("<input type=text class=groups id=groups"+u.id+" placeholder=dir./dpt./grp./unit./? value="+u.groups+">");
+        tab.push("<input type=text class=groups id=groups"+u.id+" placeholder="+sb["placeholder_fix_groups"]+" value="+u.groups+">");
         tab.push("<button id=modifygroups type=submit value="+u.id+">"+sb["update"]+" "+sb["groups"]+"</button>");
         tab.push("</td>");
         tab.push("<td><a data-confirm='"+sb["are_yu_sure"]+"' rel=nofollow data-method=delete href=/users/"+u.id+">"+sb["delete"]+"</a></td>"); 

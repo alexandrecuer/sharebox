@@ -193,6 +193,13 @@ fr:
     # for views\folders\index.html.erb
     folder_to_move: "répertoire à déplacer"
     destination_folder: "répertoire de destination"
+    
+    # specific placeholders
+    placeholder_filter_on_email: "filtrage email > !ce = emails not like %ce%"
+    placeholder_filter_on_statut: "filtrage sur statut..."
+    placeholder_filter_on_groups: "filtrage groupe de W > ! = pas de groupe de W"
+    placeholder_fix_groups: "dir./dpt./grp./unit./?"
+    
     folder_move: "Déplacement de répertoire"
     folder_id_to_move: "ID du répertoire à déplacer"
     destination_folder_id: "ID du répertoire de destination (0 pour envoyer à la racine)"
