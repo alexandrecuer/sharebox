@@ -193,3 +193,9 @@ en:
     # for views\folders\index.html.erb
     folder_to_move: "folder to move"
     destination_folder: "destination folder"
+    
+    # specific placeholders
+    placeholder_filter_on_email: "filter by email > !ce = emails not like %ce%"
+    placeholder_filter_on_statut: "filter by status..."
+    placeholder_filter_on_groups: "filter by workgroups > ! = no workgroup"
+    placeholder_fix_groups: "comp./dir./dpt./unit?"

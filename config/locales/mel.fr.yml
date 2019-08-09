@@ -23,3 +23,7 @@ fr:
     many_files_folder_visited: "Vous avez déjà visité ce répertoire contenant les fichiers"
     one_file_shared: "Un livrable vous a été partagé"
     many_files_shared: "livrables vous ont été partagés"
+
+    text_change_pass_1: "Vous avez déclenché la procédure de changement de mot de passe. Pour procéder à cette modification, suivez le lien ci dessous."
+    text_change_pass_2: "Votre mot de passe ne sera pas changé tant que vous n'aurez pas cliqué sur le lien et suivi les instructions."
+    unwanted: "Si vous n'avez pas effectué cette demande, merci de bien vouloir ignorer ce mel."

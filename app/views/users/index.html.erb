@@ -5,17 +5,17 @@
 Email server : <%= Rails.application.config.action_mailer.smtp_settings[:address] %><br>
 Application Mailer default from : <%= ApplicationMailer.default[:from] %><br>
 Address sending emails to users for password change : <%= Devise.mailer_sender %><br>
-Address collecting information related to users activity (shared folders & unregistered users with shares) : <%= MAIN["admin_mel"] %><br><br>
+Address collecting information related to users activity (shared folders & unregistered users with shares) : <%= CONF["admin_mel"] %><br><br>
 
 <div id=users_summary></div>
 <div class="table-responsive-sm">
 <table class=table>
 <tr>
 <th></th>
-<th><input type=text class=form-control placeholder="filtrage email - !ce = emails not like %ce%" id=melfrag></th>
+<th><input type=text class=form-control placeholder="<%= t('sb.placeholder_filter_on_email') %>" id=melfrag></th>
 <th></th>
-<th><input type=text class=form-control placeholder="filtrage sur statut..." id=statut></th>
-<th><input type=text class=form-control placeholder="filtrage groupe de W - ! = pas de groupe de W" id=groups></th>
+<th><input type=text class=form-control placeholder="<%= t('sb.placeholder_filter_on_statut') %>" id=statut></th>
+<th><input type=text class=form-control placeholder="<%= t('sb.placeholder_filter_on_groups') %>" id=groups></th>
 <th></th>
 </tr>
 <tbody id=users_list></tbody>
