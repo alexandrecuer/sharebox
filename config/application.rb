@@ -19,5 +19,11 @@ module Sharebox
     config.i18n.default_locale = :fr
     
     config.action_mailer.asset_host = "http://"+ENV.fetch('DOMAIN')
+    
+    #a good option with a classic sharebox.yml file using section default: production, development, test
+    #config.sharebox = Rails.application.config_for(:sharebox)
+    
+    config_path="#{Rails.root}/config/config.yml"
+    config.sharebox = YAML.load_file(config_path)["conf"]
   end
 end

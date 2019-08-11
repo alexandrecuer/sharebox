@@ -2,10 +2,10 @@
 <% if ENV['TEAM'] %>
   You are working in TEAM mode - <%= ENV.fetch('TEAM') %><br>
 <% end %>
-Email server : <%= Rails.application.config.action_mailer.smtp_settings[:address] %><br>
+Email server : <%= Rails.configuration.action_mailer.smtp_settings[:address] %><br>
 Application Mailer default from : <%= ApplicationMailer.default[:from] %><br>
 Address sending emails to users for password change : <%= Devise.mailer_sender %><br>
-Address collecting information related to users activity (shared folders & unregistered users with shares) : <%= CONF["admin_mel"] %><br><br>
+Address collecting information related to users activity (shared folders & unregistered users with shares) : <%= Rails.configuration.sharebox["admin_mel"] %><br><br>
 
 <div id=users_summary></div>
 <div class="table-responsive-sm">

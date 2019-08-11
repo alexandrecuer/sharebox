@@ -13,9 +13,8 @@ Devise.setup do |config|
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
   # config.mailer_sender = 'alexandre.cuer@wanadoo.fr'
-  config_path="#{Rails.root}/config/config.yml"
-  puts("admin_mel is : #{YAML.load_file(config_path)["conf"]["admin_mel"]}")
-  config.mailer_sender = YAML.load_file(config_path)["conf"]["admin_mel"]
+  puts("admin_mel is : #{Rails.configuration.sharebox["admin_mel"]}")
+  config.mailer_sender = Rails.configuration.sharebox["admin_mel"]
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
