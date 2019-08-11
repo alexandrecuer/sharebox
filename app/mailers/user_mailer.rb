@@ -4,14 +4,14 @@
 
 class UserMailer < ApplicationMailer
 
-  default from: CONF["admin_mel"]
+  default from: Rails.configuration.sharebox["admin_mel"]
   
   ##
   # inform admin when a share is created and of all users registration till all pending share emails did not register 
   def inform_admin(current_user,text)
     @user = current_user
     @text = text
-    mail(to: CONF["admin_mel"], subject: 'Activity report') 
+    mail(to: Rails.configuration.sharebox["admin_mel"], subject: 'Activity report') 
   end
 
   ##
@@ -93,7 +93,7 @@ class UserMailer < ApplicationMailer
   # generate email in order to alert a non registered client of a survey
   def send_free_survey(id)
     @survey = Survey.find_by_id(id)
-    title="[#{CONF["company"]}][#{t('mel.satisfaction_survey')}]#{@survey.description}"
+    title="[#{Rails.configuration.sharebox["company"]}][#{t('mel.satisfaction_survey')}]#{@survey.description}"
     mail(to: @survey.client_mel, from: @survey.by, subject: title)
   end
   

@@ -75,7 +75,7 @@ end
   <div class="col">
     <div class="float-right">
       <div id=name class="navbar-brand"><%= t('sb.site_name').html_safe%></div>
-      <div id=sources>Powered by <%= link_to "colibri v#{CONF["version"]}", "http://github.com/alexandrecuer/sharebox" %></div>
+      <div id=sources>Powered by <%= link_to "colibri v#{Rails.configuration.sharebox["version"]}", "http://github.com/alexandrecuer/sharebox" %></div>
     </div>
   </div>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

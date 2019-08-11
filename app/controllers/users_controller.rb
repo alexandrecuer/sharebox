@@ -143,6 +143,10 @@ class UsersController < ApplicationController
         tab.push("%#{statut}%")
       end
       if melfrag
+        puts("************************we have ")
+        if Rails.configuration.sharebox["downcase_email_search_autocomplete"]
+          melfrag=melfrag.downcase
+        end
         unless melfrag.include?("!")
           request.push("email like ?")
           tab.push("%#{melfrag}%")
