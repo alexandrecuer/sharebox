@@ -23,6 +23,7 @@ fr:
     id: "numéro/id"
     no_name_given: "Il faut fournir un nom"
     no_input: "vous n'avez rien saisi !"
+    no_mel_given: "Il faut fournir une adresse mel valable"
     success: "succès"
     failure: "échec"
     create: "créer"
@@ -200,6 +201,21 @@ fr:
     placeholder_filter_on_groups: "filtrage groupe de W > ! = pas de groupe de W"
     placeholder_fix_groups: "dir./dpt./grp./unit./?"
     
+    # specific to sharing matters
+    no_client_mel_for_team_member: "pas d'envoi de mel client à des membres de l'équipe"
+    customer_already_answered: "ce client a déjà répondu"
+    no_share_owned_with_email: "vous ne possédez pas de partage pour cette adresse mel"
+    no_share_selected: "Aucun partage sélectionné"
+    you_are_folder_owner: "Vous êtes propriétaire - pas besoin de vous partager ce répertoire"
+    already_shared_to: "Partage déjà opérationnel pour l'adresse"
+    unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse"
+    shared_to: "Partage effectué pour l'adresse"
+    cannot_send_mel: "Vous ne pouvez pas envoyer de mel !"
+    empty_folder: "le répertoire partagé est vide"
+    upload_or_poll_folder: "Chargez donc un livrable ou associez au répertoire une enquête satisfaction"
+    mail_sent_to: "Vous venez d'envoyer un email à l'adresse"
+    could_not_send_mail_to: "une erreur est survenue dans l'envoi du mel à"
+    
     folder_move: "Déplacement de répertoire"
     folder_id_to_move: "ID du répertoire à déplacer"
     destination_folder_id: "ID du répertoire de destination (0 pour envoyer à la racine)"
@@ -211,12 +227,4 @@ fr:
     asset_not_for_yu: "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
     inexisting_asset: "Ce fichier n'existe pas !"
     
-    #shared_folders_msg:
-    mail_sent_to: "Vous venez d'envoyer un email à l'adresse : "
     email_needed: "Il faut indiquer une adresse mel"
-    you_are_folder_owner: "Vous êtes propriétaire - pas besoin de vous partager ce répertoire"
-    already_shared_to: "Partage déjà opérationnel pour l'adresse "
-    unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse "
-    shared_to: "Partage effectué pour l'adresse "
-    no_share_selected: "Aucun partage sélectionné"
-    shares_destroyed: "Partage(s) supprimé(s)"

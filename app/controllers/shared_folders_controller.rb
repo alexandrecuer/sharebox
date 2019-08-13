@@ -86,24 +86,22 @@ class SharedFoldersController < ApplicationController
   # - remove shares one by one, unless a satisfaction answer was recorded on the share<br>
   # - send automatic emails<br>
   # For each share email, the control panel display the number of clicks on the shared assets<br>
-
   def show
     @current_folder = Folder.find_by_id(params[:id])
     unless @current_folder
-      flash[:notice] = FOLDERS_MSG["inexisting_folder"]
+      flash[:notice] = t('sb.inexisting_folder')
       redirect_to root_url
     end
-    # bof bof un user public peut s'envoyer un fichier
     unless (current_user.is_admin? || current_user.has_shared_access?(@current_folder))
-      flash[:notice] = "cette action ne vous est pas autorisée"
+      flash[:notice] = t('sb.no_permission')
       redirect_to root_url
     end
-    # Happens only when a mail is sent 
-    if params[:share_email]
-      result = @current_folder.email_customer(current_user,params[:share_email])
-      flash[:notice]=result["message"].gsub(/\n/,"<br/>")
-      redirect_to shared_folder_path(params[:id])
-    end
+    # This is not good practise.....
+    #if params[:share_email]
+    #  result = @current_folder.email_customer(current_user,params[:share_email])
+    #  flash[:notice]=result["message"].gsub(/\n/,"<br/>")
+    #  redirect_to shared_folder_path(params[:id])
+    #end
     @shared_folders = @current_folder.shared_folders
     @satisfactions = @current_folder.satisfactions
   end
@@ -120,14 +118,14 @@ class SharedFoldersController < ApplicationController
     current_folder=current_user.folders.find_by_id(folder_id)
     unless current_folder
       results["success"]=false
-      result="impossible de continuer\n"
-      results["message"]="#{result}ce répertoire n'existe pas ou ne vous appartient pas"
+      result="#{t('sb.stop')}, #{t('sb.maybe')} : \n"
+      results["message"]="#{result}- #{t('sb.inexisting_folder')}\n - #{t('sb.folder_not_for_yu')}"
     else
       puts("customer is #{customer_email}")
       unless /^[^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4}$/.match(customer_email)
         results["success"]=false
-        result="impossible de continuer\n"
-        results["message"]="#{result}il faut donner une adresse mel valable"
+        result="#{t('sb.stop')}\n"
+        results["message"]="#{result}#{t('sb.no_mel_given')}"
       else
         if ENV['TEAM']
           teamdomain=ENV.fetch('TEAM')
@@ -137,14 +135,18 @@ class SharedFoldersController < ApplicationController
         inteam = customer_email.split("@")[1]==teamdomain
         if inteam
           results["success"]=false
-          results["message"]="pas d'envoi de mel client à des membres de l'équipe"
+          results["message"]=t('sb.no_client_mel_for_team_member')
         else
-          if share=current_user.shared_folders.find_by_share_email(customer_email)
-            if customer=User.find_by_email(customer_email)
+          email_to_search=customer_email
+          if Rails.configuration.sharebox["downcase_email_search_autocompletion"]
+            email_to_search=email_to_seach.downcase
+          end
+          if share=current_user.shared_folders.find_by_share_email(email_to_search)
+            if customer=User.find_by_email(email_to_search)
               if satis=Satisfaction.find_by_folder_id_and_user_id(folder_id, customer.id)
                 processed={}
                 processed["success"]=false
-                processed["message"]="ce client a déjà répondu sous le numéro #{satis.id} "
+                processed["message"]="#{t('sb.client_already_answered')}\n #{t('sb.sb.feedback_number')} #{satis.id} "
               else
                 processed = current_folder.email_customer(current_user,customer_email,share,customer)
               end
@@ -155,7 +157,7 @@ class SharedFoldersController < ApplicationController
             results["message"]=processed["message"]
           else
             results["success"]=false
-            results["message"]="vous ne possédez pas de partage pour cette addresse mel sur ce dossier"
+            results["message"]="#{t('sb.folder')} #{t('sb.id')} #{folder_id} \n#{t('sb.no_share_owned_with_email')}"
           end
         end
       end
@@ -178,10 +180,13 @@ class SharedFoldersController < ApplicationController
   ##
   # Show the sharing form<br>
   # When a folder is shared to a user, you must give at least one email address or more but separated by a ","
+  # DEPRECATED since the new browsing system is active
+  # if wish to use anyway, follow route shared_folders/:folder_id/new
   def new
     unless @to_be_shared_folder = current_user.folders.find_by_id(params[:id])
     #if !current_user.has_ownership?(@to_be_shared_folder)
-      flash[:notice] = SHARED_FOLDERS_MSG["inexisting_folder"]
+      flash[:notice]="#{t('sb.stop')}, #{t('sb.maybe')} :<br>"
+      flash[:notice]="#{flash[:notice]}- #{t('sb.inexisting_folder')}<br> - #{t('sb.folder_not_for_yu')}"
       redirect_to root_url
     else
       @shared_folder = current_user.shared_folders.new
@@ -205,13 +210,13 @@ class SharedFoldersController < ApplicationController
     results={}
     if emails == ""
       results["success"]=false
-      results["message"]=SHARED_FOLDERS_MSG["email_needed"]
+      results["message"]=t('sb.no_mel_given')
     else
       folder = current_user.folders.find_by_id(folder_id)
       unless folder
         results["success"]=false
-        result="impossible de continuer\n"
-        results["message"]="#{result}ce répertoire n'existe pas ou ne vous appartient pas"
+        result="#{t('sb.stop')}, #{t('sb.maybe')} :\n"
+        results["message"]="#{result}- #{t('sb.inexisting_folder')}\n - #{t('sb.folder_not_for_yu')}"        
       else
         processed = folder.process_share_emails(emails,current_user)
         results["message"]=processed[:message]
@@ -222,6 +227,7 @@ class SharedFoldersController < ApplicationController
   end
 
   ##
+  # DEPRECATED since the new browsing system is active<br>
   # Saves the shared emails in the database<br>
   # you cannot share with yourself a folder you own<br>
   # verify if shared emails are already registered in the database for the specified folder (folder_id)<br>
@@ -230,12 +236,13 @@ class SharedFoldersController < ApplicationController
   def create
     emails=params[:shared_folder][:share_email].delete(" ")
     if emails == ""
-      flash[:notice]= SHARED_FOLDERS_MSG["email_needed"]
+      flash[:notice]= t('sb.no_mel_given')
       redirect_to new_share_on_folder_path(params[:shared_folder][:folder_id])
     else
       @folder = current_user.folders.find(params[:shared_folder][:folder_id])
       unless @folder
-        flash[:notice]="impossible de continuer<br>ce répertoire n'existe pas ou ne vous appartient pas"
+        flash[:notice]="#{t('sb.stop')}, #{t('sb.maybe')} :<br>"
+        flash[:notice]="#{flash[:notice]}- #{t('sb.inexisting_folder')}<br> - #{t('sb.folder_not_for_yu')}"
         redirect_to root_url
       else 
         result = @folder.process_share_emails(emails,current_user)
@@ -251,7 +258,7 @@ class SharedFoldersController < ApplicationController
         end
         # if new shares were successfully saved, then we inform the admin
         if result[:saved_shares]
-          mel_to_admin = "#{SHARED_FOLDERS_MSG["folder"]} #{params[:shared_folder][:folder_id]}<br>"
+          mel_to_admin = "#{t('sb.folder')} #{params[:shared_folder][:folder_id]}<br>"
           mel_to_admin = "#{mel_to_admin}<b>[#{@folder.name.html_safe}]</b><br>#{flash[:notice]}"
           InformAdminJob.perform_now(current_user,mel_to_admin)
           # alternative not using jobs
@@ -268,25 +275,26 @@ class SharedFoldersController < ApplicationController
     folder = current_user.folders.find_by_id(params[:folder_id])
     unless folder
       results["success"]=false
-      results["message"] = "ce répertoire n'existe pas ou ne vous appartient pas"
+      result="#{t('sb.stop')}, #{t('sb.maybe')} : \n"
+      results["message"]="#{result}- #{t('sb.inexisting_folder')}\n - #{t('sb.folder_not_for_yu')}"
     else
       id=params[:id]
       share=SharedFolder.find_by_id(id)
       unless share
         results["success"]=false
-        results["message"]="ce partage n'existe pas"
+        results["message"]="#{t('sb.inexisting')}\n #{t('sb.share_number')} #{id}"
       else
         if share.destroy
           results["success"]=true
           folder.lists=folder.calc_meta
           unless folder.save
-            results["message"]="impossible de mettre à jour les métadonnées"
+            results["message"]="#{t('sb.folder_metas')}\n #{t('sb.not_updated')}"
           else
-            results["message"]="partage supprimé"
+            results["message"]=t('sb.deleted')
           end
         else
           results["success"]=false
-          results["message"]="impossible de supprimer le partage"
+          results["message"]=t('sb.not_deleted')
         end
       end
     end
@@ -299,27 +307,31 @@ class SharedFoldersController < ApplicationController
   def destroy
     folder = Folder.find_by_id(params[:id])
     unless folder
-      flash[:notice] = "ce répertoire n'existe pas"
+      flash[:notice] = t('sb.inexisting')
       redirect_to root_url
     end
     unless (current_user.is_admin? || current_user.has_shared_access?(folder))
-      flash[:notice] = "cette action ne vous est pas autorisée"
+      flash[:notice] = t('sb.no_permission')
       redirect_to root_url
     end
     unless params[:ids]
-      flash[:notice] = SHARED_FOLDERS_MSG["no_share_selected"]
+      flash[:notice] = t('sb.no_share_selected')
     else
       params[:ids].each do |id|
-        SharedFolder.find_by_id(id).destroy
+        if SharedFolder.find_by_id(id).destroy
+          flash[:notice] = "#{flash[:notice]} #{t('sb.share_number')} #{id} : #{t('sb.deleted')}<br>"
+        else
+          flash[:notice] = "#{flash[:notice]} #{t('sb.share_number')} #{id} : #{t('sb.not_deleted')}<br>"
+        end
       end
-      flash[:notice] = SHARED_FOLDERS_MSG["shares_destroyed"]
       # some shares were deleted - we have to update folder metadatas
       folder.lists=folder.calc_meta
       unless folder.save
-        flash[:notice] = "#{flash[:notice]} impossible de mettre à jour les metadonnées du répertoire !!<br>"
+        flash[:notice] = "#{flash[:notice]} #{t('sb.folder_metas')} #{folder.id} #{t('sb.not_updated')}<br>"
+      else
+        flash[:notice] = "#{flash[:notice]} #{t('sb.folder_metas')} #{folder.id} #{t('sb.updated')}<br>"
       end
     end
-
     unless SharedFolder.find_by_folder_id(params[:id])
       redirect_to root_url
     else

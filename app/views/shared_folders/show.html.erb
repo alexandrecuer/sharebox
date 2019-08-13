@@ -60,7 +60,7 @@
           <% end %>
           <% if !user || !has_answered %>
           <%# if !user || !user.has_completed_satisfaction?(@current_folder) %>
-            <%= link_to shared_folder_path(f.folder_id, :share_email => f.share_email), class: 'dropdown-item' do fa_icon 'envelope 2x' end %>
+            <%= link_to contact_customer_path(f.folder_id, :share_email => f.share_email), class: 'dropdown-item' do fa_icon 'envelope 2x' end %>
           <% end %>       
         </td>
       </tr>
