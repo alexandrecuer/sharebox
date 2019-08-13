@@ -253,38 +253,42 @@ class Folder < ApplicationRecord
       result=""
       saved_shares=false
       unless emails && current_user.id == self.user_id
-        result="impossible de continuer \n vous n'avez pas fourni d'adresses mel ou ce répertoire ne vous appartient pas"
+        result="#{I18n.t('sb.stop')}, #{I18n.t('sb.maybe')} :\n - #{I18n.t('sb.no_mel_given')}\n - #{I18n.t('sb.folder_not_for_yu')}"
       else
         email_addresses = emails.split(",")
         email_addresses.each do |email_address|
           email_address=email_address.delete(' ')
-          if email_address == current_user.email
-            result = "#{result} #{SHARED_FOLDERS_MSG["you_are_folder_owner"]}\n"
+          email_to_search=email_address
+          if Rails.configuration.sharebox["downcase_email_search_autocomplete"]
+            email_to_search=email_to_search.downcase
+          end
+          if email_to_search == current_user.email
+            result = "#{result} #{I18n.t('sb.you_are_folder_owner')}\n"
           else
             # is the email_address already in the folder's shares ?
-            if current_user.shared_folders.find_by_share_email_and_folder_id(email_address,self.id)
-              result = "#{result} #{SHARED_FOLDERS_MSG["already_shared_to"]} #{email_address}\n"
+            if current_user.shared_folders.find_by_share_email_and_folder_id(email_to_search,self.id)
+              result = "#{result} #{I18n.t('sb.already_shared_to')} #{email_address}\n"
             else
               shared_folder = current_user.shared_folders.new
               shared_folder.folder_id=self.id
               shared_folder.share_email = email_address
               # We search if the email exist in the user table
               # if not, we'll have to update the share_user_id field after registration
-              share_user = User.find_by_email(email_address)
+              share_user = User.find_by_email(email_to_search)
               shared_folder.share_user_id = share_user.id if share_user
               if shared_folder.save
-                a = "#{SHARED_FOLDERS_MSG["shared_to"]} #{email_address}"
+                a = "#{I18n.t('sb.shared_to')} #{email_address}"
                 result = "#{result} #{a}\n"
                 saved_shares = true
               else
-                flash[:notice] = "#{result} #{SHARED_FOLDERS_MSG["unable_share_for"]} #{email_address}\n"
+                flash[:notice] = "#{result} #{I18n.t('sb.unable_share_for')} #{email_address}\n"
               end
             end
           end
         end
         self.lists=self.calc_meta
         unless self.save
-          result = "#{result} impossible de mettre à jour les metadonnées du répertoire !!\n"
+          result = "#{result} #{I18n.t('sb.folder_metas')} : #{I18n.t('sb.not_updated')}\n"
         end
       end
       {"message": result,"saved_shares": saved_shares}
@@ -299,18 +303,18 @@ class Folder < ApplicationRecord
     nb_files=shared_files.length
     puts("**************#{nb_files} file(s) in the folder #{self.id}");
     unless (nb_files>0 || self.is_polled?)
-      t1 = "Vous ne pouvez pas envoyer de mel !"
-      t2 = "D'une part, le répertoire partagé est vide"
-      t3 = "D'autre part, le répertoire partagé n'est pas lié à une enquête satisfaction"
-      t4 = "Chargez donc un livrable ou associez au répertoire une enquête satisfaction"
+      t1 = I18n.t('sb.cannot_send_mel')
+      t2 = I18n.t('sb.empty_folder')
+      t3 = I18n.t('sb.unpolled_folder')
+      t4 = I18n.t('sb.upload_or_poll_folder')
       results["message"] = "#{t1}\n#{t2}\n#{t3}\n#{t4}"
       results["success"] = false
     else
       if InformUserJob.perform_now(current_user,customer_email,self,shared_files,customer,share)
-        results["message"] = "#{SHARED_FOLDERS_MSG["mail_sent_to"]} #{customer_email}"
+        results["message"] = "#{I18n.t('sb.mail_sent_to')} #{customer_email}"
         results["success"] = true
       else
-        results["message"] = "une erreur est survenue dans l'envoi du mel à #{customer_email}"
+        results["message"] = "#{I18n.t('sb.could_not_send_mail_sent_to')} #{customer_email}"
         results["success"] = false
       end
     end
