@@ -23,6 +23,7 @@ en:
     id: "number/id"
     no_name_given: "please give a name"
     no_input: "please provide an input"
+    no_mel_given: "Please provide a valid email address"
     success: "success"
     failure: "failure"
     create: "create" 
@@ -199,3 +200,9 @@ en:
     placeholder_filter_on_statut: "filter by status..."
     placeholder_filter_on_groups: "filter by workgroups > ! = no workgroup"
     placeholder_fix_groups: "comp./dir./dpt./unit?"
+    
+     # specific to sharing matters
+    no_client_mel_for_team_member: "no customer email to team members"
+    customer_already_answered: "customer already answered"
+    no_share_owned_with_email: "no share owned with this email"
+    no_share_selected: "No share selected"
