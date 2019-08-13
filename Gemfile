@@ -70,4 +70,4 @@ gem "font-awesome-rails"
 
 gem 'jquery-ui-rails'
 
-gem 'bootstrap', '~> 4.1.3'
+gem 'bootstrap'
