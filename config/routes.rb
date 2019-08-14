@@ -42,7 +42,7 @@ Rails.application.routes.draw do
 
    patch '/folders' => 'folders#moove_folder', :as => 'moove_folder'
    
-   get "getpolls" => "surveys#getpolls", :as => "getpolls"
+   get "getpolls" => "polls#getpolls", :as => "getpolls"
    
    get "surveys/:id/md5/:md5" => "satisfactions#freenew", :as => "new_satisfaction_no_folder"
    
