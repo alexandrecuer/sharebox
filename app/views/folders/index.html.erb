@@ -1,26 +1,39 @@
 <%= render 'shared/nav' %>
 
-<h2><%= MAIN["folder_move"]%></h2>
+<h2><%= t('sb.folder_move') %></h2>
 
 <%= form_tag(moove_folder_path, method: "patch") do %>
-<%= label_tag(:id, MAIN["folder_id_to_move"]) %>
+<%= label_tag(:id, "#{t('sb.folder_to_move')} (#{t('sb.id')})") %>
 <%= text_field_tag(:id) %>
 
-<%= label_tag(:parent_id, MAIN["destination_folder_id"]) %>
+<%= label_tag(:parent_id, "#{t('sb.destination_folder')} (#{t('sb.id')} - #{t('sb.0_for_root')})") %>
 <%= text_field_tag(:parent_id) %>
 
-<%= submit_tag(MAIN["validate_move"]) %>
+<%= submit_tag(t('sb.validate_move')) %>
 <% end %>
 
 <%
+users = User.all
+hashu = []
+users.each do |u|
+ hashu[u.id]=u
+end
+# could be a way not to use the is_swarmed? method
+previous_folder_owner=[]
 # whole application tree exploration
 Folder.walk_tree do |folder, level|
+  if previous_folder_owner
+    puts("////////////////////////////////////////////#{previous_folder_owner}")
+  end
   # the folder's names
-  name = "#{folder.name}(D#{folder.id})"
+  name = "#{folder.name}<b>(D#{folder.id})</b>"
   name = "#{name} (#{folder.case_number})" if folder.case_number !=""
   # if the folder is shared, we have to display the share numbers after the file name
   # we also display the poll_id
-  if folder.shared?
+  metas=folder.get_meta
+  #if folder.shared?
+  if metas["shares"].length > 0
+    puts("**********************************************************having shares #{metas["shares"]}")
     shares = "{<span class='shared_to'"
     SharedFolder.where(folder_id: folder.id).each do |p|
       shares = "#{shares} ->P#{p.id}>#{p.share_email}(#{p.share_user_id}) "
@@ -32,34 +45,40 @@ Folder.walk_tree do |folder, level|
     shares = shares.html_safe
   end
   # has the folder some files ?
-  if folder.has_assets?
-    assets_list = ""
-    folder.assets.each do |asset|
-      assets_list = "#{assets_list}<span class='asset_span' style='margin-left:#{level * 10}px'>#{asset.uploaded_file_file_name}</span><br>".html_safe
-    end
+  assets = folder.assets
+  #if folder.has_assets?
+  if assets.length > 0
+    assets_list = "<span class='has_files'>#{assets.length} files</span>".html_safe
+    #folder.assets.each do |asset|
+    #  assets_list = "#{assets_list}<span class='asset_span' style='margin-left:#{level * 10}px'>#{asset.uploaded_file_file_name}</span><br>".html_safe
+    #end
   end
   # case 1 : we are in a subfolder
+  user=hashu[folder.user_id]
+  puts("#{user} vs #{previous_folder_owner}")
   if level > 0
     # we add some graphics to the name to make a visual link with the parent folder
     name = "|_#{name}"
     # has the folder been dropped in a foreign folder (ie belonging to another private user) ?
+    #if previous_folder_owner != user
     if folder.is_swarmed?
-      user = User.find_by_id(folder.user_id)
       swarmed_owner = "<span class='swarmed_to'>#{user.email}(#{user.id})</span>".html_safe
     end
   # case 2 : root folder, without any parent
   # we display the owner's mel
   else
-    user = User.find_by_id(folder.user_id)
     owner = "#{user.email}(#{user.id})"
   end
+  previous_folder_owner=hashu[folder.user.id]
+  puts("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#{previous_folder_owner.id} #{previous_folder_owner.email}")
 %> 
-  <%= link_to name, folder_path(folder), :style =>"margin-left:#{level * 10}px;" %>
+  <span class='folder_i'><%= link_to name.html_safe, folder_path(folder), :style =>"margin-left:#{level * 10}px;" %></span>
+  <%= assets_list %>
   <%= swarmed_owner %>
   <%= owner %>
   <%= shares %>
   <br>
-  <%= assets_list %>
+  <%#= assets_list %>
 <%
 #end of tree walking on Folder
 end 

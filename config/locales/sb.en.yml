@@ -194,6 +194,9 @@ en:
     # for views\folders\index.html.erb
     folder_to_move: "folder to move"
     destination_folder: "destination folder"
+    folder_move: "Folder relocation"
+    validate_move: "proceed"
+    0_for_root: "0 for root"
     
     # specific placeholders
     placeholder_filter_on_email: "filter by email > !ce = emails not like %ce%"

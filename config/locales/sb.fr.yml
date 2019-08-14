@@ -194,6 +194,9 @@ fr:
     # for views\folders\index.html.erb
     folder_to_move: "répertoire à déplacer"
     destination_folder: "répertoire de destination"
+    folder_move: "Déplacement de répertoire"
+    validate_move: "procéder au déplacement"
+    0_for_root: "0 pour envoyer à la racine"
     
     # specific placeholders
     placeholder_filter_on_email: "filtrage email > !ce = emails not like %ce%"
@@ -216,11 +219,6 @@ fr:
     mail_sent_to: "Vous venez d'envoyer un email à l'adresse"
     could_not_send_mail_to: "une erreur est survenue dans l'envoi du mel à"
     
-    folder_move: "Déplacement de répertoire"
-    folder_id_to_move: "ID du répertoire à déplacer"
-    destination_folder_id: "ID du répertoire de destination (0 pour envoyer à la racine)"
-    validate_move: "procéder au déplacement"
-
     #assets_msg: 
     rights_missing: "Vous ne pouvez pas mettre en ligne de fichier"
     not_yur_folder: "Vous ne pouvez mettre en ligne de fichier que dans les répertoires vous appartenant"
