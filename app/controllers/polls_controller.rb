@@ -15,6 +15,19 @@ class PollsController < ApplicationController
     end
   end
   
+   ##
+   # if route is /getpolls return all the polls in the colibri<br>
+   # if route is /getpolls?mynums=1 return poll numbers containing satisfactions answers out of the folders/assets system for the current_user
+   def getpolls
+    if params[:mynums].to_i==1
+      poll_ids=current_user.satisfactions.where("folder_id < ?",0).pluck("DISTINCT poll_id")
+      render json: poll_ids
+    else
+      allpolls = Poll.all.order("id DESC")
+      render json: allpolls
+    end
+   end
+  
   ##
   # the index route leads to the satisfactions exploitation main dashboard where everything is done with ajax
   def index
