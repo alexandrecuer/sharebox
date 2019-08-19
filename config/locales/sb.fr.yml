@@ -183,6 +183,7 @@ fr:
     many_reminders: "relances déjà ;-("
     new_client_not_saved: "impossible de sauvegarder le nouveau client"
     md5_disabled: "l'enquête a été désactivée"
+    reminders_counter_not_updated: "le compteur de relances n'a pas été mis à jour"
   
     # for views\folders\_form.html.erb
     folder_name: "nom du répertoire/dossier/projet"
@@ -209,7 +210,7 @@ fr:
     customer_already_answered: "ce client a déjà répondu"
     no_share_owned_with_email: "vous ne possédez pas de partage pour cette adresse mel"
     no_share_selected: "Aucun partage sélectionné"
-    you_are_folder_owner: "Vous êtes propriétaire - pas besoin de vous partager ce répertoire"
+    no_share_for_folder_owner: "Vous êtes propriétaire - pas besoin de vous partager ce répertoire"
     already_shared_to: "Partage déjà opérationnel pour l'adresse"
     unable_share_for: "Il n'a pas été possible de partager le répertoire vers l'adresse"
     shared_to: "Partage effectué pour l'adresse"
@@ -219,10 +220,7 @@ fr:
     mail_sent_to: "Vous venez d'envoyer un email à l'adresse"
     could_not_send_mail_to: "une erreur est survenue dans l'envoi du mel à"
     
-    #assets_msg: 
-    rights_missing: "Vous ne pouvez pas mettre en ligne de fichier"
-    not_yur_folder: "Vous ne pouvez mettre en ligne de fichier que dans les répertoires vous appartenant"
-    asset_not_for_yu: "Ce fichier ne vous appartient pas ou ne vous est pas destiné !"
-    inexisting_asset: "Ce fichier n'existe pas !"
-    
-    email_needed: "Il faut indiquer une adresse mel"
+    #assets_msg:
+    uploaded: "mise en ligne réussie"
+    not_uploaded: "échec de la mise en ligne"
+    size_or_type_problem: "type non autorisé ou taille trop importante"

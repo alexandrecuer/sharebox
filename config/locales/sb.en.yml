@@ -183,6 +183,7 @@ en:
     many_reminders: "reminders sent ;-("
     new_client_not_saved: "could not save new customer"
     md5_disabled: "md5 token disabled"
+    reminders_counter_not_updated: "reminders'counter could not be updated"
     
     # for views\folders\_form.html.erb
     folder_name: "folder/project name"
@@ -209,7 +210,7 @@ en:
     customer_already_answered: "customer already answered"
     no_share_owned_with_email: "no share owned with this email"
     no_share_selected: "No share selected"
-    you_are_folder_owner: "You are the owner - no need to share this folder with you"
+    no_share_for_folder_owner: "You are the owner - no need to share this folder with you"
     already_shared_to: "Already shared with the email address"
     unable_share_for: "It was not possible to share the folder with the address"
     shared_to: "folder shared succesfully with the address"
@@ -218,3 +219,8 @@ en:
     upload_or_poll_folder: "please upload a file or specify a poll for the folder"
     mail_sent_to: "You have just sent an email to"
     could_not_send_mail_to: "an error occurred in sending an email to"
+    
+    #assets_msg:
+    uploaded: "successfully uploaded"
+    not_uploaded: "uploading failure"
+    size_or_type_problem: "unauthorized type or excessive size"

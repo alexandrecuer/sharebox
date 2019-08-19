@@ -23,7 +23,7 @@ before_action :authenticate_user!
     if @asset = current_user.assets.find_by_id(params[:id])
         render json: @asset
     else
-        render json: {id: false, message:"inexisting asset or no right on that asset"}
+        render json: {id: false, message:"#{t('sb.inexisting')} - #{t('sb.no_permission')}"}
     end
   end
   
@@ -36,20 +36,20 @@ before_action :authenticate_user!
   # They cannot upload files outside the folders they own
   def new
     unless (current_user.is_admin? || current_user.is_private?)
-      flash[:notice] = ASSETS_MSG["rights_missing"]
+      flash[:notice] = t('sb.no_permission')
       redirect_to root_url
     end
     @asset = current_user.assets.new
     # If there is a folder_id, we attach the file to the corresponding folder<br>
-    # if not, ir will be a root located file 
+    # if not, it will be a root located file 
     if params[:folder_id]
-      @current_folder = current_user.folders.find_by_id(params[:folder_id])
-      if @current_folder
-        @asset.folder_id = @current_folder.id
+      @hosting_folder = current_user.folders.find_by_id(params[:folder_id])
+      if @hosting_folder
+        @asset.folder_id = @hosting_folder.id
       else
-        flash[:notice] = "Cette action n'est pas autorisée<br>"
-        flash[:notice] = "#{flash[:notice]} - #{ASSETS_MSG["inexisting_folder"]}<br>"
-        flash[:notice] = "#{flash[:notice]} - #{ASSETS_MSG["not_yur_folder"]}"
+        flash[:notice] = t('sb.no_permission')
+        flash[:notice] = "#{flash[:notice]} - #{t('sb.inexisting_folder')}<br>"
+        flash[:notice] = "#{flash[:notice]} - #{t('sb.folder_not_for_yu')}"
         redirect_to root_url
       end
     end
@@ -63,22 +63,22 @@ before_action :authenticate_user!
       if current_user.is_private? || current_user.is_admin?
           unless Folder.find_by_id(params[:asset][:folder_id]) || params[:asset][:folder_id].nil?
             results["success"]=false
-            results["message"]="impossible de poursuivre - vous essayez de charger un fichier dans un répertoire inexistant"
+            results["message"]="#{t('sb.stop')} - #{t('sb.inexisting_folder')}"
           else
 	        asset = current_user.assets.new(asset_params)
             if asset.save
               results["success"]=true
-              results["message"]="fichier mis en ligne"
+              results["message"]=t('sb.uploaded')
             else
               results["success"]=false
-              result="échec de la mise en ligne\n"
-              result="#{result}type non autorisé ou taille trop importante"
+              result="#{t('sb.not_uploaded')}\n"
+              result="#{result}#{t('sb.size_or_type_problem')}"
               results["message"]=result
             end
           end
       else
           results["success"]=false
-          results["message"]="vous ne pouvez pas mettre en ligne de fichiers"
+          results["message"]=t('sb.no_permission')
       end
       render json: results
   end
@@ -89,7 +89,7 @@ before_action :authenticate_user!
   def create
 	  @asset = current_user.assets.new(asset_params)
       if @asset.save
-        flash[:notice] = ASSETS_MSG["asset_uploaded"]
+        flash[:notice] = t('sb.uploaded')
         if @asset.folder_id
           redirect_to folder_path(@asset.folder_id)
         else
@@ -108,14 +108,14 @@ before_action :authenticate_user!
     if asset = current_user.assets.find_by_id(params[:id])
       if asset.destroy
         results["success"]=true
-        results["message"]="fichier supprimé"
+        results["message"]=t('sb.deleted')
       else
         results["success"]=false
-        results["message"]="impossible de supprimer le fichier"
+        results["message"]=t('sb.not_deleted')
       end
     else
       results["success"]=false
-      results["message"]= "ce fichier n'existe pas ou ne vous appartient pas"
+      results["message"]= "#{t('sb.inexisting')} - #{t('sb.no_permission')}"
     end
     render json: results
   end
@@ -126,7 +126,7 @@ before_action :authenticate_user!
   def destroy
     @asset = current_user.assets.find(params[:id])
     @asset.destroy
-    flash[:notice] = ASSETS_MSG["asset_destroyed"]
+    flash[:notice] = t('sb.deleted')
     if @asset.folder_id
       redirect_to folder_path(@asset.folder_id)
     else
@@ -147,7 +147,7 @@ before_action :authenticate_user!
         if current_user.has_asset_ownership?(asset)
           get_file(asset)
         else
-          flash[:notice] = ASSETS_MSG["asset_not_for_yu"]
+          flash[:notice] = t('sb.no_permission')
           redirect_to root_url
         end
       else
@@ -164,12 +164,12 @@ before_action :authenticate_user!
           end
           get_file(asset)
         else
-          flash[:notice] = ASSETS_MSG["asset_not_for_yu"]
+          flash[:notice] = t('sb.no_permission')
           redirect_to root_url
         end
       end
     else
-      flash[:notice] = ASSETS_MSG["inexisting_asset"]
+      flash[:notice] = t('sb.inexisting')
       redirect_to root_url
     end
   end

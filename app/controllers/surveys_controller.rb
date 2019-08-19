@@ -12,6 +12,26 @@ class SurveysController < ApplicationController
           redirect_to root_url
         end
     end
+    
+    ##
+    # authorize admins (and owner - not sure to keep that ?) to modify pending surveys
+    def edit
+      unless @survey=Survey.find_by_id(params[:id])
+        render plain: "#{t('sb.inexisting')} - #{t('sb.no_permission')}"
+      else
+        unless current_user.is_admin? || current_user.id.to_i == @survey.user_id.to_i
+          redirect_to root_url
+        end
+      end
+    end
+    
+    def update
+      @survey=Survey.find_by_id(params[:id])
+      if @survey.update(params.require(:survey).permit(:description,:by,:client_mel))
+        flash[:notice]="#{t('sb.survey')} #{params[:id]} <br> #{t('sb.updated')}"
+      end
+      render 'edit'
+    end
 
     ##
     # if route is /surveys return the whole list of non answered surveys<br>
@@ -32,7 +52,7 @@ class SurveysController < ApplicationController
             csv = poll.csv(allanswers)
             send_data csv, filename: "polls-#{Time.zone.today}.csv"
           else 
-            render json: {poll: "inexisting poll"}
+            render json: {poll: t('sb.inexisting')}
           end
         else
           tab=[]
@@ -65,7 +85,7 @@ class SurveysController < ApplicationController
       if params[:poll_id]
         poll=Poll.find_by_id(params[:poll_id])
         unless poll
-          @log="aucun sondage sous ce numéro"
+          @log=t('sb.inexisting')
         else
           @log=poll.consider_all_pending_surveys_sent_once
         end
@@ -80,25 +100,25 @@ class SurveysController < ApplicationController
         if survey
           if params[:email]=="send"
             if SurveyClientJob.perform_now(params[:id])
-              message="Le lien vers l'enquête a été envoyé par mel à #{survey.client_mel}"
+              message="#{t('sb.mail_sent_to')} #{survey.client_mel}"
               if survey.update_metas
                 render plain: message
               else
-                render plain: "#{message}\n Mais le compteur de relance n'a pas été mis à jour"
+                render plain: "#{message}\n #{t('sb.reminders_counter_not_updated')}"
               end
             else
-              render plain: "Erreur : le lien vers l'enquête n'a pas pu être envoyé par mel à #{survey.client_mel}"
+              render plain: "#{t('sb.failure')} : #{t('sb.could_not_send_mail_to')} #{survey.client_mel}"
             end
           else
             render json: survey
           end
         else
-          render plain: "cet élément n'existe pas"
+          render plain: t('sb.inexisting')
         end
     end
     
     ##
-    # initiate a new survey - actually open the surveys control panel dor the current user
+    # initiate a new survey - actually open the surveys control panel for the current user
     def new
         @survey = Survey.new
     end
@@ -115,7 +135,7 @@ class SurveysController < ApplicationController
         if @survey.save
           render json: @survey
         else 
-          render json: [{"error": "could not save the survey"}]
+          render json: [{"error": t('sb.not_created')}]
         end
     end
     
@@ -125,9 +145,9 @@ class SurveysController < ApplicationController
         @survey = Survey.find_by_id(params[:id])
         if @survey.user_id == current_user.id || current_user.is_admin?
           @survey.destroy
-          render plain: "Enquête #{params[:id]} supprimée"
+          render plain: "#{t('sb.survey')} #{params[:id]} #{t('sb.deleted')}"
         else
-          render plain: "Vous n'avez pas les droits nécessaires"
+          render plain: t('sb.no_permission')
         end
     end
         
