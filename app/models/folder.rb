@@ -263,7 +263,7 @@ class Folder < ApplicationRecord
             email_to_search=email_to_search.downcase
           end
           if email_to_search == current_user.email
-            result = "#{result} #{I18n.t('sb.you_are_folder_owner')}\n"
+            result = "#{result} #{I18n.t('sb.no_share_for_folder_owner')}\n"
           else
             # is the email_address already in the folder's shares ?
             if current_user.shared_folders.find_by_share_email_and_folder_id(email_to_search,self.id)

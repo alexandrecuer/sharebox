@@ -1,0 +1,22 @@
+<%= render 'shared/nav' %>
+
+<% if @survey.errors.any? %>
+    <h3><%= pluralize(@survey.errors.count, t('sb.failure')) %></h3>
+	<ul>
+	<% @survey.errors.full_messages.each do |msg| %>
+		<li><%= sanitize msg.html_safe %></li>
+	<% end %>
+	</ul>
+<% end %>
+
+<%= form_for @survey do |s| %>
+<%= t('sb.project_description') %>
+<%= s.text_field :description, placeholder: t('sb.project_description'), class: 'form-control' %>
+<%= t('sb.project_manager_email') %>
+<%= s.text_field :by, placeholder: t('sb.project_manager_email'), class: 'form-control' %>
+<%= t('sb.client_email') %>
+<%= s.text_field :client_mel, placeholder: t('sb.client_email'), class: 'form-control' %>
+
+<%= s.submit t('sb.update'), class: 'btn' %>
+
+<% end %>

@@ -5,6 +5,12 @@
 class Survey < ApplicationRecord
     belongs_to :user
     
+    validates :description, presence: true
+    
+    validates :by, presence: true
+    
+    validates :client_mel, presence: true
+    
     ##
     # updates the metas after a survey has been successfully sent to customer
     def update_metas
