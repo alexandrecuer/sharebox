@@ -57,22 +57,15 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><div id='filecontents'><h1>A social network tool with your clients for your business</h1>
+      <div id="content"><div id='filecontents'><h1>A business social network tool dedicated to quality management</h1>
 
-<p>This application is a SharingFile System</p>
+<p>This application is a SharingFile System with surveys management facilities</p>
 
 <p><a href="https://travis-ci.org/alexandrecuer/sharebox"><img src="https://travis-ci.org/alexandrecuer/sharebox.svg?branch=master" alt="Build Status"></a>
 <a href="https://www.codacy.com/app/alexandrecuer/sharebox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=alexandrecuer/sharebox&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/ed6f26a2613349e0a92b404d515a4b29" alt="Codacy Badge"></a></p>
 
-<p>If you deliver files and documents to your clients and if you want to record your clients&#39;satisfaction, this tool is for you</p>
-
-<p>4 different user profiles are available :</p>
-
-<p>0) external user: customer who is not registered in the tool and who has received a token by email to answer a satisfaction survey not related to a deliverable
-1) standard public user: customer who wants to access a deliverable and to complete an associated satisfaction survey, if any
-2) public user with address type &quot;first_name.name@team_domain&quot;: team member who wants to send customer satisfaction surveys without making deliverables available on the cloud - initialize TEAM config var with your domain name to make this work - otherwise there will be no difference between profile 1 and profile 2 
-3) private user: full team member who dematerializes his productions - private users can swarm one or more of their <strong>root</strong> directories in other private users&#39;folders - this constitutes a primitive kind of collaborative work
-4) admin: all powers - access to all directories and assets, surveys management, ability to modify directories (moving and changing ownership)</p>
+<p>If you deliver files and documents to your clients and if you want to record your clients&#39;satisfaction, this tool is for you
+<img src=public/images/doc/colibri_front.png></p>
 
 <p>Online class documentation (not up to date) :
 <a href="https://alexandrecuer.github.io/sharebox/">https://alexandrecuer.github.io/sharebox/</a></p>
@@ -81,20 +74,191 @@
 
 <p>Check online prototype : <a href="https://desolate-earth-32333.herokuapp.com/">https://desolate-earth-32333.herokuapp.com/</a></p>
 
+<p><b>
+An automatic process is available for deployment on a linux Ubuntu server or virtual machine. It will install the required dependencies then the application in /var/www/colibri/sharebox.</p>
+
+<p>When installing the server, reserve 8GB at least for the system and create a specific mounting point for /var/www</p>
+
+<p>check : <a href="https://github.com/alexandrecuer/colibriScripts">https://github.com/alexandrecuer/colibriScripts</a>
+</b></p>
+
 <p>Uses the following gems :</p>
 
 <ul>
-<li><a href="https://github.com/thoughtbot/paperclip">paperclip</a> for documents processing</li>
 <li><a href="https://github.com/plataformatec/devise">devise</a> for user authentification</li>
 <li><a href="https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/heroku/standalone/oss/deploy_app_main.html">passenger</a> as the application server (in standalone mode)</li>
 <li><a href="https://github.com/aws/aws-sdk-ruby">aws-sdk</a> for storage on S3</li>
-<li><a href="https://github.com/twbs/bootstrap-rubygem">bootstrap</a> as the frontoffice framework</li>
-<li><a href="https://github.com/bokmann/font-awesome-rails">font-awesome</a> for icons and cosmectic details</li>
 </ul>
 
-<h2>Will have to switch from paperclip to <a href="http://guides.rubyonrails.org/active_storage_overview.html">ActiveStorage</a> as paperclip is now deprecated</h2>
+<p>frontoffice :</p>
 
-<p><img src=public/images/doc/colibri_front.png></p>
+<ul>
+<li><a href="https://github.com/twbs/bootstrap-rubygem">bootstrap</a></li>
+<li><a href="https://github.com/bokmann/font-awesome-rails">font-awesome</a> icons and cosmectic details</li>
+<li><a href="https://github.com/rails/jquery-rails">jquery rails</a></li>
+</ul>
+
+<h2>File storage</h2>
+
+<p>The application can use <a href="https://github.com/thoughtbot/paperclip">paperclip</a> or rails <a href="http://guides.rubyonrails.org/active_storage_overview.html">ActiveStorage</a> for file storage/documents processing (work in progress - see active_storage branch not yet merged into master)</p>
+
+<p>As paperclip is deprecated, active storage is recommanded for new installations</p>
+
+<p>For existant paperclip installations, a <a href="https://github.com/alexandrecuer/sharebox/issues/8">migration guide</a> is available</p>
+
+<p>An environment variable permits to define the storage engine</p>
+
+<table>
+    <tr>
+        <td>PAPERCLIP</td>
+        <td>
+            0 -> active storage<br>
+            1 -> paperclip
+        </td>
+    </tr>
+ </table>
+
+Document storage is configured for : 
+- Amazon S3 in production mode 
+- local file system in development mode. In that case, the aws-sdk gem is not used.
+
+corresponding model and controller can be found there :
+- [app/models/asset.rb](app/models/asset.rb)
+- [app/controllers/assets_controller.rb](app/controllers/assets_controller.rb) - see the get_file private method
+
+to open a file, follow the route /forge/get/:id
+
+Switching between S3 mode and local storage mode can be done by modifying : 
+- /config/environments/development.rb 
+- /config/environments/production.rb
+
+### if using paperclip :
+
+you have to modify the value of **config.local_storage** in the corresponding config/environments/*.rb file(s)
+
+- config.local_storage = 1 > local storage will be activated
+- config.local_storage = 0 > all files will go in the S3 bucket
+
+paperclip files will be stored in the 'forge' directory : (rails_root or S3 bucket)/forge/attachments/:id/:filename
+
+### if using active_storage :
+
+you have to modify the value of **config.active_storage.service** in the corresponding config/environments/*.rb file(s)
+
+- config.active_storage.service = :local or :local_production > local storage will be activated
+- config.active_storage.service = :amazon > all files will go in the S3 bucket
+
+let's take the case of a file with an active_storage_blobs.key value equal to xMRXuT6nqpoiConJFQJFt6c9 :
+- if local storage is activated, the file will be stored as rails_root/(storage or production_storage)/xM/RX/xMRXuT6nqpoiConJFQJFt6c9
+- if S3 storage is activated, the file will be stored directly at the root of the bucket :  S3 bucket/xMRXuT6nqpoiConJFQJFt6c9
+
+in local storage, if you delete the file the folders xM/RX will remain on disk
+
+in lib/tasks, you can find a rake utility to clean the storage or production_storage folder
+
+just launch :
+```
+bundle exec rake storage:clean_storage['storage']
+bundle exec rake storage:clean_storage['storage_production']
+```
+empty folders will be deleted
+
+##  S3 storage environmental variables
+
+<table>
+    <tr>
+        <td>S3_BUCKET_NAME</td>
+        <td><a href=https://devcenter.heroku.com/articles/s3#s3-setup>Heroku specific doc</a></td>
+    </tr>
+    <tr>
+        <td>AWS_REGION</td>
+        <td rowspan=2>
+            <a href=https://docs.aws.amazon.com/fr_fr/general/latest/gr/rande.html#s3_region>AWS regional parameters</a><br> 
+            exemple : <br>
+            AWS_REGION=eu-west-3<br>
+            AWS_HOST_NAME=s3.eu-west-3.amazonaws.com
+        </td> 
+    </tr>
+    <tr>
+        <td>AWS_HOST_NAME</td>
+    </tr>
+    <tr>
+        <td>AWS_URL</td>
+        <td>S3_BUCKET_NAME.AWS_HOST_NAME</td>
+    </tr>
+    <tr>
+        <td>AWS_ACCESS_KEY_ID</td>
+        <td rowspan=2>
+            <a href=https://console.aws.amazon.com/iam/home#/users>IAM - Identity and Access Management</a>
+        </td>
+    </tr>
+    <tr>
+        <td>AWS_SECRET_ACCESS_KEY</td>
+    </tr>
+</table>
+
+<h2>Mail delivery Environmental variables</h2>
+
+<table>
+    <tr>
+        <td>GMAIL_USERNAME</td>
+        <td rowspan=2>
+          SendGrid is the preferred option<br>
+          <a href=https://sendgrid.com/>sendgrid</a><br><br>
+          <a href=https://mail.google.com/>gmail</a><br>
+          Please note gmail is not a reliable solution as a backoffice mailer<br>
+          if, however, you were considering using gmail for mail delivery, you may need to configure your google account in order to allow external applications to use it<br>
+          <a href=https://www.google.com/settings/security/lesssecureapps>lesssecureapps</a><br>
+          <a href=https://accounts.google.com/DisplayUnlockCaptcha>unlockcaptach</a><br>
+        </td>
+    </tr>
+    <tr>
+        <td>GMAIL_PASSWORD</td>
+    </tr>
+    <tr>
+        <td>SMTP_ADDRESS</td>
+        <td rowspan=2>example if using sendgrid :<br>SMTP_ADDRESS="smtp.sengrid.net"<br>SMTP_PORT=587</td>
+    </tr>
+    <tr>
+      <td>SMTP_PORT</td>
+    </tr>
+    <tr>
+      <td>DOMAIN</td>
+      <td>In development mode : localhost<br>For a production server :ip address or domain name of the server</td>
+    </tr>
+</table>
+
+<h1>User management</h1>
+
+<p>5 different user profiles are available</p>
+
+<h2>profile 0 : external user</h2>
+
+<p>customer who is not registered in the tool and who has received a token by email to answer a satisfaction survey not related to a deliverable</p>
+
+<h2>profile 1 : standard public user</h2>
+
+<p>customer who wants to access a deliverable and to complete an associated satisfaction survey, if any</p>
+
+<h2>profile 2 : team member</h2>
+
+<p>team members can only send customer satisfaction surveys <strong>without</strong> making deliverables available on the cloud</p>
+
+<p>a specific environmental variable TEAM permits to active the profile 2 </p>
+
+<table><tr><td>TEAM</td><td>cerema.fr</td></tr></table>
+
+<p>Initialize TEAM with your domain name - otherwise there will be no difference between profile 1 and profile 2</p>
+
+<h2>profile 3 : private user</h2>
+
+<p>full team member who dematerializes his productions</p>
+
+<p>Private users can create directories and upload files in folders they don&#39;t own, if they have received shared access - this constitutes a primitive kind of collaborative work</p>
+
+<h2>profile 4 : admin</h2>
+
+<p>all powers - access to all directories and assets, surveys management, ability to modify directories (moving and changing ownership)</p>
 
 <h1>Deployment to Heroku through GitHub integration</h1>
 
@@ -125,274 +289,6 @@ Here are the main steps :</p>
 <p>Please note that the first user to register in the system will be given admin rights !!</p>
 
 <p>for more details : <a href="/public/images/doc/deploy_on_heroku.pdf">deploy on heroku in images</a></p>
-
-<h1>Installation on a Microsoft Window development machine</h1>
-
-<h2>Requirements</h2>
-
-<p>Window All-In-One rails installer <a href="http://railsinstaller.org/en">Ruby on Rails</a> &gt;= 5.1.4 + NodeJS</p>
-
-<p><a href="http://www.imagemagick.org">ImageMagick</a> for documents processing</p>
-
-<p>Gem file is configured to use postgreSQL, so please install PGQSL window binary
-<a href="https://www.enterprisedb.com/">EDB POSTGRES</a></p>
-
-<p>If you want to use another DBMS, you will have to change the gem file</p>
-
-<h3>Rails</h3>
-
-<p>After having run RailsInstaller, launch a git bash, verify ruby version <code>ruby -v</code>, install Rails <code>gem install rails</code> and verify the version :</p>
-
-<pre class="code ruby"><code class="ruby">$ rails -v
-Rails 5.1.5
-</code></pre>
-
-<p>Check you can create a new application named blog <code>rails new blog</code></p>
-
-<p>The system will create the app files and launch the command <code>bundle install</code> to fetch some gems</p>
-
-<p>Launch the server with the command <code>rails server</code>. The server should be up on port 3000. Browse the adress <a href="http://localhost:3000">http://localhost:3000</a> in Mozilla.</p>
-
-<h3>ImageMagick</h3>
-
-<p>For a more detailed procedure, check <a href="https://github.com/thoughtbot/paperclip#requirements">https://github.com/thoughtbot/paperclip#requirements</a></p>
-
-<p>ImageMagick uses two utilities file.exe and convert.exe</p>
-
-<p>You will have to install file.exe from <a href="http://gnuwin32.sourceforge.net/packages/file.htm">gnuwin32</a></p>
-
-<p>When you install ImageMagick, don&#39;t forget to include the required legacy utilities among which you will find convert.exe</p>
-
-<p><img src=public/images/doc/imagemagick.png height=300></p>
-
-<p>Modify the system and user paths so that they begin with something like C:\Program Files\ImageMagick-7.0.6-Q16\ and C:\Program Files (x86)\GnuWin32.</p>
-
-<p>On windows 10, from the control panel :
-<code>
-Security and System &gt; System &gt; Advanced System Parameters &gt; Environment Variables
-</code></p>
-
-<p>Please note Window has got its own convert utility. Paperclip will not work with the Window convert.exe. ImageMagick&#39;s convert.exe should come first</p>
-
-<pre class="code ruby"><code class="ruby">$ where convert
-c:\Program Files\ImageMagick-7.0.6-Q16\convert.exe
-c:\Windows\System32\convert.exe
-</code></pre>
-
-<p>Check if everything is OK in the rails git bash :</p>
-
-<pre class="code ruby"><code class="ruby">$ which file
-/c/Program Files (x86)/GnuWin32/bin/file
-$ which convert
-/c/Program Files/ImageMagick-7.0.6-Q16/convert
-</code></pre>
-
-<h3>NodeJS</h3>
-
-<p>Install <a href="https://nodejs.org/en/download/">NodeJS</a></p>
-
-<h2>Installation</h2>
-
-<p>Clone/Unzip the repository into your local rails directory, for example C:/Sites/. 
-Open the resulting app directory in a git bash </p>
-
-<pre class="code ruby"><code class="ruby">$ cd /c/Sites/sharebox
-</code></pre>
-
-<p>Install the required gems <code>$ bundle install</code> or <code>$ bundle update</code></p>
-
-<p>Please note that the bcrypt gem needed for devise may malfunction.
-To correct, you have to reinstall manually</p>
-
-<pre class="code ruby"><code class="ruby">$ gem uninstall bcrypt
-$ gem uninstall bcrypt-ruby
-$ gem install bcrypt --platform=ruby
-</code></pre>
-
-<h3>Setting environmental variables</h3>
-
-<p>The application uses several variables, which you have to fix in the environment</p>
-
-<table><tr><td valign=top>For S3 storage
-<table>
-    <tr>
-        <td><sub>S3_BUCKET_NAME</sub></td>
-        <td><sub><a href=https://devcenter.heroku.com/articles/s3#s3-setup>Heroku specific doc</a></sub></td>
-    </tr>
-    <tr>
-        <td><sub>AWS_REGION</sub></td>
-        <td rowspan=2><sub><a href=https://docs.aws.amazon.com/fr_fr/general/latest/gr/rande.html#s3_region>AWS regional parameters</a><br><sub> ex : AWS_REGION=eu-west-3 and AWS_HOST_NAME=s3.eu-west-3.amazonaws.com</sub></sub></td> 
-    </tr>
-    <tr>
-        <td><sub>AWS_HOST_NAME</sub></td>
-    </tr>
-    <tr>
-        <td><sub>AWS_URL</sub></td>
-        <td><sub>S3_BUCKET_NAME.AWS_HOST_NAME</sub></td>
-    </tr>
-    <tr>
-        <td><sub>AWS_ACCESS_KEY_ID</sub></td>
-        <td rowspan=2><sub><a href=https://console.aws.amazon.com/iam/home#/users>IAM - Identity and Access Management</a></sub></td>
-    </tr>
-    <tr>
-        <td><sub>AWS_SECRET_ACCESS_KEY</sub></td>
-    </tr>
-</table>
-
-<p></td><td valign=top>For Mail delivery</p>
-
-<table>
-    <tr>
-        <td><sub>GMAIL_USERNAME</sub></td>
-        <td rowspan=2>
-          SendGrid is the preferred option<br>
-          <sub><a href=https://sendgrid.com/>sendgrid</a></sub><br><br>
-          <sub><a href=https://mail.google.com/>gmail</a></sub><br>
-          <sub>Please note gmail is not a reliable solution as a backoffice mailer</sub><br>
-          <sub>if, however, you were considering using gmail for mail delivery, you may need to configure your google account in order to allow external applications to use it</sub><br>
-          <sub><a href=https://www.google.com/settings/security/lesssecureapps>lesssecureapps</a></sub><br>
-          <sub><a href=https://accounts.google.com/DisplayUnlockCaptcha>unlockcaptach</a></sub><br>
-        </td>
-    </tr>
-    <tr>
-        <td><sub>GMAIL_PASSWORD</sub></td>
-    </tr>
-    <tr>
-        <td><sub>SMTP_ADDRESS</sub></td>
-        <td rowspan=2><sub>example if using sendgrid :<br><sub>SMTP_ADDRESS="smtp.sengrid.net" and SMTP_PORT=587</sub></sub></td>
-    </tr>
-    <tr>
-      <td><sub>SMTP_PORT</sub></td>
-    </tr>
-    <tr>
-      <td><sub>DOMAIN</sub></td>
-      <td><sub>In development mode :<br><sub>localhost</sub><br>For a production server :<br><sub>ip address or domain name of the server</sub></sub></td>
-    </tr>
-</table>
-
-<p></td></tr></table></p>
-
-<h5>First option</h5>
-
-<p>Edit the set_env_var.bat file, fill it with your personal credentials and run this bat file from the main DOS shell. It will fix the environment details in all subsequent shells such as git bash or window power shell. You can start the server from a git bash with the classic method :</p>
-
-<pre class="code ruby"><code class="ruby">$ rails server
-</code></pre>
-
-<h5>Second option</h5>
-
-<p>On Windows, this second option may permit to override specific problems related to environment variables beginning with /. Edit the .env file and fill it with your personal credentials. Install <a href="https://github.com/strongloop/node-foreman">node-foreman</a> and start the server from a git bash with the following command :</p>
-
-<pre class="code ruby"><code class="ruby">$ nf -p 3000 start -s -j Procfile_dev
-</code></pre>
-
-<h3>Database configuration</h3>
-
-<p>Modify the \config\environments\database.yml with your database credentials. 
-Generally, the postgreSQL Window installer creates a user &quot;postgres&quot; for which you were asked a password during the installation process. </p>
-
-<pre class="code ruby"><code class="ruby">default: &amp;default
-  adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: &lt;%= ENV.fetch(&quot;RAILS_MAX_THREADS&quot;) { 5 } %&gt;
-  username: postgres
-  password: your_pass
-  host: localhost
-</code></pre>
-
-<p>Create the database and the tables</p>
-
-<pre class="code ruby"><code class="ruby">$ rake db:create
-$ rails db:migrate
-</code></pre>
-
-<p>To create the database structure and the tables, you don&#39;t have to run all the migrations from scratch :</p>
-
-<pre class="code ruby"><code class="ruby">$ rails db:schema:load
-</code></pre>
-
-<h2>File storage</h2>
-
-<p>Document storage is configured for : </p>
-
-<ul>
-<li>Amazon S3 in production mode </li>
-<li>local file system in development mode. In that case, the aws-sdk gem is not used.</li>
-</ul>
-
-<p>Switching between S3 mode and local storage mode can be done by modifying the value of config.local_storage </p>
-
-<ul>
-<li>in /config/environments/development.rb </li>
-<li>and in /config/environments/production.rb</li>
-</ul>
-
-<p>with config.local_storage = 1, local storage will be activated<br>
-with config.local_storage = 0, all files will go in the defined S3 bucket</p>
-
-<table>
-  <tr>
-    <td></td>
-    <td valign=top>S3 storage</td>
-    <td valign=top>local storage</td>
-  </tr>
-  <tr>
-    <td>\config\environments\developpment.rb</td>
-    <td width=50%><sub>
-      config.paperclip_defaults = {<br>
-        storage: :s3,<br>
-        s3_credentials: {<br>
-          bucket: ENV.fetch('S3_BUCKET_NAME'),<br>
-          access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),<br>
-          secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),<br>
-          s3_region: ENV.fetch('AWS_REGION'),<br>
-          s3_host_name: ENV.fetch('AWS_HOST_NAME'),<br>
-        }<br>
-      }
-      </sub>
-    </td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>\app\models\asset.rb</td>
-    <td width=50%><sub>
-      has_attached_file :uploaded_file,<br>
-      url: ENV.fetch('AWS_URL'),<br>
-      path: '/forge/attachments/:id/:filename',<br>
-      s3_permissions: :private
-      </sub>
-    </td>
-    <td width=50%><sub>
-      has_attached_file :uploaded_file,<br>
-      url: '/forge/get/:id/:filename',<br>      
-      path: ':rails_root/forge/attachments/:id/:filename'<br>
-      </td>
-  </tr>
-  <tr>
-    <td>\app\controllers\assets_controller.rb</td>
-    <td><sub>
-      redirect_to asset.uploaded_file.expiring_url(10)
-      </sub>
-    </td>
-    <td><sub>
-      send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-      </sub>
-    </td>
-  </tr>
-</table>
-
-<h3>Use Amazon S3</h3>
-
-<p>You may encounter difficulties due to some SSL defaults on your development machine.</p>
-
-<p>To override, create a file /config/initializers/paperclip.rb with the following command</p>
-
-<pre class="code ruby"><code class="ruby"><span class='const'>OpenSSL</span><span class='op'>::</span><span class='const'>SSL</span><span class='op'>::</span><span class='const'>VERIFY_PEER</span> <span class='op'>=</span> <span class='const'>OpenSSL</span><span class='op'>::</span><span class='const'>SSL</span><span class='op'>::</span><span class='const'>VERIFY_NONE</span>
-</code></pre>
-
-<p>Caution : only for a development purpose; not suitable for a production server !</p>
 
 <h1>Installation on Heroku (for production) from a development server</h1>
 
@@ -460,10 +356,14 @@ $ heroku config:set DOMAIN=&quot;desolate-earth-32333.herokuapp.com&quot;
 <pre class="code ruby"><code class="ruby">$ export https_proxy=&quot;http://user_name:password@proxy_url:proxy_port&quot;
 $ export http_proxy=&quot;http://user_name:password@proxy_url:proxy_port&quot;
 </code></pre>
+
+<h1>Installation on a microsoft windows development machine</h1>
+
+<p>Follow the <a href="public/images/doc/install_on_microsoft_window_dev_machine.md">specific guide</a></p>
 </div></div>
 
       <div id="footer">
-  Generated on Sun Apr 14 10:40:45 2019 by
+  Generated on Tue Aug 20 10:01:43 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

@@ -181,7 +181,7 @@ out of the folders/assets system</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#getpolls-instance_method" title="#getpolls (instance method)">#<strong>getpolls</strong>  &#x21d2; Object </a>
+      <a href="#edit-instance_method" title="#edit (instance method)">#<strong>edit</strong>  &#x21d2; Object </a>
     
 
     
@@ -196,12 +196,31 @@ out of the folders/assets system</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>should be in the controller polls - but controller polls is only accessible
-to admin and should be redesigned<br> if route is /getpolls return all the
-polls in the colibri<br> if route is /getpolls?mynums=1 return poll numbers
-containing satisfactions answers out of the folders/assets system for the
-current_user.</p>
+<p>authorize admins (and owner - not sure to keep that ?) to modify pending
+surveys.</p>
 </div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fill_empty_metas-instance_method" title="#fill_empty_metas (instance method)">#<strong>fill_empty_metas</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -253,8 +272,8 @@ folders/assets system.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>check if user is an affiliated team member from the domain component of its
-email address.</p>
+<p>check if user is admin or is an affiliated team member from the domain
+component of its email address.</p>
 </div></span>
   
 </li>
@@ -278,7 +297,7 @@ email address.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>initiate a new survey - actually open the surveys control panel dor the
+<p>initiate a new survey - actually open the surveys control panel for the
 current user.</p>
 </div></span>
   
@@ -311,6 +330,28 @@ survey.</p>
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#update-instance_method" title="#update (instance method)">#<strong>update</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -321,6 +362,11 @@ survey.</p>
   
   
   
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="ApplicationController.html" title="ApplicationController (class)">ApplicationController</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="ApplicationController.html#check_lang-instance_method" title="ApplicationController#check_lang (method)">#check_lang</a></span></p>
+
   
 
   <div id="instance_method_details" class="method_details_list">
@@ -353,22 +399,22 @@ survey.</p>
       <pre class="lines">
 
 
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119</pre>
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 107</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 128</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
     <span class='ivar'>@survey</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_surveys'>surveys</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -380,7 +426,7 @@ survey.</p>
     <span class='kw'>if</span> <span class='ivar'>@survey</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
       <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='ivar'>@survey</span>
     <span class='kw'>else</span> 
-      <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='lbracket'>[</span><span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>error</span><span class='label_end'>&quot;:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>could not save the survey</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='lbracket'>[</span><span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>error</span><span class='label_end'>&quot;:</span> <span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.not_created</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='rbracket'>]</span>
     <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -414,26 +460,26 @@ survey.</p>
       <pre class="lines">
 
 
-123
-124
-125
-126
-127
-128
-129
-130
-131</pre>
+144
+145
+146
+147
+148
+149
+150
+151
+152</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 123</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 144</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
     <span class='ivar'>@survey</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Survey.html" title="Survey (class)">Survey</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
     <span class='kw'>if</span> <span class='ivar'>@survey</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>==</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>||</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_is_admin?'>is_admin?</span>
       <span class='ivar'>@survey</span><span class='period'>.</span><span class='id identifier rubyid_destroy'>destroy</span>
-      <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Enquête </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> supprimée</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.survey</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.deleted</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
     <span class='kw'>else</span>
-      <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Vous n&#39;avez pas les droits nécessaires</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.no_permission</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
     <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -442,9 +488,9 @@ survey.</p>
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="getpolls-instance_method">
+  <h3 class="signature " id="edit-instance_method">
   
-    #<strong>getpolls</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>edit</strong>  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -453,11 +499,8 @@ survey.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>should be in the controller polls - but controller polls is only accessible
-to admin and should be redesigned<br> if route is /getpolls return all the
-polls in the colibri<br> if route is /getpolls?mynums=1 return poll numbers
-containing satisfactions answers out of the folders/assets system for the
-current_user</p>
+<p>authorize admins (and owner - not sure to keep that ?) to modify pending
+surveys</p>
 
 
   </div>
@@ -471,27 +514,71 @@ current_user</p>
       <pre class="lines">
 
 
-69
-70
-71
-72
-73
-74
-75
-76
-77</pre>
+18
+19
+20
+21
+22
+23
+24
+25
+26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 69</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 18</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_getpolls'>getpolls</span>
-    <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:mynums</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='op'>==</span><span class='int'>1</span>
-      <span class='id identifier rubyid_poll_ids'>poll_ids</span><span class='op'>=</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>folder_id &lt; ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='int'>0</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_pluck'>pluck</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>DISTINCT poll_id</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-      <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_poll_ids'>poll_ids</span>
-    <span class='kw'>else</span>
-      <span class='id identifier rubyid_allpolls'>allpolls</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Poll.html" title="Poll (class)">Poll</a></span></span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_order'>order</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id DESC</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-      <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_allpolls'>allpolls</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_edit'>edit</span>
+  <span class='kw'>unless</span> <span class='ivar'>@survey</span><span class='op'>=</span><span class='const'><span class='object_link'><a href="Survey.html" title="Survey (class)">Survey</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.inexisting</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'> - </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.no_permission</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>else</span>
+    <span class='kw'>unless</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_is_admin?'>is_admin?</span> <span class='op'>||</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='op'>==</span> <span class='ivar'>@survey</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+      <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_root_url'>root_url</span>
     <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="fill_empty_metas-instance_method">
+  
+    #<strong>fill_empty_metas</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 84</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_fill_empty_metas'>fill_empty_metas</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:poll_id</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_poll'>poll</span><span class='op'>=</span><span class='const'>Poll</span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:poll_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='kw'>unless</span> <span class='id identifier rubyid_poll'>poll</span>
+      <span class='ivar'>@log</span><span class='op'>=</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.inexisting</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='ivar'>@log</span><span class='op'>=</span><span class='id identifier rubyid_poll'>poll</span><span class='period'>.</span><span class='id identifier rubyid_consider_all_pending_surveys_sent_once'>consider_all_pending_surveys_sent_once</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -530,26 +617,6 @@ answers for the given poll_id</p>
       <pre class="lines">
 
 
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
 41
 42
 43
@@ -572,52 +639,66 @@ answers for the given poll_id</p>
 60
 61
 62
-63</pre>
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 21</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_index'>index</span>
-    <span class='id identifier rubyid_users'>users</span><span class='op'>=</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_get_all_emails'>get_all_emails</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:csv</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='op'>==</span><span class='int'>1</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:poll_id</span><span class='rbracket'>]</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:all</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='op'>==</span><span class='int'>1</span>
-        <span class='id identifier rubyid_allanswers'>allanswers</span><span class='op'>=</span><span class='const'>Satisfaction</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>folder_id &lt; ? and poll_id=?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='int'>0</span><span class='comma'>,</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:poll_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-      <span class='kw'>else</span>
-        <span class='id identifier rubyid_allanswers'>allanswers</span><span class='op'>=</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>folder_id &lt; ? and poll_id=?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='int'>0</span><span class='comma'>,</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:poll_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-      <span class='kw'>end</span>
       <span class='kw'>if</span> <span class='id identifier rubyid_poll'>poll</span><span class='op'>=</span><span class='const'>Poll</span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:poll_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-        <span class='comment'>#headers = poll.get_names.insert(0,&#39;récolté par&#39;).insert(1,&#39;Date réception&#39;).insert(2,&#39;Description&#39;)
-</span>        <span class='id identifier rubyid_headers'>headers</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>id</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Affaire</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>client</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>chargé d\&#39;affaire</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>récolté par</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Date réception</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Description</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='op'>+</span><span class='id identifier rubyid_poll'>poll</span><span class='period'>.</span><span class='id identifier rubyid_get_names'>get_names</span>
-        <span class='id identifier rubyid_attributes'>attributes</span><span class='op'>=</span><span class='id identifier rubyid_poll'>poll</span><span class='period'>.</span><span class='id identifier rubyid_fetch_attributes'>fetch_attributes</span>
-        <span class='id identifier rubyid_csv'>csv</span> <span class='op'>=</span> <span class='const'>CSV</span><span class='period'>.</span><span class='id identifier rubyid_generate'>generate</span><span class='lparen'>(</span><span class='label'>headers:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='symbol'>:col_sep</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
-          <span class='id identifier rubyid_c'>c</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_headers'>headers</span>
-          <span class='id identifier rubyid_allanswers'>allanswers</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='op'>|</span>
-            <span class='id identifier rubyid_casenum'>casenum</span> <span class='op'>=</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>[a-zA-Z][0-9]{1,2}[a-zA-Z]{1,2}[0-9]{1,4}</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_case_number'>case_number</span><span class='rparen'>)</span>
-            <span class='id identifier rubyid_client'>client</span> <span class='op'>=</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>Client: ([^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4})</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_case_number'>case_number</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
-            <span class='id identifier rubyid_w'>w</span><span class='op'>=</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>Chargé d&#39;affaire: ([^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4})</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_case_number'>case_number</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
-            <span class='comment'>#c &lt;&lt; users.values_at(a.user_id) + a.attributes.values_at(*attributes)
-</span>            <span class='id identifier rubyid_closed'>closed</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
-            <span class='kw'>for</span> <span class='id identifier rubyid_i'>i</span> <span class='kw'>in</span> <span class='lparen'>(</span><span class='int'>1</span><span class='op'>..</span><span class='id identifier rubyid_poll'>poll</span><span class='period'>.</span><span class='id identifier rubyid_closed_names_number'>closed_names_number</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='rparen'>)</span>
-              <span class='id identifier rubyid_closed'>closed</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_a'>a</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>closed</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_i'>i</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
-            <span class='kw'>end</span>
-            <span class='id identifier rubyid_open'>open</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
-            <span class='kw'>for</span> <span class='id identifier rubyid_i'>i</span> <span class='kw'>in</span> <span class='lparen'>(</span><span class='int'>1</span><span class='op'>..</span><span class='id identifier rubyid_poll'>poll</span><span class='period'>.</span><span class='id identifier rubyid_open_names_number'>open_names_number</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='rparen'>)</span>
-              <span class='id identifier rubyid_open'>open</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_a'>a</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>open</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_i'>i</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
-            <span class='kw'>end</span>
-            <span class='id identifier rubyid_c'>c</span> <span class='op'>&lt;&lt;</span> <span class='lbracket'>[</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span><span class='id identifier rubyid_casenum'>casenum</span><span class='comma'>,</span><span class='id identifier rubyid_client'>client</span><span class='comma'>,</span><span class='id identifier rubyid_w'>w</span><span class='rbracket'>]</span><span class='op'>+</span><span class='id identifier rubyid_users'>users</span><span class='period'>.</span><span class='id identifier rubyid_values_at'>values_at</span><span class='lparen'>(</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span><span class='op'>+</span><span class='lbracket'>[</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_updated_at'>updated_at</span><span class='comma'>,</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_case_number'>case_number</span><span class='rbracket'>]</span><span class='op'>+</span><span class='id identifier rubyid_closed'>closed</span><span class='op'>+</span><span class='id identifier rubyid_open'>open</span>             
-          <span class='kw'>end</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:all</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='op'>==</span><span class='int'>1</span>
+          <span class='id identifier rubyid_sqlexp'>sqlexp</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>satisfactions.folder_id &lt; ?</span><span class='tstring_end'>&quot;</span></span>
+          <span class='id identifier rubyid_allanswers'>allanswers</span><span class='op'>=</span><span class='id identifier rubyid_poll'>poll</span><span class='period'>.</span><span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='period'>.</span><span class='id identifier rubyid_joins'>joins</span><span class='lparen'>(</span><span class='symbol'>:user</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>satisfactions.*,users.email as email</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_sqlexp'>sqlexp</span><span class='comma'>,</span><span class='int'>0</span><span class='rparen'>)</span>
+        <span class='kw'>else</span>
+          <span class='id identifier rubyid_sqlexp'>sqlexp</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>satisfactions.folder_id &lt; ? and satisfactions.poll_id=?</span><span class='tstring_end'>&quot;</span></span>
+          <span class='id identifier rubyid_allanswers'>allanswers</span><span class='op'>=</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='period'>.</span><span class='id identifier rubyid_joins'>joins</span><span class='lparen'>(</span><span class='symbol'>:user</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>satisfactions.*,users.email as email</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_sqlexp'>sqlexp</span><span class='comma'>,</span><span class='int'>0</span><span class='comma'>,</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:poll_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
         <span class='kw'>end</span>
+        <span class='comment'># generate csv file with the csv method of the poll model, using the satisfactions active records
+</span>        <span class='id identifier rubyid_csv'>csv</span> <span class='op'>=</span> <span class='id identifier rubyid_poll'>poll</span><span class='period'>.</span><span class='id identifier rubyid_csv'>csv</span><span class='lparen'>(</span><span class='id identifier rubyid_allanswers'>allanswers</span><span class='rparen'>)</span>
         <span class='id identifier rubyid_send_data'>send_data</span> <span class='id identifier rubyid_csv'>csv</span><span class='comma'>,</span> <span class='label'>filename:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>polls-</span><span class='embexpr_beg'>#{</span><span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_zone'>zone</span><span class='period'>.</span><span class='id identifier rubyid_today'>today</span><span class='embexpr_end'>}</span><span class='tstring_content'>.csv</span><span class='tstring_end'>&quot;</span></span>
       <span class='kw'>else</span> 
-        <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='lbrace'>{</span><span class='label'>poll:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>inexisting poll</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
+        <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='lbrace'>{</span><span class='label'>poll:</span> <span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.inexisting</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span>
       <span class='kw'>end</span>
     <span class='kw'>else</span>
-      <span class='ivar'>@surveys</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Survey.html" title="Survey (class)">Survey</a></span></span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_order'>order</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id DESC</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='semicolon'>;</span>
-      <span class='id identifier rubyid_results'>results</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
-      <span class='ivar'>@surveys</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='comma'>,</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
-         <span class='id identifier rubyid_results'>results</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='op'>=</span><span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_as_json'>as_json</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>owner_mel</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_users'>users</span><span class='lbracket'>[</span><span class='id identifier rubyid_s'>s</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_tab'>tab</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_tab'>tab</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:groups</span><span class='rbracket'>]</span>
+        <span class='id identifier rubyid_tab'>tab</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_tab'>tab</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>users.groups like ?</span><span class='tstring_end'>&quot;</span></span>
+        <span class='id identifier rubyid_tab'>tab</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:groups</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>%</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
       <span class='kw'>end</span>
-      <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_results'>results</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:time_start</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:time_end</span><span class='rbracket'>]</span>
+        <span class='id identifier rubyid_tab'>tab</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_tab'>tab</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> and surveys.created_at BETWEEN ? AND ?</span><span class='tstring_end'>&quot;</span></span>
+        <span class='id identifier rubyid_tab'>tab</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:time_start</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_tab'>tab</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:time_end</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+      <span class='comment'># check if the sql &#39;where&#39; instruction begin by &quot; and &quot; and if yes truncate it
+</span>      <span class='kw'>if</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\sand\s</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_tab'>tab</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_tab'>tab</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_gsub!'>gsub!</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\sand\s</span><span class='regexp_end'>/</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_tab'>tab</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='op'>&gt;</span><span class='int'>0</span>
+        <span class='id identifier rubyid_surveys'>surveys</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Survey.html" title="Survey (class)">Survey</a></span></span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_joins'>joins</span><span class='lparen'>(</span><span class='symbol'>:user</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>surveys.*, users.email as owner_mel</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_tab'>tab</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_order'>order</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id DESC</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_surveys'>surveys</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Survey.html" title="Survey (class)">Survey</a></span></span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_joins'>joins</span><span class='lparen'>(</span><span class='symbol'>:user</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>surveys.*, users.email as owner_mel</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_order'>order</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id DESC</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_surveys'>surveys</span>
     <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -637,8 +718,8 @@ answers for the given poll_id</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>check if user is an affiliated team member from the domain component of its
-email address</p>
+<p>check if user is admin or is an affiliated team member from the domain
+component of its email address</p>
 
 
   </div>
@@ -664,7 +745,7 @@ email address</p>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inteam'>inteam</span>
     <span class='id identifier rubyid_authenticate_user!'>authenticate_user!</span>
-    <span class='kw'>unless</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_belongs_to_team?'>belongs_to_team?</span>
+    <span class='kw'>unless</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_belongs_to_team?'>belongs_to_team?</span> <span class='op'>||</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_is_admin?'>is_admin?</span>
       <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_root_url'>root_url</span>
     <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -685,7 +766,7 @@ email address</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>initiate a new survey - actually open the surveys control panel dor the
+<p>initiate a new survey - actually open the surveys control panel for the
 current user</p>
 
 
@@ -700,12 +781,12 @@ current user</p>
       <pre class="lines">
 
 
-101
-102
-103</pre>
+122
+123
+124</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 101</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 122</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_new'>new</span>
     <span class='ivar'>@survey</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Survey.html" title="Survey (class)">Survey</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -743,41 +824,89 @@ survey</p>
       <pre class="lines">
 
 
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97</pre>
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 82</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 98</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_show'>show</span>
     <span class='id identifier rubyid_survey'>survey</span><span class='op'>=</span><span class='const'>Survey</span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_survey'>survey</span>
       <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:email</span><span class='rbracket'>]</span><span class='op'>==</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>send</span><span class='tstring_end'>&quot;</span></span>
         <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="SurveyClientJob.html" title="SurveyClientJob (class)">SurveyClientJob</a></span></span><span class='period'>.</span><span class='id identifier rubyid_perform_now'>perform_now</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-          <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Le lien vers l&#39;enquête a été envoyé par mel à </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_survey'>survey</span><span class='period'>.</span><span class='id identifier rubyid_client_mel'>client_mel</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+          <span class='id identifier rubyid_message'>message</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.mail_sent_to</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_survey'>survey</span><span class='period'>.</span><span class='id identifier rubyid_client_mel'>client_mel</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+          <span class='kw'>if</span> <span class='id identifier rubyid_survey'>survey</span><span class='period'>.</span><span class='id identifier rubyid_update_metas'>update_metas</span>
+            <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='id identifier rubyid_message'>message</span>
+          <span class='kw'>else</span>
+            <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_message'>message</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.reminders_counter_not_updated</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+          <span class='kw'>end</span>
         <span class='kw'>else</span>
-          <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Erreur : le lien vers l&#39;enquête n&#39;a pas pu être envoyé par mel à </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_survey'>survey</span><span class='period'>.</span><span class='id identifier rubyid_client_mel'>client_mel</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+          <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.failure</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'> : </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.could_not_send_mail_to</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_survey'>survey</span><span class='period'>.</span><span class='id identifier rubyid_client_mel'>client_mel</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
         <span class='kw'>end</span>
       <span class='kw'>else</span>
         <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_survey'>survey</span>
       <span class='kw'>end</span>
     <span class='kw'>else</span>
-      <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>cet élément n&#39;existe pas</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_render'>render</span> <span class='label'>plain:</span> <span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.inexisting</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
     <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="update-instance_method">
+  
+    #<strong>update</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+28
+29
+30
+31
+32
+33
+34</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/controllers/surveys_controller.rb', line 28</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_update'>update</span>
+  <span class='ivar'>@survey</span><span class='op'>=</span><span class='const'><span class='object_link'><a href="Survey.html" title="Survey (class)">Survey</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='ivar'>@survey</span><span class='period'>.</span><span class='id identifier rubyid_update'>update</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_require'>require</span><span class='lparen'>(</span><span class='symbol'>:survey</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_permit'>permit</span><span class='lparen'>(</span><span class='symbol'>:description</span><span class='comma'>,</span><span class='symbol'>:by</span><span class='comma'>,</span><span class='symbol'>:client_mel</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.survey</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> &lt;br&gt; </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.updated</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_render'>render</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>edit</span><span class='tstring_end'>&#39;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -789,7 +918,7 @@ survey</p>
 </div>
 
       <div id="footer">
-  Generated on Sun Apr 14 10:40:49 2019 by
+  Generated on Tue Aug 20 10:01:47 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

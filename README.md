@@ -1,4 +1,4 @@
-# A social network tool with your clients for your business
+# A business social network tool dedicated to quality management
 
 This application is a SharingFile System with surveys management facilities
 

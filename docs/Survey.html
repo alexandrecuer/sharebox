@@ -121,6 +121,41 @@
 
 
 
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#update_metas-instance_method" title="#update_metas (instance method)">#<strong>update_metas</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>updates the metas after a survey has been successfully sent to customer.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
 
   
   
@@ -129,11 +164,86 @@
   
   
   
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="update_metas-instance_method">
+  
+    #<strong>update_metas</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>updates the metas after a survey has been successfully sent to customer</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/survey.rb', line 16</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_update_metas'>update_metas</span>
+  <span class='id identifier rubyid_metas'>metas</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_metas'>metas</span>
+    <span class='id identifier rubyid_metas'>metas</span><span class='op'>=</span><span class='const'>ActiveSupport</span><span class='op'>::</span><span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_decode'>decode</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_metas'>metas</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_metas'>metas</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>sent</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>+=</span><span class='int'>1</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_metas'>metas</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>sent</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>=</span><span class='int'>1</span>
+  <span class='kw'>end</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_metas'>metas</span><span class='op'>=</span><span class='const'>ActiveSupport</span><span class='op'>::</span><span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_encode'>encode</span><span class='lparen'>(</span><span class='id identifier rubyid_metas'>metas</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>*************adjusting surveys </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'> metas to </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_metas'>metas</span><span class='embexpr_end'>}</span><span class='tstring_content'>***************</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+    <span class='id identifier rubyid_result'>result</span><span class='op'>=</span><span class='kw'>true</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_result'>result</span><span class='op'>=</span><span class='kw'>false</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_result'>result</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
 
 </div>
 
       <div id="footer">
-  Generated on Sun Apr 14 10:40:48 2019 by
+  Generated on Tue Aug 20 10:01:46 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

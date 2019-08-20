@@ -230,13 +230,21 @@ fills the share_user_id field in the table shared_folders</p>
 
 26
 27
-28</pre>
+28
+29
+30
+31
+32</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/models/shared_folder.rb', line 26</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_fetch_user_id_associated_to_email'>fetch_user_id_associated_to_email</span>
-  <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="User.html" title="User (class)">User</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>email:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_share_email'>share_email</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_ids'>ids</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_shemail'>shemail</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_share_email'>share_email</span>
+  <span class='kw'>if</span> <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_configuration'>configuration</span><span class='period'>.</span><span class='id identifier rubyid_sharebox'>sharebox</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>downcase_email_search_autocomplete</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_shemail'>shemail</span><span class='op'>=</span><span class='id identifier rubyid_shemail'>shemail</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="User.html" title="User (class)">User</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>email:</span> <span class='id identifier rubyid_shemail'>shemail</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_ids'>ids</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -302,7 +310,7 @@ fills the share_user_id field in the table shared_folders</p>
 </div>
 
       <div id="footer">
-  Generated on Sun Apr 14 10:40:48 2019 by
+  Generated on Tue Aug 20 10:01:46 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>
