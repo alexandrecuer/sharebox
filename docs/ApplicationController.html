@@ -114,9 +114,8 @@
 
 </div><div id="subclasses">
   <h2>Direct Known Subclasses</h2>
-  <p class="children"><span class='object_link'><a href="AssetsController.html" title="AssetsController (class)">AssetsController</a></span>, <span class='object_link'><a href="ClientsController.html" title="ClientsController (class)">ClientsController</a></span>, <span class='object_link'><a href="FoldersController.html" title="FoldersController (class)">FoldersController</a></span>, <span class='object_link'><a href="HelpController.html" title="HelpController (class)">HelpController</a></span>, <span class='object_link'><a href="HomeController.html" title="HomeController (class)">HomeController</a></span>, <span class='object_link'><a href="PollsController.html" title="PollsController (class)">PollsController</a></span>, <span class='object_link'><a href="SatisfactionsController.html" title="SatisfactionsController (class)">SatisfactionsController</a></span>, <span class='object_link'><a href="SharedFoldersController.html" title="SharedFoldersController (class)">SharedFoldersController</a></span>, <span class='object_link'><a href="SurveysController.html" title="SurveysController (class)">SurveysController</a></span>, <span class='object_link'><a href="UsersController.html" title="UsersController (class)">UsersController</a></span></p>
+  <p class="children"><span class='object_link'><a href="AdminController.html" title="AdminController (class)">AdminController</a></span>, <span class='object_link'><a href="AssetsController.html" title="AssetsController (class)">AssetsController</a></span>, <span class='object_link'><a href="ClientsController.html" title="ClientsController (class)">ClientsController</a></span>, <span class='object_link'><a href="FoldersController.html" title="FoldersController (class)">FoldersController</a></span>, <span class='object_link'><a href="HelpController.html" title="HelpController (class)">HelpController</a></span>, <span class='object_link'><a href="HomeController.html" title="HomeController (class)">HomeController</a></span>, <span class='object_link'><a href="PollsController.html" title="PollsController (class)">PollsController</a></span>, <span class='object_link'><a href="SatisfactionsController.html" title="SatisfactionsController (class)">SatisfactionsController</a></span>, <span class='object_link'><a href="SharedFoldersController.html" title="SharedFoldersController (class)">SharedFoldersController</a></span>, <span class='object_link'><a href="SurveysController.html" title="SurveysController (class)">SurveysController</a></span>, <span class='object_link'><a href="UsersController.html" title="UsersController (class)">UsersController</a></span></p>
 </div>
-
 
 
 
@@ -125,11 +124,118 @@
 
 
   
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#check_lang-instance_method" title="#check_lang (instance method)">#<strong>check_lang</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>this fix the locale by reading the lang parameter for the current user
+called each time a controller is called.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="check_lang-instance_method">
+  
+    #<strong>check_lang</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>this fix the locale by reading the lang parameter for the current user
+called each time a controller is called</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/controllers/application_controller.rb', line 20</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_check_lang'>check_lang</span>
+  <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>----------------------------------&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><span class='embexpr_beg'>#{</span><span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_locale'>locale</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_impl_lang'>impl_lang</span><span class='op'>=</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>fr</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>en</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_current_user'>current_user</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_impl_lang'>impl_lang</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span><span class='rparen'>)</span>
+      <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_locale'>locale</span><span class='op'>=</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_lang'>lang</span>
+      <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>******************************</span><span class='embexpr_beg'>#{</span><span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_locale'>locale</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>locale</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>a specific locale has been specified in the url</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_locale'>locale</span><span class='op'>=</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:locale</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
 
 </div>
 
       <div id="footer">
-  Generated on Sun Apr 14 10:40:49 2019 by
+  Generated on Tue Aug 20 10:01:47 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>

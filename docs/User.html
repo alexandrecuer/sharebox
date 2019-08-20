@@ -118,6 +118,65 @@
 
 
 
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#has_shares-instance_method" title="#has_shares (instance method)">#<strong>has_shares</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute has_shares.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#is_sharing-instance_method" title="#is_sharing (instance method)">#<strong>is_sharing</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute is_sharing.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
 
 
 
@@ -499,6 +558,97 @@ first user opening an account<br> you can use db/seeds.rb as an alternative
   
   
   
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="has_shares=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="has_shares-instance_method">
+  
+    #<strong>has_shares</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute has_shares</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+28
+29
+30</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 28</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_has_shares'>has_shares</span>
+  <span class='ivar'>@has_shares</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="is_sharing=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="is_sharing-instance_method">
+  
+    #<strong>is_sharing</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute is_sharing</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26
+27
+28</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 26</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_is_sharing'>is_sharing</span>
+  <span class='ivar'>@is_sharing</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
 
   <div id="class_method_details" class="method_details_list">
     <h2>Class Method Details</h2>
@@ -530,12 +680,12 @@ first user opening an account<br> you can use db/seeds.rb as an alternative
       <pre class="lines">
 
 
-231
-232
-233</pre>
+238
+239
+240</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 231</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 238</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_search'>search</span><span class='lparen'>(</span><span class='id identifier rubyid_term'>term</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>LOWER(email) LIKE :term</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>term:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_term'>term</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='embexpr_end'>}</span><span class='tstring_content'>%</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -590,16 +740,16 @@ first user opening an account<br> you can use db/seeds.rb as an alternative
       <pre class="lines">
 
 
-32
-33
-34
-35
-36
-37
-38</pre>
+38
+39
+40
+41
+42
+43
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 38</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_belongs_to_team?'>belongs_to_team?</span>
   <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='kw'>true</span>
@@ -641,12 +791,6 @@ an email to the admin</p>
       <pre class="lines">
 
 
-56
-57
-58
-59
-60
-61
 62
 63
 64
@@ -664,10 +808,16 @@ an email to the admin</p>
 76
 77
 78
-79</pre>
+79
+80
+81
+82
+83
+84
+85</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 56</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 62</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_complete_suid'>complete_suid</span>
   <span class='ivar'>@shared_folders</span><span class='op'>=</span><span class='const'><span class='object_link'><a href="SharedFolder.html" title="SharedFolder (class)">SharedFolder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>share_user_id IS NULL</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -725,16 +875,16 @@ SQL request</p>
       <pre class="lines">
 
 
-157
-158
-159
-160
-161
-162
-163</pre>
+164
+165
+166
+167
+168
+169
+170</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 157</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 164</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_all_emails'>get_all_emails</span>
   <span class='id identifier rubyid_h'>h</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -787,13 +937,13 @@ SQL request</p>
       <pre class="lines">
 
 
-176
-177
-178
-179</pre>
+183
+184
+185
+186</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 176</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 183</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_asset_ownership?'>has_asset_ownership?</span><span class='lparen'>(</span><span class='id identifier rubyid_asset'>asset</span><span class='rparen'>)</span>
   <span class='comment'>#return true if self.assets.include?(asset)
@@ -845,13 +995,6 @@ a satisfaction list record is given, do not burn a SQL request</p>
       <pre class="lines">
 
 
-209
-210
-211
-212
-213
-214
-215
 216
 217
 218
@@ -863,10 +1006,17 @@ a satisfaction list record is given, do not burn a SQL request</p>
 224
 225
 226
-227</pre>
+227
+228
+229
+230
+231
+232
+233
+234</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 209</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 216</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_completed_satisfaction?'>has_completed_satisfaction?</span><span class='lparen'>(</span><span class='id identifier rubyid_folder'>folder</span><span class='comma'>,</span> <span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_satisfactions'>satisfactions</span>
@@ -931,15 +1081,15 @@ a satisfaction list record is given, do not burn a SQL request</p>
       <pre class="lines">
 
 
-167
-168
-169
-170
-171
-172</pre>
+174
+175
+176
+177
+178
+179</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 167</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 174</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_ownership?'>has_ownership?</span><span class='lparen'>(</span><span class='id identifier rubyid_folder'>folder</span><span class='rparen'>)</span>
   <span class='comment'># not sure but include? does not burn a SQL request
@@ -995,12 +1145,6 @@ the subfolder QUITE SQL COSTLY - do not use heavily - DO NOT USE IN LOOPS
       <pre class="lines">
 
 
-86
-87
-88
-89
-90
-91
 92
 93
 94
@@ -1052,10 +1196,16 @@ the subfolder QUITE SQL COSTLY - do not use heavily - DO NOT USE IN LOOPS
 140
 141
 142
-143</pre>
+143
+144
+145
+146
+147
+148
+149</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 86</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 92</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_shared_access?'>has_shared_access?</span><span class='lparen'>(</span><span class='id identifier rubyid_folder'>folder</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>shared_access_testing...</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -1160,12 +1310,12 @@ admin users</p>
       <pre class="lines">
 
 
-183
-184
-185</pre>
+190
+191
+192</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 183</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 190</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_shared_folders_from_others?'>has_shared_folders_from_others?</span>
   <span class='kw'>return</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_shared_folders_by_others'>shared_folders_by_others</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='op'>&gt;</span><span class='int'>0</span>
@@ -1215,19 +1365,21 @@ user<br> a low cost method using the metadatas</p>
       <pre class="lines">
 
 
-148
-149
-150
-151
-152</pre>
+154
+155
+156
+157
+158
+159</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 148</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 154</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_su_access?'>has_su_access?</span><span class='lparen'>(</span><span class='id identifier rubyid_folder'>folder</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>superuser_access_testing...</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_folders'>folders</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_folder'>folder</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_folder'>folder</span><span class='period'>.</span><span class='id identifier rubyid_get_meta'>get_meta</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>swarmed_to</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='op'>==</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+  <span class='kw'>return</span> <span class='kw'>false</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1273,12 +1425,12 @@ user<br> a low cost method using the metadatas</p>
       <pre class="lines">
 
 
-189
-190
-191</pre>
+196
+197
+198</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 189</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 196</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_admin?'>is_admin?</span>
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_statut'>statut</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>admin</span><span class='tstring_end'>&quot;</span></span>
@@ -1327,12 +1479,12 @@ user<br> a low cost method using the metadatas</p>
       <pre class="lines">
 
 
-195
-196
-197</pre>
+202
+203
+204</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 195</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 202</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_private?'>is_private?</span>
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_statut'>statut</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>private</span><span class='tstring_end'>&quot;</span></span>
@@ -1381,12 +1533,12 @@ user<br> a low cost method using the metadatas</p>
       <pre class="lines">
 
 
-201
-202
-203</pre>
+208
+209
+210</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 201</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 208</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_public?'>is_public?</span>
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_statut'>statut</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>public</span><span class='tstring_end'>&quot;</span></span>
@@ -1425,15 +1577,15 @@ first user opening an account<br> you can use db/seeds.rb as an alternative
       <pre class="lines">
 
 
-45
-46
-47
-48
-49
-50</pre>
+51
+52
+53
+54
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 45</span>
+      <pre class="code"><span class="info file"># File 'app/models/user.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_admin'>set_admin</span>
   <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="" title="User (class)">User</a></span></span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>==</span> <span class='int'>1</span>
@@ -1451,7 +1603,7 @@ first user opening an account<br> you can use db/seeds.rb as an alternative
 </div>
 
       <div id="footer">
-  Generated on Sun Apr 14 10:40:48 2019 by
+  Generated on Tue Aug 20 10:01:45 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.3).
 </div>
