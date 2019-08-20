@@ -7,6 +7,44 @@ class SatisfactionsController < ApplicationController
   DATE_REG_EXP=/([0-9]{4}-[0-9]{2}-[0-9]{2})/
   
   ##
+  # give the ability to an admin to edit a feedback
+  def edit
+    unless current_user.is_admin?
+      flash[:notice] = t('sb.no_permission')
+      redirect_to root_url
+    else
+      unless @satisfaction=Satisfaction.find_by_id(params[:id])
+        flash[:notice] = "#{t('sb.inexisting_satisfaction')} #{params[:id]}"
+        redirect_to root_url
+      else
+        @poll = Poll.find_by_id(@satisfaction.poll_id)
+      end
+    end
+  end
+  
+  ##
+  # proceed to the update following an admin order
+  def update
+    unless current_user.is_admin?
+      flash[:notice] = t('sb.no_permission')
+      redirect_to root_url
+    else
+      unless @satisfaction=Satisfaction.find_by_id(params[:id])
+        flash[:notice] = "#{t('sb.inexisting_satisfaction')} #{params[:id]}"
+        redirect_to root_url
+      else
+        if @satisfaction.update(satisfaction_params)
+          flash[:notice]=t('sb.updated')
+        else
+          flash[:notice]=t('sb.not_updated')
+        end
+        @poll = Poll.find_by_id(@satisfaction.poll_id)
+        render 'edit'
+      end
+    end
+  end
+  
+  ##
   # show / update meta datas on satisfactions
   # to upgrade from deprecated versions of colibri (v0 or v1)
   def feedback_metas
@@ -197,7 +235,7 @@ class SatisfactionsController < ApplicationController
         else
             results["affaire"]=satisfaction.case_number
         end
-        results["date"]=satisfaction.updated_at
+        results["date"]=satisfaction.created_at
         poll=Poll.find_by_id(satisfaction.poll_id)
         open=poll.hash_open
         closed=poll.hash_closed
@@ -441,7 +479,7 @@ class SatisfactionsController < ApplicationController
       satisfactions.each_with_index do |s,i|
         results[i]={}
         results[i]["id"]=s.id
-        results[i]["date"]=s.updated_at
+        results[i]["date"]=s.created_at
         results[i]["affaire"]=s.case_number
         results[i]["folder_id"]=s.folder_id
         results[i]["poll_id"]=s.poll_id

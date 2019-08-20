@@ -79,7 +79,7 @@ class Poll < ApplicationRecord
         for i in (1..self.open_names_number.to_i)
           open << a["open#{i}"]
         end
-        c << [a.id,casenum,client,w]+[a.email,a.updated_at,a.case_number]+closed+open             
+        c << [a.id,casenum,client,w]+[a.email,a.created_at,a.case_number]+closed+open             
       end
     end
     csv  

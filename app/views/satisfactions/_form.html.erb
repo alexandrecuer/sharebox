@@ -15,6 +15,13 @@
         <% end %>
     <% end %>
 
+<% 
+if params[:action] != "edit" && !@satisfaction.new_record?
+  disabled=true
+else
+  disabled=false
+end
+%>
 <div class="container">
     <div class="row align-items-center justify-content-left">
     <% @arrayclosed = @poll.get_closed_names %>
@@ -26,16 +33,16 @@
                 <div class="stars">
                   <% a = "closed" + i.to_s %>
 
-                  <%= f.radio_button a.to_sym, '4', disabled: !@satisfaction.new_record? %>
+                  <%= f.radio_button a.to_sym, '4', disabled: disabled %>
                       <label class="star-4" for="satisfaction_closed<%= i %>_4"></label>
 
-                  <%= f.radio_button a.to_sym, '3', disabled: !@satisfaction.new_record? %>
+                  <%= f.radio_button a.to_sym, '3', disabled: disabled %>
                       <label class="star-3" for="satisfaction_closed<%= i %>_3"></label>
                       
-                  <%= f.radio_button a.to_sym, '2', disabled: !@satisfaction.new_record? %>
+                  <%= f.radio_button a.to_sym, '2', disabled: disabled %>
                       <label class="star-2" for="satisfaction_closed<%= i %>_2"></label>
 
-                  <%= f.radio_button a.to_sym, '1', disabled: !@satisfaction.new_record? %>
+                  <%= f.radio_button a.to_sym, '1', disabled: disabled %>
                       <label class="star-1" for="satisfaction_closed<%= i %>_1"></label>
                 </div>  
               </div>
@@ -63,6 +70,8 @@
 
 	<% if @satisfaction.new_record? %>
     	<%= f.submit t('sb.record_satisfaction'), class: 'btn' %>
+    <% elsif params[:action]=="edit" %>
+        <%= f.submit t('sb.save_mod'), class: 'btn' %>
     <% end %>
     <br><br>
 <% end %>
