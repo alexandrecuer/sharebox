@@ -17,4 +17,3 @@ message="COLIBRI VERSION GOING TO RUN is #{CONF["version"]}"
 #color_code=33
 #puts("\e[#{color_code}m#{message}\e[0m")
 puts("\e[33m#{message}\e[0m")
-puts(Rails.configuration.autoload_paths)
