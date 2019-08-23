@@ -126,4 +126,6 @@ Rails.application.configure do
     }
   end
   
+  config.dependency_loading = true
+  
 end
