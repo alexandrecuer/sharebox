@@ -26,5 +26,9 @@ module Sharebox
     
     config_path="#{Rails.root}/config/config.yml"
     config.sharebox = YAML.load_file(config_path)["conf"]
+    
+    # for modules auto integration
+    #config.autoload_paths += Dir["#{Rails.root}/lib/**/"]
+    config.eager_load_paths << "#{Rails.root}/lib"
   end
 end

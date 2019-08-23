@@ -31,9 +31,9 @@ class Satisfaction < ApplicationRecord
     end
     result=[]
     result.push(title)
-    result.push(" - Client: ")
+    result.push(" - #{Validations.client_pattern}: ")
     result.push(client.email)
-    result.push(" - Chargé d'affaire: ")
+    result.push(" - #{Validations.project_manager_pattern}: ")
     result.push(owner.email)
     result
   end

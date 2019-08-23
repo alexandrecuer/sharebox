@@ -6,7 +6,7 @@
 /*eslint no-undef: "error"*/
 
 //$(".carousel2").carousel();
-var date = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
+var date = sb["date_reg_exp"];
 
 //generate the next and previous buttons to navigate through the carousel
 function carouselnav(carName)

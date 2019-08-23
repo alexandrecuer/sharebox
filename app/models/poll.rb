@@ -12,6 +12,8 @@ class Poll < ApplicationRecord
   has_many :satisfactions, :dependent=> :destroy
   
   has_many :surveys, :dependent=> :destroy
+  
+  # uses validations module
 
   ##
   # Return a table with all closed questions
@@ -68,9 +70,12 @@ class Poll < ApplicationRecord
     csv = CSV.generate(headers: true, :col_sep => ';') do |c|
       c << headers
       satisfactions.each do |a|
-        casenum = /[a-zA-Z][0-9]{1,2}[a-zA-Z]{1,2}[0-9]{1,4}/.match(a.case_number)
-        client = /Client: (([^\W])([a-zA-Z0-9_\-]+)*(\.[a-zA-Z0-9_\-]+)*\@([a-zA-Z0-9_\-]+)(\.[a-zA-Z0-9_\-]+)*\.([a-zA-Z]{2,4}))/.match(a.case_number)[1].to_s
-        w=/Chargé d'affaire: (([^\W])([a-zA-Z0-9_\-]+)*(\.[a-zA-Z0-9_\-]+)*\@([a-zA-Z0-9_\-]+)(\.[a-zA-Z0-9_\-]+)*\.([a-zA-Z]{2,4}))/.match(a.case_number)[1].to_s
+        # ****************************************************************************
+        # regular expression check !!!!!
+        casenum = Validations.project_id_reg_exp.match(a.case_number)
+        client = Validations.extract_client(a.case_number)
+        w = Validations.extract_project_manager(a.case_number)
+        # ****************************************************************************
         closed=[]
         for i in (1..self.closed_names_number.to_i)
           closed << a["closed#{i}"]
@@ -120,8 +125,6 @@ class Poll < ApplicationRecord
   # time_start and time_end should be in format AAAA-MM-DD 00:00:00
   def count_sent_surveys(time_start=nil, time_end=nil, groups=nil)
     puts("BEGIN________________________________count_sent_surveys method poll model")
-    # DATE could be a constant
-    date = /([0-9]{4}-[0-9]{2}-[0-9]{2})/
     # shares to a TEAM email do not count 
     if ENV['TEAM']
       domain=ENV.fetch('TEAM')
@@ -147,7 +150,9 @@ class Poll < ApplicationRecord
     #surveys basics
     sur_req[0]=""
     #complements :-)
-    if date.match(time_start) && date.match(time_end)
+    if Validations.date_reg_exp.match(time_start) && Validations.date_reg_exp.match(time_end)
+      time_start = Validations.date_reg_exp.match(time_start)[0]
+      time_end = Validations.date_reg_exp.match(time_end)[0]
       sf_expr.push("shared_folders.created_at BETWEEN ? and ?")
       sf_req.push(time_start)
       sf_req.push(time_end)
@@ -184,34 +189,6 @@ class Poll < ApplicationRecord
     nb3=self.surveys.joins(:user).where(sur_req).count
     puts("satis launched in the folders/files system:#{nb1} satis collected out of the folders/files system:#{nb2} pending surveys #{nb3}")
     nb=nb1+nb2+nb3
-    puts("********************************************************")
-    #unless time_start && time_end
-    #  nb=SharedFolder.joins(:folder).where("folders.poll_id = ? and shared_folders.share_email not like ?",self.id,"%#{domain}%").count
-    #  nb+=Satisfaction.where("folder_id < ? and poll_id= ?", 0, self.id).count
-    #  nb+=Survey.where(poll_id: self.id).count
-    #else
-    #  
-    #  if date.match(time_start) && date.match(time_end)
-    #    time_start="#{date.match(time_start)} 00:00:00"
-    #    time_end="#{date.match(time_end)} 00:00:00"
-    #    puts("*******enumerating all surveys for poll on data range #{time_start} to #{time_end}*******")
-    #    unless groups
-    #      request="folders.poll_id = ? and shared_folders.share_email not like ? and shared_folders.created_at BETWEEN ? and ?"
-    #      nb=SharedFolder.joins(:folder).where(request,self.id,"%#{domain}%", time_start, time_end).count
-    #      request="folder_id < ? and created_at BETWEEN ? and ?"
-    #      nb+=self.satisfactions.where(request, 0, time_start, time_end).count
-    #      request="poll_id = ? and created_at BETWEEN ? and ?"
-    #      nb+=Survey.where(request, self.id, time_start, time_end).count
-    #    else
-    #      request="folders.poll_id = ? and shared_folders.share_email not like ? and shared_folders.created_at BETWEEN ? and ? and users.groups like ?"
-    #      nb=SharedFolder.joins(:folder).joins(:user).where(request,self.id,"%#{domain}%", time_start, time_end, "%#{groups}%").count
-    #      request="folder_id < ? and satisfactions.created_at BETWEEN ? and ? and users.groups like ?"
-    #      nb+=self.satisfactions.joins(:user).where(request, 0, time_start, time_end, "%#{groups}%").count
-    #      request="poll_id = ? and surveys.created_at BETWEEN ? and ? and users.groups like ?"
-    #      nb+=Survey.joins(:user).where(request, self.id, time_start, time_end, "%#{groups}%").count
-    #    end
-    #  end
-    #end
     puts("END__________________________________count_sent_surveys method poll model")
     nb
   end
