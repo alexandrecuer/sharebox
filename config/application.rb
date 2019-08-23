@@ -27,6 +27,8 @@ module Sharebox
     config.sharebox = YAML.load_file(config_path)["conf"]
     
     # for modules auto integration
-    config.autoload_paths += %W(#{config.root}/lib)
+    #config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    config.autoload_paths += Dir["#{config.root}/lib/validations.rb"]
   end
 end
