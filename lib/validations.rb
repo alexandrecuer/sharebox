@@ -3,7 +3,11 @@
 # all what is related to regular expression checking should be concentrated here
 module Validations
 
-  MEL = /([^\W])([a-zA-Z0-9_\-]+)*(\.[a-zA-Z0-9_\-]+)*\@([a-zA-Z0-9_\-]+)(\.[a-zA-Z0-9_\-]+)*([\.]{1})([a-zA-Z]{2})/
+  # could be better
+  # the domain part can be : developpement-durable.gouv.fr or something.fr or wanadoo.fr or a.something@gmail.com
+  # so after the last dot, we have 2 or 3 characters
+  # all should be downcased but we accept capitals
+  MEL = /([^\W])([a-zA-Z0-9_\-]+)*(\.[a-zA-Z0-9_\-]+)*\@([a-zA-Z0-9_\-]+)(\.[a-zA-Z0-9_\-]+)*([\.]{1})([a-zA-Z]{2,3})/
   CUSTOMER = "Client"
   PROJECT_MANAGER = "Chargé d'affaire"
   DATE = /([0-9]{4}-[0-9]{2}-[0-9]{2})/
