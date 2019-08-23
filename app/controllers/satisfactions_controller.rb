@@ -4,7 +4,7 @@
 
 class SatisfactionsController < ApplicationController
   
-  DATE_REG_EXP=/([0-9]{4}-[0-9]{2}-[0-9]{2})/
+  # uses validations module
   
   ##
   # give the ability to an admin to edit a feedback
@@ -62,7 +62,7 @@ class SatisfactionsController < ApplicationController
         satisfactions=Satisfaction.where("folder_id > ?",0)
         satisfactions.each do |sat|
           meta=sat.calc_meta
-          sat.case_number=meta.join("")#gentitle(meta[0],meta[1],meta[2])
+          sat.case_number=meta.join("")
           unless sat.save
             log="#{log} -> satisfaction #{sat.id} on folder (#{sat.folder_id}) updating metadatas failed\n"
           else
@@ -79,7 +79,6 @@ class SatisfactionsController < ApplicationController
   # route is  /satisfactions/run/:poll_id
   def run
     #authenticate_user!
-    #puts(DATE_REG_EXP)
     polls=[]
     all={}
     poll=Poll.find_by_id(params[:poll_id])
@@ -98,8 +97,8 @@ class SatisfactionsController < ApplicationController
         all["groups"]=params[:groups]
       end
       if params[:start] && params[:end]
-        all["from"]=format_date(params[:start])
-        all["to"]=format_date(params[:end])
+        all["from"]=params[:start]
+        all["to"]=params[:end]
       end
       if params[:ncap]
         all["ncap"]="#{t('sb.ncap')} #{params[:ncap]}"
@@ -147,7 +146,7 @@ class SatisfactionsController < ApplicationController
       authenticate_user!
       freesats=current_user.satisfactions.where("folder_id < ?",0).map {|x| {id: x.id, case_number: x.case_number}}
       freesats.each_with_index do |s,i|
-         freesats[i][:case_number]= /[a-zA-Z][0-9]{1,2}[a-zA-Z]{1,2}[0-9]{1,4}/.match(s[:case_number]).to_s
+         freesats[i][:case_number]=Validations.project_id_reg_exp.match(s[:case_number]).to_s
       end
       render json: freesats
   end
@@ -230,7 +229,7 @@ class SatisfactionsController < ApplicationController
             end
             user=User.find_by_id(satisfaction.user_id)
             if user
-              results["affaire"]="#{results["affaire"]}<br>Client: #{user.email}"
+              results["affaire"]="#{results["affaire"]}<br>#{t('sb.client')}: #{user.email}"
             end
         else
             results["affaire"]=satisfaction.case_number
@@ -393,14 +392,7 @@ class SatisfactionsController < ApplicationController
     # format the title of the feedback<br>
     # used during creation process
     def gentitle(title,client,owner)
-      "#{title} - Client: #{client} - Chargé d'affaire: #{owner}"
-    end
-    
-    ##
-    # format a basic date AAAA-MM-YY in a SQL way
-    def format_date(t)
-      time=DATE_REG_EXP.match(t)
-      "#{time} 00:00:00"
+      "#{title} - #{Validations.client_pattern}: #{client} - #{Validations.project_manager_pattern}: #{owner}"
     end
     
     ##
@@ -430,16 +422,14 @@ class SatisfactionsController < ApplicationController
         request.push("satisfactions.poll_id = ?")
         tab.push(params[:poll_id])
       end
-      #if params[:start] && params[:end]
       puts("------SQL preparation function------------we have the following date range [#{params[:start]} ; #{params[:end]}]")
-        if DATE_REG_EXP.match(params[:start]) && DATE_REG_EXP.match(params[:end])
-          time_start=format_date(params[:start])
-          time_end=format_date(params[:end])
+      if Validations.date_reg_exp.match(params[:start]) && Validations.date_reg_exp.match(params[:end])
+          time_start = Validations.date_reg_exp.match(params[:start])[0]
+          time_end = Validations.date_reg_exp.match(params[:end])[0]
           request.push("(satisfactions.created_at BETWEEN ? AND ?)")
           tab.push("#{time_start}")
           tab.push("#{time_end}")
-        end
-      #end
+      end
       if params[:groups]
         unless params[:groups].include?("!")
           request.push("users.groups like ?")
@@ -453,14 +443,14 @@ class SatisfactionsController < ApplicationController
         ncap=[]
         for i in (1..closed_names_number)
           ncap.push("satisfactions.closed#{i} <= ?")
-          tab.push(params[:ncap])
+          tab.push(params[:ncap].to_i)
         end
         ncapstring=ncap.join(" or ")
         request.push("(#{ncapstring})")
       end
       if params[:email]
         request.push("satisfactions.case_number like ?")
-        tab.push("%Chargé d'affaire: #{params[:email]}%")
+        tab.push("%#{Validations.project_manager_pattern}: #{params[:email]}%")
       end
       tab[0]=tab[0]+request.join(" and ")
       tab

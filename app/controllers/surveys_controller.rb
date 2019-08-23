@@ -4,6 +4,8 @@
 class SurveysController < ApplicationController
     before_action :inteam
 
+    # uses validations module
+    
     ##
     # check if user is admin or is an affiliated team member from the domain component of its email address
     def inteam
@@ -61,10 +63,12 @@ class SurveysController < ApplicationController
             tab[0]="#{tab[0]}users.groups like ?"
             tab.push("%#{params[:groups]}%")
           end
-          if params[:time_start] && params[:time_end]
+          if Validations.date_reg_exp.match(params[:time_start]) && Validations.date_reg_exp.match(params[:time_end])
+            time_start=Validations.date_reg_exp.match(params[:time_start])[0]
+            time_end=Validations.date_reg_exp.match(params[:time_end])[0]
             tab[0]="#{tab[0]} and surveys.created_at BETWEEN ? AND ?"
-            tab.push(params[:time_start])
-            tab.push(params[:time_end])
+            tab.push(time_start)
+            tab.push(time_end)
           end
           # check if the sql 'where' instruction begin by " and " and if yes truncate it
           if /^\sand\s/.match(tab[0])

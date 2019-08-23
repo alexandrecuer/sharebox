@@ -40,13 +40,13 @@ if min_survey_id=Survey.all.minimum(:id)
 end
 
 a={}
-a["controller"]="surveys"
+a["controller"]="polls"
 a["url"]="<a href=/getpolls>#{root_url}getpolls</a>"
 a["text"]="sortie json de tous les types de sondages disponibles (pattern polls)"
 help << a
 
 a={}
-a["controller"]="surveys"
+a["controller"]="polls"
 a["url"]="<a href=/getpolls?mynums=1>#{root_url}getpolls?mynums=1</a>"
 a["text"]="Liste des numéros de sondages sur lesquels l'utilisateur connecté a reçu des réponses après avoir déclenché des enquêtes non associées à un livrable"
 help << a

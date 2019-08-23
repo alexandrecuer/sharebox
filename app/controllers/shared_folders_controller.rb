@@ -15,6 +15,8 @@ class SharedFoldersController < ApplicationController
 
   before_action :authenticate_user!
   
+  # uses validations module
+  
   ##
   # ?id=1 show metadatas for folder 1
   # ?id=1&update_meta=1 update metadatas for folder 1
@@ -96,12 +98,6 @@ class SharedFoldersController < ApplicationController
       flash[:notice] = t('sb.no_permission')
       redirect_to root_url
     end
-    # This is not good practise.....
-    #if params[:share_email]
-    #  result = @current_folder.email_customer(current_user,params[:share_email])
-    #  flash[:notice]=result["message"].gsub(/\n/,"<br/>")
-    #  redirect_to shared_folder_path(params[:id])
-    #end
     @shared_folders = @current_folder.shared_folders
     @satisfactions = @current_folder.satisfactions
   end
@@ -122,7 +118,7 @@ class SharedFoldersController < ApplicationController
       results["message"]="#{result}- #{t('sb.inexisting_folder')}\n - #{t('sb.folder_not_for_yu')}"
     else
       puts("customer is #{customer_email}")
-      unless /^[^\W][a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\@[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*\.[a-zA-Z]{2,4}$/.match(customer_email)
+      unless Validations.mel_reg_exp.match(customer_email)
         results["success"]=false
         result="#{t('sb.stop')}\n"
         results["message"]="#{result}#{t('sb.no_mel_given')}"
