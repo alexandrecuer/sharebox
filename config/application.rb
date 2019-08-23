@@ -28,8 +28,8 @@ module Sharebox
     
     # for modules auto integration
     #config.autoload_paths += %W(#{config.root}/lib)
-    config.autoload_paths += Dir["#{Rails.root}/lib/**/"]
-    config.autoload_paths += Dir["#{Rails.root}/lib/validations.rb"]
+    #config.autoload_paths += Dir["#{Rails.root}/lib/**/"]
+    #config.autoload_paths += Dir["#{Rails.root}/lib/validations.rb"]
     config.eager_load_paths << "#{Rails.root}/lib"
   end
 end
