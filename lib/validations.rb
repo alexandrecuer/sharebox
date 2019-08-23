@@ -3,7 +3,7 @@
 # all what is related to regular expression checking should be concentrated here
 module Validations
 
-  MEL = /([^\W])([a-zA-Z0-9_\-]+)*(\.[a-zA-Z0-9_\-]+)*\@([a-zA-Z0-9_\-]+)(\.[a-zA-Z0-9_\-]+)*\.([a-zA-Z]{2,4})/
+  MEL = /([^\W])([a-zA-Z0-9_\-]+)*(\.[a-zA-Z0-9_\-]+)*\@([a-zA-Z0-9_\-]+)(\.[a-zA-Z0-9_\-]+)*([\.]{1})([a-zA-Z]{2})/
   CUSTOMER = "Client"
   PROJECT_MANAGER = "Chargé d'affaire"
   DATE = /([0-9]{4}-[0-9]{2}-[0-9]{2})/
