@@ -142,7 +142,7 @@ class SharedFoldersController < ApplicationController
               if satis=Satisfaction.find_by_folder_id_and_user_id(folder_id, customer.id)
                 processed={}
                 processed["success"]=false
-                processed["message"]="#{t('sb.client_already_answered')}\n #{t('sb.sb.feedback_number')} #{satis.id} "
+                processed["message"]="#{t('sb.client_already_answered')}\n #{t('sb.feedback_number')} #{satis.id} "
               else
                 processed = current_folder.email_customer(current_user,customer_email,share,customer)
               end

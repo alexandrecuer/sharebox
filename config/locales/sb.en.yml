@@ -219,6 +219,7 @@ en:
     upload_or_poll_folder: "please upload a file or specify a poll for the folder"
     mail_sent_to: "You have just sent an email to"
     could_not_send_mail_to: "an error occurred in sending an email to"
+    client_already_answered: "the customer already answered to the survey"
     
     #assets_msg:
     uploaded: "successfully uploaded"

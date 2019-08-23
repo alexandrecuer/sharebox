@@ -219,6 +219,7 @@ fr:
     upload_or_poll_folder: "Chargez donc un livrable ou associez au répertoire une enquête satisfaction"
     mail_sent_to: "Vous venez d'envoyer un email à l'adresse"
     could_not_send_mail_to: "une erreur est survenue dans l'envoi du mel à"
+    client_already_answered: "le client a déjà répondu à l'enquête"
     
     #assets_msg:
     uploaded: "mise en ligne réussie"
