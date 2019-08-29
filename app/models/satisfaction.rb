@@ -38,6 +38,12 @@ class Satisfaction < ApplicationRecord
     result
   end
   
+  ##
+  # meta translation
+  def get_meta_i18n
+    self.case_number[Validations.client_pattern] = I18n.t("sb.client")
+    self.case_number[Validations.project_manager_pattern] = I18n.t("sb.project_manager")
+    self.case_number
+  end
   
-
 end

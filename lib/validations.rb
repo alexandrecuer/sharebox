@@ -52,6 +52,14 @@ module Validations
     build_and_extract(str,PROJECT_MANAGER,MEL)
   end
   
+  ##
+  # returns project description
+  def self.extract_project_description(str)
+    exp = Regexp.new(" - #{CUSTOMER}")
+    pos = str =~ exp
+    str[0..pos]
+  end
+  
 end
 
 ##

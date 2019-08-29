@@ -261,12 +261,15 @@ class Folder < ApplicationRecord
           email_to_search=email_address
           if Rails.configuration.sharebox["downcase_email_search_autocomplete"]
             email_to_search=email_to_search.downcase
+            share=current_user.shared_folders.where("LOWER(share_email) = ? and folder_id = ?", email_to_search, self.id)[0]
+          else
+            share=current_user.shared_folders.find_by_share_email_and_folder_id(email_to_search,self.id)
           end
           if email_to_search == current_user.email
             result = "#{result} #{I18n.t('sb.no_share_for_folder_owner')}\n"
           else
             # is the email_address already in the folder's shares ?
-            if current_user.shared_folders.find_by_share_email_and_folder_id(email_to_search,self.id)
+            if share
               result = "#{result} #{I18n.t('sb.already_shared_to')} #{email_address}\n"
             else
               shared_folder = current_user.shared_folders.new
