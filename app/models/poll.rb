@@ -76,6 +76,7 @@ class Poll < ApplicationRecord
         client = Validations.extract_client(a.case_number)
         w = Validations.extract_project_manager(a.case_number)
         # ****************************************************************************
+        project_description = Validations.extract_project_description(a.case_number)
         closed=[]
         for i in (1..self.closed_names_number.to_i)
           closed << a["closed#{i}"]
@@ -84,7 +85,7 @@ class Poll < ApplicationRecord
         for i in (1..self.open_names_number.to_i)
           open << a["open#{i}"]
         end
-        c << [a.id,casenum,client,w]+[a.email,a.created_at,a.case_number]+closed+open             
+        c << [a.id,casenum,client,w]+[a.email,a.created_at,project_description]+closed+open             
       end
     end
     csv  

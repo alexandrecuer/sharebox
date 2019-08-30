@@ -134,10 +134,14 @@ class SharedFoldersController < ApplicationController
           results["message"]=t('sb.no_client_mel_for_team_member')
         else
           email_to_search=customer_email
-          if Rails.configuration.sharebox["downcase_email_search_autocompletion"]
-            email_to_search=email_to_seach.downcase
+          if Rails.configuration.sharebox["downcase_email_search_autocomplete"]
+            email_to_search=email_to_search.downcase
+            share=current_user.shared_folders.where("LOWER(share_email) = ? and folder_id = ?", email_to_search, folder_id)[0]
+          else
+            share=current_user.shared_folders.find_by_share_email_and_folder_id(email_to_search, folder_id)
           end
-          if share=current_user.shared_folders.find_by_share_email(email_to_search)
+          if share
+            puts("______________________________________________________________existing share for #{share.share_email} on number #{share.id}")
             if customer=User.find_by_email(email_to_search)
               if satis=Satisfaction.find_by_folder_id_and_user_id(folder_id, customer.id)
                 processed={}

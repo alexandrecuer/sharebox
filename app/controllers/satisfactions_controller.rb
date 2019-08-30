@@ -232,7 +232,7 @@ class SatisfactionsController < ApplicationController
               results["affaire"]="#{results["affaire"]}<br>#{t('sb.client')}: #{user.email}"
             end
         else
-            results["affaire"]=satisfaction.case_number
+            results["affaire"]=satisfaction.get_meta_i18n
         end
         results["date"]=satisfaction.created_at
         poll=Poll.find_by_id(satisfaction.poll_id)
@@ -294,11 +294,16 @@ class SatisfactionsController < ApplicationController
           else
             client_mel=survey.client_mel
             @satisfaction.case_number= gentitle(survey.description,survey.client_mel,survey.by)
-            client=Client.find_by_mel(client_mel)
+            if Rails.configuration.sharebox["downcase_email_search_autocomplete"]
+              client= Client.where("LOWER(mel) = ?",client_mel.downcase)[0]
+            else
+              client=Client.find_by_mel(client_mel)
+            end
             if client
               # everything should be fine at this stage - we can fix things
               # folder_id will contain (-1)*client_id
               # user_id will be the user id of the registered user who launched the interaction
+              puts("#{client.mel} already recorded on id #{client.id}!!!")
               @satisfaction.user_id = survey.user_id
               @satisfaction.folder_id = -client.id
               message=save_free_sat(@satisfaction, survey)
@@ -306,6 +311,7 @@ class SatisfactionsController < ApplicationController
             else
               # client is not in the base
               # we save the client without fixing the organisation - it can be done further in the clients controller if needed
+              puts("new record going to be created with email #{client_mel}")
               client=Client.new
               client.mel=survey.client_mel
               if client.save
@@ -449,8 +455,14 @@ class SatisfactionsController < ApplicationController
         request.push("(#{ncapstring})")
       end
       if params[:email]
-        request.push("satisfactions.case_number like ?")
-        tab.push("%#{Validations.project_manager_pattern}: #{params[:email]}%")
+        if Rails.configuration.sharebox["downcase_email_search_autocomplete"]
+          request.push("LOWER(satisfactions.case_number) like ?")
+          str="#{Validations.project_manager_pattern.downcase}: #{params[:email].downcase}"
+        else
+          request.push("satisfactions.case_number like ?")
+          str="#{Validations.project_manager_pattern}: #{params[:email]}"
+        end
+        tab.push("%#{str}%")
       end
       tab[0]=tab[0]+request.join(" and ")
       tab
@@ -470,7 +482,7 @@ class SatisfactionsController < ApplicationController
         results[i]={}
         results[i]["id"]=s.id
         results[i]["date"]=s.created_at
-        results[i]["affaire"]=s.case_number
+        results[i]["affaire"]=s.get_meta_i18n
         results[i]["folder_id"]=s.folder_id
         results[i]["poll_id"]=s.poll_id
         results[i]["collected_by"]=s.email

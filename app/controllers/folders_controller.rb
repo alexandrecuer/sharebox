@@ -379,7 +379,9 @@ class FoldersController < ApplicationController
       # Updating a case number on a folder also update every case number on satisfactions of the same folder
         #Satisfaction.where(folder_id: @folder.id).each do |s|
         @folder.satisfactions.each do |s|
-          s.case_number = @folder.case_number
+          #s.case_number = @folder.case_number
+          meta=s.calc_meta
+          s.case_number=meta.join("")
           s.save
         end
         if @folder.parent_id

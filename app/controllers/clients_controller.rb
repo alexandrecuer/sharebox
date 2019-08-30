@@ -10,7 +10,12 @@ class ClientsController < ApplicationController
   # if route is clients?melfrag=some_text, return a json list of clients with emails containing some_text 
   def index
     if melfrag=params[:melfrag]
-      allclients = Client.where("mel LIKE ?", "%#{melfrag}%")
+      if Rails.configuration.sharebox["downcase_email_search_autocomplete"]
+        melfrag=melfrag.downcase
+        allclients = Client.where("LOWER(mel) LIKE ?", "%#{melfrag}%")
+      else
+        allclients = Client.where("mel LIKE ?", "%#{melfrag}%")
+      end
       results=[]
       allclients.each do |c|
         results<< {"email": c.mel,"id": c.id}
