@@ -1,5 +1,5 @@
 conf:
-  version: 1.41
+  version: 1.42beta
   company: "Cerema"
   admin_mel: "alexandre.cuer@cerema.fr"
   # devise is storing emails in the users table without case sensitivity
