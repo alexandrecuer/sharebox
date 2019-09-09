@@ -1,8 +1,7 @@
 # Installation on a Microsoft Window development machine
 
 ## Requirements
-Window All-In-One rails installer [Ruby on Rails](http://railsinstaller.org/en) >= 5.1.4 + NodeJS
-
+Window All-In-One rails installer [Ruby on Rails](http://railsinstaller.org/en) rails >= 5.1.4 + Ruby 2.3.3 + NodeJS
 [ImageMagick](http://www.imagemagick.org) for documents processing
 
 Gem file is configured to use postgreSQL, so please install PGQSL window binary
@@ -61,7 +60,7 @@ $ which convert
 Install [NodeJS](https://nodejs.org/en/download/)
 
 ## Installation
-Clone/Unzip the repository into your local rails directory, for example C:/Sites/. 
+Clone/Unzip/git clone the repository into your local rails directory, for example C:/Sites/. 
 Open the resulting app directory in a git bash 
 ```
 $ cd /c/Sites/sharebox
@@ -122,3 +121,49 @@ To override, create a file /config/initializers/paperclip.rb with the following 
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 ```
 Caution : only for a development purpose; not suitable for a production server !
+
+## update to a uptodate version of ruby
+
+last versions of sharebox/colibri may not work with 5.1.4 and ruby 2.3.3
+
+Check https://rubyinstaller.org/downloads/ and install the version of ruby of your choice
+
+It can be https://github.com/oneclick/rubyinstaller2/releases/download/RubyInstaller-2.6.3-1/rubyinstaller-2.6.3-1-x64.exe
+
+The installer will ask you if you want to install the MSYS2 tools (Minimalist GNU for Windows) -> choose option 3
+
+launch a git bash and check your bundle version :
+```
+bundle --version
+Bundler version 1.17.2
+```
+update bundle :
+```
+gem update bundler
+```
+the update command should render the following output :
+```
+Updating installed gems
+Updating bundler
+Fetching bundler-2.0.2.gem
+Successfully installed bundler-2.0.2
+Parsing documentation for bundler-2.0.2
+Installing ri documentation for bundler-2.0.2
+Installing darkfish documentation for bundler-2.0.2
+Done installing documentation for bundler after 11 seconds
+Parsing documentation for bundler-2.0.2
+Done installing documentation for bundler after 3 seconds
+Gems updated: bundler
+```
+make a verification :
+```
+bundle --version
+Bundler version 2.0.2
+```
+
+
+
+
+
+
+
