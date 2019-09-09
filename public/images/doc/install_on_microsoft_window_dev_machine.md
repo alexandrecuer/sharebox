@@ -76,7 +76,7 @@ $ gem install bcrypt --platform=ruby
 ```
 ## database
 
-Modify the \config\environments\database.yml with your database credentials. 
+Modify the \config\database.yml with your database credentials. 
 Generally, the postgreSQL Window installer creates a user "postgres" for which you were asked a password during the installation process. 
 ```
 default: &default
@@ -160,10 +160,29 @@ make a verification :
 bundle --version
 Bundler version 2.0.2
 ```
+clone the repo :
+```
+git clone https://github.com/alexandrecuer/sharebox.git
+cd sharebox
+```
+edit the Gemfile with the editor of yur choice and change the lines defining the versions of ruby and pg gems :
+```
+ruby '2.6.3'
+gem 'pg', '~> 1.1.4'
+```
+for the postgresql gem, check the last version on the rubygems website. At the date of september 2019, it should be :
 
+https://rubygems.org/gems/pg/versions/1.1.4-x86-mingw32
 
+install the gems :
+```
+bundle install
+```
+Your Gemfile.lock should be fine
 
-
-
+Modify your config/database.yml with your pgsql password, create/migrate the base if not already done and start rails :
+```
+rails server
+```
 
 
