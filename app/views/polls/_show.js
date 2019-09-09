@@ -146,11 +146,14 @@ function genstatsforpoll(pollId)
   }
   //console.log(request);
   var csvlink;
+  var ncaplink;
   //console.log(request.indexOf("?"));
   if (request.indexOf("?") > 0){
     csvlink=request+"&csv=1";
+    ncaplink=request+"&csv=1&ncap=2";
   } else {
     csvlink=request+"?csv=1";
+    ncaplink=request+"?csv=1&ncap=2";
   }
     
   $.ajax({
@@ -165,7 +168,8 @@ function genstatsforpoll(pollId)
         stats.push(result.satisfactions.length);
         stats.push("  "+sb["feedbacks"]+"<br>");
         stats.push("<a data-toggle='modal' data-target='#synth' href='#'>"+sb["check_summary"]+"</a><br>");
-        stats.push("<a href="+csvlink+">"+sb["download_csv"]+"</a>");
+        stats.push("<a href="+csvlink+">"+sb["download_csv"]+"</a><br>");
+        stats.push("<a href="+ncaplink+">"+sb["ncap"]+"&nbsp;2</a>");
         $("#stats").html(stats.join(""));
         if (result.stats){
           if (Object.keys(result.stats).length>0){
