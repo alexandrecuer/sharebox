@@ -64,7 +64,7 @@ if (selectId){
   options.push("<select class='form-control' id="+selectId+">");
 }
 if (!selectedPollId && conf["main_poll_number"]){
-    var selectedPollId=conf["main_poll_number"];
+    selectedPollId=conf["main_poll_number"];
 }
 options.push("<option value=''>"+sb["choose_poll"]+"</option>");
 if (polls.length>0) {    

@@ -1,4 +1,5 @@
 /*global sb*/
+/*global pollselect*/
 /*global stringify*/
 /*global genfeedback*/
 /*global genGroupsAutocompletion*/
