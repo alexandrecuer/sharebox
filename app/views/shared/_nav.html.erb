@@ -16,7 +16,13 @@ sb["lang"]="<%= lang %>-<%= lang.upcase %>";
 //console.log(sb);
 sb["mel_reg_exp"]=new RegExp("<%= Validations.mel_reg_exp.source %>");
 sb["date_reg_exp"]=new RegExp("<%= Validations.date_reg_exp.source %>");
+var conf={};
 </script>
+<% if Rails.configuration.sharebox["main_poll_number"] %>
+<script>
+conf["main_poll_number"]=<%= Rails.configuration.sharebox["main_poll_number"] %>;
+</script>
+<% end %>
 
 <%
 

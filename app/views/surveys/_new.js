@@ -184,10 +184,11 @@ $.ajax({
     dataType: "json",
     async: true, 
     success(result) {
-        var options="";
-        $.each(result, function(index, array){
-            options+="<option value="+array.id+">"+array.name+" (S"+array.id+")</option>";
-        });
+        var options=pollselect(result);
+        //var options="";
+        //$.each(result, function(index, array){
+        //    options+="<option value="+array.id+">"+array.name+" (S"+array.id+")</option>";
+        //});
         //options+="<select>";
         $("#s_poll_id").html(options);
         //console.log(options);

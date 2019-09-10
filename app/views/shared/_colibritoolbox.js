@@ -1,4 +1,5 @@
 /*global sb*/
+/*global conf*/
 /*eslint no-undef: "error"*/
 
 //interrogate the API and show a given satisfaction feedback in a specific modal 
@@ -62,8 +63,11 @@ var options=[];
 if (selectId){
   options.push("<select class='form-control' id="+selectId+">");
 }
+if (!selectedPollId && conf["main_poll_number"]){
+    var selectedPollId=conf["main_poll_number"];
+}
 options.push("<option value=''>"+sb["choose_poll"]+"</option>");
-if (polls.length>0) {
+if (polls.length>0) {    
   polls.forEach(function(poll){
     var tag=" ";
     if (selectedPollId === poll.id) {
