@@ -122,7 +122,7 @@ OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 ```
 Caution : only for a development purpose; not suitable for a production server !
 
-## update to a uptodate version of ruby
+# update to the lastest ruby version
 
 last versions of sharebox/colibri may not work with 5.1.4 and ruby 2.3.3
 
