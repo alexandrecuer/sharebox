@@ -4,6 +4,7 @@
 /*global genfeedback*/
 /*global genGroupsAutocompletion*/
 /*eslint no-undef: "error"*/
+/*eslint no-console: ["error", { allow: ["warn", "error"] }] */
 
 //interrogate the API and generate the list of pending surveys for all the registered users or for a specified group
 //possibility to query on a datarange
@@ -14,6 +15,7 @@ function gensurveylist()
     var timeStart=$("#time_start").val();
     var timeEnd=$("#time_end").val();
     var groups=$("#groups").val();
+    var pollId=$("#s_poll_id").val();
     if (groups) {
         reqend.push("groups="+groups);
     }
@@ -23,13 +25,16 @@ function gensurveylist()
     if (timeEnd) {
         reqend.push("time_end="+timeEnd);
     }
+    if (pollId) {
+        reqend.push("poll_id="+pollId);
+    }
     var end=reqend.join("&");
     if (end){
         request="/surveys?"+end;
     } else {
         request="/surveys";
     }
-    //console.log(request);
+    //console.warn(request);
     
     $.ajax({ url: request, 
         dataType: "json", 
@@ -64,7 +69,7 @@ function gensurveylist()
                     out.push("</tr>");
                 }                    
             });
-            //console.log(out.join(""));
+            //console.warn(out.join(""));
             $("#surveylist").html(out.join(""));
             
         }
@@ -73,7 +78,7 @@ function gensurveylist()
 
 function genanswerslinks()
 {
-    //console.log("triggering a list of answers");
+    //console.warn("triggering a list of answers");
     $.ajax({ url: "/freelist", 
         dataType: "json", 
         async: true, 
@@ -134,7 +139,7 @@ function validate()
     
     if (valid) {
         $("#create").show(); 
-        //console.log("all inputs valid");
+        //console.warn("all inputs valid");
     } else {
         $("#create").hide();
     }
@@ -174,7 +179,7 @@ $("#groups").on("change",function(){
 //groups autocompletion with the common function
 $("#groups").on("input",function(){
   var frag=$(this).val();
-  //console.log(frag);
+  //console.warn(frag);
   genGroupsAutocompletion(frag,"groups");
 });
 
@@ -192,8 +197,13 @@ $.ajax({
         //});
         //options+="<select>";
         $("#s_poll_id").html(options);
-        //console.log(options);
+        //console.warn(options);
+        gensurveylist();
     } 
+});
+
+$("#s_poll_id").on("input",function(){
+    gensurveylist();
 });
 
 //manage json output for the create method of the controller
@@ -208,7 +218,7 @@ $("#create").click(function(){
         return false;
     }
     
-    //console.log(params);
+    //console.warn(params);
     
     $.ajax({
         type: "POST",
@@ -216,7 +226,7 @@ $("#create").click(function(){
         data: params,
         async: true, 
         success(result) { 
-            //console.log(result); 
+            //console.warn(result); 
             gensurveylist();
             $("#create").hide();
             $("#s_description").val("");
@@ -251,20 +261,20 @@ function genBasicEmailCompletion(saisie,model,inputId)
 //email autocompletion on project manager field
 $("#s_by").on("input",function(e){
     var saisie = $(this).val();
-    //console.log(saisie);
+    //console.warn(saisie);
     genBasicEmailCompletion(saisie,"users","s_by");
 });
 
 //email autocompletion on client field
 $("#s_client_mel").on("input",function(e){
     var saisie = $(this).val();
-    //console.log(saisie);
+    //console.warn(saisie);
     genBasicEmailCompletion(saisie,"clients","s_client_mel");
 });
 
 $("#surveylist").on("click",".send",function(){
     var id = $(this).val();
-    //console.log("processing survey "+id);
+    //console.warn("processing survey "+id);
     $.ajax({
         type: "GET",
         url: "/surveys/"+id+"?email=send",
@@ -282,14 +292,14 @@ $("#surveylist").on("click",".send",function(){
 //implementing action for all .btn 'dynamic' element starting from his ancestor which has to be a static element
 $("#surveylist").on("click",".btn",function(){
     var id = $(this).val();
-    //console.log("triggering the deletion of survey "+id);
+    //console.warn("triggering the deletion of survey "+id);
     $.ajax({
         type: "DELETE",
         url: "/surveys/"+id,
         dataType: "json",
         async: false,
         success(result) {
-            //console.log(result.responseText);
+            //console.warn(result.responseText);
             //gensurveylist();
         },
         error(result) {
@@ -315,6 +325,6 @@ $.ajax({
  
 $("#answers").on("click",".btn",function(){
     var id = $(this).val();
-    //console.log(id);
+    //console.warn(id);
     genfeedback(id,"AnswerModal");
 });

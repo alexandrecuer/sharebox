@@ -59,21 +59,29 @@ class SurveysController < ApplicationController
         else
           tab=[]
           tab[0]=""
+          request=[]
+          if params[:poll_id]
+            request.push("surveys.poll_id = ?")
+            tab.push(params[:poll_id])
+          end
           if params[:groups]
-            tab[0]="#{tab[0]}users.groups like ?"
+            request.push("users.groups like ?")
+            #tab[0]="#{tab[0]}users.groups like ?"
             tab.push("%#{params[:groups]}%")
           end
           if Validations.date_reg_exp.match(params[:time_start]) && Validations.date_reg_exp.match(params[:time_end])
             time_start=Validations.date_reg_exp.match(params[:time_start])[0]
             time_end=Validations.date_reg_exp.match(params[:time_end])[0]
-            tab[0]="#{tab[0]} and surveys.created_at BETWEEN ? AND ?"
+            request.push("surveys.created_at BETWEEN ? AND ?")
+            #tab[0]="#{tab[0]} and surveys.created_at BETWEEN ? AND ?"
             tab.push(time_start)
             tab.push(time_end)
           end
+          tab[0]=request.join(" and ")
           # check if the sql 'where' instruction begin by " and " and if yes truncate it
-          if /^\sand\s/.match(tab[0])
-            tab[0].gsub!(/^\sand\s/,"")
-          end
+          #if /^\sand\s/.match(tab[0])
+          #  tab[0].gsub!(/^\sand\s/,"")
+          #end
           if tab[0].length>0
             surveys = Survey.all.joins(:user).select("surveys.*, users.email as owner_mel").where(tab).order("id DESC")
           else
