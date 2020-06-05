@@ -71,3 +71,5 @@ gem "font-awesome-rails"
 gem 'jquery-ui-rails'
 
 gem 'bootstrap'
+
+gem "websocket-extensions", ">= 0.1.5"
