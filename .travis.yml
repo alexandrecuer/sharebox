@@ -3,6 +3,6 @@ before_install:
   - rm Gemfile.lock
   - bundle install
 rvm:
-  - "2.6.1"
+  - "2.6.6"
 script:
   - cat Gemfile.lock
