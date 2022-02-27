@@ -22,7 +22,7 @@ gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 gem "activerecord", ">= 5.2.4.5"
-gem "nokogiri", ">= 1.11.0"
+gem "nokogiri", ">= 1.13.2"
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
