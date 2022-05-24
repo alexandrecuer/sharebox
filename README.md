@@ -1,6 +1,6 @@
 # A business social network tool dedicated to quality management
 
-This application is a SharingFile System with surveys management facilities. It can be defined as an open source CRM (Client Relation Management)
+This application is a SharingFile System with surveys management facilities. It can be defined as an open source CRM - Client Relation Management
 
 [![Ruby](https://github.com/alexandrecuer/sharebox/actions/workflows/ruby.yml/badge.svg)](https://github.com/alexandrecuer/sharebox/actions/workflows/ruby.yml)
 
