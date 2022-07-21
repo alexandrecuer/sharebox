@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        ruby-version: ['head']
+        ruby-version: ['3.1']
 
     steps:
     - uses: actions/checkout@v3
@@ -32,3 +32,8 @@ jobs:
           ruby --version
           bundle --version
           cat Gemfile.lock
+    - name: Upload Gemfile.lock
+      uses: actions/upload-artifact@v1
+      with:
+        name: Gemfile.lock
+        path: Gemfile.lock
