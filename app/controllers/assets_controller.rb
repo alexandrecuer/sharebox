@@ -1,24 +1,46 @@
-## 
+##
 # manage assets'creation inside the sharebox site
 
 class AssetsController < ApplicationController
 
-before_action :authenticate_user!
-  
+  before_action do
+    :authenticate_user!
+    # cf https://stackoverflow.com/questions/51110789
+    #activestorage-service-url-rails-blob-path-cannot-generate-full-url-when-not-u?rq=1
+    ActiveStorage::Current.host = request.base_url
+  end
+
   def index
+    # request preparation
+    req=prepare_attached_docs_request
+    fullreq=[]
+
     unless params[:folder_id]
-      assets=Asset.all
+      if Rails.application.config.paperclip == 1
+        assets=Asset.all
+      else
+        fullreq[0]=req.join("")
+        fullreq.push('Asset')
+        assets=Asset.find_by_sql(fullreq)
+      end
     else
-      # cannot use find_by - it returns only one element
-      assets=Asset.where(folder_id: params[:folder_id])
+      if Rails.application.config.paperclip == 1
+        assets=Asset.where(folder_id: params[:folder_id])
+      else
+        req.push(" and assets.folder_id = ?")
+        fullreq[0]=req.join("")
+        fullreq.push('Asset')
+        fullreq.push(params[:folder_id])
+        assets=Asset.find_by_sql(fullreq)
+      end
     end
     render json: assets
   end
-  
-  ## 
+
+  ##
   # Method used when following the route /assets/assets_id<br>
   # Show the name of the file and its directory (forge/attachments/asset_id/asset_name)<br>
-  # actually not used.... 
+  # actually not used....
   def show
     if @asset = current_user.assets.find_by_id(params[:id])
         render json: @asset
@@ -26,12 +48,12 @@ before_action :authenticate_user!
         render json: {id: false, message:"#{t('sb.inexisting')} - #{t('sb.no_permission')}"}
     end
   end
-  
+
   ##
   # Show the new form in order to upload a new asset<br>
   # method used when following a route /folders/folder_id/new_file or /assets/new<br>
   # /folders/folder_id/new_file will upload the asset in the folder identified by folder_id<br>
-  # /assets/new will upload the asset at the root of the user - such files are strictly personal and cannot be shared<br>  
+  # /assets/new will upload the asset at the root of the user - such files are strictly personal and cannot be shared<br>
   # Only admin or private users are able to upload files<br>
   # They cannot upload files outside the folders they own
   def new
@@ -41,7 +63,7 @@ before_action :authenticate_user!
     end
     @asset = current_user.assets.new
     # If there is a folder_id, we attach the file to the corresponding folder<br>
-    # if not, it will be a root located file 
+    # if not, it will be a root located file
     if params[:folder_id]
       @hosting_folder = current_user.folders.find_by_id(params[:folder_id])
       if @hosting_folder
@@ -54,7 +76,7 @@ before_action :authenticate_user!
       end
     end
   end
-  
+
   def upload_asset
       results={}
       if params[:asset][:folder_id]==""
@@ -82,7 +104,7 @@ before_action :authenticate_user!
       end
       render json: results
   end
-  
+
   ##
   # following the call to the new asset method, upload an asset and register it in the database<br>
   # if the asset is a root file, we redirect to root else we redirect to the parent folder
@@ -102,7 +124,7 @@ before_action :authenticate_user!
         render 'new'
       end
   end
-  
+
   def delete_asset
     results={}
     if asset = current_user.assets.find_by_id(params[:id])
@@ -119,7 +141,7 @@ before_action :authenticate_user!
     end
     render json: results
   end
-  
+
   ##
   # Destroy the asset<br>
   # only for owners - to be fixed
@@ -133,14 +155,14 @@ before_action :authenticate_user!
       redirect_to root_url
     end
   end
-  
+
 
   ##
   # Permits the user to download a file<br>
   def get
     #asset = current_user.assets.find_by_id(params[:id])
     asset = Asset.find_by_id(params[:id])
-    
+
     if asset
       #case 1 : asset is a root file
       if !asset.folder_id
@@ -173,14 +195,14 @@ before_action :authenticate_user!
       redirect_to root_url
     end
   end
-  
+
   private
     def asset_params
       params.require(:asset).permit(:uploaded_file, :folder_id)
       # previous config when form was only composed of a file input
       #params.require(:asset).permit(:uploaded_file, :folder_id) if params[:asset]
     end
-    
+
     ##
     # private method for file opening management<br>
     # 2 different options for file storage are possible :<br>
@@ -190,12 +212,21 @@ before_action :authenticate_user!
     def get_file(asset)
       # switching to S3, we use "redirect_to asset.uploaded_file.expiring_url(10)"
       # this creates a valid 10s url that allows access to private S3 files
-      if Rails.application.config.local_storage==1
-        puts ("opening local file")
-        send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-      elsif Rails.application.config.local_storage==0
-        puts ("opening amazon S3 file")
-        redirect_to asset.uploaded_file.expiring_url(10)
+      if Rails.application.config.paperclip==0
+        redirect_to asset.uploaded_file.service_url
+        # NOT RECOMMANDED BUT WORKING
+        #send_data asset.uploaded_file.download,
+        #            filename: asset.uploaded_file.filename.to_s,
+        #            content_type: asset.uploaded_file.content_type
+      end
+      if Rails.application.config.paperclip==1
+        if Rails.application.config.local_storage==1
+          puts ("opening local file")
+          send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
+        elsif Rails.application.config.local_storage==0
+          puts ("opening amazon S3 file")
+          redirect_to asset.uploaded_file.expiring_url(10)
+        end
       end
     end
 end

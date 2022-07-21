@@ -61,6 +61,8 @@ class FoldersController < ApplicationController
     currentfoldershares={}
     currentfoldersatis={}
     currentuser= {id: current_user.id, name: current_user.email, statut: current_user.statut}
+    assetreq=prepare_attached_docs_request
+    sql_array=[]
     if id=params[:id]
       puts("current folder request")
       currentfolder=Folder.joins(:user).select("folders.*, users.email as user_name, users.statut as user_statut").find_by_id(id)
@@ -74,7 +76,15 @@ class FoldersController < ApplicationController
         else
           puts("******shared access test - SUCCESS!!!!!!")
           subfolders=Folder.joins(:user).where(parent_id: id).select("folders.*, users.email as user_name, users.statut as user_statut").order("folders.name ASC")
-          assets=Asset.joins(:user).where(folder_id: id).select("assets.*, users.email as user_name, users.statut as user_statut")
+          if Rails.application.config.paperclip == 1
+            assets=Asset.joins(:user).where(folder_id: id).select("assets.*, users.email as user_name, users.statut as user_statut")
+          else 
+            assetreq.push(" and assets.folder_id = ?")
+            sql_array[0]=assetreq.join("")
+            sql_array.push('Asset')
+            sql_array.push(id)
+            assets=Asset.find_by_sql(sql_array)
+          end
           currentfoldershares=currentfolder.shared_folders
           currentfoldersatis=currentfolder.satisfactions
         end
@@ -84,7 +94,17 @@ class FoldersController < ApplicationController
       currentfolder["name"]=t('sb.root')
       subfolders=current_user.folders.where(parent_id: nil).order("name ASC")
       # these assets are on root - so they are owned by the user and the joins(:user) is not necessary
-      assets=current_user.assets.where(folder_id: nil)
+      if Rails.application.config.paperclip == 1
+        assets=current_user.assets.where(folder_id: nil)
+      else
+        assetreq.push(" and users.id = ?")
+        assetreq.push(" and assets.folder_id IS ?")
+        sql_array[0]=assetreq.join("")
+        sql_array.push('Asset')
+        sql_array.push(current_user.id)
+        sql_array.push(nil)
+        assets=Asset.find_by_sql(sql_array)
+      end
       #nearly the same as current_user.shared_folders_by_others but with more complete info on the user
       sharedfoldersbyothers=SharedFolder.joins(:user).joins(:folder).select("folders.*, users.email as user_name, users.statut as user_statut").where(share_user_id: current_user.id).order("folders.name ASC")
     end
