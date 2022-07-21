@@ -1367,9 +1367,11 @@ GEM
       nokogiri (~> 1)
       rake
     mini_mime (1.1.2)
+    mini_portile2 (2.8.0)
     minitest (5.16.2)
     nio4r (2.5.8)
-    nokogiri (1.13.7-x86_64-linux)
+    nokogiri (1.13.7)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     paperclip (6.1.0)
@@ -1381,7 +1383,7 @@ GEM
     passenger (6.0.14)
       rack
       rake (>= 0.8.1)
-    pg (0.21.0)
+    pg (1.4.1)
     popper_js (2.11.5)
     public_suffix (4.0.7)
     racc (1.6.0)
@@ -1495,7 +1497,7 @@ DEPENDENCIES
   nokogiri (>= 1.13.2)
   paperclip
   passenger
-  pg (~> 0.18)
+  pg
   rails (~> 5.2.3)
   sass-rails (~> 5.0)
   selenium-webdriver
@@ -1505,6 +1507,6 @@ DEPENDENCIES
   web-console (>= 3.3.0)
   websocket-extensions (>= 0.1.5)
 RUBY VERSION
-   ruby 3.0.0p0
+   ruby 3.2.0p-1
 BUNDLED WITH
-   2.3.18
+   2.4.0.dev
