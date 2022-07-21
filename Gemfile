@@ -60,8 +60,6 @@ gem 'devise'
 
 gem 'bcrypt', platforms: :ruby
 
-gem 'paperclip'
-
 gem 'acts_as_tree'
 
 gem 'jquery-rails'
