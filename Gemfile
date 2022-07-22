@@ -8,12 +8,12 @@ end
 ruby '3.1.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.3'
+gem 'rails', '>= 7.0.3.1'
 # Use mysql as the database for Active Record
 # gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'pg'
 # Use Puma as the app server
-#gem 'puma', '~> 3.7'
+gem 'puma'
 gem 'passenger'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -21,7 +21,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
-gem "activerecord", ">= 5.2.4.5"
+gem "activerecord"
 gem "nokogiri", ">= 1.13.2"
 
 # Use CoffeeScript for .coffee assets and views
@@ -32,13 +32,6 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# gem 'bcrypt', '3.1.6', platforms: [:ruby]
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
