@@ -1,8 +1,9 @@
 conf:
-  version: 1.41
+  version: 1.41beta
   company: "Cerema"
   admin_mel: "alexandre.cuer@cerema.fr"
   # devise is storing emails in the users table without case sensitivity
   # we are storing them with case sensitivity in the shared_folders and clients tables
   # all research and autocompletion tasks will be done without case sensitivity
   downcase_email_search_autocomplete: true
+  main_poll_number: 4

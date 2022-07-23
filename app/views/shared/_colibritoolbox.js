@@ -1,4 +1,5 @@
 /*global sb*/
+/*global conf*/
 /*eslint no-undef: "error"*/
 
 //interrogate the API and show a given satisfaction feedback in a specific modal 
@@ -56,14 +57,20 @@ function genfeedback(id,modalId)
 
 //generate html output to create a select menu for choosing the active poll
 //used in different views (browse, surveys, polls)
+//if selectId is given, we build a full select component and we do not use conf["main_poll_number"] to initialize a default entry
+//if selectId is not given, we build an the list of options to be integrated as an html in a empty select component already existing in a view 
+//in that case, we use conf["main_poll_number"] to initialize a default entry, for lazy users...
 function pollselect(polls,selectedPollId,selectId)
 {
 var options=[];
 if (selectId){
   options.push("<select class='form-control' id="+selectId+">");
 }
+if (!selectId && !selectedPollId && conf["main_poll_number"]){
+    selectedPollId=conf["main_poll_number"];
+}
 options.push("<option value=''>"+sb["choose_poll"]+"</option>");
-if (polls.length>0) {
+if (polls.length>0) {    
   polls.forEach(function(poll){
     var tag=" ";
     if (selectedPollId === poll.id) {

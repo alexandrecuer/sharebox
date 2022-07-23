@@ -1,4 +1,5 @@
 /*global sb*/
+/*global conf*/
 /*global humandate*/
 /*global stringify*/
 /*global pollselect*/
@@ -241,7 +242,11 @@ $.ajax({
           ids.push(p.id);
         });
         //console.log(...ids);
-        pollId=Math.max(...ids);
+        if (conf["main_poll_number"]){
+          pollId=conf["main_poll_number"];
+        } else {
+          pollId=Math.max(...ids);
+        }
         $("#s_poll_id").html(pollselect(polls,pollId));
         genstatsforpoll(pollId);
     } 
