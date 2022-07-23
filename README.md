@@ -7,7 +7,7 @@ This application is a SharingFile System with surveys management facilities. It 
 [![Build Status](https://travis-ci.org/alexandrecuer/sharebox.svg?branch=master)](https://travis-ci.org/alexandrecuer/sharebox)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ed6f26a2613349e0a92b404d515a4b29)](https://www.codacy.com/app/alexandrecuer/sharebox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=alexandrecuer/sharebox&amp;utm_campaign=Badge_Grade)
 
-If you deliver files and documents to your clients and if you want to record your clients'satisfaction, this tool is for you
+Deliver files and documents to your clients and Record your clients'satisfaction
 <img src=public/images/doc/colibri_front.png>
 
 Online class documentation (not up to date) :
@@ -40,22 +40,9 @@ frontoffice :
 
 ## File storage
 
-The application can use [paperclip](https://github.com/thoughtbot/paperclip) or rails [ActiveStorage](http://guides.rubyonrails.org/active_storage_overview.html) for file storage/documents processing (work in progress - see active_storage branch not yet merged into master)
+The application use rails [ActiveStorage](http://guides.rubyonrails.org/active_storage_overview.html) for file storage/documents processing 
 
-As paperclip is deprecated, active storage is recommanded for new installations
-
-For existant paperclip installations, a [migration guide](https://github.com/alexandrecuer/sharebox/issues/8) is available
-
-An environment variable permits to define the storage engine
-<table>
-    <tr>
-        <td>PAPERCLIP</td>
-        <td>
-            0 -> active storage<br>
-            1 -> paperclip
-        </td>
-    </tr>
- </table>
+[migration guide from paperclip](https://github.com/alexandrecuer/sharebox/issues/8)
 
 Document storage is configured for : 
 - Amazon S3 in production mode 
@@ -67,22 +54,9 @@ corresponding model and controller can be found there :
 
 to open a file, follow the route /forge/get/:id
 
-Switching between S3 mode and local storage mode can be done by modifying : 
-- /config/environments/development.rb 
-- /config/environments/production.rb
+### Switching between S3 and local storage
 
-### if using paperclip :
-
-you have to modify the value of **config.local_storage** in the corresponding config/environments/*.rb file(s)
-
-- config.local_storage = 1 > local storage will be activated
-- config.local_storage = 0 > all files will go in the S3 bucket
-
-paperclip files will be stored in the 'forge' directory : (rails_root or S3 bucket)/forge/attachments/:id/:filename
-
-### if using active_storage :
-
-you have to modify the value of **config.active_storage.service** in the corresponding config/environments/*.rb file(s)
+Modify the value of **config.active_storage.service** in the corresponding config/environments/*.rb file(s)
 
 - config.active_storage.service = :local or :local_production > local storage will be activated
 - config.active_storage.service = :amazon > all files will go in the S3 bucket
@@ -102,7 +76,7 @@ bundle exec rake storage:clean_storage['storage_production']
 ```
 empty folders will be deleted
 
-##  S3 storage environmental variables
+##  S3 storage environmental variables : TO REVIEW
 
 <table>
     <tr>

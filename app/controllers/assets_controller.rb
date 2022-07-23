@@ -200,7 +200,6 @@ class AssetsController < ApplicationController
     # 2 different options for file storage are possible :<br>
     # - 1) local storage in application_root/storage/<br>
     # - 2) Amazon S3 mode, in a cloud storage<br>
-    # asset will be stored in a directory named with the asset id : asset_id/asset_name
     def get_file(asset)
       redirect_to url_for(asset.uploaded_file)
     end
