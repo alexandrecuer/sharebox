@@ -95,7 +95,7 @@ function genanswerslinks()
                     lib=array.id;
                     w=50;
                 }
-                out.push("<div style='width:"+w+"px; float:left'><button data-toggle='modal' class='btn btn-link' value='"+array.id+"'>"+lib+"</button></div>");                      
+                out.push("<div style='width:"+w+"px; float:left'><button data-bs-toggle='modal' class='btn btn-link' value='"+array.id+"'>"+lib+"</button></div>");                      
             });
             out.push("</td></tr>");
             $("#answers").html(out); 

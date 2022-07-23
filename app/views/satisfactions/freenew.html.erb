@@ -35,10 +35,12 @@ var i;
 var j;
 for (i=4;i>=1;i--){
     out+="<tr style='background-color: #eee;'><td><div class='row align-items-center justify-content-center'>";
-    for (j=1;j<=i;j++){
-        out+="<i class='far fa-star'></i>";
+    if (i>1) {
+        out+=i+" étoiles = ";
+    } else {
+        out+="1 étoile = ";
     }
-    out+="</div></td><td>"+legend[i]+"</td>";
+    out+=legend[i]+"</div></td>";
     out+="</tr>";
 }
 out+="</table>";

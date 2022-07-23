@@ -26,7 +26,7 @@ function genfeedback(id,modalId)
                         var note=parseInt(data[val],10);
                         //console.log(note);
                         var i;
-                        out+="<tr><td colspan=2><div class='row align-items-center justify-content-center'>";
+                        out+="<tr><td colspan=2><div>";
                         if (!note) {
                           for (i=0;i<4;i++){
                             out+="<div class='stars'><input type=radio disabled='disabled'><label class='star'></label></div>";
@@ -40,8 +40,7 @@ function genfeedback(id,modalId)
                             out+="<div class='stars'><input type=radio disabled='disabled'><label class='star'></label></div>";
                           }
                         }
-                        out+="<div class='col-6 col-md-4'>"+val+"</div>";
-                        out+="</div></td></tr>";
+                        out+=val+"</td></tr>";
                     } else {
                         out+="<tr><td>"+val+"</td><td>"+data[val]+"</td></tr>";
                     }

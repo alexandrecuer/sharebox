@@ -37,26 +37,25 @@ class Poll < ApplicationRecord
   end
   
   ##
-  # return a hash given a keyword and a csv list of properties separated by ;
-  def hash(list,keyword)
-    table=list.split(';')
-    hash={}
-    table.each_with_index do |t,i|
-      hash["#{keyword}#{i+1}"]=t.strip
-    end
-    hash
-  end
-  
-  ##
   # Return all closed questions in a hash
   def hash_closed
-    hash(self.closed_names,"closed")
+    table=self.closed_names.split(';')
+    hash={}
+    table.each_with_index do |t,i|
+      hash["closed#{i+1}"]=t.strip
+    end
+    hash
   end
 
   ##
   # Return all open questions in a hash
   def hash_open
-    hash(self.open_names,"open")
+    table=self.open_names.split(';')
+    hash={}
+    table.each_with_index do |t,i|
+      hash["open#{i+1}"]=t.strip
+    end
+    hash
   end
 
   ##

@@ -16,23 +16,15 @@ class AssetsController < ApplicationController
     fullreq=[]
 
     unless params[:folder_id]
-      if Rails.application.config.paperclip == 1
-        assets=Asset.all
-      else
         fullreq[0]=req.join("")
         fullreq.push('Asset')
         assets=Asset.find_by_sql(fullreq)
-      end
     else
-      if Rails.application.config.paperclip == 1
-        assets=Asset.where(folder_id: params[:folder_id])
-      else
         req.push(" and assets.folder_id = ?")
         fullreq[0]=req.join("")
         fullreq.push('Asset')
         fullreq.push(params[:folder_id])
         assets=Asset.find_by_sql(fullreq)
-      end
     end
     render json: assets
   end
@@ -109,7 +101,7 @@ class AssetsController < ApplicationController
   # following the call to the new asset method, upload an asset and register it in the database<br>
   # if the asset is a root file, we redirect to root else we redirect to the parent folder
   def create
-	  @asset = current_user.assets.new(asset_params)
+      @asset = current_user.assets.new(asset_params)
       if @asset.save
         flash[:notice] = t('sb.uploaded')
         if @asset.folder_id
@@ -206,27 +198,10 @@ class AssetsController < ApplicationController
     ##
     # private method for file opening management<br>
     # 2 different options for file storage are possible :<br>
-    # - 1) local storage in application_root/forge/attachments/<br>
+    # - 1) local storage in application_root/storage/<br>
     # - 2) Amazon S3 mode, in a cloud storage<br>
     # asset will be stored in a directory named with the asset id : asset_id/asset_name
     def get_file(asset)
-      # switching to S3, we use "redirect_to asset.uploaded_file.expiring_url(10)"
-      # this creates a valid 10s url that allows access to private S3 files
-      if Rails.application.config.paperclip==0
-        redirect_to url_for(asset.uploaded_file)#.service_url
-        # NOT RECOMMANDED BUT WORKING
-        #send_data asset.uploaded_file.download,
-        #            filename: asset.uploaded_file.filename.to_s,
-        #            content_type: asset.uploaded_file.content_type
-      end
-      if Rails.application.config.paperclip==1
-        if Rails.application.config.local_storage==1
-          puts ("opening local file")
-          send_file asset.uploaded_file.path, :type => asset.uploaded_file_content_type
-        elsif Rails.application.config.local_storage==0
-          puts ("opening amazon S3 file")
-          redirect_to asset.uploaded_file.expiring_url(10)
-        end
-      end
+      redirect_to url_for(asset.uploaded_file)
     end
 end
