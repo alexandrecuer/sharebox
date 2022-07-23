@@ -118,19 +118,19 @@ function createtabs(folder,shares,satis,currentuser)
         tabs.push("</li>");
         if (currentuser.id===folder.user_id){
           tabs.push("<li class=nav-item>");
-          tabs.push("<a class=nav-link id=manage-tab data-toggle=tab href=#manage_folder role=tab aria-controls=manage_folder>"+sb["manage"]+" "+sb["folder"]+"</a>");
+          tabs.push("<a class=nav-link id=manage-tab data-bs-toggle=tab href=#manage_folder role=tab aria-controls=manage_folder>"+sb["manage"]+" "+sb["folder"]+"</a>");
           tabs.push("</li>");
         }
     }
     tabs.push("<li class=nav-item>");
-    tabs.push("<a class='nav-link' id=folder-tab data-toggle=tab href=#new_folder role=tab aria-controls=new_folder>"+sb["create"]+" "+sb["subfolder"]+"</a>");
+    tabs.push("<a class='nav-link' id=folder-tab data-bs-toggle=tab href=#new_folder role=tab aria-controls=new_folder>"+sb["create"]+" "+sb["subfolder"]+"</a>");
     tabs.push("</li>");
     tabs.push("<li class=nav-item>");
-    tabs.push("<a class=nav-link id=asset-tab data-toggle=tab href=#new_asset role=tab aria-controls=new_asset>"+sb["upload"]+" "+sb["file"]+"</a>");
+    tabs.push("<a class=nav-link id=asset-tab data-bs-toggle=tab href=#new_asset role=tab aria-controls=new_asset>"+sb["upload"]+" "+sb["file"]+"</a>");
     tabs.push("</li>");
     if (satis.length>0) {
         tabs.push("<li class=nav-item>");
-        tabs.push("<a class=nav-link id=satis-tab data-toggle=tab href=#satisfactions role=tab aria-controls=satisfactions>"+sb["feedbacks"]+"</a>");
+        tabs.push("<a class=nav-link id=satis-tab data-bs-toggle=tab href=#satisfactions role=tab aria-controls=satisfactions>"+sb["feedbacks"]+"</a>");
         tabs.push("</li>");
     }
     tabs.push("</ul>");

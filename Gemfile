@@ -1,53 +1,75 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-  "https://github.com/#{repo_name}.git"
-end
+ruby "3.1.2"
 
-ruby '3.1.2'
+# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+gem "rails", "~> 7.0.3", ">= 7.0.3.1"
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '>= 7.0.3.1'
-# Use mysql as the database for Active Record
-# gem 'mysql2', '>= 0.3.18', '< 0.5'
-gem 'pg'
-# Use Puma as the app server
-gem 'puma'
-gem 'passenger'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-gem "activerecord"
-gem "nokogiri", ">= 1.13.2"
+# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+gem "sprockets-rails"
 
-# Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.2'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.5'
+# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+gem "importmap-rails"
+
+# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem "turbo-rails"
+
+# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem "stimulus-rails"
+
+# Build JSON APIs with ease [https://github.com/rails/jbuilder]
+gem "jbuilder"
+
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+gem "redis", "~> 4.0"
+
+# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
+# gem "kredis"
+
+# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+# gem "bcrypt", "~> 3.1.7"
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
+
+# Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", require: false
+
+# Use Sass to process CSS
+# gem "sassc-rails"
+
+# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+# gem "image_processing", "~> 1.2"
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  #gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '~> 2.13'
-  gem 'selenium-webdriver'
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", platforms: %i[ mri mingw x64_mingw ]
 end
 
 group :development do
-  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
+  # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "web-console"
+
+  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
+  # gem "rack-mini-profiler"
+
+  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
+  # gem "spring"
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+group :test do
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "capybara"
+  gem "selenium-webdriver"
+  gem "webdrivers"
+end
+
+gem 'pg'
+
+gem 'puma'
+
+gem 'passenger'
 
 gem 'devise'
 
@@ -67,4 +89,4 @@ gem 'jquery-ui-rails'
 
 gem 'bootstrap'
 
-gem "websocket-extensions", ">= 0.1.5"
+gem 'websocket-extensions'

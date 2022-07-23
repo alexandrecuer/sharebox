@@ -4,6 +4,8 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+.env
+*.origin*
 # Ignore bundler config.
 /.bundle
 
@@ -20,3 +22,5 @@
 /yarn-error.log
 
 .byebug_history
+
+
