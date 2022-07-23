@@ -213,7 +213,7 @@ class AssetsController < ApplicationController
       # switching to S3, we use "redirect_to asset.uploaded_file.expiring_url(10)"
       # this creates a valid 10s url that allows access to private S3 files
       if Rails.application.config.paperclip==0
-        redirect_to asset.uploaded_file.service_url
+        redirect_to url_for(asset.uploaded_file)#.service_url
         # NOT RECOMMANDED BUT WORKING
         #send_data asset.uploaded_file.download,
         #            filename: asset.uploaded_file.filename.to_s,

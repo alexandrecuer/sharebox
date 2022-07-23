@@ -17,6 +17,7 @@
 /set_env.bat
 /config/initializers/paperclip.rb
 /forge
+/storage
 
 /node_modules
 /yarn-error.log
