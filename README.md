@@ -1,6 +1,10 @@
+rails | [jquery-rails](https://github.com/rails/jquery-rails/blob/master/VERSIONS.md) | bootstrap
+--|--|--
+7.0.3.1 | 4.5 | 5.2
+
 # A business social network tool dedicated to quality management
 
-This application is a SharingFile System with surveys management facilities. It can be defined as an open source CRM - Client Relation Management
+This application is a SharingFile System with surveys management facilities or an open source CRM - Client Relation Management
 
 [![Ruby](https://github.com/alexandrecuer/sharebox/actions/workflows/ruby.yml/badge.svg)](https://github.com/alexandrecuer/sharebox/actions/workflows/ruby.yml)
 
