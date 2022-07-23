@@ -1345,7 +1345,6 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     childprocess (4.1.0)
-    climate_control (0.2.0)
     concurrent-ruby (1.1.10)
     crass (1.0.6)
     debug (1.6.1)
@@ -1391,12 +1390,6 @@ GEM
     marcel (1.0.2)
     matrix (0.4.2)
     method_source (1.0.0)
-    mime-types (3.4.1)
-      mime-types-data (~> 3.2015)
-    mime-types-data (3.2022.0105)
-    mimemagic (0.3.10)
-      nokogiri (~> 1)
-      rake
     mini_mime (1.1.2)
     minitest (5.16.2)
     msgpack (1.5.3)
@@ -1418,12 +1411,6 @@ GEM
     nokogiri (1.13.7-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    paperclip (6.1.0)
-      activemodel (>= 4.2.0)
-      activesupport (>= 4.2.0)
-      mime-types
-      mimemagic (~> 0.3.0)
-      terrapin (~> 0.6.0)
     passenger (6.0.14)
       rack
       rake (>= 0.8.1)
@@ -1495,8 +1482,6 @@ GEM
     stimulus-rails (1.1.0)
       railties (>= 6.0.0)
     strscan (3.0.3)
-    terrapin (0.6.0)
-      climate_control (>= 0.0.3, < 1.0)
     thor (1.2.1)
     tilt (2.0.11)
     timeout (0.3.0)
@@ -1542,7 +1527,6 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   jquery-ui-rails
-  paperclip
   passenger
   pg
   puma
