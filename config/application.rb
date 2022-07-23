@@ -11,7 +11,7 @@ Bundler.require(*Rails.groups)
 module Sharebox
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+    config.load_defaults 7.0
     config.active_job.queue_name_prefix = Rails.env
     config.time_zone = 'Paris'
     # Settings in config/environments/* take precedence over those specified here.
