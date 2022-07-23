@@ -66,37 +66,9 @@ Rails.application.configure do
     enable_starttls_auto:   true
   }
   
-  # windows users only
-  # error with ENV variables starting by / addition of an 21 char prefix : C:/RailsInstaller/Git'
-  # we remove this prefix
-  #AWS_SAK = ENV.fetch('AWS_SECRET_ACCESS_KEY')[21,ENV.fetch('AWS_SECRET_ACCESS_KEY').length-21]
-  #ERRATUM : when using a .env file and node foreman, the problem disappears
-  
-  # paperclip conf
-  config.local_storage=1
-
-  if (config.local_storage==0)
-    config.paperclip_defaults = {
-      storage: :s3,
-      s3_credentials: {
-          bucket: ENV.fetch('S3_BUCKET_NAME'),
-          access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-          secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
-          s3_region: ENV.fetch('AWS_REGION'),
-          s3_host_name: ENV.fetch('AWS_HOST_NAME'),
-      }
-    }
-  end
 
   # active storage conf : store files locally or not
   # Store files locally for devlopment
   config.active_storage.service = :local
-  
-  # activate paperclip or active storage
-  if ENV['PAPERCLIP']
-    config.paperclip=ENV.fetch('PAPERCLIP').to_i
-  else
-    config.paperclip=1
-  end
   
 end
