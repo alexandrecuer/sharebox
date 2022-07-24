@@ -6,15 +6,15 @@
 <title>
   Class: PollsController
   
-    &mdash; Documentation by YARD 0.9.16
+    &mdash; Documentation by YARD 0.9.28
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "PollsController";
   relpath = '';
 </script>
@@ -147,8 +147,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>check if user has admin rights<br> All the views and features related to
-polls are destinated only for admins.</p>
+<p>check if user has admin rights<br> All the views and features related to polls are destinated only for admins.</p>
 </div></span>
   
 </li>
@@ -172,9 +171,7 @@ polls are destinated only for admins.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Create the poll <br> possible only if there is a title, a description and
-at least 1 question (open or closed)<br> duplicate questions will be
-rejected and the poll creation will fail.</p>
+<p>Create the poll <br> possible only if there is a title, a description and at least 1 question (open or closed)<br> duplicate questions will be rejected and the poll creation will fail.</p>
 </div></span>
   
 </li>
@@ -198,9 +195,7 @@ rejected and the poll creation will fail.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Destroy a poll/survey <br> Every folder related to this poll will be
-updated (reinitialize poll_id) <br> All satisfaction answers related to the
-poll will be deleted cause they all belong to a poll.</p>
+<p>Destroy a poll/survey <br> Every folder related to this poll will be updated (reinitialize poll_id) <br> All satisfaction answers related to the poll will be deleted cause they all belong to a poll.</p>
 </div></span>
   
 </li>
@@ -224,8 +219,7 @@ poll will be deleted cause they all belong to a poll.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Show the edit form in order for the admin to update existing polls (title,
-description…)<br> This view allows you to edit a poll.</p>
+<p>Show the edit form in order for the admin to update existing polls (title, description…)<br> This view allows you to edit a poll.</p>
 </div></span>
   
 </li>
@@ -249,9 +243,7 @@ description…)<br> This view allows you to edit a poll.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>if route is /getpolls return all the polls in the colibri<br> if route is
-/getpolls?mynums=1 return poll numbers containing satisfactions answers out
-of the folders/assets system for the current_user.</p>
+<p>if route is /getpolls return all the polls in the colibri<br> if route is /getpolls?mynums=1 return poll numbers containing satisfactions answers out of the folders/assets system for the current_user.</p>
 </div></span>
   
 </li>
@@ -275,8 +267,7 @@ of the folders/assets system for the current_user.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>the index route leads to the satisfactions exploitation main dashboard
-where everything is done with ajax.</p>
+<p>the index route leads to the satisfactions exploitation main dashboard where everything is done with ajax.</p>
 </div></span>
   
 </li>
@@ -300,10 +291,30 @@ where everything is done with ajax.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Show the &#39;new&#39; form in order for the admin to create new polls<br>
-open &amp; closed questions can be defined, via two different textarea<br>
-Questions must be separated by “;”.</p>
+<p>Show the ‘new’ form in order for the admin to create new polls<br> open &amp; closed questions can be defined, via two different textarea<br> Questions must be separated by “;”.</p>
 </div></span>
+  
+</li>
+
+      
+        <li class="private ">
+  <span class="summary_signature">
+    
+      <a href="#poll_params-instance_method" title="#poll_params (instance method)">#<strong>poll_params</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title private">private</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -326,9 +337,7 @@ Questions must be separated by “;”.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>not used actually<br> should be recoded (?) to implement the same result as
-the route <a
-href="http://localhost:3000/satisfactions/run/poll_id?blabla">localhost:3000/satisfactions/run/poll_id?blabla</a>.</p>
+<p>not used actually<br> should be recoded (?) to implement the same result as the route <a href="http://localhost:3000/satisfactions/run/poll_id?blabla">localhost:3000/satisfactions/run/poll_id?blabla</a>.</p>
 </div></span>
   
 </li>
@@ -371,7 +380,7 @@ href="http://localhost:3000/satisfactions/run/poll_id?blabla">localhost:3000/sat
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="ApplicationController.html" title="ApplicationController (class)">ApplicationController</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="ApplicationController.html#check_lang-instance_method" title="ApplicationController#check_lang (method)">#check_lang</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="ApplicationController.html#check_lang-instance_method" title="ApplicationController#check_lang (method)">#check_lang</a></span>, <span class='object_link'><a href="ApplicationController.html#prepare_attached_docs_request-instance_method" title="ApplicationController#prepare_attached_docs_request (method)">#prepare_attached_docs_request</a></span></p>
 
   
 
@@ -391,8 +400,7 @@ href="http://localhost:3000/satisfactions/run/poll_id?blabla">localhost:3000/sat
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>check if user has admin rights<br> All the views and features related to
-polls are destinated only for admins</p>
+<p>check if user has admin rights<br> All the views and features related to polls are destinated only for admins</p>
 
 
   </div>
@@ -439,9 +447,7 @@ polls are destinated only for admins</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Create the poll <br> possible only if there is a title, a description and
-at least 1 question (open or closed)<br> duplicate questions will be
-rejected and the poll creation will fail</p>
+<p>Create the poll <br> possible only if there is a title, a description and at least 1 question (open or closed)<br> duplicate questions will be rejected and the poll creation will fail</p>
 
 
   </div>
@@ -477,13 +483,15 @@ rejected and the poll creation will fail</p>
 128
 129
 130
-131</pre>
+131
+132</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 109</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
   <span class='id identifier rubyid_check_admin'>check_admin</span>
+  <span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_poll_params'>poll_params</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>name</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='ivar'>@poll</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_polls'>polls</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_poll_params'>poll_params</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='ivar'>@poll</span><span class='period'>.</span><span class='id identifier rubyid_description'>description</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
     <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.missing_required_fields</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -522,9 +530,7 @@ rejected and the poll creation will fail</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Destroy a poll/survey <br> Every folder related to this poll will be
-updated (reinitialize poll_id) <br> All satisfaction answers related to the
-poll will be deleted cause they all belong to a poll</p>
+<p>Destroy a poll/survey <br> Every folder related to this poll will be updated (reinitialize poll_id) <br> All satisfaction answers related to the poll will be deleted cause they all belong to a poll</p>
 
 
   </div>
@@ -538,7 +544,6 @@ poll will be deleted cause they all belong to a poll</p>
       <pre class="lines">
 
 
-137
 138
 139
 140
@@ -548,10 +553,11 @@ poll will be deleted cause they all belong to a poll</p>
 144
 145
 146
-147</pre>
+147
+148</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 137</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 138</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
   <span class='id identifier rubyid_check_admin'>check_admin</span>
@@ -581,8 +587,7 @@ poll will be deleted cause they all belong to a poll</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Show the edit form in order for the admin to update existing polls (title,
-description…)<br> This view allows you to edit a poll.</p>
+<p>Show the edit form in order for the admin to update existing polls (title, description…)<br> This view allows you to edit a poll.</p>
 
 
   </div>
@@ -633,9 +638,7 @@ description…)<br> This view allows you to edit a poll.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>if route is /getpolls return all the polls in the colibri<br> if route is
-/getpolls?mynums=1 return poll numbers containing satisfactions answers out
-of the folders/assets system for the current_user</p>
+<p>if route is /getpolls return all the polls in the colibri<br> if route is /getpolls?mynums=1 return poll numbers containing satisfactions answers out of the folders/assets system for the current_user</p>
 
 
   </div>
@@ -663,13 +666,13 @@ of the folders/assets system for the current_user</p>
       <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 21</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_getpolls'>getpolls</span>
- <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:mynums</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='op'>==</span><span class='int'>1</span>
-   <span class='id identifier rubyid_poll_ids'>poll_ids</span><span class='op'>=</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>folder_id &lt; ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='int'>0</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_pluck'>pluck</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>DISTINCT poll_id</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-   <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_poll_ids'>poll_ids</span>
- <span class='kw'>else</span>
-   <span class='id identifier rubyid_allpolls'>allpolls</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Poll.html" title="Poll (class)">Poll</a></span></span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_order'>order</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id DESC</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-   <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_allpolls'>allpolls</span>
- <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:mynums</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='op'>==</span><span class='int'>1</span>
+    <span class='id identifier rubyid_poll_ids'>poll_ids</span><span class='op'>=</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_satisfactions'>satisfactions</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>folder_id &lt; ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='int'>0</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_pluck'>pluck</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>DISTINCT poll_id</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_poll_ids'>poll_ids</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_allpolls'>allpolls</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Poll.html" title="Poll (class)">Poll</a></span></span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_order'>order</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id DESC</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_allpolls'>allpolls</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -688,8 +691,7 @@ of the folders/assets system for the current_user</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>the index route leads to the satisfactions exploitation main dashboard
-where everything is done with ajax</p>
+<p>the index route leads to the satisfactions exploitation main dashboard where everything is done with ajax</p>
 
 
   </div>
@@ -734,9 +736,7 @@ where everything is done with ajax</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Show the &#39;new&#39; form in order for the admin to create new polls<br>
-open &amp; closed questions can be defined, via two different textarea<br>
-Questions must be separated by “;”</p>
+<p>Show the ‘new’ form in order for the admin to create new polls<br> open &amp; closed questions can be defined, via two different textarea<br> Questions must be separated by “;”</p>
 
 
   </div>
@@ -768,6 +768,36 @@ Questions must be separated by “;”</p>
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="poll_params-instance_method">
+  
+    #<strong>poll_params</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(private)</span>
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+151
+152
+153</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/controllers/polls_controller.rb', line 151</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_poll_params'>poll_params</span>
+  <span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_require'>require</span><span class='lparen'>(</span><span class='symbol'>:poll</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_permit'>permit</span><span class='lparen'>(</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:description</span><span class='comma'>,</span> <span class='symbol'>:closed_names</span><span class='comma'>,</span> <span class='symbol'>:open_names</span><span class='comma'>,</span> <span class='symbol'>:closed_names_number</span><span class='comma'>,</span> <span class='symbol'>:open_names_number</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="show-instance_method">
   
     #<strong>show</strong>  &#x21d2; <tt>Object</tt> 
@@ -779,9 +809,7 @@ Questions must be separated by “;”</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>not used actually<br> should be recoded (?) to implement the same result as
-the route <a
-href="http://localhost:3000/satisfactions/run/poll_id?blabla">localhost:3000/satisfactions/run/poll_id?blabla</a></p>
+<p>not used actually<br> should be recoded (?) to implement the same result as the route <a href="http://localhost:3000/satisfactions/run/poll_id?blabla">localhost:3000/satisfactions/run/poll_id?blabla</a></p>
 
 
   </div>
@@ -916,9 +944,9 @@ href="http://localhost:3000/satisfactions/run/poll_id?blabla">localhost:3000/sat
 </div>
 
       <div id="footer">
-  Generated on Tue Aug 20 10:01:47 2019 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.16 (ruby-2.3.3).
+  Generated on Sun Jul 24 11:52:51 2022 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.1.2).
 </div>
 
     </div>

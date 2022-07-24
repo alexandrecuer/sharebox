@@ -6,15 +6,15 @@
 <title>
   Class: AssetsController
   
-    &mdash; Documentation by YARD 0.9.16
+    &mdash; Documentation by YARD 0.9.28
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "AssetsController";
   relpath = '';
 </script>
@@ -106,7 +106,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>manage assets&#39;creation inside the sharebox site</p>
+<p>manage assets’creation inside the sharebox site</p>
 
 
   </div>
@@ -129,6 +129,28 @@
 
     <ul class="summary">
       
+        <li class="private ">
+  <span class="summary_signature">
+    
+      <a href="#asset_params-instance_method" title="#asset_params (instance method)">#<strong>asset_params</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title private">private</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
         <li class="public ">
   <span class="summary_signature">
     
@@ -147,9 +169,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>following the call to the new asset method, upload an asset and register it
-in the database<br> if the asset is a root file, we redirect to root else
-we redirect to the parent folder.</p>
+<p>following the call to the new asset method, upload an asset and register it in the database<br> if the asset is a root file, we redirect to root else we redirect to the parent folder.</p>
 </div></span>
   
 </li>
@@ -225,6 +245,30 @@ we redirect to the parent folder.</p>
 </li>
 
       
+        <li class="private ">
+  <span class="summary_signature">
+    
+      <a href="#get_file-instance_method" title="#get_file (instance method)">#<strong>get_file</strong>(asset)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title private">private</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>private method for file opening management<br> 2 different options for file storage are possible :<br> - 1) local storage in application_root/storage/<br> - 2) Amazon S3 mode, in a cloud storage<br>.</p>
+</div></span>
+  
+</li>
+
+      
         <li class="public ">
   <span class="summary_signature">
     
@@ -265,13 +309,7 @@ we redirect to the parent folder.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Show the new form in order to upload a new asset<br> method used when
-following a route /folders/folder_id/new_file or /assets/new<br>
-/folders/folder_id/new_file will upload the asset in the folder identified
-by folder_id<br> /assets/new will upload the asset at the root of the user
-- such files are strictly personal and cannot be shared<br>   Only admin or
-private users are able to upload files<br> They cannot upload files outside
-the folders they own.</p>
+<p>Show the new form in order to upload a new asset<br> method used when following a route /folders/folder_id/new_file or /assets/new<br> /folders/folder_id/new_file will upload the asset in the folder identified by folder_id<br> /assets/new will upload the asset at the root of the user - such files are strictly personal and cannot be shared<br> Only admin or private users are able to upload files<br> They cannot upload files outside the folders they own.</p>
 </div></span>
   
 </li>
@@ -295,9 +333,7 @@ the folders they own.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Method used when following the route /assets/assets_id<br> Show the name of
-the file and its directory (forge/attachments/asset_id/asset_name)<br>
-actually not used.…</p>
+<p>Method used when following the route /assets/assets_id<br> Show the name of the file and its directory (forge/attachments/asset_id/asset_name)<br> actually not used.…</p>
 </div></span>
   
 </li>
@@ -338,7 +374,7 @@ actually not used.…</p>
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="ApplicationController.html" title="ApplicationController (class)">ApplicationController</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="ApplicationController.html#check_lang-instance_method" title="ApplicationController#check_lang (method)">#check_lang</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="ApplicationController.html#check_lang-instance_method" title="ApplicationController#check_lang (method)">#check_lang</a></span>, <span class='object_link'><a href="ApplicationController.html#prepare_attached_docs_request-instance_method" title="ApplicationController#prepare_attached_docs_request (method)">#prepare_attached_docs_request</a></span></p>
 
   
 
@@ -347,7 +383,41 @@ actually not used.…</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="create-instance_method">
+  <h3 class="signature first" id="asset_params-instance_method">
+  
+    #<strong>asset_params</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(private)</span>
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+192
+193
+194
+195
+196</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 192</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_asset_params'>asset_params</span>
+  <span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_require'>require</span><span class='lparen'>(</span><span class='symbol'>:asset</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_permit'>permit</span><span class='lparen'>(</span><span class='symbol'>:uploaded_file</span><span class='comma'>,</span> <span class='symbol'>:folder_id</span><span class='rparen'>)</span>
+  <span class='comment'># previous config when form was only composed of a file input
+</span>  <span class='comment'>#params.require(:asset).permit(:uploaded_file, :folder_id) if params[:asset]
+</span><span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="create-instance_method">
   
     #<strong>create</strong>  &#x21d2; <tt>Object</tt> 
   
@@ -358,9 +428,7 @@ actually not used.…</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>following the call to the new asset method, upload an asset and register it
-in the database<br> if the asset is a root file, we redirect to root else
-we redirect to the parent folder</p>
+<p>following the call to the new asset method, upload an asset and register it in the database<br> if the asset is a root file, we redirect to root else we redirect to the parent folder</p>
 
 
   </div>
@@ -374,28 +442,28 @@ we redirect to the parent folder</p>
       <pre class="lines">
 
 
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
 103
-104</pre>
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 89</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 103</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
- <span class='ivar'>@asset</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_assets'>assets</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_asset_params'>asset_params</span><span class='rparen'>)</span>
+    <span class='ivar'>@asset</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_assets'>assets</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_asset_params'>asset_params</span><span class='rparen'>)</span>
     <span class='kw'>if</span> <span class='ivar'>@asset</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
       <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.uploaded</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
       <span class='kw'>if</span> <span class='ivar'>@asset</span><span class='period'>.</span><span class='id identifier rubyid_folder_id'>folder_id</span>
@@ -430,25 +498,25 @@ we redirect to the parent folder</p>
       <pre class="lines">
 
 
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
 120
-121</pre>
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 106</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 120</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete_asset'>delete_asset</span>
   <span class='id identifier rubyid_results'>results</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -497,19 +565,19 @@ we redirect to the parent folder</p>
       <pre class="lines">
 
 
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135</pre>
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 126</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 140</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
   <span class='ivar'>@asset</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_assets'>assets</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -552,20 +620,6 @@ we redirect to the parent folder</p>
       <pre class="lines">
 
 
-140
-141
-142
-143
-144
-145
-146
-147
-148
-149
-150
-151
-152
-153
 154
 155
 156
@@ -587,15 +641,29 @@ we redirect to the parent folder</p>
 172
 173
 174
-175</pre>
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 140</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 154</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span>
   <span class='comment'>#asset = current_user.assets.find_by_id(params[:id])
 </span>  <span class='id identifier rubyid_asset'>asset</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Asset.html" title="Asset (class)">Asset</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-  
+
   <span class='kw'>if</span> <span class='id identifier rubyid_asset'>asset</span>
     <span class='comment'>#case 1 : asset is a root file
 </span>    <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_asset'>asset</span><span class='period'>.</span><span class='id identifier rubyid_folder_id'>folder_id</span>
@@ -634,6 +702,52 @@ we redirect to the parent folder</p>
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="get_file-instance_method">
+  
+    #<strong>get_file</strong>(asset)  &#x21d2; <tt>Object</tt>  <span class="extras">(private)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>private method for file opening management<br> 2 different options for file storage are possible :<br></p>
+<ul><li>
+<p>1) local storage in application_root/storage/<br></p>
+</li><li>
+<p>2) Amazon S3 mode, in a cloud storage<br></p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+203
+204
+205</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 203</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_file'>get_file</span><span class='lparen'>(</span><span class='id identifier rubyid_asset'>asset</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_url_for'>url_for</span><span class='lparen'>(</span><span class='id identifier rubyid_asset'>asset</span><span class='period'>.</span><span class='id identifier rubyid_uploaded_file'>uploaded_file</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="index-instance_method">
   
     #<strong>index</strong>  &#x21d2; <tt>Object</tt> 
@@ -648,25 +762,43 @@ we redirect to the parent folder</p>
       <pre class="lines">
 
 
-8
-9
-10
-11
-12
 13
 14
 15
-16</pre>
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 13</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_index'>index</span>
+  <span class='comment'># request preparation
+</span>  <span class='id identifier rubyid_req'>req</span><span class='op'>=</span><span class='id identifier rubyid_prepare_attached_docs_request'>prepare_attached_docs_request</span>
+  <span class='id identifier rubyid_fullreq'>fullreq</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
+
   <span class='kw'>unless</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:folder_id</span><span class='rbracket'>]</span>
-    <span class='id identifier rubyid_assets'>assets</span><span class='op'>=</span><span class='const'>Asset</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span>
+      <span class='id identifier rubyid_fullreq'>fullreq</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>=</span><span class='id identifier rubyid_req'>req</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_fullreq'>fullreq</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Asset</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_assets'>assets</span><span class='op'>=</span><span class='const'>Asset</span><span class='period'>.</span><span class='id identifier rubyid_find_by_sql'>find_by_sql</span><span class='lparen'>(</span><span class='id identifier rubyid_fullreq'>fullreq</span><span class='rparen'>)</span>
   <span class='kw'>else</span>
-    <span class='comment'># cannot use find_by - it returns only one element
-</span>    <span class='id identifier rubyid_assets'>assets</span><span class='op'>=</span><span class='const'>Asset</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>folder_id:</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:folder_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_req'>req</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> and assets.folder_id = ?</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_fullreq'>fullreq</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>=</span><span class='id identifier rubyid_req'>req</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_fullreq'>fullreq</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Asset</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_fullreq'>fullreq</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:folder_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_assets'>assets</span><span class='op'>=</span><span class='const'>Asset</span><span class='period'>.</span><span class='id identifier rubyid_find_by_sql'>find_by_sql</span><span class='lparen'>(</span><span class='id identifier rubyid_fullreq'>fullreq</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_assets'>assets</span>
 <span class='kw'>end</span></pre>
@@ -687,14 +819,7 @@ we redirect to the parent folder</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Show the new form in order to upload a new asset<br> method used when
-following a route /folders/folder_id/new_file or /assets/new<br>
-/folders/folder_id/new_file will upload the asset in the folder identified
-by folder_id<br> /assets/new will upload the asset at the root of the user
-- such files are strictly personal and cannot be shared<br></p>
-
-<p>Only admin or private users are able to upload files<br> They cannot upload
-files outside the folders they own</p>
+<p>Show the new form in order to upload a new asset<br> method used when following a route /folders/folder_id/new_file or /assets/new<br> /folders/folder_id/new_file will upload the asset in the folder identified by folder_id<br> /assets/new will upload the asset at the root of the user - such files are strictly personal and cannot be shared<br> Only admin or private users are able to upload files<br> They cannot upload files outside the folders they own</p>
 
 
   </div>
@@ -708,29 +833,29 @@ files outside the folders they own</p>
       <pre class="lines">
 
 
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
 51
 52
 53
 54
 55
-56</pre>
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 37</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_new'>new</span>
   <span class='kw'>unless</span> <span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_is_admin?'>is_admin?</span> <span class='op'>||</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_is_private?'>is_private?</span><span class='rparen'>)</span>
@@ -739,7 +864,7 @@ files outside the folders they own</p>
   <span class='kw'>end</span>
   <span class='ivar'>@asset</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_assets'>assets</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
   <span class='comment'># If there is a folder_id, we attach the file to the corresponding folder&lt;br&gt;
-</span>  <span class='comment'># if not, it will be a root located file 
+</span>  <span class='comment'># if not, it will be a root located file
 </span>  <span class='kw'>if</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:folder_id</span><span class='rbracket'>]</span>
     <span class='ivar'>@hosting_folder</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_folders'>folders</span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:folder_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
     <span class='kw'>if</span> <span class='ivar'>@hosting_folder</span>
@@ -769,9 +894,7 @@ files outside the folders they own</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Method used when following the route /assets/assets_id<br> Show the name of
-the file and its directory (forge/attachments/asset_id/asset_name)<br>
-actually not used.…</p>
+<p>Method used when following the route /assets/assets_id<br> Show the name of the file and its directory (forge/attachments/asset_id/asset_name)<br> actually not used.…</p>
 
 
   </div>
@@ -785,16 +908,16 @@ actually not used.…</p>
       <pre class="lines">
 
 
-22
-23
-24
-25
-26
-27
-28</pre>
+36
+37
+38
+39
+40
+41
+42</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 36</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_show'>show</span>
   <span class='kw'>if</span> <span class='ivar'>@asset</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_assets'>assets</span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -823,20 +946,6 @@ actually not used.…</p>
       <pre class="lines">
 
 
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
 72
 73
 74
@@ -849,10 +958,24 @@ actually not used.…</p>
 81
 82
 83
-84</pre>
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/assets_controller.rb', line 72</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_upload_asset'>upload_asset</span>
     <span class='id identifier rubyid_results'>results</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -891,9 +1014,9 @@ actually not used.…</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Aug 20 10:01:47 2019 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.16 (ruby-2.3.3).
+  Generated on Sun Jul 24 11:52:51 2022 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.1.2).
 </div>
 
     </div>

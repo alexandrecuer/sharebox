@@ -6,15 +6,15 @@
 <title>
   Class: Folder
   
-    &mdash; Documentation by YARD 0.9.16
+    &mdash; Documentation by YARD 0.9.28
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "Folder";
   relpath = '';
 </script>
@@ -184,13 +184,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>return a list of all metadatas for a given folder id<br> to be inserted in
-the folder &#39;lists&#39; field<br> <a href=""shares"">list</a> will
-contain a table with all share ids<br> <a href=""satis"">list</a> will
-contain a table with all satisfaction ids<br> <a
-href=""swarmed_to"">list</a> will contain the id of the user being granted
-the folder as swarmed<br> to decode when reading the folder record :
-ActiveSupport::JSON.decode(folder.lists).</p>
+<p>return a list of all metadatas for a given folder id<br> to be inserted in the folder ‘lists’ field<br> <a href=""shares"">list</a> will contain a table with all share ids<br> <a href=""satis"">list</a> will contain a table with all satisfaction ids<br> <a href=""swarmed_to"">list</a> will contain the id of the user being granted the folder as swarmed<br> to decode when reading the folder record : ActiveSupport::JSON.decode(folder.lists).</p>
 </div></span>
   
 </li>
@@ -214,8 +208,7 @@ ActiveSupport::JSON.decode(folder.lists).</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Fix user_id to i on all folder&#39;s children (assets, subfolders,
-subassets, shares, subshares).</p>
+<p>Fix user_id to i on all folder’s children (assets, subfolders, subassets, shares, subshares).</p>
 </div></span>
   
 </li>
@@ -239,8 +232,7 @@ subassets, shares, subshares).</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>inform the customer by email if files/surveys are waiting for him<br>
-customer can be registered in colibri or not.</p>
+<p>inform the customer by email if files/surveys are waiting for him<br> customer can be registered in colibri or not.</p>
 </div></span>
   
 </li>
@@ -312,10 +304,7 @@ customer can be registered in colibri or not.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Return all subfolders, assets and shares related to the folder, directly or
-indirectly<br> works recursively<br> analyzing the &#39;nearest&#39;
-children first - operate layer by layer, from the nearest layer to the
-furthest layer.</p>
+<p>Return all subfolders, assets and shares related to the folder, directly or indirectly<br> works recursively<br> analyzing the ‘nearest’ children first - operate layer by layer, from the nearest layer to the furthest layer.</p>
 </div></span>
   
 </li>
@@ -363,8 +352,7 @@ furthest layer.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Return true if at least a satisfaction answer has been recorded on the
-folder.</p>
+<p>Return true if at least a satisfaction answer has been recorded on the folder.</p>
 </div></span>
   
 </li>
@@ -388,8 +376,7 @@ folder.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>return true if we can find at least one subfolder, asset or share directly
-related to the folder.</p>
+<p>return true if we can find at least one subfolder, asset or share directly related to the folder.</p>
 </div></span>
   
 </li>
@@ -509,9 +496,7 @@ related to the folder.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>return all assets belonging to a folder (directly - ie its own assets, not
-the ones in its subfolders)<br> inutile non - folder.assets donne le même
-résultat def get_assets  return Asset.where(folder_id: self.id) end.</p>
+<p>return all assets belonging to a folder (directly - ie its own assets, not the ones in its subfolders)<br> inutile non - folder.assets donne le même résultat def get_assets  return Asset.where(folder_id: self.id) end.</p>
 </div></span>
   
 </li>
@@ -535,8 +520,7 @@ résultat def get_assets  return Asset.where(folder_id: self.id) end.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>is the folder explicitely shared to the user ?<br> by a share in the
-shared_folders table.</p>
+<p>is the folder explicitely shared to the user ?<br> by a share in the shared_folders table.</p>
 </div></span>
   
 </li>
@@ -560,8 +544,7 @@ shared_folders table.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>is the folder swarmed ?<br> has the folder been created or dropped in a
-directory belonging to another private user ?.</p>
+<p>is the folder swarmed ?<br> has the folder been created or dropped in a directory belonging to another private user ?.</p>
 </div></span>
   
 </li>
@@ -609,15 +592,7 @@ directory belonging to another private user ?.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>return the id of the user being granted the folder as swarmed<br> for this
-legacy process, things <strong>MUST</strong> be done in a specific
-order<br> checking if parent.user_id equals to owner.id before analysing
-the parent meta &#39;swarmed_to&#39; would NOT be suitable<br> example :
-considering a folder1 belonging to user1, shared to user2 and user3<br>
-user2 creates folder2 inside folder 1 and user3 creates folder3 inside
-folder2<br> if we check the parent first, the legacy process could conclude
-that folder3 is swarmed to user2<br> this is not what is expected from the
-legacy process which has to conclude that folder3 is swarmed to user 1.</p>
+<p>return the id of the user being granted the folder as swarmed<br> for this legacy process, things <strong>MUST</strong> be done in a specific order<br> checking if parent.user_id equals to owner.id before analysing the parent meta ‘swarmed_to’ would NOT be suitable<br> example : considering a folder1 belonging to user1, shared to user2 and user3<br> user2 creates folder2 inside folder 1 and user3 creates folder3 inside folder2<br> if we check the parent first, the legacy process could conclude that folder3 is swarmed to user2<br> this is not what is expected from the legacy process which has to conclude that folder3 is swarmed to user 1.</p>
 </div></span>
   
 </li>
@@ -641,9 +616,7 @@ legacy process which has to conclude that folder3 is swarmed to user 1.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>move a folder and all related childs (subs,assets,shares,satisfactions)
-into another one and/or transfer to another user <br> quite costly but it
-is the ony way.…</p>
+<p>move a folder and all related childs (subs,assets,shares,satisfactions) into another one and/or transfer to another user <br> quite costly but it is the ony way.…</p>
 </div></span>
   
 </li>
@@ -667,10 +640,7 @@ is the ony way.…</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>execute all &#39;folder sharing&#39; operations providing a text list of
-emails (separator ,) <br> update folder metadata if shares are successfully
-created only folder owner can add new shares<br> if TEAM var exists, could
-we authorize others users from the team who benefit from a share  ?.</p>
+<p>execute all ‘folder sharing’ operations providing a text list of emails (separator ,) <br> update folder metadata if shares are successfully created only folder owner can add new shares<br> if TEAM var exists, could we authorize others users from the team who benefit from a share  ?.</p>
 </div></span>
   
 </li>
@@ -729,7 +699,7 @@ we authorize others users from the team who benefit from a share  ?.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the value of attribute status</p>
+<p>Returns the value of attribute status.</p>
 
 
   </div>
@@ -777,13 +747,7 @@ we authorize others users from the team who benefit from a share  ?.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>return a list of all metadatas for a given folder id<br> to be inserted in
-the folder &#39;lists&#39; field<br> <a href=""shares"">list</a> will
-contain a table with all share ids<br> <a href=""satis"">list</a> will
-contain a table with all satisfaction ids<br> <a
-href=""swarmed_to"">list</a> will contain the id of the user being granted
-the folder as swarmed<br> to decode when reading the folder record :
-ActiveSupport::JSON.decode(folder.lists)</p>
+<p>return a list of all metadatas for a given folder id<br> to be inserted in the folder ‘lists’ field<br> <a href=""shares"">list</a> will contain a table with all share ids<br> <a href=""satis"">list</a> will contain a table with all satisfaction ids<br> <a href=""swarmed_to"">list</a> will contain the id of the user being granted the folder as swarmed<br> to decode when reading the folder record : ActiveSupport::JSON.decode(folder.lists)</p>
 
 
   </div>
@@ -862,8 +826,7 @@ ActiveSupport::JSON.decode(folder.lists)</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Fix user_id to i on all folder&#39;s children (assets, subfolders,
-subassets, shares, subshares)</p>
+<p>Fix user_id to i on all folder’s children (assets, subfolders, subassets, shares, subshares)</p>
 
 
   </div>
@@ -914,8 +877,7 @@ subassets, shares, subshares)</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>inform the customer by email if files/surveys are waiting for him<br>
-customer can be registered in colibri or not</p>
+<p>inform the customer by email if files/surveys are waiting for him<br> customer can be registered in colibri or not</p>
 
 
   </div>
@@ -929,9 +891,6 @@ customer can be registered in colibri or not</p>
       <pre class="lines">
 
 
-300
-301
-302
 303
 304
 305
@@ -951,10 +910,13 @@ customer can be registered in colibri or not</p>
 319
 320
 321
-322</pre>
+322
+323
+324
+325</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 300</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 303</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_email_customer'>email_customer</span><span class='lparen'>(</span><span class='id identifier rubyid_current_user'>current_user</span><span class='comma'>,</span><span class='id identifier rubyid_customer_email'>customer_email</span><span class='comma'>,</span><span class='id identifier rubyid_share'>share</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span><span class='id identifier rubyid_customer'>customer</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_results'>results</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -1102,10 +1064,7 @@ customer can be registered in colibri or not</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Return all subfolders, assets and shares related to the folder, directly or
-indirectly<br> works recursively<br> analyzing the &#39;nearest&#39;
-children first - operate layer by layer, from the nearest layer to the
-furthest layer</p>
+<p>Return all subfolders, assets and shares related to the folder, directly or indirectly<br> works recursively<br> analyzing the ‘nearest’ children first - operate layer by layer, from the nearest layer to the furthest layer</p>
 
 
   </div>
@@ -1232,8 +1191,7 @@ furthest layer</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Return true if at least a satisfaction answer has been recorded on the
-folder</p>
+<p>Return true if at least a satisfaction answer has been recorded on the folder</p>
 
 
   </div>
@@ -1295,8 +1253,7 @@ folder</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>return true if we can find at least one subfolder, asset or share directly
-related to the folder</p>
+<p>return true if we can find at least one subfolder, asset or share directly related to the folder</p>
 
 
   </div>
@@ -1599,9 +1556,7 @@ related to the folder</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>return all assets belonging to a folder (directly - ie its own assets, not
-the ones in its subfolders)<br> inutile non - folder.assets donne le même
-résultat def get_assets</p>
+<p>return all assets belonging to a folder (directly - ie its own assets, not the ones in its subfolders)<br> inutile non - folder.assets donne le même résultat def get_assets</p>
 
 <pre class="code ruby"><code class="ruby"><span class='kw'>return</span> <span class='const'><span class='object_link'><a href="Asset.html" title="Asset (class)">Asset</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>folder_id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
 </code></pre>
@@ -1660,8 +1615,7 @@ résultat def get_assets</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>is the folder explicitely shared to the user ?<br> by a share in the
-shared_folders table</p>
+<p>is the folder explicitely shared to the user ?<br> by a share in the shared_folders table</p>
 
 
   </div>
@@ -1715,8 +1669,7 @@ shared_folders table</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>is the folder swarmed ?<br> has the folder been created or dropped in a
-directory belonging to another private user ?</p>
+<p>is the folder swarmed ?<br> has the folder been created or dropped in a directory belonging to another private user ?</p>
 
 
   </div>
@@ -1838,15 +1791,7 @@ directory belonging to another private user ?</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>return the id of the user being granted the folder as swarmed<br> for this
-legacy process, things <strong>MUST</strong> be done in a specific
-order<br> checking if parent.user_id equals to owner.id before analysing
-the parent meta &#39;swarmed_to&#39; would NOT be suitable<br> example :
-considering a folder1 belonging to user1, shared to user2 and user3<br>
-user2 creates folder2 inside folder 1 and user3 creates folder3 inside
-folder2<br> if we check the parent first, the legacy process could conclude
-that folder3 is swarmed to user2<br> this is not what is expected from the
-legacy process which has to conclude that folder3 is swarmed to user 1</p>
+<p>return the id of the user being granted the folder as swarmed<br> for this legacy process, things <strong>MUST</strong> be done in a specific order<br> checking if parent.user_id equals to owner.id before analysing the parent meta ‘swarmed_to’ would NOT be suitable<br> example : considering a folder1 belonging to user1, shared to user2 and user3<br> user2 creates folder2 inside folder 1 and user3 creates folder3 inside folder2<br> if we check the parent first, the legacy process could conclude that folder3 is swarmed to user2<br> this is not what is expected from the legacy process which has to conclude that folder3 is swarmed to user 1</p>
 
 
   </div>
@@ -1909,9 +1854,7 @@ legacy process which has to conclude that folder3 is swarmed to user 1</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>move a folder and all related childs (subs,assets,shares,satisfactions)
-into another one and/or transfer to another user <br> quite costly but it
-is the ony way.…</p>
+<p>move a folder and all related childs (subs,assets,shares,satisfactions) into another one and/or transfer to another user <br> quite costly but it is the ony way.…</p>
 
 
   </div>
@@ -1925,9 +1868,6 @@ is the ony way.…</p>
       <pre class="lines">
 
 
-327
-328
-329
 330
 331
 332
@@ -1972,10 +1912,13 @@ is the ony way.…</p>
 371
 372
 373
-374</pre>
+374
+375
+376
+377</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 327</span>
+      <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 330</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_move'>move</span><span class='lparen'>(</span><span class='id identifier rubyid_destination_folder'>destination_folder</span><span class='comma'>,</span> <span class='id identifier rubyid_destination_user'>destination_user</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_results'>results</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -2042,10 +1985,7 @@ is the ony way.…</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>execute all &#39;folder sharing&#39; operations providing a text list of
-emails (separator ,) <br> update folder metadata if shares are successfully
-created only folder owner can add new shares<br> if TEAM var exists, could
-we authorize others users from the team who benefit from a share  ?</p>
+<p>execute all ‘folder sharing’ operations providing a text list of emails (separator ,) <br> update folder metadata if shares are successfully created only folder owner can add new shares<br> if TEAM var exists, could we authorize others users from the team who benefit from a share  ?</p>
 
 
   </div>
@@ -2102,7 +2042,10 @@ we authorize others users from the team who benefit from a share  ?</p>
 292
 293
 294
-295</pre>
+295
+296
+297
+298</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/models/folder.rb', line 252</span>
@@ -2119,12 +2062,15 @@ we authorize others users from the team who benefit from a share  ?</p>
         <span class='id identifier rubyid_email_to_search'>email_to_search</span><span class='op'>=</span><span class='id identifier rubyid_email_address'>email_address</span>
         <span class='kw'>if</span> <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_configuration'>configuration</span><span class='period'>.</span><span class='id identifier rubyid_sharebox'>sharebox</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>downcase_email_search_autocomplete</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
           <span class='id identifier rubyid_email_to_search'>email_to_search</span><span class='op'>=</span><span class='id identifier rubyid_email_to_search'>email_to_search</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
+          <span class='id identifier rubyid_share'>share</span><span class='op'>=</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_shared_folders'>shared_folders</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>LOWER(share_email) = ? and folder_id = ?</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_email_to_search'>email_to_search</span><span class='comma'>,</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+        <span class='kw'>else</span>
+          <span class='id identifier rubyid_share'>share</span><span class='op'>=</span><span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_shared_folders'>shared_folders</span><span class='period'>.</span><span class='id identifier rubyid_find_by_share_email_and_folder_id'>find_by_share_email_and_folder_id</span><span class='lparen'>(</span><span class='id identifier rubyid_email_to_search'>email_to_search</span><span class='comma'>,</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
         <span class='kw'>end</span>
         <span class='kw'>if</span> <span class='id identifier rubyid_email_to_search'>email_to_search</span> <span class='op'>==</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_email'>email</span>
           <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_result'>result</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.no_share_for_folder_owner</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
         <span class='kw'>else</span>
           <span class='comment'># is the email_address already in the folder&#39;s shares ?
-</span>          <span class='kw'>if</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_shared_folders'>shared_folders</span><span class='period'>.</span><span class='id identifier rubyid_find_by_share_email_and_folder_id'>find_by_share_email_and_folder_id</span><span class='lparen'>(</span><span class='id identifier rubyid_email_to_search'>email_to_search</span><span class='comma'>,</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+</span>          <span class='kw'>if</span> <span class='id identifier rubyid_share'>share</span>
             <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_result'>result</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sb.already_shared_to</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_email_address'>email_address</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
           <span class='kw'>else</span>
             <span class='id identifier rubyid_shared_folder'>shared_folder</span> <span class='op'>=</span> <span class='id identifier rubyid_current_user'>current_user</span><span class='period'>.</span><span class='id identifier rubyid_shared_folders'>shared_folders</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -2215,9 +2161,9 @@ we authorize others users from the team who benefit from a share  ?</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Aug 20 10:01:46 2019 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.16 (ruby-2.3.3).
+  Generated on Sun Jul 24 11:52:51 2022 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.1.2).
 </div>
 
     </div>

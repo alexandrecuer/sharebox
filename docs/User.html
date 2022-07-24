@@ -6,15 +6,15 @@
 <title>
   Class: User
   
-    &mdash; Documentation by YARD 0.9.16
+    &mdash; Documentation by YARD 0.9.28
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "User";
   relpath = '';
 </script>
@@ -263,9 +263,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>This method is used after a user creation<br> It checks if the
-shared_folders table has to be completed (column share_user_id)<br> Sends
-an email to the admin.</p>
+<p>This method is used after a user creation<br> It checks if the shared_folders table has to be completed (column share_user_id)<br> Sends an email to the admin.</p>
 </div></span>
   
 </li>
@@ -289,8 +287,7 @@ an email to the admin.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Return an hash table (key/value) =&gt; (id/email) of all users in a single
-SQL request.</p>
+<p>Return an hash table (key/value) =&gt; (id/email) of all users in a single SQL request.</p>
 </div></span>
   
 </li>
@@ -338,9 +335,7 @@ SQL request.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>return the corresponding satisfaction record if user has answered to a
-satisfaction survey on the folder return false if user has not answered if
-a satisfaction list record is given, do not burn a SQL request.</p>
+<p>return the corresponding satisfaction record if user has answered to a satisfaction survey on the folder return false if user has not answered if a satisfaction list record is given, do not burn a SQL request.</p>
 </div></span>
   
 </li>
@@ -388,11 +383,7 @@ a satisfaction list record is given, do not burn a SQL request.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Return true if user has “shared access” on the folder<br> “shared access”
-means being owner or being granted of a share<br> if folder is a subfolder
-of a folder shared to the user, we consider the user has shared access on
-the subfolder QUITE SQL COSTLY - do not use heavily - DO NOT USE IN LOOPS
-!!!!!!!!!!!!!.</p>
+<p>Return true if user has “shared access” on the folder<br> “shared access” means being owner or being granted of a share<br> if folder is a subfolder of a folder shared to the user, we consider the user has shared access on the subfolder QUITE SQL COSTLY - do not use heavily - DO NOT USE IN LOOPS !!!!!!!!!!!!!.</p>
 </div></span>
   
 </li>
@@ -416,8 +407,7 @@ the subfolder QUITE SQL COSTLY - do not use heavily - DO NOT USE IN LOOPS
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Return true if user has been awarded some shared folders by private or
-admin users.</p>
+<p>Return true if user has been awarded some shared folders by private or admin users.</p>
 </div></span>
   
 </li>
@@ -441,8 +431,7 @@ admin users.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>super user access on a folder is true if folder is owned or swarmed to the
-user<br> a low cost method using the metadatas.</p>
+<p>super user access on a folder is true if folder is owned or swarmed to the user<br> a low cost method using the metadatas.</p>
 </div></span>
   
 </li>
@@ -538,10 +527,7 @@ user<br> a low cost method using the metadatas.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>This method is used after a user creation<br> It realize a concrete action
-only once in theory<br> It grants, after initial login, admin rights to the
-first user opening an account<br> you can use db/seeds.rb as an alternative
-: rake db:seed<br>.</p>
+<p>This method is used after a user creation<br> It realize a concrete action only once in theory<br> It grants, after initial login, admin rights to the first user opening an account<br> you can use db/seeds.rb as an alternative : rake db:seed<br>.</p>
 </div></span>
   
 </li>
@@ -575,7 +561,7 @@ first user opening an account<br> you can use db/seeds.rb as an alternative
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the value of attribute has_shares</p>
+<p>Returns the value of attribute has_shares.</p>
 
 
   </div>
@@ -618,7 +604,7 @@ first user opening an account<br> you can use db/seeds.rb as an alternative
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the value of attribute is_sharing</p>
+<p>Returns the value of attribute is_sharing.</p>
 
 
   </div>
@@ -775,9 +761,7 @@ first user opening an account<br> you can use db/seeds.rb as an alternative
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This method is used after a user creation<br> It checks if the
-shared_folders table has to be completed (column share_user_id)<br> Sends
-an email to the admin</p>
+<p>This method is used after a user creation<br> It checks if the shared_folders table has to be completed (column share_user_id)<br> Sends an email to the admin</p>
 
 
   </div>
@@ -860,8 +844,7 @@ an email to the admin</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Return an hash table (key/value) =&gt; (id/email) of all users in a single
-SQL request</p>
+<p>Return an hash table (key/value) =&gt; (id/email) of all users in a single SQL request</p>
 
 
   </div>
@@ -966,9 +949,7 @@ SQL request</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>return the corresponding satisfaction record if user has answered to a
-satisfaction survey on the folder return false if user has not answered if
-a satisfaction list record is given, do not burn a SQL request</p>
+<p>return the corresponding satisfaction record if user has answered to a satisfaction survey on the folder return false if user has not answered if a satisfaction list record is given, do not burn a SQL request</p>
 
 
   </div>
@@ -1114,11 +1095,7 @@ a satisfaction list record is given, do not burn a SQL request</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Return true if user has “shared access” on the folder<br> “shared access”
-means being owner or being granted of a share<br> if folder is a subfolder
-of a folder shared to the user, we consider the user has shared access on
-the subfolder QUITE SQL COSTLY - do not use heavily - DO NOT USE IN LOOPS
-!!!!!!!!!!!!!</p>
+<p>Return true if user has “shared access” on the folder<br> “shared access” means being owner or being granted of a share<br> if folder is a subfolder of a folder shared to the user, we consider the user has shared access on the subfolder QUITE SQL COSTLY - do not use heavily - DO NOT USE IN LOOPS !!!!!!!!!!!!!</p>
 
 
   </div>
@@ -1282,8 +1259,7 @@ the subfolder QUITE SQL COSTLY - do not use heavily - DO NOT USE IN LOOPS
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Return true if user has been awarded some shared folders by private or
-admin users</p>
+<p>Return true if user has been awarded some shared folders by private or admin users</p>
 
 
   </div>
@@ -1337,8 +1313,7 @@ admin users</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>super user access on a folder is true if folder is owned or swarmed to the
-user<br> a low cost method using the metadatas</p>
+<p>super user access on a folder is true if folder is owned or swarmed to the user<br> a low cost method using the metadatas</p>
 
 
   </div>
@@ -1560,10 +1535,7 @@ user<br> a low cost method using the metadatas</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This method is used after a user creation<br> It realize a concrete action
-only once in theory<br> It grants, after initial login, admin rights to the
-first user opening an account<br> you can use db/seeds.rb as an alternative
-: rake db:seed<br></p>
+<p>This method is used after a user creation<br> It realize a concrete action only once in theory<br> It grants, after initial login, admin rights to the first user opening an account<br> you can use db/seeds.rb as an alternative : rake db:seed<br></p>
 
 
   </div>
@@ -1603,9 +1575,9 @@ first user opening an account<br> you can use db/seeds.rb as an alternative
 </div>
 
       <div id="footer">
-  Generated on Tue Aug 20 10:01:45 2019 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.16 (ruby-2.3.3).
+  Generated on Sun Jul 24 11:52:50 2022 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.1.2).
 </div>
 
     </div>

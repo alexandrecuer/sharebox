@@ -6,15 +6,15 @@
 <title>
   Top Level Namespace
   
-    &mdash; Documentation by YARD 0.9.16
+    &mdash; Documentation by YARD 0.9.28
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "";
   relpath = '';
 </script>
@@ -82,7 +82,7 @@
 <p class="children">
   
     
-      <strong class="modules">Modules:</strong> <span class='object_link'><a href="AdminHelper.html" title="AdminHelper (module)">AdminHelper</a></span>, <span class='object_link'><a href="ApplicationCable.html" title="ApplicationCable (module)">ApplicationCable</a></span>, <span class='object_link'><a href="ApplicationHelper.html" title="ApplicationHelper (module)">ApplicationHelper</a></span>, <span class='object_link'><a href="ClientsHelper.html" title="ClientsHelper (module)">ClientsHelper</a></span>, <span class='object_link'><a href="HelpHelper.html" title="HelpHelper (module)">HelpHelper</a></span>, <span class='object_link'><a href="SurveysHelper.html" title="SurveysHelper (module)">SurveysHelper</a></span>
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="ApplicationCable.html" title="ApplicationCable (module)">ApplicationCable</a></span>, <span class='object_link'><a href="ApplicationHelper.html" title="ApplicationHelper (module)">ApplicationHelper</a></span>, <span class='object_link'><a href="Validations.html" title="Validations (module)">Validations</a></span>
     
   
     
@@ -97,14 +97,116 @@
 
 
 
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
 
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="top-level-namespace.html#build_and_extract-instance_method" title="#build_and_extract (instance method)">#<strong>build_and_extract</strong>(str, type, mel_reg)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>generic research function note ( and ) in the regexp string are necessary for the email to be element 0 of the returned ‘matchdata’ array.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="build_and_extract-instance_method">
+  
+    #<strong>build_and_extract</strong>(str, type, mel_reg)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>generic research function note ( and ) in the regexp string are necessary for the email to be element 0 of the returned ‘matchdata’ array</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/validations.rb', line 68</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_build_and_extract'>build_and_extract</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='comma'>,</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span><span class='id identifier rubyid_mel_reg'>mel_reg</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_valmel'>valmel</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_exp'>exp</span> <span class='op'>=</span> <span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_type'>type</span><span class='embexpr_end'>}</span><span class='tstring_content'>: (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_mel_reg'>mel_reg</span><span class='period'>.</span><span class='id identifier rubyid_source'>source</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='comment'># to debug
+</span>  <span class='comment'>#exp.match(str).captures.each do |e|
+</span>  <span class='comment'>#  puts (e)
+</span>  <span class='comment'>#end
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='id identifier rubyid_exp'>exp</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_valmel'>valmel</span><span class='op'>=</span><span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_captures'>captures</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+    <span class='comment'>#puts(valmel)
+</span>  <span class='kw'>end</span>
+  <span class='id identifier rubyid_valmel'>valmel</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
 
 </div>
 
       <div id="footer">
-  Generated on Tue Aug 20 10:01:43 2019 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.16 (ruby-2.3.3).
+  Generated on Sun Jul 24 11:52:50 2022 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.1.2).
 </div>
 
     </div>

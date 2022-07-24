@@ -6,15 +6,15 @@
 <title>
   Class: Satisfaction
   
-    &mdash; Documentation by YARD 0.9.16
+    &mdash; Documentation by YARD 0.9.28
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "Satisfaction";
   relpath = '';
 </script>
@@ -153,6 +153,30 @@
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_meta_i18n-instance_method" title="#get_meta_i18n (instance method)">#<strong>get_meta_i18n</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>meta translation.</p>
+</div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -235,11 +259,56 @@
   <span class='kw'>end</span>
   <span class='id identifier rubyid_result'>result</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_title'>title</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> - Client: </span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> - </span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="Validations.html" title="Validations (module)">Validations</a></span></span><span class='period'>.</span><span class='id identifier rubyid_client_pattern'><span class='object_link'><a href="Validations.html#client_pattern-class_method" title="Validations.client_pattern (method)">client_pattern</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_email'>email</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> - Chargé d&#39;affaire: </span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> - </span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="Validations.html" title="Validations (module)">Validations</a></span></span><span class='period'>.</span><span class='id identifier rubyid_project_manager_pattern'><span class='object_link'><a href="Validations.html#project_manager_pattern-class_method" title="Validations.project_manager_pattern (method)">project_manager_pattern</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='period'>.</span><span class='id identifier rubyid_email'>email</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_result'>result</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_meta_i18n-instance_method">
+  
+    #<strong>get_meta_i18n</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>meta translation</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+43
+44
+45
+46
+47</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/satisfaction.rb', line 43</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_meta_i18n'>get_meta_i18n</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_case_number'>case_number</span><span class='lbracket'>[</span><span class='const'><span class='object_link'><a href="Validations.html" title="Validations (module)">Validations</a></span></span><span class='period'>.</span><span class='id identifier rubyid_client_pattern'><span class='object_link'><a href="Validations.html#client_pattern-class_method" title="Validations.client_pattern (method)">client_pattern</a></span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>sb.client</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_case_number'>case_number</span><span class='lbracket'>[</span><span class='const'><span class='object_link'><a href="Validations.html" title="Validations (module)">Validations</a></span></span><span class='period'>.</span><span class='id identifier rubyid_project_manager_pattern'><span class='object_link'><a href="Validations.html#project_manager_pattern-class_method" title="Validations.project_manager_pattern (method)">project_manager_pattern</a></span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>sb.project_manager</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_case_number'>case_number</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -251,9 +320,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Aug 20 10:01:46 2019 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.16 (ruby-2.3.3).
+  Generated on Sun Jul 24 11:52:51 2022 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.1.2).
 </div>
 
     </div>
