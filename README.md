@@ -4,12 +4,14 @@ rails | [jquery-rails](https://github.com/rails/jquery-rails/blob/master/VERSION
 
 # A business social network tool dedicated to quality management
 
-This application is a SharingFile System with surveys management facilities or an open source CRM - Client Relation Management
+This application is a SharingFile System with surveys management facilities
+
+Basic open source CRM - Client Relation Management
 
 [![Ruby](https://github.com/alexandrecuer/sharebox/actions/workflows/ruby.yml/badge.svg)](https://github.com/alexandrecuer/sharebox/actions/workflows/ruby.yml)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ed6f26a2613349e0a92b404d515a4b29)](https://www.codacy.com/app/alexandrecuer/sharebox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=alexandrecuer/sharebox&amp;utm_campaign=Badge_Grade)
 
-Deliver files and documents to your clients and Record your clients'satisfaction
+Deliver files and documents and record your clients'satisfaction
 <img src=public/images/doc/colibri_front.png>
 
 Online class documentation :
