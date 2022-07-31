@@ -80,12 +80,12 @@ end
   <% end %>
   <td><a href=<%= user_path(current_user.id) %>><center><i class="fa fa-user fa-2x"></i><div id=pref style="display: block;"><%= t('sb.pref') %></div></center></a></td>
   </tr></table>
-  <div class="col">
-    <div class="float-right">
-      <div id=name class="navbar-brand"><%= t('sb.site_name').html_safe%></div>
-      <div id=sources>Powered by <%= link_to "colibri v#{Rails.configuration.sharebox["version"]}", "http://github.com/alexandrecuer/sharebox" %></div>
+  <div class="navbar-nav ms-auto"><div>
+    <div id=name class="navbar-brand"><%= t('sb.site_name').html_safe%></div>
+    <div id=sources class="nav-item">
+      <%= link_to "powered by colibri v#{Rails.configuration.sharebox["version"]}", "http://github.com/alexandrecuer/sharebox", class: "nav-link" %>
     </div>
-  </div>
+  </div></div>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
