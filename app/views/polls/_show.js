@@ -13,10 +13,10 @@ var date = sb["date_reg_exp"];
 function carouselnav(carName)
 {
   var nav=[];
-  nav.push("<a class='carousel-control-prev' href='#"+carName+"' role='button' data-slide='prev'>");
+  nav.push("<a class='carousel-control-prev' href='#"+carName+"' role='button' data-bs-slide='prev'>");
   nav.push("<i class='fa fa-chevron-left' style='color:black'></i>");
   nav.push("</a>");
-  nav.push("<a class='carousel-control-next' href='#"+carName+"' role='button' data-slide='next'>");
+  nav.push("<a class='carousel-control-next' href='#"+carName+"' role='button' data-bs-slide='next'>");
   nav.push("<i class='fa fa-chevron-right' style='color:black'></i>");
   nav.push("</a>");
   return nav.join("");
@@ -168,7 +168,7 @@ function genstatsforpoll(pollId)
         stats.push(" "+sb["sent_surveys"]+"<br>");
         stats.push(result.satisfactions.length);
         stats.push("  "+sb["feedbacks"]+"<br>");
-        stats.push("<a data-toggle='modal' data-target='#synth' href='#'>"+sb["check_summary"]+"</a><br>");
+        stats.push("<a data-bs-toggle='modal' data-target='#synth' href='#'>"+sb["check_summary"]+"</a><br>");
         stats.push("<a href="+csvlink+">"+sb["download_csv"]+"</a><br>");
         stats.push("<a href="+ncaplink+">"+sb["ncap"]+"&nbsp;2</a>");
         $("#stats").html(stats.join(""));
