@@ -1,14 +1,7 @@
-<% 
-if Rails.application::config.local_storage==1
-  file_system="local file system"
-elsif Rails.application::config.local_storage==0
-  file_system="S3 bucket ["+ENV.fetch('S3_BUCKET_NAME')+"]"
-end
-%>
-
 <%= image_tag 'logo.jpg', size: '50x50' %><br>
 <%= link_to t('sb.site_name'), "http://"+ENV.fetch('DOMAIN') %><br>
-File system : <%= file_system %><br>
+File system : <%= Rails.application::config.active_storage.service %><br>
+Bucket: <%= ENV.fetch('S3_BUCKET_NAME') %><br>
 <h1>Activity on <%= ENV.fetch('DOMAIN') %></h1>
 <p>By <%= @user.email %>, user <%= @user.id %></p>
 <br>
