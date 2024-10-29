@@ -33,7 +33,7 @@ jobs:
           bundle --version
           cat Gemfile.lock
     - name: Upload Gemfile.lock
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: Gemfile.lock
         path: Gemfile.lock
