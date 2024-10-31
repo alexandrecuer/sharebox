@@ -60,7 +60,7 @@ Rails.application.configure do
     address:                ENV.fetch('SMTP_ADDRESS'),
     port:                   ENV.fetch('SMTP_PORT'),
     domain:                 ENV.fetch('DOMAIN'),
-    user_name:              ENV.fetch('GMAIL_USERNAME'),
+    user_name:              'apikey',
     password:               ENV.fetch('GMAIL_PASSWORD'),
     authentication:         :plain,
     enable_starttls_auto:   true
