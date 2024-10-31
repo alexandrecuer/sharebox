@@ -7,7 +7,7 @@ class AssetsController < ApplicationController
     :authenticate_user!
     # cf https://stackoverflow.com/questions/51110789
     #activestorage-service-url-rails-blob-path-cannot-generate-full-url-when-not-u?rq=1
-    ActiveStorage::Current.host = request.base_url
+    #ActiveStorage::Current.host = request.base_url
   end
 
   def index

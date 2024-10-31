@@ -22,7 +22,7 @@ Address collecting information related to users activity (shared folders & unreg
 </table>
 </div>
 
-<% uncompletedshares=SharedFolder.where("share_user_id IS ?", nil) %>
+<% uncompletedshares=SharedFolder.where("share_user_id IS NULL") %>
 <% if uncompletedshares.length > 0 %>
 <div class="table-responsive-sm">
   <table class="table table-hover">
