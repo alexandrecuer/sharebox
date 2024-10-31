@@ -187,4 +187,4 @@ $ export http_proxy="http://user_name:password@proxy_url:proxy_port"
 
 # [Installation on heroku](legacy_docs/heroku.md)
 
-# [Installation on a microsoft windows development machine](legacy_docs/mswindow/install_on_microsoft_window_dev_machine.md)
+# [Installation on a microsoft windows development machine](legacy_docs/install_on_microsoft_window_dev_machine.md)
