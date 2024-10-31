@@ -5,7 +5,7 @@ This application is a SharingFile System with surveys management facilities
 Basic open source CRM - Client Relation Management
 
 Deliver files and documents and record your clients'satisfaction
-<img src=public/images/doc/colibri_front.png>
+<img src=src/public/images/colibri_front.png>
 
 Online class documentation :
 https://alexandrecuer.github.io/sharebox/
