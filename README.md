@@ -1,3 +1,26 @@
+# docker standalone container
+
+An easy way to start with colibri is to use the all-in-one docker container
+
+There is no pipeline producing yet the containers so this is a manual process
+
+```
+git clone https://github.com/alexandrecuer/sharebox
+cd sharebox
+sudo docker build -t colibri .
+sudo docker run --rm -it -v $(pwd):/colibri -p 3000:3000 colibri
+```
+To have persistent datas, you should mount from the host a `data` folder
+
+Then connect to the container and customize the env var to your needs and create the database :
+```
+cd colibri/src
+bundle exec rake db:create
+bundle exec rake db:schema:load
+rails server -b 0.0.0.0
+```
+
+
 # A business social network tool dedicated to quality management
 
 This application is a SharingFile System with surveys management facilities
